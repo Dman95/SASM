@@ -1,4 +1,4 @@
 SASM
 ====
 
-SASM- simple crossplatform IDE for NASM assembly language
+SASM - simple crossplatform IDE for NASM assembly language
