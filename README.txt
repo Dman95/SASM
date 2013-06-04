@@ -29,7 +29,7 @@ Put SASM.exe (SASM) executable file to appropriate for your system folder:
 Linux or Windows. From this folder you can run the Program.
 ===========================================================================
 
-Also you can download already compiled packages.
+Also you can download already compiled packages. In Linux - simply unpack their. In Windows - run install file and follow the instructions of installer.
 
 More help info in file help.html
 
