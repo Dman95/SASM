@@ -12,6 +12,19 @@
   </head>
 
   <body>
+  <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41457512-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
 
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
@@ -69,6 +82,15 @@ Licensed under the GNU GPL v3.0. Based on the Qt.</p>
 <a name="linux" class="anchor" href="#linux"><span class="octicon octicon-link"></span></a>Linux</h3>
 
 <p>Для работы программы на Linux на Вашем компьютере должны быть установлены: nasm, gcc, gdb (для отладки).</p>
+
+<h3>
+<a name="changes" class="anchor" href="#changes"><span class="octicon octicon-link"></span></a>История изменений</h3>
+
+<p>04.06.2013 - версия 2.0 - сделаны все запланированные изменения - реализован отладчик, улучшена подсветка, стало возможно работать с несколькими файлами, SASM (новое название) полностью переписан на Qt и теперь с открытым кодом и кроссплатформен. Исходники выложены на github, туда же переехал и сайт. В новом SASM нет поддержки MASM, так как он работал только на 32-битных системах Windows, плюс отладчик с ним бы не работал. Кому нужна версия для MASM - качайте 1.0.4 на <a href="https://sites.google.com/site/simpleasmproject">предыдущем сайте.</a></p>
+<p>21.04.2013 - версия 1.0.4 - исправлена ошибка с CEXTERN</p>
+<p>18.03.2013 - версия 1.0.3 - исправлены ошибки подсветки синтаксиса, теперь подсвечиваются все ключевые слова NASM, исправлен запуск программ на MASM</p>
+<p>10.03.2013 - версия 1.0.2 - исправлены ошибки, добавлено автосохранение кода и пути</p>
+<p>07.03.2013 - появилась первая версия программы - 1.0.0</p>
 
 <p>Copyright © 2013 Dmitriy Manushin</p>
       </section>
