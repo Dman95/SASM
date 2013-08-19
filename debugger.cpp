@@ -94,7 +94,7 @@ void Debugger::processOutput()
         return;
     }
 
-    if (c == 1) { //next disasssembly top part of code for setting acoording with program in memory and program in file
+    if (c == 1) { //next disasssembly top part of code for setting according with program in memory and program in file
         /*Dump of assembler code for function sasmStartL:
            0x00401390 <+0>:	xor    %eax,%eax
            0x00401392 <+2>:	ret
