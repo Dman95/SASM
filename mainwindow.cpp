@@ -811,8 +811,8 @@ void MainWindow::debug()
     QString path = QString( QCoreApplication::applicationDirPath() + "/Program/SASMprog.exe" );
     debugger = new Debugger(compilerOut, path, ioIncIncluded);
     connect(debugger, SIGNAL(highlightLine(int)), this, SLOT(highlightDebugLine(int)));
-    connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()));
-    enableDebugActions();
+    connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
+    connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
 }
 
 void MainWindow::enableDebugActions()
