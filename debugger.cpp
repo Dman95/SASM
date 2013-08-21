@@ -65,17 +65,34 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QWidget *p
 
     setActionType(start);
 
-    QObject::connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(processOutput()));
+    QObject::connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputToBuffer()));
+
+    bufferTimer = new QTimer;
+    QObject::connect(bufferTimer, SIGNAL(timeout()), this, SLOT(processOutput()), Qt::QueuedConnection);
+    bufferTimer->start(10);
+}
+
+void Debugger::readOutputToBuffer()
+{
+    if (!process)
+        return;
+    buffer += process->readAllStandardOutput();
 }
 
 void Debugger::processOutput()
 {
-    if (!process)
-        return;
+    bufferTimer->stop();
+    int index = buffer.indexOf(QString("(gdb)"));
+    if (index != -1) { //if whole message ready to processing (end of whole message is "(gdb)")
+        processMessage(buffer.left(index));
+        buffer.remove(0, index + 5); //remove processed message
+    }
+    bufferTimer->start(10);
+}
 
-    QString output(process->readAllStandardOutput());
-
-    if (c == 0 && output.indexOf(QString("(gdb)")) != -1) { //in start wait for printing of start gdb text like this:
+void Debugger::processMessage(QString output)
+{
+    if (c == 0) { //in start wait for printing of start gdb text like this:
         /*GNU gdb (GDB) 7.4
         Copyright (C) 2012 Free Software Foundation, Inc.
         License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
@@ -94,7 +111,7 @@ void Debugger::processOutput()
         return;
     }
 
-    if (c == 1) { //next disasssembly top part of code for setting according with program in memory and program in file
+    if (c == 1) { //next disassembly top part of code for setting according with program in memory and program in file
         /*Dump of assembler code for function sasmStartL:
            0x00401390 <+0>:	xor    %eax,%eax
            0x00401392 <+2>:	ret
@@ -105,62 +122,45 @@ void Debugger::processOutput()
         //count offset
         QRegExp r = QRegExp("0x[0-9a-fA-F]{8}");
         int index = output.indexOf(r);
-        char s[11];
-        for (int i = 0; i < 10; i++) {
-            s[i] = output[index + i].toLatin1();
-        }
-        s[10] = 0;
-        sscanf(s, "%x", &offset);
+        offset = output.mid(index, 10).toUInt(0, 16); //take offset in hexadecimal representation (10 symbols) from string and convert it to int
         c++;
-        processLst(); //count accordance, also invoke Debugger::run()
+        processLst(); //count accordance
+        run(); //perform Debugger::run(), that run program and open I/O files
         return;
     }
-
-    //further perform Debugger::run(), that run program and open I/O files
-    //need for skipping output from files opening
-    if (output.indexOf(QString("$1 = 0")) != -1)
-        return;
-    #ifdef Q_OS_WIN32
-        if (output.indexOf(QString("$2 = 0")) != -1)
-            return;
-    #else
-        if (output.indexOf(QString("$2 = 1")) != -1)
-            return;
-    #endif
 
     //determine run of program
     //wait for message like this: Breakpoint 1, 0x00401390 in sasmStartL ()
     if (c == 2 && output.indexOf(QString(" in ")) != -1) {
         c++;
         this->setActionType(ni);
+        emit started(); //emit start signal
     }
 
     //process all actions after start
     if (c == 3) {
-        processAction(output);
+        if ((output.indexOf(QString("$1 =")) == -1) && (output.indexOf(QString("$2 =")) == -1))
+            processAction(output);
     }
 }
 
 void Debugger::processAction(QString output)
 {
     if (output.indexOf(exitMessage) != -1) { //if debug finished
+        QObject::disconnect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputToBuffer()));
         emit finished();
         return;
     }
 
     int failIndex = output.indexOf(QString("Program received signal")); //program was completed incorrectly
     if (failIndex == -1) {
-        if ((actionType == si || actionType == ni) && outputCount == 0) { //print line number
-            //outputCount is necessary to turn off printing of line number, if it is already printed
-            //for printing info after line number - variable in memory for example
-            outputCount++;
-
+        if (actionType == si || actionType == ni) { //message is: line number + data
+                                                    //print line number and other data
             //scan line number in memory
             QRegExp r = QRegExp("0x[0-9a-fA-F]{8}");
             int index = output.indexOf(r);
-            int lineNumber;
-            if (sscanf(output.mid(index, 10).toLocal8Bit().constData(), "%x", &lineNumber) != 1)
-                return;
+            unsigned int lineNumber = output.mid(index, 10).toUInt(0, 16); //take line number in hexadecimal representation
+                                                                           //(10 symbols) in memory from string and convert it to int
 
             //find line number in accordance array and get number line in file with code
             bool found = false;
@@ -173,23 +173,17 @@ void Debugger::processAction(QString output)
             }
 
             if (!found) {
-                 output = tr("Inside the macro or outside the program.") + '\n';
+                output = tr("Inside the macro or outside the program.") + '\n';
             } else { //if found highlight and print it
-                //highlight row number
+                //highlight line number
                 emit highlightLine(lineNumber);
 
-                //print number to log
-                output = QString::number(lineNumber) + tr(" line") + output.mid(output.indexOf("()") + 2);
                 //print string number and all after it
+                output = QString::number(lineNumber) + tr(" line") + output.mid(output.indexOf("()") + 2);
             }
         }
     } else { //if program fail
         output = output.mid(failIndex);
-    }
-
-    int gdbIndex = output.indexOf(QRegExp("(gdb)")); //remove (gdb) from end
-    if (gdbIndex != -1) {
-        output.chop(6);
     }
 
     if ((actionType == anyAction || actionType == infoMemory) && output[output.length() - 1] != '\n') { //add linefeed
@@ -212,7 +206,6 @@ void Debugger::processAction(QString output)
 void Debugger::setActionType(DebugActionType action)
 {
     actionType = action;
-    outputCount = 0;
 }
 
 void Debugger::doInput(QString command)
@@ -238,8 +231,8 @@ void Debugger::processLst()
             continue;
         }
         char *s = line.toLocal8Bit().data();
-        int a, b, c, argumentCount;
-        if ((argumentCount = sscanf(s, "%d %x %x", &a, &b, &c)) >= 2){
+        unsigned int a, b, c, argumentCount;
+        if ((argumentCount = sscanf(s, "%u %x %x", &a, &b, &c)) >= 2){
             if (!(argumentCount == 3 && b == 0 && c == 0)) { //exclude 0 0
                 lineNum l;
                 l.numInCode = a - 1 - omitLinesCount;
@@ -251,7 +244,6 @@ void Debugger::processLst()
             }
         }
     }
-    run();
 }
 
 void Debugger::run()
@@ -268,7 +260,6 @@ void Debugger::run()
 
 Debugger::~Debugger() {
     emit highlightLine(-1);
-    QObject::disconnect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(processOutput()));
     doInput("c\n");
     doInput("quit\n");
     process->waitForFinished(2000);
@@ -276,5 +267,5 @@ Debugger::~Debugger() {
     delete process;
     process = 0;
     lines.clear();
+    delete bufferTimer;
 }
-

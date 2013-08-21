@@ -48,6 +48,7 @@
 #include <QFile>
 #include <QVector>
 #include <QCoreApplication>
+#include <QTimer>
 
 enum DebugActionType {start, ni, si, infoRegisters, infoMemory, anyAction};
 
@@ -69,21 +70,25 @@ private:
     unsigned int omitLinesCount; //for skipping strings from section .data - for processLst()
 
     struct lineNum {
-        int numInCode;
-        int numInMem;
+        unsigned int numInCode;
+        unsigned int numInMem;
     };
     QVector<lineNum> lines; //accordance between program lines in memory and in file
 
     int c; //counter for sequential performing of actions
     bool ioIncIncluded;
-    int outputCount; //for processAction()
-    int ioIncSize;
+    unsigned int ioIncSize;
 
     DebugActionType actionType; //current action type from enum
     QString exitMessage; //message on exit in current platform
 
+    QString buffer; //global gdb output buffer
+    QTimer *bufferTimer; //timer for checking output and sending ready output to processing with Debugger::processOutput() function
+
 public slots:
+    void readOutputToBuffer();
     void processOutput();
+    void processMessage(QString output);
     void processAction(QString output);
     void setActionType(DebugActionType);
     void doInput(QString command);
@@ -91,6 +96,7 @@ public slots:
 signals:
     void highlightLine(int); //highlight current debug line
     void finished();
+    void started(); //emited when debugger is ready to get commands like step into, etc.
 };
 
 #endif // DEBUGGER_H
