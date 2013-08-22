@@ -617,6 +617,16 @@ void MainWindow::buildProgram(bool debugMode)
     printLogWithTime(tr("Build started...") + '\n', Qt::black);
     QCoreApplication::processEvents();
 
+    if (! QFile::exists(QCoreApplication::applicationDirPath() + "/NASM")) {
+        printLogWithTime(tr("Error! Directory NASM does not exist. Please, reinstall the program.") + '\n', Qt::red);
+        QMessageBox::critical(0, tr("Error!"), tr("Directory NASM does not exist. Please, reinstall the program."));
+        return;
+    }
+
+    if (! QFile::exists(QCoreApplication::applicationDirPath() + "/Program")) {
+        QDir().mkpath(QCoreApplication::applicationDirPath() + "/Program");
+    }
+
     QString path( QCoreApplication::applicationDirPath() + "/Program/program.asm" );
     QFile::remove(path);
     QString exePath(QCoreApplication::applicationDirPath() + "/Program/SASMprog.exe");
