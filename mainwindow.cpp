@@ -672,13 +672,20 @@ void MainWindow::buildProgram(bool debugMode)
     nasmProcess.waitForFinished();
 
     //GCC
+    QString stdioMacros = "NASM/macro.o";
     #ifdef Q_OS_WIN32
         QString gcc = QCoreApplication::applicationDirPath() + "/NASM/MinGW/bin/gcc.exe";
-        QString stdioMacros = "NASM/macros_win.o";
     #else
         QString gcc = "gcc";
-        QString stdioMacros = "NASM/macros_lin.o";
+
+        //macro.c compilation
+        QStringList gccMArguments;
+        gccMArguments << "-x" << "c" << "NASM/macro.c" << "-c" << "-g" << "-o" << stdioMacros << "-m32";
+        QProcess gccMProcess;
+        gccMProcess.start(gcc, gccMArguments);
+        gccMProcess.waitForFinished();
     #endif
+    //final linking
     QStringList gccArguments;
     gccArguments << "NASM/program.o" << stdioMacros << "-g" << "-o" << "Program/SASMprog.exe" << "-m32";
     QProcess gccProcess;
