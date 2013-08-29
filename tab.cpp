@@ -179,8 +179,22 @@ void Tab::saveCodeToFile(const QString &filePath, bool changeCodeModifiedFlag, b
     outfile.setFileName(filePath);
     outfile.open(QIODevice::WriteOnly | QIODevice::Text);
     QTextStream out(&outfile);
-    if (debugMode)
+    if (debugMode) {
         out << "sasmStartL:\n";
+        //add : mov ebp, esp for making frame for correct debugging if this code has not been added yet
+        int index;
+        #ifdef Q_OS_WIN32
+            index = code->toPlainText().indexOf(QRegExp("CMAIN:|_main:"));
+        #else
+            index = code->toPlainText().indexOf(QRegExp("CMAIN:|main:"));
+        #endif
+        if (index != -1) {
+            index = code->toPlainText().indexOf(QChar(':'), index);
+            if ( code->toPlainText().indexOf(QRegExp("\\s+mov +ebp *, *esp"), index + 1) == -1) {
+                code->setPlainText(code->toPlainText().insert(index + 1, QString("\n    mov ebp, esp; for correct debugging")));
+            }
+        }
+    }
     out << code->toPlainText();
     if (changeCodeModifiedFlag) {
         currentFilePath = filePath;
