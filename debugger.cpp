@@ -236,7 +236,7 @@ void Debugger::processLst()
         if ((argumentCount = sscanf(s, "%u %x %x", &a, &b, &c)) >= 2){
             if (!(argumentCount == 3 && b == 0 && c == 0)) { //exclude 0 0
                 lineNum l;
-                l.numInCode = a - 1 - omitLinesCount;
+                l.numInCode = a - 1 - omitLinesCount; //-1 for missing of sasmStartL:
                 if (ioIncIncluded) {
                     l.numInCode -= ioIncSize;
                 }
