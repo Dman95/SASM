@@ -57,7 +57,7 @@ class Debugger : public QObject
     Q_OBJECT
 
 public:
-    Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QWidget *parent = 0);
+    Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tmp, QWidget *parent = 0);
     ~Debugger();
 
 private:
@@ -81,6 +81,7 @@ private:
 
     DebugActionType actionType; //current action type from enum
     QString exitMessage; //message on exit in current platform
+    QString tmpPath;
 
     QString buffer; //global gdb output buffer
     QTimer *bufferTimer; //timer for checking output and sending ready output to processing with Debugger::processOutput() function

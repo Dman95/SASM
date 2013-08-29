@@ -40,13 +40,14 @@
 
 #include "debugger.h"
 
-Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QWidget *parent)
+Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tmp, QWidget *parent)
     : QObject(parent)
 {
     omitLinesCount = 0;
     c = 0;
     textEdit = tEdit;
     ioIncIncluded = ioInc;
+    tmpPath = tmp;
     #ifdef Q_OS_WIN32
         QString gdb = QCoreApplication::applicationDirPath() + "/NASM/MinGW/bin/gdb.exe";
         ioIncSize = 726;
@@ -219,7 +220,7 @@ void Debugger::processLst()
 {
     //set accordance with .lst file and program in memory
     QFile lst;
-    lst.setFileName(QString(QCoreApplication::applicationDirPath() + "/NASM/program.lst"));
+    lst.setFileName(tmpPath + "program.lst");
     lst.open(QIODevice::ReadOnly);
     QTextStream lstStream(&lst);
 
@@ -252,7 +253,7 @@ void Debugger::run()
     //put \n after commands!
     //b main and run before others!
     doInput(QString("b main\n"));
-    doInput(QString("cd " + QCoreApplication::applicationDirPath()) + "/Program" + "\n");
+    doInput(QString("cd " + tmpPath + "\n"));
     doInput(QString("run\n"));
     doInput(QString("p dup2(open(\"input.txt\",0),0)\n"));
     doInput(QString("p dup2(open(\"output.txt\",1),1)\n"));
