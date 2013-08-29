@@ -190,7 +190,7 @@ void Tab::saveCodeToFile(const QString &filePath, bool changeCodeModifiedFlag, b
         #endif
         if (index != -1) {
             index = code->toPlainText().indexOf(QChar(':'), index);
-            if ( code->toPlainText().indexOf(QRegExp("\\s+mov +ebp *, *esp"), index + 1) == -1) {
+            if ( code->toPlainText().indexOf(QRegExp("\\s+mov +ebp *, *esp"), index + 1) != index + 1) {
                 code->setPlainText(code->toPlainText().insert(index + 1, QString("\n    mov ebp, esp; for correct debugging")));
             }
         }
