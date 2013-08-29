@@ -498,7 +498,7 @@ void MainWindow::saveExe()
     saveOpenDirectory = saveFileName;
     if (saveFileName.isEmpty())
         return;
-    QFile exeFile( QCoreApplication::applicationDirPath() + "/Program/SASMprog.exe");
+    QFile exeFile(pathInTemp("SASMprog.exe"));
     exeFile.copy(saveFileName);
 }
 
@@ -612,6 +612,25 @@ void MainWindow::setHighlighter(int index)
     highlighter->setDocument(currentTab->getCodeDocument());
 }
 
+QString MainWindow::pathInTemp(QString path, bool forCygwin)
+{
+    QString temp = QDir::tempPath();
+    QChar lastSymbol = temp[temp.length() - 1];
+    if (lastSymbol == QChar('/') || lastSymbol == QChar('\\')) {
+        temp.chop(1);
+    }
+    if (! QFile::exists(temp + "/SASM")) {
+        QDir().mkpath(temp + "/SASM");
+    }
+    if (forCygwin) {
+        #ifdef Q_OS_WIN32
+            temp.remove(1, 1);
+            temp = "/cygdrive/" + temp;
+        #endif
+    }
+    return temp + "/SASM/" + path;
+}
+
 void MainWindow::buildProgram(bool debugMode)
 {
     printLogWithTime(tr("Build started...") + '\n', Qt::black);
@@ -623,13 +642,9 @@ void MainWindow::buildProgram(bool debugMode)
         return;
     }
 
-    if (! QFile::exists(QCoreApplication::applicationDirPath() + "/Program")) {
-        QDir().mkpath(QCoreApplication::applicationDirPath() + "/Program");
-    }
-
-    QString path( QCoreApplication::applicationDirPath() + "/Program/program.asm" );
+    QString path = pathInTemp("program.asm");
     QFile::remove(path);
-    QString exePath(QCoreApplication::applicationDirPath() + "/Program/SASMprog.exe");
+    QString exePath = pathInTemp("SASMprog.exe");
     QFile::remove(exePath);
 
     while (QFile::exists(path)) {
@@ -641,17 +656,17 @@ void MainWindow::buildProgram(bool debugMode)
 
     if (debugMode) {
         //save input to file
-        QString inputPath = QString( QCoreApplication::applicationDirPath() + "/Program/input.txt" );
+        QString inputPath = pathInTemp("input.txt");
         Tab *currentTab = (Tab *) tabs->currentWidget();
         currentTab->saveInputToFile(inputPath);
         //create output file
-        QString outputPath = QString( QCoreApplication::applicationDirPath() + "/Program/output.txt" );
+        QString outputPath = pathInTemp("output.txt");
         QFile output;
         output.setFileName(outputPath);
         output.open(QIODevice::WriteOnly | QIODevice::Text);
     }
 
-    while (!QFile::exists(path)) {
+    while (! QFile::exists(path)) {
     }
 
     //NASM
@@ -663,33 +678,39 @@ void MainWindow::buildProgram(bool debugMode)
         QString objFormat = "elf32";
     #endif
     QStringList nasmArguments;
-    nasmArguments << "-g" << "-f" << objFormat << "Program/program.asm" << "-l" << "NASM/program.lst" << "-o" << "NASM/program.o";
+    nasmArguments << "-g" << "-f" << objFormat << pathInTemp("program.asm", true) << "-l" <<
+                     pathInTemp("program.lst", true) << "-o" << pathInTemp("program.o", true);
     QProcess nasmProcess;
-    QString nasmOutput = QCoreApplication::applicationDirPath() + "/NASM/compilererror.txt";
+    QString nasmOutput = pathInTemp("compilererror.txt");
     nasmProcess.setStandardOutputFile(nasmOutput);
     nasmProcess.setStandardErrorFile(nasmOutput, QIODevice::Append);
     nasmProcess.start(nasm, nasmArguments);
     nasmProcess.waitForFinished();
 
     //GCC
-    QString stdioMacros = "NASM/macro.o";
+    QString stdioMacros = pathInTemp("macro.o");
+    QFile macro;
     #ifdef Q_OS_WIN32
         QString gcc = QCoreApplication::applicationDirPath() + "/NASM/MinGW/bin/gcc.exe";
+        macro.setFileName(QCoreApplication::applicationDirPath() + "/NASM/macro.o");
+        macro.copy(stdioMacros);
     #else
         QString gcc = "gcc";
+        macro.setFileName(QCoreApplication::applicationDirPath() + "/NASM/macro.c");
+        macro.copy(pathInTemp("macro.c"));
 
         //macro.c compilation
         QStringList gccMArguments;
-        gccMArguments << "-x" << "c" << "NASM/macro.c" << "-c" << "-g" << "-o" << stdioMacros << "-m32";
+        gccMArguments << "-x" << "c" << pathInTemp("macro.c") << "-c" << "-g" << "-o" << stdioMacros << "-m32";
         QProcess gccMProcess;
         gccMProcess.start(gcc, gccMArguments);
         gccMProcess.waitForFinished();
     #endif
     //final linking
     QStringList gccArguments;
-    gccArguments << "NASM/program.o" << stdioMacros << "-g" << "-o" << "Program/SASMprog.exe" << "-m32";
+    gccArguments << pathInTemp("program.o") << stdioMacros << "-g" << "-o" << pathInTemp("SASMprog.exe") << "-m32";
     QProcess gccProcess;
-    QString gccOutput = QCoreApplication::applicationDirPath() + "/NASM/linkererror.txt";
+    QString gccOutput = pathInTemp("linkererror.txt");
     gccProcess.setStandardOutputFile(gccOutput);
     gccProcess.setStandardErrorFile(gccOutput, QIODevice::Append);
     gccProcess.start(gcc, gccArguments);
@@ -739,17 +760,17 @@ void MainWindow::runProgram()
     printLogWithTime(tr("The program executing...") + '\n', Qt::black);
     QCoreApplication::processEvents();
 
-    QString output = QString( QCoreApplication::applicationDirPath() + "/Program/output.txt" );
-    QString input = QString( QCoreApplication::applicationDirPath() + "/Program/input.txt" );
+    QString output = pathInTemp("output.txt");
+    QString input = pathInTemp("input.txt");
     Tab *currentTab = (Tab *) tabs->currentWidget();
     currentTab->saveInputToFile(input);
 
-    QString program = QCoreApplication::applicationDirPath() + "/Program/SASMprog.exe";
+    QString program = pathInTemp("SASMprog.exe");
     runProcess->setStandardInputFile(input);
     runProcess->setStandardOutputFile(output);
     runProcess->start(program);
 
-    timer->start();
+    timer->start(100);
     //Previous - connect(timer, SIGNAL(timeout()), this, SLOT(testStopOfProgram()));
 }
 
@@ -759,7 +780,7 @@ void MainWindow::testStopOfProgram()
     if (runProcess->state() == QProcess::NotRunning) {
         stopAction->setEnabled(false);
         Tab *currentTab = (Tab *) tabs->currentWidget();
-        currentTab->loadOutputFromFile(QCoreApplication::applicationDirPath() + "/Program/output.txt");
+        currentTab->loadOutputFromFile(pathInTemp("output.txt"));
         printLogWithTime(tr("The program finished.") + '\n', Qt::darkGreen);
         timer->stop();
     }
@@ -774,7 +795,7 @@ void MainWindow::runExeProgram()
        return;
     }
 
-    QString program = QCoreApplication::applicationDirPath() + "/Program/SASMprog.exe";
+    QString program = pathInTemp("SASMprog.exe");
     runProcess->startDetached(program);
 }
 
@@ -824,9 +845,10 @@ void MainWindow::debug()
         printLogWithTime(tr("Before debugging you need to build the program.") + '\n', Qt::red);
         return;
     }
+    ((Tab *) tabs->currentWidget())->clearOutput();
     printLogWithTime(tr("Debugging started...") + '\n', Qt::darkGreen);
-    QString path = QString( QCoreApplication::applicationDirPath() + "/Program/SASMprog.exe" );
-    debugger = new Debugger(compilerOut, path, ioIncIncluded);
+    QString path = pathInTemp("SASMprog.exe");
+    debugger = new Debugger(compilerOut, path, ioIncIncluded, pathInTemp(QString()));
     connect(debugger, SIGNAL(highlightLine(int)), this, SLOT(highlightDebugLine(int)));
     connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
     connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
@@ -877,9 +899,8 @@ void MainWindow::debugShowRegisters()
 void MainWindow::debugExit()
 {
     delete debugger;
-    QString path = QString( QCoreApplication::applicationDirPath() );
     Tab *currentTab = (Tab *) tabs->currentWidget();
-    currentTab->loadOutputFromFile(path + "/Program/output.txt");
+    currentTab->loadOutputFromFile(pathInTemp("output.txt"));
     printLogWithTime(tr("Debugging finished.") + '\n', Qt::darkGreen);
     disableDebugActions();
 }
@@ -1233,4 +1254,10 @@ void MainWindow::openAbout()
                        tr("Donate:") + '\n' +
                        tr("WMZ - Z282016332582") + '\n' +
                        tr("WMR - R331674303467"));
+}
+
+MainWindow::~MainWindow()
+{
+    //delete all temporary files
+    QDir(pathInTemp(QString())).removeRecursively();
 }

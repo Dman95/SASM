@@ -66,6 +66,7 @@ class MainWindow : public QMainWindow
     
 public:
     MainWindow(QWidget *parent = 0);
+    ~MainWindow();
 
     void initUi();
     void createMenus();
@@ -77,6 +78,7 @@ public:
     void printLogWithTime(const QString & message, const QColor &color);
     bool okToContinue(int index = -1);
     void setCurrentTabName(const QString &filePath, int index = -1);
+    QString pathInTemp(QString path, bool forCygwin = false);
 
 private:
     //ui
