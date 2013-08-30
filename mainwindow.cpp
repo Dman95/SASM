@@ -684,6 +684,7 @@ void MainWindow::buildProgram(bool debugMode)
     QString nasmOutput = pathInTemp("compilererror.txt");
     nasmProcess.setStandardOutputFile(nasmOutput);
     nasmProcess.setStandardErrorFile(nasmOutput, QIODevice::Append);
+    nasmProcess.setWorkingDirectory(QCoreApplication::applicationDirPath());
     nasmProcess.start(nasm, nasmArguments);
     nasmProcess.waitForFinished();
 
