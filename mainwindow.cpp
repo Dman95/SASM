@@ -1256,8 +1256,30 @@ void MainWindow::openAbout()
                        tr("WMR - R331674303467"));
 }
 
+bool MainWindow::removeDirRecuresively(const QString &dirName){
+    bool result = true;
+    QDir dir(dirName);
+
+    if (dir.exists(dirName)) {
+        Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst)) {
+            if (info.isDir()) {
+                result = removeDirRecuresively(info.absoluteFilePath());
+            }
+            else {
+                result = QFile::remove(info.absoluteFilePath());
+            }
+
+            if (!result) {
+                return result;
+            }
+        }
+        result = dir.rmdir(dirName);
+    }
+    return result;
+}
+
 MainWindow::~MainWindow()
 {
     //delete all temporary files
-    QDir(pathInTemp(QString())).removeRecursively();
+    removeDirRecuresively(pathInTemp(QString()));
 }
