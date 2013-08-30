@@ -637,8 +637,8 @@ void MainWindow::buildProgram(bool debugMode)
     QCoreApplication::processEvents();
 
     if (! QFile::exists(QCoreApplication::applicationDirPath() + "/NASM")) {
-        printLogWithTime(tr("Error! Directory NASM does not exist. Please, reinstall the program.") + '\n', Qt::red);
-        QMessageBox::critical(0, tr("Error!"), tr("Directory NASM does not exist. Please, reinstall the program."));
+        printLogWithTime(tr("Error! Directory NASM does not exist. Please reinstall the program.") + '\n', Qt::red);
+        QMessageBox::critical(0, tr("Error!"), tr("Directory NASM does not exist. Please reinstall the program."));
         return;
     }
 
@@ -757,7 +757,7 @@ void MainWindow::runProgram()
 
     ((Tab *) tabs->currentWidget())->clearOutput();
 
-    printLogWithTime(tr("The program executing...") + '\n', Qt::black);
+    printLogWithTime(tr("The program is executing...") + '\n', Qt::black);
     QCoreApplication::processEvents();
 
     QString output = pathInTemp("output.txt");
