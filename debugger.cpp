@@ -138,6 +138,14 @@ void Debugger::processMessage(QString output)
         emit started(); //emit start signal
     }
 
+    //if an error with the wrong name of the section has occurred
+    if (c == 2 && output.indexOf(QString("Make breakpoint pending on future shared library load")) != -1) {
+        this->setActionType(anyAction);
+        processAction(tr("An error has occurred in the debugger. Please check the names of the sections."));
+        QObject::disconnect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputToBuffer()));
+        emit finished();
+    }
+
     //process all actions after start
     if (c == 3) {
         if ((output.indexOf(QString("$1 =")) == -1) && (output.indexOf(QString("$2 =")) == -1))
