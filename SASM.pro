@@ -13,13 +13,19 @@ TEMPLATE = app
 
 binfile.files += sasm
 binfile.path = /usr/bin/
-data.files += Linux/*
+data.files += Linux/data/*
 data.path = /usr/share/sasm/
-shortcutfiles.files += desktop/sasm.desktop
+shortcutfiles.files += Linux/desktop/sasm.desktop
 shortcutfiles.path = /usr/share/applications/
+docfiles.files += Linux/doc/*
+docfiles.path = /usr/share/doc/sasm/
+manfiles.files += Linux/man/*
+manfiles.path = /usr/share/man/man1/
 INSTALLS += binfile
 INSTALLS += data
 INSTALLS += shortcutfiles
+INSTALLS += docfiles
+INSTALLS += manfiles
 
 SOURCES += main.cpp\
         mainwindow.cpp \
