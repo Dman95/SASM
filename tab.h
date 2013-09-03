@@ -48,6 +48,7 @@
 #include <QSplitter>
 #include <QSettings>
 #include <QTextStream>
+#include <QFile>
 #include "codeeditor.h"
 #include "ruqtextedit.h"
 
