@@ -80,6 +80,7 @@ public:
     void setCurrentTabName(const QString &filePath, int index = -1);
     QString pathInTemp(QString path, bool forCygwin = false);
     bool removeDirRecuresively(const QString &dirName);
+    QString applicationDataPath();
 
 private:
     //ui

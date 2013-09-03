@@ -9,27 +9,30 @@ Licensed under the GNU GPL v3.0. Based on the Qt.
 How to build SASM from sources:
 ===========================================================================
 You need:
-	Qt 5.0.1 and above
-	C++ comipler
+	Qt 4.8 and above
+	C++ compiler
 
 	On linux also: 
-	libxcb
-	gcc
-	nasm
+	gcc (x86) or gcc-multilib (x64)
 	gdb
+	nasm
+	libqt4-core 	
+	libqt4-gui
+	libxcb1
+	libxcb-render0
+	libxcb-icccm4
+	libxcb-sync0
 
 Download sources and unpack their.
 Go to directory with their: "cd <path>"
 Further print commands:
-"qmake"
-"make" for Linux and "mingw32-make" for Windows.
-You built main general part of program.
-
-Put SASM.exe (SASM) executable file to appropriate for your system folder: 
-Linux or Windows. From this folder you can run the Program.
+1) "qmake"
+2) "make" for Linux and "mingw32-make" for Windows.
+3) For Linux: "make install"
+   For Windows: Put SASM.exe executable file to folder "Windows". From this folder you can run the program.
 ===========================================================================
 
-Also you can download already compiled packages. In Linux - simply unpack their. In Windows - run install file and follow the instructions of installer.
+Also you can download already compiled packages from site http://dman95.github.io/SASM/
 
 More help info in file help.html
 
