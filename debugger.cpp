@@ -1,7 +1,7 @@
 /****************************************************************************
 ** SASM - simple IDE for NASM development
 ** Copyright (C) 2013 Dmitriy Manushin
-** Contact: site: https://sites.google.com/site/simpleasmproject/
+** Contact: site: http://dman95.github.io/SASM/
 **          e-mail: Dman1095@gmail.com
 **
 ** This file is part of SASM.
