@@ -43,6 +43,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
 {
+    this->setWindowTitle("SASM");
     setWindowIcon(QIcon(":images/mainIcon.png"));
 
     //restore settings
@@ -60,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     //set save and open directory
-    saveOpenDirectory = settings.value("saveopendirectory", QString(QCoreApplication::applicationDirPath() + "/Projects")).toString();
+    saveOpenDirectory = settings.value("saveopendirectory", QString(applicationDataPath() + "/Projects")).toString();
 
     //initial variables
     programIsBuilded = false;
@@ -631,12 +632,21 @@ QString MainWindow::pathInTemp(QString path, bool forCygwin)
     return temp + "/SASM/" + path;
 }
 
+QString MainWindow::applicationDataPath()
+{
+    #ifdef Q_OS_WIN32
+        return QCoreApplication::applicationDirPath();
+    #else
+        return QString("/usr/share/sasm");
+    #endif
+}
+
 void MainWindow::buildProgram(bool debugMode)
 {
     printLogWithTime(tr("Build started...") + '\n', Qt::black);
     QCoreApplication::processEvents();
 
-    if (! QFile::exists(QCoreApplication::applicationDirPath() + "/NASM")) {
+    if (! QFile::exists(applicationDataPath() + "/NASM")) {
         printLogWithTime(tr("Error! Directory NASM does not exist. Please reinstall the program.") + '\n', Qt::red);
         QMessageBox::critical(0, tr("Error!"), tr("Directory NASM does not exist. Please reinstall the program."));
         return;
@@ -671,7 +681,7 @@ void MainWindow::buildProgram(bool debugMode)
 
     //NASM
     #ifdef Q_OS_WIN32
-        QString nasm = QCoreApplication::applicationDirPath() + "/NASM/nasm.exe";
+        QString nasm = QCoreApplication::applicationDataPath() + "/NASM/nasm.exe";
         QString objFormat = "win32";
     #else
         QString nasm = "nasm";
@@ -684,7 +694,7 @@ void MainWindow::buildProgram(bool debugMode)
     QString nasmOutput = pathInTemp("compilererror.txt");
     nasmProcess.setStandardOutputFile(nasmOutput);
     nasmProcess.setStandardErrorFile(nasmOutput, QIODevice::Append);
-    nasmProcess.setWorkingDirectory(QCoreApplication::applicationDirPath());
+    nasmProcess.setWorkingDirectory(applicationDataPath());
     nasmProcess.start(nasm, nasmArguments);
     nasmProcess.waitForFinished();
 
@@ -692,12 +702,12 @@ void MainWindow::buildProgram(bool debugMode)
     QString stdioMacros = pathInTemp("macro.o");
     QFile macro;
     #ifdef Q_OS_WIN32
-        QString gcc = QCoreApplication::applicationDirPath() + "/NASM/MinGW/bin/gcc.exe";
-        macro.setFileName(QCoreApplication::applicationDirPath() + "/NASM/macro.o");
+        QString gcc = QCoreApplication::applicationDataPath() + "/NASM/MinGW/bin/gcc.exe";
+        macro.setFileName(QCoreApplication::applicationDataPath() + "/NASM/macro.o");
         macro.copy(stdioMacros);
     #else
         QString gcc = "gcc";
-        macro.setFileName(QCoreApplication::applicationDirPath() + "/NASM/macro.c");
+        macro.setFileName(applicationDataPath() + "/NASM/macro.c");
         macro.copy(pathInTemp("macro.c"));
 
         //macro.c compilation

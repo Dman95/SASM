@@ -8,9 +8,18 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = SASM
+TARGET = sasm
 TEMPLATE = app
 
+binfile.files += sasm
+binfile.path = /usr/bin/
+data.files += Linux/*
+data.path = /usr/share/sasm/
+shortcutfiles.files += desktop/sasm.desktop
+shortcutfiles.path = /usr/share/applications/
+INSTALLS += binfile
+INSTALLS += data
+INSTALLS += shortcutfiles
 
 SOURCES += main.cpp\
         mainwindow.cpp \
