@@ -637,7 +637,8 @@ QString MainWindow::applicationDataPath()
     #ifdef Q_OS_WIN32
         return QCoreApplication::applicationDirPath();
     #else
-        return QString("/usr/share/sasm");
+        QString path = QCoreApplication::applicationDirPath();
+        return path.left(path.length() - 4) + QString("/share/sasm"); //replace /bin with /share/sasm
     #endif
 }
 
