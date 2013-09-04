@@ -26,7 +26,7 @@ You need:
 Download sources and unpack their.
 Go to directory with their: "cd <path>"
 Further print commands:
-1) "qmake"
+1) "qmake" (For installing in specific directory on Linux - print: "qmake PREFIX=<path>". By default SASM installs in "/usr/bin" and "usr/share")
 2) "make" for Linux and "mingw32-make" for Windows.
 3) For Linux: "make install"
    For Windows: Put SASM.exe executable file to folder "Windows". From this folder you can run the program.
