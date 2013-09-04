@@ -11,8 +11,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = sasm
 TEMPLATE = app
 
-BINDIR = $$PREFIX/usr/bin
-DATADIR = $$PREFIX/usr/share
+isEmpty(PREFIX):PREFIX = /usr
+BINDIR = $$PREFIX/bin
+DATADIR = $$PREFIX/share
 
 binfile.files += sasm
 binfile.path = $$BINDIR
