@@ -11,7 +11,10 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = sasm
 TEMPLATE = app
 
-isEmpty(PREFIX):PREFIX = /usr
+isEmpty(PREFIX) {
+ PREFIX = /usr
+}
+
 BINDIR = $$PREFIX/bin
 DATADIR = $$PREFIX/share
 
@@ -21,9 +24,10 @@ data.files += Linux/data/*
 data.path = $$DATADIR/sasm/
 shortcutfiles.files += Linux/desktop/sasm.desktop
 shortcutfiles.path = $$DATADIR/applications/
-docfiles.files += Linux/doc/*
+docfiles.files += Linux/doc/changelog.gz
+docfiles.files += Linux/doc/copyright
 docfiles.path = $$DATADIR/doc/sasm/
-manfiles.files += Linux/man/*
+manfiles.files += Linux/man/sasm.1.gz
 manfiles.path = $$DATADIR/man/man1/
 INSTALLS += binfile
 INSTALLS += data
