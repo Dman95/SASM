@@ -31,7 +31,6 @@ INSTALLS += binfile
 INSTALLS += data
 INSTALLS += shortcutfiles
 INSTALLS += docfiles
-INSTALLS += manfiles
 
 SOURCES += main.cpp\
         mainwindow.cpp \
