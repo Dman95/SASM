@@ -1259,7 +1259,7 @@ void MainWindow::saveTabSplitterState(){
 void MainWindow::openAbout()
 {
     QMessageBox::about(this, tr("About SASM"),
-                       tr("SASM (SimpleASM) 2.0 Beta - simple Open Source IDE for NASM.") + '\n' +
+                       tr("SASM (SimpleASM) 2.0 - simple Open Source IDE for NASM.") + '\n' +
                        tr("Licensed under the GNU GPL v3.0") + '\n' +
                        tr("Based on the Qt.") + '\n' +
                        tr("Copyright © 2013 Dmitriy Manushin") + '\n' +
