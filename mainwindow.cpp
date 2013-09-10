@@ -638,7 +638,10 @@ QString MainWindow::applicationDataPath()
         return QCoreApplication::applicationDirPath();
     #else
         QString path = QCoreApplication::applicationDirPath();
-        return path.left(path.length() - 4) + QString("/share/sasm"); //replace /bin with /share/sasm
+        QString appDir = path.left(path.length() - 4) + QString("/share/sasm"); //replace /bin with /share/sasm
+        if (! QFile::exists(appDir))
+            return QCoreApplication::applicationDirPath();
+        return appDir;
     #endif
 }
 
