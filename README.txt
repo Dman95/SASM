@@ -33,6 +33,7 @@ Further print commands:
 ===========================================================================
 
 Also you can download already compiled packages from site http://dman95.github.io/SASM/
+or from OBS repository https://build.opensuse.org/package/show/home:Dman95/SASM
 
 More help info in file help.html
 
