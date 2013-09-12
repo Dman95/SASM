@@ -32,8 +32,7 @@ Further print commands:
    For Windows: Put "sasm.exe" executable file to folder "Windows". From this folder you can run the program.
 ===========================================================================
 
-Also you can download already compiled packages from site http://dman95.github.io/SASM/
-or from OBS repository https://build.opensuse.org/package/show/home:Dman95/SASM
+Also you can download already compiled packages from site http://dman95.github.io/SASM/ or from OBS repository https://build.opensuse.org/package/show/home:Dman95/SASM
 
 More help info in file help.html
 
