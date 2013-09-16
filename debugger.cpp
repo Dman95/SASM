@@ -64,8 +64,6 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tm
     process = new QProcess;
     process->start(gdb, arguments);
 
-    setActionType(start);
-
     QObject::connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputToBuffer()));
 
     bufferTimer = new QTimer;
@@ -134,23 +132,22 @@ void Debugger::processMessage(QString output)
     //wait for message like this: Breakpoint 1, 0x00401390 in sasmStartL ()
     if (c == 2 && output.indexOf(QString(" in ")) != -1) {
         c++;
-        this->setActionType(ni);
+        actionTypeQueue.enqueue(ni);
         emit started(); //emit start signal
     }
 
     //if an error with the wrong name of the section has occurred
     if (c == 2 && output.indexOf(QString("Make breakpoint pending on future shared library load")) != -1) {
-        this->setActionType(anyAction);
+        actionTypeQueue.enqueue(anyAction);
         processAction(tr("An error has occurred in the debugger. Please check the names of the sections."));
         QObject::disconnect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputToBuffer()));
         emit finished();
     }
 
     //process all actions after start
-    if (c == 3) {
+    if (c == 3)
         if ((output.indexOf(QString("$1 =")) == -1) && (output.indexOf(QString("$2 =")) == -1))
             processAction(output);
-    }
 }
 
 void Debugger::processAction(QString output)
@@ -161,6 +158,7 @@ void Debugger::processAction(QString output)
         return;
     }
 
+    DebugActionType actionType = actionTypeQueue.dequeue();
     int failIndex = output.indexOf(QString("Program received signal")); //program was completed incorrectly
     if (failIndex == -1) {
         if (actionType == si || actionType == ni) { //message is: line number + data
@@ -199,26 +197,38 @@ void Debugger::processAction(QString output)
         output += QChar('\n');
     }
 
-    if (output == QString("\r\n") || output == QString("\n") || output == QString("\r\n\n") || output == QString("\n\n")) //if empty
-        return;
+    if (actionType == infoRegisters) {
+        QTextStream registersStream(&output);
+        registersInfo *registers = new registersInfo[16];
+        for (int i = 0; i < 16; i++) {
+            if (i == 8 || i == 9) {
+                registersStream >> registers[i].name >> registers[i].hexValue;
+                registersStream.skipWhiteSpace();
+                registers[i].decValue = registersStream.readLine();
+            } else
+                registersStream >> registers[i].name >> registers[i].hexValue >> registers[i].decValue;
+        }
+        emit printRegisters(registers);
+        delete[] registers;
+    } else {
+        if (output == QString("\r\n") || output == QString("\n") || output == QString("\r\n\n") || output == QString("\n\n")) //if empty
+            return;
 
-    //print to log field
-    QTextCursor cursor = QTextCursor(textEdit->document());
-    cursor.movePosition(QTextCursor::End);
-    textEdit->setTextCursor(cursor);
-    textEdit->setTextColor(Qt::black);
-    textEdit->insertPlainText(output);
-    cursor.movePosition(QTextCursor::End);
-    textEdit->setTextCursor(cursor);
+        //print to log field
+        QTextCursor cursor = QTextCursor(textEdit->document());
+        cursor.movePosition(QTextCursor::End);
+        textEdit->setTextCursor(cursor);
+        textEdit->setTextColor(Qt::black);
+        textEdit->insertPlainText(output);
+        cursor.movePosition(QTextCursor::End);
+        textEdit->setTextCursor(cursor);
+    }
 }
 
-void Debugger::setActionType(DebugActionType action)
+void Debugger::doInput(QString command, DebugActionType actionType)
 {
-    actionType = action;
-}
-
-void Debugger::doInput(QString command)
-{
+    if (actionType != none)
+        actionTypeQueue.enqueue(actionType);
     //put \n after commands!
     if (process)
         process->write(command.toLatin1());
