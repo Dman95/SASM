@@ -43,7 +43,8 @@ SOURCES += main.cpp\
     finddialog.cpp \
     ruqtextedit.cpp \
     ruqplaintextedit.cpp \
-    getstartedwidget.cpp
+    getstartedwidget.cpp \
+    registerswindow.cpp
 
 HEADERS  += mainwindow.h \
     tab.h \
@@ -55,7 +56,8 @@ HEADERS  += mainwindow.h \
     finddialog.h \
     ruqtextedit.h \
     ruqplaintextedit.h \
-    getstartedwidget.h
+    getstartedwidget.h \
+    registerswindow.h
 
 FORMS += settings.ui
 

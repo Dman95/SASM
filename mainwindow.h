@@ -50,6 +50,7 @@
 #include <QFileDialog>
 #include <QTime>
 #include <QPointer>
+#include <QDesktopWidget>
 #include "tab.h"
 #include "highlighter.h"
 #include "debugger.h"
@@ -59,6 +60,7 @@
 #include "ruqtextedit.h"
 #include "getstartedwidget.h"
 #include "ui_settings.h"
+#include "registerswindow.h"
 
 class MainWindow : public QMainWindow
 {
@@ -142,6 +144,7 @@ private:
     CommandDebugWindow *anyCommandDebugWindow;
     bool programIsBuilded;
     bool ioIncIncluded;
+    RegistersWindow *registersWindow;
 
     //highlighters
     Highlighter *highlighter;
@@ -201,6 +204,8 @@ public slots:
     void debugAnyCommand();
     void debugRunCommand(QString command);
     void highlightDebugLine(int lineNum);
+    void printRegisters(Debugger::registersInfo *registers);
+    void setShowRegistersToUnchecked(void);
 
     //search
     void find();

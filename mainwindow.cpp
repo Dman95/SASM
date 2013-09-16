@@ -74,6 +74,7 @@ MainWindow::MainWindow(QWidget *parent)
     closeFromCloseAll = false;
     settingsStartTextEditor = 0;
     help = 0;
+    registersWindow = 0;
 
     timer = new QTimer;
     timer->setInterval(100);
@@ -306,7 +307,8 @@ void MainWindow::createActions()
 
     debugShowRegistersAction = new QAction(tr("Show registers"), this);
     debugShowRegistersAction->setShortcut(QString("Ctrl+R"));
-    connect(debugShowRegistersAction, SIGNAL(triggered()), this, SLOT(debugShowRegisters()));
+    debugShowRegistersAction->setCheckable(true);
+    connect(debugShowRegistersAction, SIGNAL(changed()), this, SLOT(debugShowRegisters()));
 
     debugMemoryDialogAction = new QAction(tr("Show memory"), this);
     debugMemoryDialogAction->setShortcut(QString("Ctrl+M"));
@@ -558,6 +560,12 @@ void MainWindow::closeAllChildWindows()
         help->close();
         delete help;
     }
+    if (registersWindow) {
+        registersWindow->close();
+        registersWindow->clear();
+        delete registersWindow;
+        registersWindow = 0;
+    }
 }
 
 bool MainWindow::deleteTab(int index, bool saveFileName)
@@ -588,7 +596,7 @@ bool MainWindow::okToContinue(int index)
     else
         deletingTab = (Tab *) tabs->widget(index);
     if (deletingTab->isCodeModified()) {
-        QMessageBox msgBox;
+        QMessageBox msgBox(this);
         QPushButton *yesButton = msgBox.addButton(tr("Yes"), QMessageBox::YesRole);
         msgBox.addButton(tr("No"), QMessageBox::NoRole);
         QPushButton *cancelButton = msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
@@ -867,6 +875,7 @@ void MainWindow::debug()
     connect(debugger, SIGNAL(highlightLine(int)), this, SLOT(highlightDebugLine(int)));
     connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
     connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
+    connect(debugger, SIGNAL(printRegisters(Debugger::registersInfo*)), this, SLOT(printRegisters(Debugger::registersInfo*)));
 }
 
 void MainWindow::enableDebugActions()
@@ -895,20 +904,84 @@ void MainWindow::disableDebugActions()
 
 void MainWindow::debugNext()
 {
-    debugger->setActionType(si);
-    debugger->doInput(QString("si\n"));
+    debugger->doInput(QString("si\n"), si);
+    debugShowRegisters();
 }
 
 void MainWindow::debugNextNi()
 {
-    debugger->setActionType(ni);
-    debugger->doInput(QString("ni\n"));
+    debugger->doInput(QString("ni\n"), ni);
+    debugShowRegisters();
 }
 
 void MainWindow::debugShowRegisters()
 {
-    debugger->setActionType(infoRegisters);
-    debugger->doInput(QString("info registers\n"));
+    if (debugShowRegistersAction->isChecked()) {
+        debugger->doInput(QString("info registers\n"), infoRegisters);
+    } else
+        if (registersWindow) {
+            registersWindow->close();
+            registersWindow->clear();
+            delete registersWindow;
+            registersWindow = 0;
+        }
+}
+
+void MainWindow::printRegisters(Debugger::registersInfo *registers)
+{
+    int tableHeight, tableWidth;
+    //create table
+    if (!registersWindow) {
+        registersWindow = new RegistersWindow(16, 3);
+        connect(registersWindow, SIGNAL(close()), this, SLOT(setShowRegistersToUnchecked()));
+        registersWindow->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::WindowDoesNotAcceptFocus);
+
+        tableWidth = registersWindow->horizontalHeader()->length() + 2;
+        registersWindow->move(QDesktopWidget().availableGeometry().width() - tableWidth, 80);
+
+        registersWindow->verticalHeader()->hide();
+        registersWindow->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        registersWindow->setSelectionMode(QAbstractItemView::NoSelection);
+        QStringList header;
+        header << tr("Register") << tr("Hex") << tr("Integer");
+        registersWindow->setHorizontalHeaderLabels(header);
+        registersWindow->setWindowTitle(tr("Registers"));
+    }
+
+    //fill table
+    if (!registersWindow->item(0, 0)) {
+        for (int i = 0; i < 16; i++) {
+            QTableWidgetItem *name = new QTableWidgetItem(registers[i].name);
+            QTableWidgetItem *hexValue = new QTableWidgetItem(registers[i].hexValue);
+            QTableWidgetItem *decValue = new QTableWidgetItem(registers[i].decValue);
+            registersWindow->setItem(i, 0, name);
+            registersWindow->setItem(i, 1, hexValue);
+            registersWindow->setItem(i, 2, decValue);
+        }
+    } else {
+        for (int i = 0; i < 16; i++) {
+            registersWindow->item(i, 0)->setText(registers[i].name);
+            registersWindow->item(i, 1)->setText(registers[i].hexValue);
+            registersWindow->item(i, 2)->setText(registers[i].decValue);
+        }
+    }
+
+    //adjust size
+    registersWindow->resizeColumnsToContents();
+    tableHeight = registersWindow->horizontalHeader()->height() +
+            registersWindow->verticalHeader()->length() + 2;
+    registersWindow->setFixedHeight(tableHeight);
+    tableWidth = registersWindow->horizontalHeader()->length() + 2;
+    registersWindow->setFixedWidth(tableWidth);
+    registersWindow->resizeColumnsToContents();
+
+    //show
+    registersWindow->show();
+}
+
+void MainWindow::setShowRegistersToUnchecked()
+{
+    debugShowRegistersAction->setChecked(false);
 }
 
 void MainWindow::debugExit()
@@ -916,6 +989,7 @@ void MainWindow::debugExit()
     delete debugger;
     Tab *currentTab = (Tab *) tabs->currentWidget();
     currentTab->loadOutputFromFile(pathInTemp("output.txt"));
+    debugShowRegistersAction->setChecked(false);
     printLogWithTime(tr("Debugging finished.") + '\n', Qt::darkGreen);
     disableDebugActions();
 }
@@ -948,7 +1022,6 @@ void MainWindow::debugExamineMemory()
 
 void MainWindow::debugAnyCommand()
 {
-    debugger->setActionType(anyAction);
     if (!anyCommandDebugWindow) {
         anyCommandDebugWindow = new CommandDebugWindow;
         connect(anyCommandDebugWindow, SIGNAL(runCommand(QString)), this, SLOT(debugRunCommand(QString)));
@@ -958,27 +1031,25 @@ void MainWindow::debugAnyCommand()
 
 void MainWindow::debugRunCommand(QString command)
 {
-    debugger->doInput(command + "\n");
+    debugger->doInput(command + "\n", anyAction);
 }
 
 void MainWindow::debugAddVariable(QString variableName, bool once)
 {
     //also may be registers with $ start
-    debugger->setActionType(infoMemory);
     if (once)
-        debugger->doInput(QString("p ") + variableName + QString("\n"));
+        debugger->doInput(QString("p ") + variableName + QString("\n"), infoMemory);
     else
-        debugger->doInput(QString("display ") + variableName + QString("\n"));
+        debugger->doInput(QString("display ") + variableName + QString("\n"), infoMemory);
 }
 
 void MainWindow::debugAddExamine(QString variableName, bool once)
 {
     //also may be registers with $ start and number addresses
-    debugger->setActionType(infoMemory);
     if (once)
-        debugger->doInput(QString("p *(") + variableName + QString(")\n"));
+        debugger->doInput(QString("p *(") + variableName + QString(")\n"), infoMemory);
     else
-        debugger->doInput(QString("display *(") + variableName + QString(")\n"));
+        debugger->doInput(QString("display *(") + variableName + QString(")\n"), infoMemory);
 }
 
 void MainWindow::find()

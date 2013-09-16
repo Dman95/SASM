@@ -49,8 +49,10 @@
 #include <QVector>
 #include <QCoreApplication>
 #include <QTimer>
+#include <QQueue>
 
-enum DebugActionType {start, ni, si, infoRegisters, infoMemory, anyAction};
+
+enum DebugActionType {ni, si, infoRegisters, infoMemory, anyAction, none};
 
 class Debugger : public QObject
 {
@@ -59,6 +61,11 @@ class Debugger : public QObject
 public:
     Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tmp, QWidget *parent = 0);
     ~Debugger();
+    struct registersInfo {
+        QString name;
+        QString hexValue;
+        QString decValue;
+    };
 
 private:
     void processLst();
@@ -79,7 +86,7 @@ private:
     bool ioIncIncluded;
     unsigned int ioIncSize;
 
-    DebugActionType actionType; //current action type from enum
+    QQueue<DebugActionType> actionTypeQueue; //queue of actions type from enum
     QString exitMessage; //message on exit in current platform
     QString tmpPath;
 
@@ -91,13 +98,13 @@ public slots:
     void processOutput();
     void processMessage(QString output);
     void processAction(QString output);
-    void setActionType(DebugActionType);
-    void doInput(QString command);
+    void doInput(QString command, DebugActionType actionType = none);
 
 signals:
     void highlightLine(int); //highlight current debug line
     void finished();
     void started(); //emited when debugger is ready to get commands like step into, etc.
+    void printRegisters(Debugger::registersInfo*);
 };
 
 #endif // DEBUGGER_H
