@@ -6,5 +6,5 @@ RegistersWindow::RegistersWindow(int rows, int columns, QWidget *parent) :
 }
 
 void RegistersWindow::closeEvent(QCloseEvent *) {
-    emit close();
+    emit closeSignal();
 }

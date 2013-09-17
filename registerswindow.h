@@ -13,7 +13,7 @@ protected:
     void closeEvent(QCloseEvent *);
     
 signals:
-    void close();
+    void closeSignal();
     
 public slots:
     

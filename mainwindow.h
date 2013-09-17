@@ -51,6 +51,7 @@
 #include <QTime>
 #include <QPointer>
 #include <QDesktopWidget>
+#include <QThread>
 #include "tab.h"
 #include "highlighter.h"
 #include "debugger.h"
