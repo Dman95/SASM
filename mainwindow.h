@@ -51,7 +51,6 @@
 #include <QTime>
 #include <QPointer>
 #include <QDesktopWidget>
-#include <QThread>
 #include "tab.h"
 #include "highlighter.h"
 #include "debugger.h"
@@ -139,6 +138,7 @@ private:
     QProcess *runProcess;
     CodeEditor *prevCodeEditor;
     QTimer *timer;
+    QTimer *windowTimer;
     Debugger *debugger;
     MemoryDebugWindow *memoryDebugWindow;
     MemoryDebugWindow *memoryExamineWindow;
@@ -228,6 +228,8 @@ public slots:
     //other windows
     void openHelp();
     void openAbout();
+
+    void activateMainWindow();
 };
 
 #endif // MAINWINDOW_H
