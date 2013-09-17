@@ -20,12 +20,12 @@ DATADIR = $$PREFIX/share
 
 binfile.files += sasm
 binfile.path = $$BINDIR
-data.files += Linux/data/*
+data.files += Linux/share/sasm/*
 data.path = $$DATADIR/sasm/
-shortcutfiles.files += Linux/desktop/sasm.desktop
+shortcutfiles.files += Linux/share/applications/sasm.desktop
 shortcutfiles.path = $$DATADIR/applications/
-docfiles.files += Linux/doc/changelog.gz
-docfiles.files += Linux/doc/copyright
+docfiles.files += Linux/share/doc/sasm/changelog.gz
+docfiles.files += Linux/share/doc/sasm/copyright
 docfiles.path = $$DATADIR/doc/sasm/
 INSTALLS += binfile
 INSTALLS += data

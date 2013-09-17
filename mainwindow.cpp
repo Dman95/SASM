@@ -643,12 +643,26 @@ QString MainWindow::pathInTemp(QString path, bool forCygwin)
 QString MainWindow::applicationDataPath()
 {
     #ifdef Q_OS_WIN32
-        return QCoreApplication::applicationDirPath();
+        QString appDir = QCoreApplication::applicationDirPath();
+        if (! QFile::exists(appDir + "/NASM")) {
+            appDir = QCoreApplication::applicationDirPath() + "/Windows";
+        }
+        if (! QFile::exists(appDir + "/NASM")) {
+            appDir = QCoreApplication::applicationDirPath();
+        }
+        return appDir;
     #else
         QString path = QCoreApplication::applicationDirPath();
         QString appDir = path.left(path.length() - 4) + QString("/share/sasm"); //replace /bin with /share/sasm
-        if (! QFile::exists(appDir))
-            return QCoreApplication::applicationDirPath();
+        if (! QFile::exists(appDir)) {
+            appDir = QCoreApplication::applicationDirPath() + "/share/sasm";
+        }
+        if (! QFile::exists(appDir)) {
+            appDir = QCoreApplication::applicationDirPath() + "/Linux/share/sasm";
+        }
+        if (! QFile::exists(appDir)) {
+            appDir = QCoreApplication::applicationDirPath();
+        }
         return appDir;
     #endif
 }
@@ -932,9 +946,9 @@ void MainWindow::printRegisters(Debugger::registersInfo *registers)
     int tableHeight, tableWidth;
     //create table
     if (!registersWindow) {
-        registersWindow = new RegistersWindow(16, 3);
-        connect(registersWindow, SIGNAL(close()), this, SLOT(setShowRegistersToUnchecked()));
-        registersWindow->setWindowFlags(Qt::WindowStaysOnTopHint | Qt::WindowDoesNotAcceptFocus);
+        registersWindow = new RegistersWindow(16, 3, this);
+        connect(registersWindow, SIGNAL(closeSignal()), this, SLOT(setShowRegistersToUnchecked()));
+        registersWindow->setWindowFlags(Qt::Window);
 
         tableWidth = registersWindow->horizontalHeader()->length() + 2;
         registersWindow->move(QDesktopWidget().availableGeometry().width() - tableWidth, 80);
@@ -977,6 +991,8 @@ void MainWindow::printRegisters(Debugger::registersInfo *registers)
 
     //show
     registersWindow->show();
+    QThread::msleep(50);
+    this->activateWindow();
 }
 
 void MainWindow::setShowRegistersToUnchecked()
