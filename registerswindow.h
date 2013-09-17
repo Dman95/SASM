@@ -11,7 +11,7 @@ public:
 
 protected:
     void closeEvent(QCloseEvent *);
-    
+
 signals:
     void closeSignal();
     

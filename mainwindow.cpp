@@ -991,8 +991,16 @@ void MainWindow::printRegisters(Debugger::registersInfo *registers)
 
     //show
     registersWindow->show();
-    QThread::msleep(50);
+    windowTimer = new QTimer;
+    connect(windowTimer, SIGNAL(timeout()), this, SLOT(activateMainWindow()));
+    windowTimer->setSingleShot(true);
+    windowTimer->start(50);
+}
+
+void MainWindow::activateMainWindow()
+{
     this->activateWindow();
+    delete windowTimer;
 }
 
 void MainWindow::setShowRegistersToUnchecked()
