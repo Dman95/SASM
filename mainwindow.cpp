@@ -693,7 +693,7 @@ void MainWindow::buildProgram(bool debugMode)
 
     //NASM
     #ifdef Q_OS_WIN32
-        QString nasm = QCoreApplication::applicationDataPath() + "/NASM/nasm.exe";
+        QString nasm = applicationDataPath() + "/NASM/nasm.exe";
         QString objFormat = "win32";
     #else
         QString nasm = "nasm";
@@ -714,8 +714,8 @@ void MainWindow::buildProgram(bool debugMode)
     QString stdioMacros = pathInTemp("macro.o");
     QFile macro;
     #ifdef Q_OS_WIN32
-        QString gcc = QCoreApplication::applicationDataPath() + "/NASM/MinGW/bin/gcc.exe";
-        macro.setFileName(QCoreApplication::applicationDataPath() + "/NASM/macro.o");
+        QString gcc = applicationDataPath() + "/NASM/MinGW/bin/gcc.exe";
+        macro.setFileName(applicationDataPath() + "/NASM/macro.o");
         macro.copy(stdioMacros);
     #else
         QString gcc = "gcc";
