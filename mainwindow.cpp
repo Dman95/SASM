@@ -948,7 +948,7 @@ void MainWindow::printRegisters(Debugger::registersInfo *registers)
     if (!registersWindow) {
         registersWindow = new RegistersWindow(16, 3, this);
         connect(registersWindow, SIGNAL(closeSignal()), this, SLOT(setShowRegistersToUnchecked()));
-        registersWindow->setWindowFlags(Qt::Window);
+        registersWindow->setWindowFlags(Qt::Tool);
 
         tableWidth = registersWindow->horizontalHeader()->length() + 2;
         registersWindow->move(QDesktopWidget().availableGeometry().width() - tableWidth, 80);
@@ -972,6 +972,12 @@ void MainWindow::printRegisters(Debugger::registersInfo *registers)
             registersWindow->setItem(i, 1, hexValue);
             registersWindow->setItem(i, 2, decValue);
         }
+        registersWindow->horizontalHeader()->resizeSection(2,
+                                             QFontMetrics(registersWindow->item(8, 2)->font()).width("<function.sasmMacroE_0.L>") + 10);
+        registersWindow->horizontalHeader()->resizeSection(1,
+                                             QFontMetrics(registersWindow->item(0, 1)->font()).width("0x99999999") + 10);
+        registersWindow->horizontalHeader()->resizeSection(0,
+                                             QFontMetrics(registersWindow->horizontalHeader()->font()).width("Register") + 15);
     } else {
         for (int i = 0; i < 16; i++) {
             registersWindow->item(i, 0)->setText(registers[i].name);
@@ -981,26 +987,15 @@ void MainWindow::printRegisters(Debugger::registersInfo *registers)
     }
 
     //adjust size
-    registersWindow->resizeColumnsToContents();
     tableHeight = registersWindow->horizontalHeader()->height() +
             registersWindow->verticalHeader()->length() + 2;
     registersWindow->setFixedHeight(tableHeight);
     tableWidth = registersWindow->horizontalHeader()->length() + 2;
     registersWindow->setFixedWidth(tableWidth);
-    registersWindow->resizeColumnsToContents();
 
     //show
     registersWindow->show();
-    windowTimer = new QTimer;
-    connect(windowTimer, SIGNAL(timeout()), this, SLOT(activateMainWindow()));
-    windowTimer->setSingleShot(true);
-    windowTimer->start(50);
-}
-
-void MainWindow::activateMainWindow()
-{
-    this->activateWindow();
-    delete windowTimer;
+    registersWindow->activateWindow();
 }
 
 void MainWindow::setShowRegistersToUnchecked()
