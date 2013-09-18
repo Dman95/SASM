@@ -201,9 +201,17 @@ void Debugger::processAction(QString output)
         QTextStream registersStream(&output);
         registersInfo *registers = new registersInfo[16];
         for (int i = 0; i < 16; i++) {
-            if (i == 8 || i == 9) {
+            if (i == 9) {
                 registersStream >> registers[i].name >> registers[i].hexValue;
                 registersStream.skipWhiteSpace();
+                registers[i].decValue = registersStream.readLine();
+            } else if (i == 8) {
+                registersStream >> registers[i].name >> registers[i].hexValue;
+                registersStream.skipWhiteSpace();
+                char c;
+                registersStream >> c;
+                while (c != ' ')
+                    registersStream >> c;
                 registers[i].decValue = registersStream.readLine();
             } else
                 registersStream >> registers[i].name >> registers[i].hexValue >> registers[i].decValue;

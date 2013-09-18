@@ -14,9 +14,6 @@ protected:
 
 signals:
     void closeSignal();
-    
-public slots:
-    
 };
 
 #endif // REGISTERSWINDOW_H
