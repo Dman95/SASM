@@ -1335,6 +1335,7 @@ void MainWindow::openHelp()
     QFile helpFile(":help/help.html");
     helpFile.open(QFile::ReadOnly);
     QTextStream helpText(&helpFile);
+    helpText.setCodec("utf-8");
     help->setHtml(helpText.readAll());
     help->setWindowState(Qt::WindowMaximized);
     help->setOpenExternalLinks(true);
