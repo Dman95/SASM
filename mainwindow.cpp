@@ -951,7 +951,7 @@ void MainWindow::printRegisters(Debugger::registersInfo *registers)
         registersWindow->setWindowFlags(Qt::Tool);
 
         tableWidth = registersWindow->horizontalHeader()->length() + 2;
-        registersWindow->move(QDesktopWidget().availableGeometry().width() - tableWidth, 80);
+        registersWindow->move(QDesktopWidget().availableGeometry().width() - tableWidth - 50, 80);
 
         registersWindow->verticalHeader()->hide();
         registersWindow->setEditTriggers(QAbstractItemView::NoEditTriggers);

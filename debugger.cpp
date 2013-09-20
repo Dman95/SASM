@@ -50,6 +50,8 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tm
     tmpPath = tmp;
     #ifdef Q_OS_WIN32
         QString gdb = QCoreApplication::applicationDirPath() + "/NASM/MinGW/bin/gdb.exe";
+        if (! QFile::exists(gdb))
+            gdb = QCoreApplication::applicationDirPath() + "/Windows/NASM/MinGW/bin/gdb.exe";
         ioIncSize = 726;
         exitMessage = "mingw_CRTStartup";
     #else
