@@ -40,8 +40,11 @@
 
 #include "codeeditor.h"
 
-CodeEditor::CodeEditor(QWidget *parent) : RuQPlainTextEdit(parent)
+CodeEditor::CodeEditor(QWidget *parent) :
+    RuQPlainTextEdit(parent), debugImage(":/images/debugLine.png")
 {
+    this->setDebugMode(false);
+    debugAreaWidth = 3 + debugImage.width() + 1;
     lineNumberArea = new LineNumberArea(this);
 
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
@@ -62,7 +65,7 @@ int CodeEditor::lineNumberAreaWidth()
         ++digits;
     }
 
-    int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
+    int space = fontMetrics().width(QLatin1Char('9')) * digits + debugAreaWidth;
 
     return space;
 }
@@ -74,13 +77,13 @@ void CodeEditor::updateLineNumberAreaWidth(int /* newBlockCount */)
 
 void CodeEditor::updateLineNumberArea(const QRect &rect, int dy)
 {
-    lastRect = rect;
     if (dy)
         lineNumberArea->scroll(0, dy);
     else
         lineNumberArea->update(0, rect.y(), lineNumberArea->width(), rect.height());
+        //indirectly invokes CodeEditor::lineNumberAreaPaintEvent() throw virtual LineNumberArea::paintEvent()
 
-    if (rect.contains(viewport()->rect()))
+    if (rect.contains(viewport()->rect())) //viewport - visible part of widget
         updateLineNumberAreaWidth(0);
 }
 
@@ -92,27 +95,9 @@ void CodeEditor::resizeEvent(QResizeEvent *e)
     lineNumberArea->setGeometry(QRect(cr.left(), cr.top(), lineNumberAreaWidth(), cr.height()));
 }
 
-void CodeEditor::highlightCurrentLine()
-{
-    QList<QTextEdit::ExtraSelection> extraSelections;
-
-    if (!isReadOnly()) {
-        QTextEdit::ExtraSelection selection;
-
-        QColor lineColor = QColor(232,232,255);
-
-        selection.format.setBackground(lineColor);
-        selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-        selection.cursor = textCursor();
-        selection.cursor.clearSelection();
-        extraSelections.append(selection);
-    }
-
-    setExtraSelections(extraSelections);
-}
-
 void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
+    //paint on line number area
     QPainter painter(lineNumberArea);
     painter.fillRect(event->rect(), QColor(240,240,240));
 
@@ -121,14 +106,20 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
     int bottom = top + (int) blockBoundingRect(block).height();
 
+    //set debugAreaWidth before drawing
+    debugAreaWidth = 3 + debugImage.width() + 1; //left margin + arrow width + right margin
+    updateLineNumberAreaWidth(0);
+
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             QString number = QString::number(blockNumber + 1);
             painter.setPen(Qt::black);
-            if (blockNumber + 1 == currentDebugLine)
-                painter.setPen(Qt::red);
-            painter.drawText(0, top, lineNumberArea->width(), fontMetrics().height(),
+            painter.drawText(0, top, lineNumberArea->width() - debugAreaWidth, fontMetrics().height(),
                              Qt::AlignRight, number);
+
+            if (blockNumber + 1 == currentDebugLine)
+                painter.drawPixmap(lineNumberArea->width() - debugAreaWidth + 3, top + fontMetrics().height() / 2 - debugImage.height() / 2,
+                                   debugImage.width(), debugImage.height(), debugImage);
         }
 
         block = block.next();
@@ -138,11 +129,69 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     }
 }
 
+void CodeEditor::highlightCurrentLine()
+{
+    if (!debugMode) {
+        QList<QTextEdit::ExtraSelection> extraSelections;
+
+        if (!isReadOnly()) {
+            QTextEdit::ExtraSelection selection;
+
+            QColor lineColor = QColor(232, 232, 255);
+
+            selection.format.setBackground(lineColor);
+            selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+            selection.cursor = textCursor();
+            selection.cursor.clearSelection();
+            extraSelections.append(selection);
+        }
+
+        setExtraSelections(extraSelections);
+    }
+}
+
+void CodeEditor::highlightDebugLine(int lineNumber)
+{
+    if (debugMode) {
+        QList<QTextEdit::ExtraSelection> extraSelections;
+
+        if (!isReadOnly()) {
+            QTextEdit::ExtraSelection selection;
+
+            QColor lineColor = QColor(235, 200, 40);
+
+            selection.format.setBackground(lineColor);
+            selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+            selection.cursor = QTextCursor(this->document());
+            selection.cursor.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, lineNumber - 1);
+            selection.cursor.clearSelection();
+            this->setTextCursor(selection.cursor); //scroll to debugging line
+            extraSelections.append(selection);
+        }
+
+        setExtraSelections(extraSelections);
+    }
+}
+
 void CodeEditor::updateDebugLine(int number)
 {
+    if (number == -1)
+        setDebugMode(false);
+    else
+        setDebugMode(true);
     currentDebugLine = number;
-    lineNumberArea->scroll(0, 1);
-    lineNumberArea->scroll(0, -1);
+
+    //create rectangle of line number area and highlight debug line throw updateRequest()
+    QRect rect(lineNumberArea->x(), lineNumberArea->y(), lineNumberArea->width(), lineNumberArea->height());
+    emit updateRequest(rect, 0);
+
+    highlightDebugLine(number);
+    highlightCurrentLine();
+}
+
+void CodeEditor::setDebugMode(bool mode)
+{
+    debugMode = mode;
 }
 
 void CodeEditor::putTab()

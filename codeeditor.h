@@ -70,6 +70,8 @@ public slots:
     void putTab();
     void deleteTab();
     void highlightCurrentLine();
+    void highlightDebugLine(int lineNumber);
+    void setDebugMode(bool mode);
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -82,7 +84,9 @@ private slots:
 private:
     QWidget *lineNumberArea;
     int currentDebugLine;
-    QRect lastRect;
+    bool debugMode;
+    int debugAreaWidth;
+    QPixmap debugImage;
 };
 
 
