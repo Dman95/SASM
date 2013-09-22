@@ -3,5 +3,6 @@
         <file>mainIcon.png</file>
         <file>smallIcon.png</file>
         <file>debugLine.png</file>
+        <file>breakpoint.png</file>
     </qresource>
 </RCC>

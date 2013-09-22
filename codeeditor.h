@@ -63,6 +63,7 @@ public:
     ~CodeEditor();
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
+    void lineNumberAreaMousePressEvent(QMouseEvent *event);
     int lineNumberAreaWidth();
 
 public slots:
@@ -72,6 +73,7 @@ public slots:
     void highlightCurrentLine();
     void highlightDebugLine(int lineNumber);
     void setDebugMode(bool mode);
+    QList<int> *getBreakpoints();
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -87,6 +89,13 @@ private:
     bool debugMode;
     int debugAreaWidth;
     QPixmap debugImage;
+    QPixmap breakpointImage;
+    QList<int> breakpoints; //numbers of lines with breakpoints
+    int scroll;
+    int firstTopMargin;
+
+signals:
+    void breakpointsChanged(int lineNumber, bool isAdded);
 };
 
 
@@ -104,6 +113,9 @@ public:
 protected:
     void paintEvent(QPaintEvent *event) {
         codeEditor->lineNumberAreaPaintEvent(event);
+    }
+    void mousePressEvent(QMouseEvent *event) {
+        codeEditor->lineNumberAreaMousePressEvent(event);
     }
 
 private:

@@ -41,10 +41,14 @@
 #include "codeeditor.h"
 
 CodeEditor::CodeEditor(QWidget *parent) :
-    RuQPlainTextEdit(parent), debugImage(":/images/debugLine.png")
+    RuQPlainTextEdit(parent), debugImage(":/images/debugLine.png"),
+    breakpointImage(":/images/breakpoint.png")
 {
     this->setDebugMode(false);
     debugAreaWidth = 3 + debugImage.width() + 1;
+    scroll = 0;
+    this->setWordWrapMode(QTextOption::NoWrap);
+    firstTopMargin = contentOffset().y();
     lineNumberArea = new LineNumberArea(this);
 
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
@@ -77,9 +81,10 @@ void CodeEditor::updateLineNumberAreaWidth(int /* newBlockCount */)
 
 void CodeEditor::updateLineNumberArea(const QRect &rect, int dy)
 {
-    if (dy)
+    if (dy) {
+        scroll -= dy;
         lineNumberArea->scroll(0, dy);
-    else
+    } else
         lineNumberArea->update(0, rect.y(), lineNumberArea->width(), rect.height());
         //indirectly invokes CodeEditor::lineNumberAreaPaintEvent() throw virtual LineNumberArea::paintEvent()
 
@@ -99,7 +104,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     //paint on line number area
     QPainter painter(lineNumberArea);
-    painter.fillRect(event->rect(), QColor(240,240,240));
+    painter.fillRect(event->rect(), QColor(240, 240, 240));
 
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
@@ -117,9 +122,15 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
             painter.drawText(0, top, lineNumberArea->width() - debugAreaWidth, fontMetrics().height(),
                              Qt::AlignRight, number);
 
-            if (blockNumber + 1 == currentDebugLine)
-                painter.drawPixmap(lineNumberArea->width() - debugAreaWidth + 3, top + fontMetrics().height() / 2 - debugImage.height() / 2,
+            if (blockNumber + 1 == currentDebugLine) //blocks counting starts with 0, line number is equivalent (block number + 1)
+                //if QTextOption::NoWrap is not set, lines count - visible lines, block count - lines divided by '\n'
+                painter.drawPixmap(lineNumberArea->width() - debugAreaWidth + 3,
+                                   top + fontMetrics().height() / 2 - debugImage.height() / 2,
                                    debugImage.width(), debugImage.height(), debugImage);
+            if (breakpoints.contains(blockNumber + 1))
+                painter.drawPixmap(lineNumberArea->width() - debugAreaWidth + 3,
+                                   top + fontMetrics().height() / 2 - breakpointImage.height() / 2,
+                                   breakpointImage.width(), breakpointImage.height(), breakpointImage);
         }
 
         block = block.next();
@@ -127,6 +138,45 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
         bottom = top + (int) blockBoundingRect(block).height();
         ++blockNumber;
     }
+}
+
+void CodeEditor::lineNumberAreaMousePressEvent(QMouseEvent *event)
+{
+    //if mouse click has been made add breakpoint
+    //counting line number
+    int lineNumber = 0;
+    QTextBlock block = document()->firstBlock();
+    int sumHeight = firstTopMargin;
+    if (scroll + event->y() < firstTopMargin) //if top
+        lineNumber = 1;
+    while (block.isValid() && scroll + event->y() > sumHeight) {
+        sumHeight += blockBoundingGeometry(block).height();
+        block = block.next();
+        lineNumber++;
+    }
+
+    if (lineNumber <= this->document()->lineCount()) {
+        //blocks counting starts with 0
+        lineNumber = document()->findBlockByLineNumber(lineNumber - 1).blockNumber() + 1; //line number to paint
+
+        //add or remove line number in list
+        if (breakpoints.contains(lineNumber)) {
+            breakpoints.removeOne(lineNumber);
+            emit breakpointsChanged(lineNumber, false);
+        } else {
+            breakpoints.append(lineNumber);
+            emit breakpointsChanged(lineNumber, true);
+        }
+
+        //repaint
+        QRect lineNumberAreaRect(lineNumberArea->x(), lineNumberArea->y(), lineNumberArea->width(), lineNumberArea->height());
+        emit updateRequest(lineNumberAreaRect, 0);
+    }
+}
+
+QList<int> *CodeEditor::getBreakpoints()
+{
+    return &breakpoints;
 }
 
 void CodeEditor::highlightCurrentLine()
@@ -182,8 +232,8 @@ void CodeEditor::updateDebugLine(int number)
     currentDebugLine = number;
 
     //create rectangle of line number area and highlight debug line throw updateRequest()
-    QRect rect(lineNumberArea->x(), lineNumberArea->y(), lineNumberArea->width(), lineNumberArea->height());
-    emit updateRequest(rect, 0);
+    QRect lineNumberAreaRect(lineNumberArea->x(), lineNumberArea->y(), lineNumberArea->width(), lineNumberArea->height());
+    emit updateRequest(lineNumberAreaRect, 0);
 
     highlightDebugLine(number);
     highlightCurrentLine();

@@ -52,7 +52,7 @@
 #include <QQueue>
 
 
-enum DebugActionType {ni, si, infoRegisters, infoMemory, anyAction, none};
+enum DebugActionType {ni, si, infoRegisters, infoMemory, anyAction, none, breakpoint};
 
 class Debugger : public QObject
 {
@@ -88,6 +88,7 @@ private:
 
     QQueue<DebugActionType> actionTypeQueue; //queue of actions type from enum
     QString exitMessage; //message on exit in current platform
+    QString cExitMessage; //message on exit which shows when "continue" command used
     QString tmpPath;
 
     QString buffer; //global gdb output buffer
@@ -98,7 +99,8 @@ public slots:
     void processOutput();
     void processMessage(QString output);
     void processAction(QString output);
-    void doInput(QString command, DebugActionType actionType = none);
+    void doInput(QString command, DebugActionType actionType);
+    void changeBreakpoint(int lineNumber, bool isAdded);
 
 signals:
     void highlightLine(int); //highlight current debug line

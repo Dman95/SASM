@@ -193,6 +193,7 @@ void MainWindow::createMenus()
     debugMenu->addAction(debugAction);
     debugMenu->addAction(debugAnyAction);
     debugMenu->addSeparator();
+    debugMenu->addAction(debugContinueAction);
     debugMenu->addAction(debugNextAction);
     debugMenu->addAction(debugNextNiAction);
     debugMenu->addSeparator();
@@ -296,6 +297,10 @@ void MainWindow::createActions()
     debugAction = new QAction(tr("Debug"), this);
     debugAction->setShortcut(QString("Ctrl+D"));
     connect(debugAction, SIGNAL(triggered()), this, SLOT(debug()));
+
+    debugContinueAction = new QAction(tr("Continue"), this);
+    debugContinueAction->setShortcut(QString("F5"));
+    connect(debugContinueAction, SIGNAL(triggered()), this, SLOT(debugContinue()));
 
     debugNextAction = new QAction(tr("Step into"), this);
     debugNextAction->setShortcut(QString("Shift+F7"));
@@ -885,16 +890,27 @@ void MainWindow::debug()
     ((Tab *) tabs->currentWidget())->clearOutput();
     printLogWithTime(tr("Debugging started...") + '\n', Qt::darkGreen);
     QString path = pathInTemp("SASMprog.exe");
+    CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
     debugger = new Debugger(compilerOut, path, ioIncIncluded, pathInTemp(QString()));
     connect(debugger, SIGNAL(highlightLine(int)), this, SLOT(highlightDebugLine(int)));
     connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
     connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
     connect(debugger, SIGNAL(printRegisters(Debugger::registersInfo*)), this, SLOT(printRegisters(Debugger::registersInfo*)));
+    connect(code, SIGNAL(breakpointsChanged(int,bool)), debugger, SLOT(changeBreakpoint(int,bool)));
 }
 
 void MainWindow::enableDebugActions()
 {
+    //set all user's breakpoints
+    CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
+    int lineNumber;
+    foreach (lineNumber, *(code->getBreakpoints())) {
+        debugger->changeBreakpoint(lineNumber, true);
+    }
+
+    //enable all actions
     debugAction->setEnabled(false);
+    debugContinueAction->setEnabled(true);
     debugNextAction->setEnabled(true);
     debugNextNiAction->setEnabled(true);
     debugShowRegistersAction->setEnabled(true);
@@ -907,6 +923,7 @@ void MainWindow::enableDebugActions()
 void MainWindow::disableDebugActions()
 {
     debugAction->setEnabled(true);
+    debugContinueAction->setEnabled(false);
     debugNextAction->setEnabled(false);
     debugNextNiAction->setEnabled(false);
     debugShowRegistersAction->setEnabled(false);
@@ -914,6 +931,11 @@ void MainWindow::disableDebugActions()
     debugExamineMemoryAction->setEnabled(false);
     debugAnyAction->setEnabled(false);
     debugExitAction->setEnabled(false);
+}
+
+void MainWindow::debugContinue()
+{
+    debugger->doInput(QString("c\n"), ni);
 }
 
 void MainWindow::debugNext()
@@ -1304,6 +1326,7 @@ void MainWindow::changeActionsState(int widgetIndex)
         runExeAction->setEnabled(false);
         stopAction->setEnabled(false);
         debugAction->setEnabled(false);
+        debugContinueAction->setEnabled(false);
         debugNextAction->setEnabled(false);
         debugNextNiAction->setEnabled(false);
         debugExitAction->setEnabled(false);
