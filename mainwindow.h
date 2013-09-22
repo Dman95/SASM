@@ -123,6 +123,7 @@ private:
     QAction *runExeAction;
     QAction *stopAction;
     QAction *debugAction;
+    QAction *debugContinueAction;
     QAction *debugNextAction;
     QAction *debugNextNiAction;
     QAction *debugExitAction;
@@ -191,6 +192,7 @@ public slots:
 
     //debug
     void debug();
+    void debugContinue();
     void enableDebugActions();
     void disableDebugActions();
     void debugNext();

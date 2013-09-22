@@ -59,6 +59,7 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tm
         ioIncSize = 710;
         exitMessage = "libc_start_main";
     #endif
+    cExitMessage = "exited normally";
 
     QStringList arguments;
     arguments << path;
@@ -107,7 +108,7 @@ void Debugger::processMessage(QString output)
         done.
         (gdb)*/
 
-        doInput(QString("disas sasmStartL\n"));
+        doInput(QString("disas sasmStartL\n"), none);
         c++;
         return;
     }
@@ -154,15 +155,21 @@ void Debugger::processMessage(QString output)
 
 void Debugger::processAction(QString output)
 {
-    if (output.indexOf(exitMessage) != -1) { //if debug finished
+    if (output.indexOf(exitMessage) != -1 || output.indexOf(cExitMessage) != -1) { //if debug finished
         QObject::disconnect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputToBuffer()));
         emit finished();
         return;
     }
 
+    if (actionTypeQueue.isEmpty())
+        return;
     DebugActionType actionType = actionTypeQueue.dequeue();
+
     int failIndex = output.indexOf(QString("Program received signal")); //program was completed incorrectly
-    if (failIndex == -1) {
+    if (failIndex == -1) { //if program works normally
+        if (actionType == breakpoint)
+            return;
+
         if (actionType == si || actionType == ni) { //message is: line number + data
                                                     //print line number and other data
             //scan line number in memory
@@ -191,48 +198,49 @@ void Debugger::processAction(QString output)
                 output = QString::number(lineNumber) + tr(" line") + output.mid(output.indexOf("()") + 2);
             }
         }
+
+        if ((actionType == anyAction || actionType == infoMemory) && output[output.length() - 1] != '\n') { //add linefeed
+            output += QChar('\n');
+        }
+
+        if (actionType == infoRegisters) {
+            QTextStream registersStream(&output);
+            registersInfo *registers = new registersInfo[16];
+            for (int i = 0; i < 16; i++) {
+                if (i == 9) {
+                    registersStream >> registers[i].name >> registers[i].hexValue;
+                    registersStream.skipWhiteSpace();
+                    registers[i].decValue = registersStream.readLine();
+                } else if (i == 8) {
+                    registersStream >> registers[i].name >> registers[i].hexValue;
+                    registersStream.skipWhiteSpace();
+                    char c;
+                    registersStream >> c;
+                    while (c != ' ')
+                        registersStream >> c;
+                    registers[i].decValue = registersStream.readLine();
+                } else
+                    registersStream >> registers[i].name >> registers[i].hexValue >> registers[i].decValue;
+            }
+            emit printRegisters(registers);
+            delete[] registers;
+            return;
+        }
+
+        if (output == QString("\r\n") || output == QString("\n") || output == QString("\r\n\n") || output == QString("\n\n")) //if empty
+            return;
     } else { //if program fail
         output = output.mid(failIndex);
     }
 
-    if ((actionType == anyAction || actionType == infoMemory) && output[output.length() - 1] != '\n') { //add linefeed
-        output += QChar('\n');
-    }
-
-    if (actionType == infoRegisters) {
-        QTextStream registersStream(&output);
-        registersInfo *registers = new registersInfo[16];
-        for (int i = 0; i < 16; i++) {
-            if (i == 9) {
-                registersStream >> registers[i].name >> registers[i].hexValue;
-                registersStream.skipWhiteSpace();
-                registers[i].decValue = registersStream.readLine();
-            } else if (i == 8) {
-                registersStream >> registers[i].name >> registers[i].hexValue;
-                registersStream.skipWhiteSpace();
-                char c;
-                registersStream >> c;
-                while (c != ' ')
-                    registersStream >> c;
-                registers[i].decValue = registersStream.readLine();
-            } else
-                registersStream >> registers[i].name >> registers[i].hexValue >> registers[i].decValue;
-        }
-        emit printRegisters(registers);
-        delete[] registers;
-    } else {
-        if (output == QString("\r\n") || output == QString("\n") || output == QString("\r\n\n") || output == QString("\n\n")) //if empty
-            return;
-
-        //print to log field
-        QTextCursor cursor = QTextCursor(textEdit->document());
-        cursor.movePosition(QTextCursor::End);
-        textEdit->setTextCursor(cursor);
-        textEdit->setTextColor(Qt::black);
-        textEdit->insertPlainText(output);
-        cursor.movePosition(QTextCursor::End);
-        textEdit->setTextCursor(cursor);
-    }
+    //print information to log field
+    QTextCursor cursor = QTextCursor(textEdit->document());
+    cursor.movePosition(QTextCursor::End);
+    textEdit->setTextCursor(cursor);
+    textEdit->setTextColor(Qt::black);
+    textEdit->insertPlainText(output);
+    cursor.movePosition(QTextCursor::End);
+    textEdit->setTextCursor(cursor);
 }
 
 void Debugger::doInput(QString command, DebugActionType actionType)
@@ -280,17 +288,34 @@ void Debugger::run()
     //set breakpoint on main, run program amd open output and input files
     //put \n after commands!
     //b main and run before others!
-    doInput(QString("b main\n"));
-    doInput(QString("cd " + tmpPath + "\n"));
-    doInput(QString("run\n"));
-    doInput(QString("p dup2(open(\"input.txt\",0),0)\n"));
-    doInput(QString("p dup2(open(\"output.txt\",1),1)\n"));
+    doInput(QString("b main\n"), none);
+    doInput(QString("cd " + tmpPath + "\n"), none);
+    doInput(QString("run\n"), none);
+    doInput(QString("p dup2(open(\"input.txt\",0),0)\n"), none);
+    doInput(QString("p dup2(open(\"output.txt\",1),1)\n"), none);
+}
+
+void Debugger::changeBreakpoint(int lineNumber, bool isAdded)
+{
+    bool found = false;
+    for (int i = lines.count() - 1; i >= 0; i--) //find address of line
+        if ((unsigned int) lineNumber == lines[i].numInCode) {
+            lineNumber = lines[i].numInMem;
+            found = true;
+            break;
+        }
+    if (found) {
+        if (isAdded) //if breakpoint was added then set it
+            doInput(QString("b *0x") + QString::number(lineNumber, 16) + QString("\n"), breakpoint);
+        else //if breakpoint was deleted then remove it
+            doInput(QString("clear *0x") + QString::number(lineNumber, 16) + QString("\n"), breakpoint);
+    }
 }
 
 Debugger::~Debugger() {
     emit highlightLine(-1);
-    doInput("c\n");
-    doInput("quit\n");
+    doInput("c\n", none);
+    doInput("quit\n", none);
     process->waitForFinished(2000);
     process->kill();
     delete process;
