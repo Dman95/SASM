@@ -43,6 +43,7 @@
 
 #include <QPainter>
 #include <QTextBlock>
+#include <QScrollBar>
 #include "ruqplaintextedit.h"
 
 QT_BEGIN_NAMESPACE
@@ -59,7 +60,7 @@ class CodeEditor : public RuQPlainTextEdit
     Q_OBJECT
 
 public:
-    CodeEditor(QWidget *parent = 0);
+    CodeEditor(QWidget *parent = 0, bool withBeakpoints = true);
     ~CodeEditor();
 
     void lineNumberAreaPaintEvent(QPaintEvent *event);
@@ -91,8 +92,8 @@ private:
     QPixmap debugImage;
     QPixmap breakpointImage;
     QList<int> breakpoints; //numbers of lines with breakpoints
-    int scroll;
     int firstTopMargin;
+    bool hasBreakpoints;
 
 signals:
     void breakpointsChanged(int lineNumber, bool isAdded);

@@ -936,6 +936,7 @@ void MainWindow::disableDebugActions()
 void MainWindow::debugContinue()
 {
     debugger->doInput(QString("c\n"), ni);
+    debugShowRegisters();
 }
 
 void MainWindow::debugNext()
@@ -1073,6 +1074,7 @@ void MainWindow::debugAnyCommand()
 void MainWindow::debugRunCommand(QString command)
 {
     debugger->doInput(command + "\n", anyAction);
+    debugShowRegisters();
 }
 
 void MainWindow::debugAddVariable(QString variableName, bool once)
@@ -1082,6 +1084,7 @@ void MainWindow::debugAddVariable(QString variableName, bool once)
         debugger->doInput(QString("p ") + variableName + QString("\n"), infoMemory);
     else
         debugger->doInput(QString("display ") + variableName + QString("\n"), infoMemory);
+    debugShowRegisters();
 }
 
 void MainWindow::debugAddExamine(QString variableName, bool once)
@@ -1091,6 +1094,7 @@ void MainWindow::debugAddExamine(QString variableName, bool once)
         debugger->doInput(QString("p *(") + variableName + QString(")\n"), infoMemory);
     else
         debugger->doInput(QString("display *(") + variableName + QString(")\n"), infoMemory);
+    debugShowRegisters();
 }
 
 void MainWindow::find()
@@ -1245,7 +1249,7 @@ void MainWindow::openSettings()
     settingsUi.language->setCurrentIndex(settings.value("language", 0).toInt());
 
     if (!settingsStartTextEditor) {
-        settingsStartTextEditor = new CodeEditor;
+        settingsStartTextEditor = new CodeEditor(0, false);
         settingsHighlighter = new Highlighter;
         settingsHighlighter->setDocument(settingsStartTextEditor->document());
         QVBoxLayout *startTextLayout = new QVBoxLayout;
