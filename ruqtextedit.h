@@ -45,6 +45,7 @@
 #include <QAction>
 #include <QMenu>
 #include <QContextMenuEvent>
+#include <QPointer>
 
 class RuQTextEdit : public QTextEdit
 {
@@ -58,7 +59,7 @@ protected:
     void contextMenuEvent(QContextMenuEvent *e);
 
 private:
-    QMenu *contextMenu;
+    QPointer<QMenu> contextMenu;
     QAction *undoAction;
     QAction *redoAction;
     QAction *cutAction;

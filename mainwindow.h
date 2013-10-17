@@ -50,17 +50,15 @@
 #include <QFileDialog>
 #include <QTime>
 #include <QPointer>
-#include <QDesktopWidget>
 #include "tab.h"
 #include "highlighter.h"
 #include "debugger.h"
-#include "memorydebugwindow.h"
 #include "commanddebugwindow.h"
 #include "finddialog.h"
 #include "ruqtextedit.h"
 #include "getstartedwidget.h"
 #include "ui_settings.h"
-#include "registerswindow.h"
+#include "debugtablewidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -128,8 +126,7 @@ private:
     QAction *debugNextNiAction;
     QAction *debugExitAction;
     QAction *debugShowRegistersAction;
-    QAction *debugMemoryDialogAction;
-    QAction *debugExamineMemoryAction;
+    QAction *debugShowMemoryAction;
     QAction *debugAnyAction;
     QAction *settingsAction;
     QAction *helpAction;
@@ -140,12 +137,12 @@ private:
     CodeEditor *prevCodeEditor;
     QTimer *timer;
     Debugger *debugger;
-    MemoryDebugWindow *memoryDebugWindow;
-    MemoryDebugWindow *memoryExamineWindow;
     CommandDebugWindow *anyCommandDebugWindow;
     bool programIsBuilded;
     bool ioIncIncluded;
-    RegistersWindow *registersWindow;
+    DebugTableWidget *registersWindow;
+    DebugTableWidget *memoryWindow;
+    QList<RuQPlainTextEdit::Watch> watches;
 
     //highlighters
     Highlighter *highlighter;
@@ -199,15 +196,14 @@ public slots:
     void debugNextNi();
     void debugExit();
     void debugShowRegisters();
-    void debugOpenMemoryDialog();
-    void debugExamineMemory();
-    void debugAddVariable(QString variableName, bool once);
-    void debugAddExamine(QString variableName, bool once);
+    void debugShowMemory();
     void debugAnyCommand();
     void debugRunCommand(QString command);
     void highlightDebugLine(int lineNum);
-    void printRegisters(Debugger::registersInfo *registers);
-    void setShowRegistersToUnchecked(void);
+    void saveWatches(DebugTableWidget *table);
+    void setShowRegistersToUnchecked();
+    void setShowMemoryToUnchecked();
+    void setShowMemoryToChecked(const RuQPlainTextEdit::Watch &variable);
 
     //search
     void find();

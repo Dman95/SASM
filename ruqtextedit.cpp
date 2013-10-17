@@ -85,30 +85,31 @@ void RuQTextEdit::contextMenuEvent(QContextMenuEvent *e)
     contextMenu = new QMenu;
     QTextCursor textCursor = this->textCursor();
 
-    cutAction->setEnabled(true);
-    copyAction->setEnabled(true);
-    deleteAction->setEnabled(true);
     //if nothing selected
     if (textCursor.selectionEnd() - textCursor.selectionStart() <= 0) {
         cutAction->setEnabled(false);
         copyAction->setEnabled(false);
         deleteAction->setEnabled(false);
+    } else {
+        cutAction->setEnabled(true);
+        copyAction->setEnabled(true);
+        deleteAction->setEnabled(true);
     }
 
-    undoAction->setVisible(true);
-    redoAction->setVisible(true);
-    cutAction->setVisible(true);
-    pasteAction->setVisible(true);
-    deleteAction->setVisible(true);
-    clearAction->setVisible(false);
     if (this->isReadOnly()) {
         undoAction->setVisible(false);
         redoAction->setVisible(false);
         cutAction->setVisible(false);
         pasteAction->setVisible(false);
         deleteAction->setVisible(false);
-
         clearAction->setVisible(true);
+    } else {
+        undoAction->setVisible(true);
+        redoAction->setVisible(true);
+        cutAction->setVisible(true);
+        pasteAction->setVisible(true);
+        deleteAction->setVisible(true);
+        clearAction->setVisible(false);
     }
 
     contextMenu->addAction(undoAction);
@@ -123,7 +124,8 @@ void RuQTextEdit::contextMenuEvent(QContextMenuEvent *e)
     contextMenu->addAction(clearAction);
 
     contextMenu->exec(e->globalPos());
-    delete contextMenu;
+    if (!contextMenu.isNull())
+        delete contextMenu;
 }
 
 void RuQTextEdit::deleteSelected()

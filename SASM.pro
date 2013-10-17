@@ -38,26 +38,26 @@ SOURCES += main.cpp\
     highlighter.cpp \
     codeeditor.cpp \
     debugger.cpp \
-    memorydebugwindow.cpp \
     commanddebugwindow.cpp \
     finddialog.cpp \
     ruqtextedit.cpp \
     ruqplaintextedit.cpp \
     getstartedwidget.cpp \
-    registerswindow.cpp
+    debugtablewidget.cpp \
+    watchsettinswidget.cpp
 
 HEADERS  += mainwindow.h \
     tab.h \
     highlighter.h \
     codeeditor.h \
     debugger.h \
-    memorydebugwindow.h \
     commanddebugwindow.h \
     finddialog.h \
     ruqtextedit.h \
     ruqplaintextedit.h \
     getstartedwidget.h \
-    registerswindow.h
+    debugtablewidget.h \
+    watchsettinswidget.h
 
 FORMS += settings.ui
 

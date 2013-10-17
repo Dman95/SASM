@@ -56,7 +56,8 @@ MainWindow::MainWindow(QWidget *parent)
     startText = settings.value("starttext", QString()).toString();
     if (startText.isEmpty()) {
         settings.setValue("starttext",
-                       QString("%include \"io.inc\"\n\nsection .text\nglobal CMAIN\nCMAIN:\n    ;write your code here\n    xor eax, eax\n    ret"));
+            QString("%include \"io.inc\"\n\nsection .text\nglobal CMAIN\n") +
+            QString("CMAIN:\n    ;write your code here\n    xor eax, eax\n    ret"));
         startText = settings.value("starttext", QString()).toString();
     }
 
@@ -65,8 +66,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     //initial variables
     programIsBuilded = false;
-    memoryDebugWindow = 0;
-    memoryExamineWindow = 0;
     anyCommandDebugWindow = 0;
     prevCodeEditor = 0;
     findDialog = 0;
@@ -75,6 +74,8 @@ MainWindow::MainWindow(QWidget *parent)
     settingsStartTextEditor = 0;
     help = 0;
     registersWindow = 0;
+    memoryWindow = 0;
+    debugger = 0;
 
     timer = new QTimer;
     timer->setInterval(100);
@@ -198,8 +199,7 @@ void MainWindow::createMenus()
     debugMenu->addAction(debugNextNiAction);
     debugMenu->addSeparator();
     debugMenu->addAction(debugShowRegistersAction);
-    debugMenu->addAction(debugMemoryDialogAction);
-    debugMenu->addAction(debugExamineMemoryAction);
+    debugMenu->addAction(debugShowMemoryAction);
     debugMenu->addSeparator();
     debugMenu->addAction(debugExitAction);
     settingsMenu = menuBar()->addMenu(tr("Settings"));
@@ -315,13 +315,10 @@ void MainWindow::createActions()
     debugShowRegistersAction->setCheckable(true);
     connect(debugShowRegistersAction, SIGNAL(changed()), this, SLOT(debugShowRegisters()));
 
-    debugMemoryDialogAction = new QAction(tr("Show memory"), this);
-    debugMemoryDialogAction->setShortcut(QString("Ctrl+M"));
-    connect(debugMemoryDialogAction, SIGNAL(triggered()), this, SLOT(debugOpenMemoryDialog()));
-
-    debugExamineMemoryAction = new QAction(tr("Examine memory at address"), this);
-    debugExamineMemoryAction->setShortcut(QString("Ctrl+P"));
-    connect(debugExamineMemoryAction, SIGNAL(triggered()), this, SLOT(debugExamineMemory()));
+    debugShowMemoryAction = new QAction(tr("Show memory"), this);
+    debugShowMemoryAction->setShortcut(QString("Ctrl+M"));
+    debugShowMemoryAction->setCheckable(true);
+    connect(debugShowMemoryAction, SIGNAL(changed()), this, SLOT(debugShowMemory()));
 
     debugAnyAction = new QAction(tr("Gdb command"), this);
     debugAnyAction->setShortcut(QString("Ctrl+G"));
@@ -337,7 +334,8 @@ void MainWindow::createActions()
     settingsAction = new QAction(tr("Settings"), this);
     connect(settingsAction, SIGNAL(triggered()), this, SLOT(openSettings()));
 
-    connect(mainWidget, SIGNAL(currentChanged(int)), this, SLOT(changeActionsState(int))); //disable some actions if get started widget opened
+    connect(mainWidget, SIGNAL(currentChanged(int)), this, SLOT(changeActionsState(int)));
+    //disable some actions if get started widget opened
     changeActionsState(mainWidget->currentIndex());
 
     helpAction = new QAction(tr("Help"), this);
@@ -549,14 +547,6 @@ void MainWindow::closeAllChildWindows()
         settingsWindow->close();
         delete settingsWindow;
     }
-    if (memoryDebugWindow) {
-        memoryDebugWindow->close();
-        delete memoryDebugWindow;
-    }
-    if (memoryExamineWindow) {
-        memoryExamineWindow->close();
-        delete memoryExamineWindow;
-    }
     if (anyCommandDebugWindow) {
         anyCommandDebugWindow->close();
         delete anyCommandDebugWindow;
@@ -567,15 +557,21 @@ void MainWindow::closeAllChildWindows()
     }
     if (registersWindow) {
         registersWindow->close();
-        registersWindow->clear();
         delete registersWindow;
         registersWindow = 0;
+    }
+    if (memoryWindow) {
+        memoryWindow->close();
+        delete memoryWindow;
+        memoryWindow = 0;
     }
 }
 
 bool MainWindow::deleteTab(int index, bool saveFileName)
 {
     if (okToContinue(index)) {
+        if (debugger && index == tabs->currentIndex())
+            debugExit();
         if (tabs->count() == 1)
             mainWidget->setCurrentIndex(0); //get started
         Tab *tabForDeleting = (Tab *) tabs->widget(index);
@@ -705,6 +701,7 @@ void MainWindow::buildProgram(bool debugMode)
         QFile output;
         output.setFileName(outputPath);
         output.open(QIODevice::WriteOnly | QIODevice::Text);
+        output.close();
     }
 
     while (! QFile::exists(path)) {
@@ -763,6 +760,7 @@ void MainWindow::buildProgram(bool debugMode)
     logFile.open(QIODevice::ReadOnly);
     QTextStream log(&logFile);
     QString logText = log.readAll();
+    logFile.close();
     if (!logText.isEmpty()) {
         printLogWithTime(tr("Warning! Errors have occurred in the build:") + '\n', Qt::red);
         printLog(logText, Qt::red);
@@ -773,6 +771,7 @@ void MainWindow::buildProgram(bool debugMode)
         logFile.open(QIODevice::ReadOnly);
         QTextStream logLinker(&logFile);
         logText = logLinker.readAll();
+        logFile.close();
 
         if (!logText.isEmpty()) {
             printLogWithTime(tr("Warning! Errors have occurred in the build:") + '\n', Qt::red);
@@ -895,8 +894,10 @@ void MainWindow::debug()
     connect(debugger, SIGNAL(highlightLine(int)), this, SLOT(highlightDebugLine(int)));
     connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
     connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
-    connect(debugger, SIGNAL(printRegisters(Debugger::registersInfo*)), this, SLOT(printRegisters(Debugger::registersInfo*)));
     connect(code, SIGNAL(breakpointsChanged(int,bool)), debugger, SLOT(changeBreakpoint(int,bool)));
+    connect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
+               this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
+    code->setDebugEnabled();
 }
 
 void MainWindow::enableDebugActions()
@@ -914,8 +915,7 @@ void MainWindow::enableDebugActions()
     debugNextAction->setEnabled(true);
     debugNextNiAction->setEnabled(true);
     debugShowRegistersAction->setEnabled(true);
-    debugMemoryDialogAction->setEnabled(true);
-    debugExamineMemoryAction->setEnabled(true);
+    debugShowMemoryAction->setEnabled(true);
     debugAnyAction->setEnabled(true);
     debugExitAction->setEnabled(true);
 }
@@ -927,8 +927,7 @@ void MainWindow::disableDebugActions()
     debugNextAction->setEnabled(false);
     debugNextNiAction->setEnabled(false);
     debugShowRegistersAction->setEnabled(false);
-    debugMemoryDialogAction->setEnabled(false);
-    debugExamineMemoryAction->setEnabled(false);
+    debugShowMemoryAction->setEnabled(false);
     debugAnyAction->setEnabled(false);
     debugExitAction->setEnabled(false);
 }
@@ -937,23 +936,122 @@ void MainWindow::debugContinue()
 {
     debugger->doInput(QString("c\n"), ni);
     debugShowRegisters();
+    debugShowMemory();
 }
 
 void MainWindow::debugNext()
 {
     debugger->doInput(QString("si\n"), si);
     debugShowRegisters();
+    debugShowMemory();
 }
 
 void MainWindow::debugNextNi()
 {
     debugger->doInput(QString("ni\n"), ni);
     debugShowRegisters();
+    debugShowMemory();
+}
+
+void MainWindow::debugShowMemory()
+{
+    if (debugShowMemoryAction->isChecked()) {
+        if (!memoryWindow) {
+            //create table
+            memoryWindow = new DebugTableWidget(0, 3, memoryTable, this);
+            connect(memoryWindow, SIGNAL(closeSignal()), this, SLOT(setShowMemoryToUnchecked()));
+            connect(memoryWindow, SIGNAL(debugShowMemory()), this, SLOT(debugShowMemory()));
+            CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
+            connect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
+                    memoryWindow, SLOT(addVariable(const RuQPlainTextEdit::Watch &)));
+            connect(debugger, SIGNAL(printMemory(QList<Debugger::memoryInfo> *)),
+                    memoryWindow, SLOT(setValuesFromDebugger(QList<Debugger::memoryInfo> *)));
+
+            //fill table
+            memoryWindow->initializeMemoryWindow(watches);
+        }
+        debugger->setWatchesCount(memoryWindow->rowCount() - 1);
+        for (int i = 0; i < memoryWindow->rowCount() - 1; i++) {
+            if (memoryWindow->cellWidget(i, 2)) {
+                WatchSettinsWidget *settings = (WatchSettinsWidget *) memoryWindow->cellWidget(i, 2);
+
+                bool ok;
+                int arraySize = settings->arraySizeEdit->text().toInt(&ok);
+                QString watchAsArray;
+                if (ok && arraySize > 0)
+                    watchAsArray = "[" + QString::number(arraySize) + "]";
+
+                int type = settings->typeComboBox->currentIndex();
+                QStringList printFormat;
+                printFormat << "p" << "p/x" << "p/t" << "p/c" << "p/d" << "p/u";
+
+                int size = settings->sizeComboBox->currentIndex();
+                QStringList sizeFormat;
+                sizeFormat << "int" << "short" << "char";
+
+                if (! settings->addressCheckbox->isChecked()) { //watch as variable
+                    debugger->doInput(printFormat[type] + " (" + sizeFormat[size] + watchAsArray + ")" +
+                                      memoryWindow->item(i, 0)->text() + "\n", infoMemory);
+                } else { //watch as random address
+                    debugger->doInput(printFormat[type] + " (" + sizeFormat[size] + watchAsArray + ")" +
+                                      "*((" + sizeFormat[size] + "*) " + memoryWindow->item(i, 0)->text() + ")" +
+                                      "\n", infoMemory);
+                }
+            }
+        }
+    } else
+        if (memoryWindow) {
+            saveWatches(memoryWindow);
+            memoryWindow->close();
+            memoryWindow->clear();
+            delete memoryWindow;
+            memoryWindow = 0;
+        }
+}
+
+void MainWindow::saveWatches(DebugTableWidget *table)
+{
+    watches.clear();
+    for (int i = 0; i < table->rowCount() - 1; i++) {
+        RuQPlainTextEdit::Watch watch;
+        watch.name = table->item(i, 0)->text();
+        WatchSettinsWidget *settings = (WatchSettinsWidget *) table->cellWidget(i, 2);
+        watch.type = settings->typeComboBox->currentIndex();
+        watch.size = settings->sizeComboBox->currentIndex();
+        watch.address = settings->addressCheckbox->isChecked();
+        bool ok;
+        watch.arraySize = settings->arraySizeEdit->text().toInt(&ok);
+        if (!ok)
+            watch.arraySize = 0;
+        watches.append(watch);
+    }
+}
+
+void MainWindow::setShowMemoryToUnchecked()
+{
+    debugShowMemoryAction->setChecked(false);
+}
+
+void MainWindow::setShowMemoryToChecked(const RuQPlainTextEdit::Watch &variable)
+{
+    if (!debugShowMemoryAction->isChecked()) {
+        if (debugAction->isEnabled())
+            debug();
+        debugShowMemoryAction->setChecked(true);
+        if (memoryWindow)
+            memoryWindow->addVariable(variable);
+    }
 }
 
 void MainWindow::debugShowRegisters()
 {
     if (debugShowRegistersAction->isChecked()) {
+        if (!registersWindow) {
+            registersWindow = new DebugTableWidget(16, 3, registersTable, this);
+            connect(registersWindow, SIGNAL(closeSignal()), this, SLOT(setShowRegistersToUnchecked()));
+            connect(debugger, SIGNAL(printRegisters(Debugger::registersInfo*)),
+                    registersWindow, SLOT(setValuesFromDebugger(Debugger::registersInfo*)));
+        }
         debugger->doInput(QString("info registers\n"), infoRegisters);
     } else
         if (registersWindow) {
@@ -964,63 +1062,6 @@ void MainWindow::debugShowRegisters()
         }
 }
 
-void MainWindow::printRegisters(Debugger::registersInfo *registers)
-{
-    int tableHeight, tableWidth;
-    //create table
-    if (!registersWindow) {
-        registersWindow = new RegistersWindow(16, 3, this);
-        connect(registersWindow, SIGNAL(closeSignal()), this, SLOT(setShowRegistersToUnchecked()));
-        registersWindow->setWindowFlags(Qt::Tool);
-
-        tableWidth = registersWindow->horizontalHeader()->length() + 2;
-        registersWindow->move(QDesktopWidget().availableGeometry().width() - tableWidth - 50, 80);
-
-        registersWindow->verticalHeader()->hide();
-        registersWindow->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        registersWindow->setSelectionMode(QAbstractItemView::NoSelection);
-        QStringList header;
-        header << tr("Register") << tr("Hex") << tr("Integer");
-        registersWindow->setHorizontalHeaderLabels(header);
-        registersWindow->setWindowTitle(tr("Registers"));
-    }
-
-    //fill table
-    if (!registersWindow->item(0, 0)) {
-        for (int i = 0; i < 16; i++) {
-            QTableWidgetItem *name = new QTableWidgetItem(registers[i].name);
-            QTableWidgetItem *hexValue = new QTableWidgetItem(registers[i].hexValue);
-            QTableWidgetItem *decValue = new QTableWidgetItem(registers[i].decValue);
-            registersWindow->setItem(i, 0, name);
-            registersWindow->setItem(i, 1, hexValue);
-            registersWindow->setItem(i, 2, decValue);
-        }
-        registersWindow->horizontalHeader()->resizeSection(2,
-                                             QFontMetrics(registersWindow->item(8, 2)->font()).width("<function.sasmMacroE_0.L>") + 10);
-        registersWindow->horizontalHeader()->resizeSection(1,
-                                             QFontMetrics(registersWindow->item(0, 1)->font()).width("0x99999999") + 10);
-        registersWindow->horizontalHeader()->resizeSection(0,
-                                             QFontMetrics(registersWindow->horizontalHeader()->font()).width("Register") + 15);
-    } else {
-        for (int i = 0; i < 16; i++) {
-            registersWindow->item(i, 0)->setText(registers[i].name);
-            registersWindow->item(i, 1)->setText(registers[i].hexValue);
-            registersWindow->item(i, 2)->setText(registers[i].decValue);
-        }
-    }
-
-    //adjust size
-    tableHeight = registersWindow->horizontalHeader()->height() +
-            registersWindow->verticalHeader()->length() + 2;
-    registersWindow->setFixedHeight(tableHeight);
-    tableWidth = registersWindow->horizontalHeader()->length() + 2;
-    registersWindow->setFixedWidth(tableWidth);
-
-    //show
-    registersWindow->show();
-    registersWindow->activateWindow();
-}
-
 void MainWindow::setShowRegistersToUnchecked()
 {
     debugShowRegistersAction->setChecked(false);
@@ -1028,10 +1069,16 @@ void MainWindow::setShowRegistersToUnchecked()
 
 void MainWindow::debugExit()
 {
+    CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
+    disconnect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
+               this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
+    code->setDebugDisabled();
     delete debugger;
+    debugger = 0;
     Tab *currentTab = (Tab *) tabs->currentWidget();
     currentTab->loadOutputFromFile(pathInTemp("output.txt"));
     debugShowRegistersAction->setChecked(false);
+    debugShowMemoryAction->setChecked(false);
     printLogWithTime(tr("Debugging finished.") + '\n', Qt::darkGreen);
     disableDebugActions();
 }
@@ -1040,26 +1087,6 @@ void MainWindow::highlightDebugLine(int lineNum)
 {
     Tab *curTab = (Tab *) tabs->widget(tabs->currentIndex());
     curTab->highlightDebugLine(lineNum);
-}
-
-void MainWindow::debugOpenMemoryDialog()
-{
-    if (!memoryDebugWindow) {
-        memoryDebugWindow = new MemoryDebugWindow;
-        memoryDebugWindow->setWindowTitle(tr("Show memory"));
-        connect(memoryDebugWindow, SIGNAL(addVariable(QString, bool)), this, SLOT(debugAddVariable(QString, bool)));
-    }
-    memoryDebugWindow->show();
-}
-
-void MainWindow::debugExamineMemory()
-{
-    if (!memoryExamineWindow) {
-        memoryExamineWindow = new MemoryDebugWindow;
-        memoryExamineWindow->setWindowTitle(tr("Examine memory at address"));
-        connect(memoryExamineWindow, SIGNAL(addVariable(QString, bool)), this, SLOT(debugAddExamine(QString, bool)));
-    }
-    memoryExamineWindow->show();
 }
 
 void MainWindow::debugAnyCommand()
@@ -1075,26 +1102,7 @@ void MainWindow::debugRunCommand(QString command)
 {
     debugger->doInput(command + "\n", anyAction);
     debugShowRegisters();
-}
-
-void MainWindow::debugAddVariable(QString variableName, bool once)
-{
-    //also may be registers with $ start
-    if (once)
-        debugger->doInput(QString("p ") + variableName + QString("\n"), infoMemory);
-    else
-        debugger->doInput(QString("display ") + variableName + QString("\n"), infoMemory);
-    debugShowRegisters();
-}
-
-void MainWindow::debugAddExamine(QString variableName, bool once)
-{
-    //also may be registers with $ start and number addresses
-    if (once)
-        debugger->doInput(QString("p *(") + variableName + QString(")\n"), infoMemory);
-    else
-        debugger->doInput(QString("display *(") + variableName + QString(")\n"), infoMemory);
-    debugShowRegisters();
+    debugShowMemory();
 }
 
 void MainWindow::find()
@@ -1106,7 +1114,6 @@ void MainWindow::find()
 
     if (!findDialog) {
         findDialog = new FindDialog;
-        findDialog->
         connect(findDialog, SIGNAL(findNext(QString,Qt::CaseSensitivity,bool,bool,QString)),
                 this, SLOT(findNext(QString,Qt::CaseSensitivity,bool,bool,QString)));
     }
@@ -1335,8 +1342,7 @@ void MainWindow::changeActionsState(int widgetIndex)
         debugNextNiAction->setEnabled(false);
         debugExitAction->setEnabled(false);
         debugShowRegistersAction->setEnabled(false);
-        debugMemoryDialogAction->setEnabled(false);
-        debugExamineMemoryAction->setEnabled(false);
+        debugShowMemoryAction->setEnabled(false);
         debugAnyAction->setEnabled(false);
     } else {
         closeAction->setEnabled(true);
@@ -1364,6 +1370,7 @@ void MainWindow::openHelp()
     QTextStream helpText(&helpFile);
     helpText.setCodec("utf-8");
     help->setHtml(helpText.readAll());
+    helpFile.close();
     help->setWindowState(Qt::WindowMaximized);
     help->setOpenExternalLinks(true);
     help->setWindowTitle(tr("Help"));
@@ -1381,7 +1388,7 @@ void MainWindow::openAbout()
                        tr("Licensed under the GNU GPL v3.0") + '\n' +
                        tr("Based on the Qt.") + '\n' +
                        tr("Copyright © 2013 Dmitriy Manushin") + '\n' +
-                       tr("Development - Dmitriy Manushin") + '\n' +
+                       tr("Development and idea - Dmitriy Manushin") + '\n' +
                        tr("Icon and advices - Alick Gaybullaev") + '\n' + '\n' +
                        tr("Wishes and error messages are sent to the e-mail: Dman1095@gmail.com") + '\n' + '\n' +
                        tr("Donate:") + '\n' +
@@ -1394,7 +1401,8 @@ bool MainWindow::removeDirRecuresively(const QString &dirName){
     QDir dir(dirName);
 
     if (dir.exists(dirName)) {
-        Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst)) {
+        Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System |
+                                                    QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst)) {
             if (info.isDir()) {
                 result = removeDirRecuresively(info.absoluteFilePath());
             }

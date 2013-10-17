@@ -45,6 +45,9 @@
 #include <QAction>
 #include <QMenu>
 #include <QContextMenuEvent>
+#include <QTextBlock>
+#include <QTextStream>
+#include <QPointer>
 
 class RuQPlainTextEdit : public QPlainTextEdit
 {
@@ -56,11 +59,20 @@ public:
 
     QMenu *createMenu();
 
+    struct Watch {
+        QString name;
+        int type;
+        int size;
+        int arraySize;
+        bool address;
+    };
+
 protected:
     void contextMenuEvent(QContextMenuEvent *e);
 
 private:
-    QMenu *contextMenu;
+    RuQPlainTextEdit::Watch variableOnCurrentLine();
+    QPointer<QMenu> contextMenu;
     QAction *commentAction;
     QAction *uncommentAction;
     QAction *undoAction;
@@ -70,11 +82,19 @@ private:
     QAction *pasteAction;
     QAction *deleteAction;
     QAction *selectAllAction;
+    QAction *addWatchAction;
+    bool debugEnabled;
 
 public slots:
     void commentSelectedCode();
     void uncommentSelectedCode();
     void deleteSelected();
+    void addWatch();
+    void setDebugEnabled();
+    void setDebugDisabled();
+
+signals:
+    void addWatchSignal(RuQPlainTextEdit::Watch variable);
 };
 
 #endif // RUQPLAINTEXTEDIT_H

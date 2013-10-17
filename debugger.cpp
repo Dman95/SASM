@@ -189,18 +189,39 @@ void Debugger::processAction(QString output)
             }
 
             if (!found) {
-                output = tr("Inside the macro or outside the program.") + '\n';
+                //output = tr("Inside the macro or outside the program.") + '\n';
+                return;
             } else { //if found highlight and print it
                 //highlight line number
                 emit highlightLine(lineNumber);
 
                 //print string number and all after it
-                output = QString::number(lineNumber) + tr(" line") + output.mid(output.indexOf("()") + 2);
+                //output = QString::number(lineNumber) + tr(" line") + output.mid(output.indexOf("()") + 2);
+                return;
             }
         }
 
-        if ((actionType == anyAction || actionType == infoMemory) && output[output.length() - 1] != '\n') { //add linefeed
+        if (actionType == anyAction && output[output.length() - 1] != '\n') { //add linefeed
             output += QChar('\n');
+        }
+
+        if (actionType == infoMemory) {
+            bool isValid = false;
+            if (output.indexOf(QString("No symbol")) == -1 &&
+                    output.indexOf(QString("no debug info")) == -1 && output != QString(" ")) {
+                //if variable exists (isValid = true)
+                isValid = true;
+                output = output.right(output.length() - output.indexOf(QChar('=')) - 1);
+            }
+            memoryInfo info;
+            info.value = output;
+            info.isValid = isValid;
+            watches.append(info);
+            if (watchesCount == watches.size()) {
+                emit printMemory(&watches);
+                watches.clear();
+            }
+            return;
         }
 
         if (actionType == infoRegisters) {
@@ -250,6 +271,11 @@ void Debugger::doInput(QString command, DebugActionType actionType)
     //put \n after commands!
     if (process)
         process->write(command.toLatin1());
+}
+
+void Debugger::setWatchesCount(int count)
+{
+    watchesCount = count;
 }
 
 void Debugger::processLst()

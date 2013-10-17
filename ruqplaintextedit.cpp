@@ -43,6 +43,8 @@
 RuQPlainTextEdit::RuQPlainTextEdit(QWidget *parent) :
     QPlainTextEdit(parent)
 {
+    setDebugDisabled();
+
     commentAction = new QAction(tr("Comment"), this);
     commentAction->setShortcut(QString("Ctrl+Shift+Q"));
     connect(commentAction, SIGNAL(triggered()), this, SLOT(commentSelectedCode()));
@@ -79,6 +81,9 @@ RuQPlainTextEdit::RuQPlainTextEdit(QWidget *parent) :
     selectAllAction->setShortcut(QKeySequence::SelectAll);
     connect(selectAllAction, SIGNAL(triggered()), this, SLOT(selectAll()));
 
+    addWatchAction = new QAction(this);
+    connect(addWatchAction, SIGNAL(triggered()), this, SLOT(addWatch()));
+
     undoAction->setEnabled(false);
     redoAction->setEnabled(false);
     connect(this, SIGNAL(undoAvailable(bool)), undoAction, SLOT(setEnabled(bool)));
@@ -90,11 +95,6 @@ QMenu * RuQPlainTextEdit::createMenu()
     QMenu *menu = new QMenu;
     QTextCursor textCursor = this->textCursor();
 
-    commentAction->setEnabled(true);
-    uncommentAction->setEnabled(true);
-    cutAction->setEnabled(true);
-    copyAction->setEnabled(true);
-    deleteAction->setEnabled(true);
     //if nothing selected
     if (textCursor.selectionEnd() - textCursor.selectionStart() <= 0) {
         commentAction->setEnabled(false);
@@ -102,16 +102,39 @@ QMenu * RuQPlainTextEdit::createMenu()
         cutAction->setEnabled(false);
         copyAction->setEnabled(false);
         deleteAction->setEnabled(false);
+    } else {
+        commentAction->setEnabled(true);
+        uncommentAction->setEnabled(true);
+        cutAction->setEnabled(true);
+        copyAction->setEnabled(true);
+        deleteAction->setEnabled(true);
     }
 
-    cutAction->setVisible(true);
-    copyAction->setVisible(true);
     if (this->isReadOnly()) {
         cutAction->setVisible(false);
         pasteAction->setVisible(false);
         deleteAction->setVisible(false);
+    } else {
+        cutAction->setVisible(true);
+        pasteAction->setVisible(true);
+        deleteAction->setVisible(true);
     }
 
+    QString variableName = variableOnCurrentLine().name;
+    if (variableName.isEmpty()) {
+        addWatchAction->setVisible(false);
+    } else {
+        addWatchAction->setVisible(true);
+        addWatchAction->setText(tr("Watch '%1'").arg(variableName));
+        if (!debugEnabled) {
+            addWatchAction->setEnabled(false);
+        } else {
+            addWatchAction->setEnabled(true);
+        }
+    }
+
+    menu->addAction(addWatchAction);
+    menu->addSeparator();
     menu->addAction(commentAction);
     menu->addAction(uncommentAction);
     menu->addSeparator();
@@ -130,9 +153,12 @@ QMenu * RuQPlainTextEdit::createMenu()
 
 void RuQPlainTextEdit::contextMenuEvent(QContextMenuEvent *e)
 {
+    QMouseEvent leftClick(QEvent::MouseButtonPress, e->pos(), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
+    this->mousePressEvent(&leftClick);
     contextMenu = createMenu();
     contextMenu->exec(e->globalPos());
-    delete contextMenu;
+    if (!contextMenu.isNull())
+        delete contextMenu;
 }
 
 void RuQPlainTextEdit::deleteSelected()
@@ -162,6 +188,72 @@ void RuQPlainTextEdit::uncommentSelectedCode()
     cursor.insertText(selected);
 }
 
+RuQPlainTextEdit::Watch RuQPlainTextEdit::variableOnCurrentLine()
+{
+    QTextBlock block = document()->findBlock(textCursor().position());
+    QString text = block.text();
+    QStringList memoryPatterns;
+    memoryPatterns << "\\bresb\\b" << "\\bresw\\b" << "\\bresd\\b" <<
+                      "\\bresq\\b" << "\\brest\\b" << "\\breso\\b" <<
+                      "\\bresy\\b" << "\\bddq\\b" << "\\bresdq\\b" <<
+                      "\\bdb\\b" << "\\bdw\\b" << "\\bdd\\b" <<
+                      "\\bdq\\b" << "\\bdt\\b" << "\\bdo\\b" <<
+                      "\\bdy\\b" << "\\bequ\\b";
+    bool isVariableLine = false;
+    foreach (const QString &pattern, memoryPatterns)
+        if (text.indexOf(QRegExp(pattern)) != -1) {
+            isVariableLine = true;
+            break;
+        }
+    QString variableName;
+    int variableSize = 0;
+    int arraySize = 0;
+    if (isVariableLine) {
+        QTextStream line(&text);
+        line.skipWhiteSpace();
+        line >> variableName;
+        line.skipWhiteSpace();
+        QString temp = 0;
+        line >> temp;
+        bool isArray = false;
+        if (temp.indexOf("res") != -1)
+            isArray = true;
+        temp = temp.right(1);
+        if (temp == "b")
+            variableSize = 2;
+        if (temp == "w")
+            variableSize = 1;
+        line.skipWhiteSpace();
+        if (isArray) {
+            line >> arraySize;
+        }
+    }
+    Watch w;
+    w.name = variableName;
+    w.type = 0;
+    w.size = variableSize;
+    if (arraySize == 1)
+        arraySize = 0;
+    w.arraySize = arraySize;
+    w.address = false;
+    return w;
+}
+
+void RuQPlainTextEdit::addWatch()
+{
+    emit addWatchSignal(variableOnCurrentLine());
+}
+
+void RuQPlainTextEdit::setDebugDisabled()
+{
+    debugEnabled = false;
+}
+
+void RuQPlainTextEdit::setDebugEnabled()
+{
+    debugEnabled = true;
+}
+
 RuQPlainTextEdit::~RuQPlainTextEdit()
 {
     delete commentAction;
@@ -173,4 +265,5 @@ RuQPlainTextEdit::~RuQPlainTextEdit()
     delete pasteAction;
     delete deleteAction;
     delete selectAllAction;
+    delete addWatchAction;
 }
