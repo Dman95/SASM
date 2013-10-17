@@ -51,7 +51,6 @@
 #include <QTimer>
 #include <QQueue>
 
-
 enum DebugActionType {ni, si, infoRegisters, infoMemory, anyAction, none, breakpoint};
 
 class Debugger : public QObject
@@ -61,10 +60,17 @@ class Debugger : public QObject
 public:
     Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tmp, QWidget *parent = 0);
     ~Debugger();
+    void setWatchesCount(int count);
+
     struct registersInfo {
         QString name;
         QString hexValue;
         QString decValue;
+    };
+
+    struct memoryInfo {
+        QString value;
+        bool isValid;
     };
 
 private:
@@ -93,6 +99,8 @@ private:
 
     QString buffer; //global gdb output buffer
     QTimer *bufferTimer; //timer for checking output and sending ready output to processing with Debugger::processOutput() function
+    int watchesCount;
+    QList<Debugger::memoryInfo> watches;
 
 public slots:
     void readOutputToBuffer();
@@ -107,6 +115,7 @@ signals:
     void finished();
     void started(); //emited when debugger is ready to get commands like step into, etc.
     void printRegisters(Debugger::registersInfo*);
+    void printMemory(QList<Debugger::memoryInfo>*);
 };
 
 #endif // DEBUGGER_H
