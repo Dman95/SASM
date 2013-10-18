@@ -8,9 +8,11 @@ WatchSettinsWidget::WatchSettinsWidget(QWidget *parent) :
     sizeComboBox = new QComboBox;
     arraySizeEdit = new QLineEdit;
     addressCheckbox = new QCheckBox(tr("Address"));
+    layout->addSpacing(3);
     layout->addWidget(typeComboBox);
     layout->addWidget(sizeComboBox);
     layout->addWidget(arraySizeEdit);
+    layout->addSpacing(5);
     layout->addWidget(addressCheckbox);
 
     arraySizeEdit->setPlaceholderText(tr("Array size"));
@@ -40,14 +42,14 @@ int WatchSettinsWidget::sumSize()
 {
     return typeComboBox->sizeHint().width() + sizeComboBox->sizeHint().width()
             + arraySizeEdit->fontMetrics().width(arraySizeEdit->placeholderText())
-            + addressCheckbox->sizeHint().width() + 10;
+            + addressCheckbox->sizeHint().width() + 50;
 }
 
 QSize WatchSettinsWidget::sizeHint() const
 {
     return QSize(typeComboBox->sizeHint().width() + sizeComboBox->sizeHint().width()
             + arraySizeEdit->fontMetrics().width(arraySizeEdit->placeholderText())
-            + addressCheckbox->sizeHint().width() + 10, 0);
+            + addressCheckbox->sizeHint().width() + 50, 0);
 }
 
 WatchSettinsWidget::~WatchSettinsWidget()
