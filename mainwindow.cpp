@@ -1035,8 +1035,6 @@ void MainWindow::setShowMemoryToUnchecked()
 void MainWindow::setShowMemoryToChecked(const RuQPlainTextEdit::Watch &variable)
 {
     if (!debugShowMemoryAction->isChecked()) {
-        if (debugAction->isEnabled())
-            debug();
         debugShowMemoryAction->setChecked(true);
         if (memoryWindow)
             memoryWindow->addVariable(variable);
