@@ -12,8 +12,6 @@ DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType w
     firstTime = true;
     verticalHeader()->hide();
     setWindowFlags(Qt::Tool);
-    int tableWidth = horizontalHeader()->length() + 2;
-    move(QDesktopWidget().availableGeometry().width() - tableWidth - 50, 80);
 
     if (type == memoryTable) {
         setSelectionMode(QAbstractItemView::SingleSelection);
@@ -26,6 +24,7 @@ DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType w
         horizontalHeader()->resizeSection(0,
             qMax(QFontMetrics(horizontalHeader()->font()).width(tr("Add variable...")) + 15,
                  QFontMetrics(horizontalHeader()->font()).width(tr("Variable")) + 15));
+        adjust(0);
     }
 
     if (type == registersTable) {
@@ -42,9 +41,10 @@ DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType w
         horizontalHeader()->resizeSection(0,
             QFontMetrics(horizontalHeader()->font()).width("Register") + 15);
         restoreGeometry(registerWindowState);
+        adjust(0);
+        int tableWidth = frameGeometry().width() + 2;
+        move(QDesktopWidget().availableGeometry().width() - tableWidth - 50, 175);
     }
-
-    adjust(0);
 }
 
 void DebugTableWidget::initializeMemoryWindow(const QList<RuQPlainTextEdit::Watch> &watches)
@@ -59,6 +59,8 @@ void DebugTableWidget::initializeMemoryWindow(const QList<RuQPlainTextEdit::Watc
         horizontalHeader()->restoreState(memoryHeaderState);
         show();
         activateWindow();
+        int tableWidth = frameGeometry().width() + 2;
+        move(QDesktopWidget().availableGeometry().width() - tableWidth - 50, 80);
     }
 }
 
