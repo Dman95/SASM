@@ -75,7 +75,7 @@ void DebugTableWidget::setValuesFromDebugger(QList<Debugger::memoryInfo> *watche
 void DebugTableWidget::setValuesFromDebugger(Debugger::registersInfo *registers) //registers
 {
     for (int i = 0; i < 16; i++)
-        addRegister(registers[i].name, registers[i].decValue, registers[i].hexValue, i);
+        addRegister(registers[i].name, registers[i].hexValue, registers[i].decValue, i);
     show();
     activateWindow();
 }
