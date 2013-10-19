@@ -897,6 +897,9 @@ void MainWindow::debug()
     connect(code, SIGNAL(breakpointsChanged(int,bool)), debugger, SLOT(changeBreakpoint(int,bool)));
     connect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
                this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
+    connect(debugContinueAction, SIGNAL(triggered()), this, SLOT(debugContinue()));
+    connect(debugNextAction, SIGNAL(triggered()), this, SLOT(debugNext()));
+    connect(debugNextNiAction, SIGNAL(triggered()), this, SLOT(debugNextNi()));
     code->setDebugEnabled();
 }
 
@@ -934,23 +937,29 @@ void MainWindow::disableDebugActions()
 
 void MainWindow::debugContinue()
 {
+    disconnect(debugContinueAction, SIGNAL(triggered()), this, SLOT(debugContinue()));
     debugger->doInput(QString("c\n"), ni);
     debugShowRegisters();
     debugShowMemory();
+    connect(debugContinueAction, SIGNAL(triggered()), this, SLOT(debugContinue()));
 }
 
 void MainWindow::debugNext()
 {
+    disconnect(debugNextAction, SIGNAL(triggered()), this, SLOT(debugNext()));
     debugger->doInput(QString("si\n"), si);
     debugShowRegisters();
     debugShowMemory();
+    connect(debugNextAction, SIGNAL(triggered()), this, SLOT(debugNext()));
 }
 
 void MainWindow::debugNextNi()
 {
+    disconnect(debugNextNiAction, SIGNAL(triggered()), this, SLOT(debugNextNi()));
     debugger->doInput(QString("ni\n"), ni);
     debugShowRegisters();
     debugShowMemory();
+    connect(debugNextNiAction, SIGNAL(triggered()), this, SLOT(debugNextNi()));
 }
 
 void MainWindow::debugShowMemory()
@@ -999,6 +1008,9 @@ void MainWindow::debugShowMemory()
                 }
             }
         }
+        QEventLoop eventLoop;
+        connect(debugger, SIGNAL(printMemory(QList<Debugger::memoryInfo>*)), &eventLoop, SLOT(quit()));
+        eventLoop.exec();
     } else
         if (memoryWindow) {
             saveWatches(memoryWindow);
@@ -1035,9 +1047,8 @@ void MainWindow::setShowMemoryToUnchecked()
 void MainWindow::setShowMemoryToChecked(const RuQPlainTextEdit::Watch &variable)
 {
     if (!debugShowMemoryAction->isChecked()) {
+        watches.append(variable);
         debugShowMemoryAction->setChecked(true);
-        if (memoryWindow)
-            memoryWindow->addVariable(variable);
     }
 }
 
@@ -1051,6 +1062,9 @@ void MainWindow::debugShowRegisters()
                     registersWindow, SLOT(setValuesFromDebugger(Debugger::registersInfo*)));
         }
         debugger->doInput(QString("info registers\n"), infoRegisters);
+        QEventLoop eventLoop;
+        connect(debugger, SIGNAL(printRegisters(Debugger::registersInfo*)), &eventLoop, SLOT(quit()));
+        eventLoop.exec();
     } else
         if (registersWindow) {
             registersWindow->close();

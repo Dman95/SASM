@@ -24,8 +24,10 @@ public:
     bool isEmpty();
     void initializeMemoryWindow(const QList<RuQPlainTextEdit::Watch> &watches);
     static QByteArray memoryHeaderState;
-    static QByteArray memoryWindowState;
+    static int memoryX, memoryY;
     static QByteArray registerWindowState;
+    static bool geometryMemorySaved;
+    static bool geometryRegistersSaved;
 
 protected:
     void closeEvent(QCloseEvent *);

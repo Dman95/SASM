@@ -1,7 +1,10 @@
 #include "debugtablewidget.h"
 
 QByteArray DebugTableWidget::memoryHeaderState;
-QByteArray DebugTableWidget::memoryWindowState;
+int DebugTableWidget::memoryX;
+int DebugTableWidget::memoryY;
+bool DebugTableWidget::geometryRegistersSaved;
+bool DebugTableWidget::geometryMemorySaved;
 QByteArray DebugTableWidget::registerWindowState;
 
 DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType widgetType, QWidget *parent) :
@@ -40,27 +43,33 @@ DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType w
             QFontMetrics(horizontalHeader()->font()).width("0x99999999") + 10);
         horizontalHeader()->resizeSection(0,
             QFontMetrics(horizontalHeader()->font()).width("Register") + 15);
-        restoreGeometry(registerWindowState);
         adjust(0);
-        int tableWidth = frameGeometry().width() + 2;
-        move(QDesktopWidget().availableGeometry().width() - tableWidth - 50, 175);
+        if (geometryRegistersSaved)
+            restoreGeometry(registerWindowState);
+        else {
+            int tableWidth = frameGeometry().width() + 2;
+            move(QDesktopWidget().availableGeometry().width() - tableWidth - 50, 175);
+        }
     }
 }
 
 void DebugTableWidget::initializeMemoryWindow(const QList<RuQPlainTextEdit::Watch> &watches)
 {
     if (type == memoryTable) {
+        horizontalHeader()->restoreState(memoryHeaderState);
         int i;
         for (i = 0; i < watches.size(); i++)
             addVariable(watches[i], i);
         addVariable(tr("Add variable..."), i);
+        if (geometryMemorySaved) {
+            move(memoryX, memoryY);
+        } else {
+            int tableWidth = frameGeometry().width() + 2;
+            move(QDesktopWidget().availableGeometry().width() - tableWidth - 50, 80);
+        }
         connect(this, SIGNAL(cellChanged(int,int)), this, SLOT(changeMemoryWindow(int,int)), Qt::QueuedConnection);
-        restoreGeometry(memoryWindowState);
-        horizontalHeader()->restoreState(memoryHeaderState);
         show();
         activateWindow();
-        int tableWidth = frameGeometry().width() + 2;
-        move(QDesktopWidget().availableGeometry().width() - tableWidth - 50, 80);
     }
 }
 
@@ -83,6 +92,8 @@ void DebugTableWidget::setValuesFromDebugger(Debugger::registersInfo *registers)
 void DebugTableWidget::changeMemoryWindow(int row, int column)
 {
     disconnect(this, SIGNAL(cellChanged(int,int)), this, SLOT(changeMemoryWindow(int,int)));
+    QString validText = item(row, 0)->text().remove("\\");
+    item(row, 0)->setText(validText);
     if (row == rowCount() - 1 && column == 0)
         addVariable(tr("Add variable..."), rowCount());
     if (column == 0)
@@ -220,7 +231,7 @@ void DebugTableWidget::adjust(int shift)
     int tableHeight, tableWidth;
     tableHeight = horizontalHeader()->height() + verticalHeader()->length() + 2;
     tableWidth = horizontalHeader()->length() + 2;
-    QPoint globalPosition = QPoint(geometry().x(), geometry().y());
+    QPoint globalPosition = QPoint(frameGeometry().x(), geometry().y());
     resize(tableWidth, tableHeight);
     //for correct redrawing
     scroll(1, 0);
@@ -231,10 +242,13 @@ void DebugTableWidget::adjust(int shift)
 DebugTableWidget::~DebugTableWidget()
 {
     if (type == memoryTable) {
-        memoryWindowState = saveGeometry();
+        memoryX = x();
+        memoryY = y();
         memoryHeaderState = horizontalHeader()->saveState();
+        geometryMemorySaved = true;
     }
     if (type == registersTable) {
         registerWindowState = saveGeometry();
+        geometryRegistersSaved = true;
     }
 }
