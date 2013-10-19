@@ -1008,9 +1008,11 @@ void MainWindow::debugShowMemory()
                 }
             }
         }
-        QEventLoop eventLoop;
-        connect(debugger, SIGNAL(printMemory(QList<Debugger::memoryInfo>*)), &eventLoop, SLOT(quit()));
-        eventLoop.exec();
+        if (memoryWindow->rowCount() > 1) {
+            QEventLoop eventLoop;
+            connect(debugger, SIGNAL(printMemory(QList<Debugger::memoryInfo>*)), &eventLoop, SLOT(quit()));
+            eventLoop.exec();
+        }
     } else
         if (memoryWindow) {
             saveWatches(memoryWindow);
