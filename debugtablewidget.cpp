@@ -69,10 +69,12 @@ void DebugTableWidget::initializeMemoryWindow(const QList<RuQPlainTextEdit::Watc
         }
         connect(this, SIGNAL(cellChanged(int,int)), this, SLOT(changeMemoryWindow(int,int)), Qt::QueuedConnection);
         show();
+        activateWindow();
     }
 }
 
-void DebugTableWidget::setValuesFromDebugger(QList<Debugger::memoryInfo> *watches){ //watches
+void DebugTableWidget::setValuesFromDebugger(QList<Debugger::memoryInfo> *watches) //watches
+{
     for (int i = 0; i < rowCount() - 1; i++) {
         changeVariableValue((*watches)[i].value, i, (*watches)[i].isValid);
     }
@@ -84,6 +86,10 @@ void DebugTableWidget::setValuesFromDebugger(Debugger::registersInfo *registers)
     for (int i = 0; i < 16; i++)
         addRegister(registers[i].name, registers[i].hexValue, registers[i].decValue, i);
     show();
+    if (firstTime) {
+        firstTime = false;
+        activateWindow();
+    }
 }
 
 void DebugTableWidget::changeMemoryWindow(int row, int column)
