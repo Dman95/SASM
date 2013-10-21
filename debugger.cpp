@@ -113,7 +113,7 @@ void Debugger::processMessage(QString output)
         return;
     }
 
-    if (c == 1) { //next disassembly top part of code for setting according with program in memory and program in file
+    if (c == 1 && output != " ") { //next disassembly top part of code for setting according with program in memory and program in file
         /*Dump of assembler code for function sasmStartL:
            0x00401390 <+0>:	xor    %eax,%eax
            0x00401392 <+2>:	ret
@@ -140,7 +140,8 @@ void Debugger::processMessage(QString output)
     }
 
     //if an error with the wrong name of the section has occurred
-    if (c == 2 && output.indexOf(QString("Make breakpoint pending on future shared library load")) != -1) {
+    if ((c == 2 && output.indexOf(QString("Make breakpoint pending on future shared library load")) != -1)
+            || (c == 1 && output == " ")) {
         actionTypeQueue.enqueue(anyAction);
         processAction(tr("An error has occurred in the debugger. Please check the names of the sections."));
         QObject::disconnect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputToBuffer()));
@@ -189,8 +190,7 @@ void Debugger::processAction(QString output)
             }
 
             if (!found) {
-                //output = tr("Inside the macro or outside the program.") + '\n';
-                return;
+                output = tr("Inside the macro or outside the program.") + '\n';
             } else { //if found highlight and print it
                 //highlight line number
                 emit highlightLine(lineNumber);
@@ -262,6 +262,12 @@ void Debugger::processAction(QString output)
     textEdit->insertPlainText(output);
     cursor.movePosition(QTextCursor::End);
     textEdit->setTextCursor(cursor);
+
+    if (failIndex != -1) {
+        QObject::disconnect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputToBuffer()));
+        emit finished();
+        return;
+    }
 }
 
 void Debugger::doInput(QString command, DebugActionType actionType)

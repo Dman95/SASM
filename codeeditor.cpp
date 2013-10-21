@@ -129,7 +129,8 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
             painter.drawText(0, top, lineNumberArea->width() - debugAreaWidth, fontMetrics().height(),
                              Qt::AlignRight, number);
 
-            if (blockNumber + 1 == currentDebugLine) //blocks counting starts with 0, line number is equivalent (block number + 1)
+            if (blockNumber + 1 == currentDebugLine)
+                //blocks counting starts with 0, line number is equivalent (block number + 1)
                 //if QTextOption::NoWrap is not set, lines count - visible lines, block count - lines divided by '\n'
                 painter.drawPixmap(lineNumberArea->width() - debugAreaWidth + 3,
                                    top + fontMetrics().height() / 2 - debugImage.height() / 2,
@@ -176,7 +177,8 @@ void CodeEditor::lineNumberAreaMousePressEvent(QMouseEvent *event)
             }
 
             //repaint
-            QRect lineNumberAreaRect(lineNumberArea->x(), lineNumberArea->y(), lineNumberArea->width(), lineNumberArea->height());
+            QRect lineNumberAreaRect(lineNumberArea->x(), lineNumberArea->y(),
+                                     lineNumberArea->width(), lineNumberArea->height());
             emit updateRequest(lineNumberAreaRect, 0);
         }
     }
@@ -223,7 +225,7 @@ void CodeEditor::highlightDebugLine(int lineNumber)
             selection.cursor = QTextCursor(this->document());
             selection.cursor.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, lineNumber - 1);
             selection.cursor.clearSelection();
-            this->setTextCursor(selection.cursor); //scroll to debugging line
+            setTextCursor(selection.cursor); //scroll to debugging line
             extraSelections.append(selection);
         }
 
@@ -240,7 +242,8 @@ void CodeEditor::updateDebugLine(int number)
     currentDebugLine = number;
 
     //create rectangle of line number area and highlight debug line throw updateRequest()
-    QRect lineNumberAreaRect(lineNumberArea->x(), lineNumberArea->y(), lineNumberArea->width(), lineNumberArea->height());
+    QRect lineNumberAreaRect(lineNumberArea->x(), lineNumberArea->y(),
+                             lineNumberArea->width(), lineNumberArea->height());
     emit updateRequest(lineNumberAreaRect, 0);
 
     highlightDebugLine(number);

@@ -200,7 +200,6 @@ public slots:
     void debugShowMemory();
     void debugAnyCommand();
     void debugRunCommand(QString command);
-    void highlightDebugLine(int lineNum);
     void saveWatches(DebugTableWidget *table);
     void setShowRegistersToUnchecked();
     void setShowMemoryToUnchecked();
