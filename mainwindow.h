@@ -177,6 +177,7 @@ public slots:
     void saveExe();
     bool closeApp();
     void refreshEditMenu();
+    void changeCurrentSavedState(bool changed);
 
     //build
     void buildProgram(bool debugMode = false);

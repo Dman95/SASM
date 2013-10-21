@@ -307,6 +307,7 @@ void Debugger::processLst()
             }
         }
     }
+    lst.close();
 }
 
 void Debugger::run()
