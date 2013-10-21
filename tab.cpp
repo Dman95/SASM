@@ -240,11 +240,6 @@ void Tab::loadOutputFromFile(const QString &filePath)
     outputFile.close();
 }
 
-void Tab::highlightDebugLine(int num)
-{
-    code->updateDebugLine(num);
-}
-
 void Tab::clearOutput()
 {
     output->clear();

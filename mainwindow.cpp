@@ -835,7 +835,10 @@ void MainWindow::testStopOfProgram()
         stopAction->setEnabled(false);
         Tab *currentTab = (Tab *) tabs->currentWidget();
         currentTab->loadOutputFromFile(pathInTemp("output.txt"));
-        printLogWithTime(tr("The program finished.") + '\n', Qt::darkGreen);
+        if (runProcess->exitStatus() == QProcess::NormalExit)
+            printLogWithTime(tr("The program finished normally.") + '\n', Qt::darkGreen);
+        else
+            printLogWithTime(tr("The program crashed.") + '\n', Qt::red);
         timer->stop();
     }
 }
@@ -904,7 +907,7 @@ void MainWindow::debug()
     QString path = pathInTemp("SASMprog.exe");
     CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
     debugger = new Debugger(compilerOut, path, ioIncIncluded, pathInTemp(QString()));
-    connect(debugger, SIGNAL(highlightLine(int)), this, SLOT(highlightDebugLine(int)));
+    connect(debugger, SIGNAL(highlightLine(int)), code, SLOT(updateDebugLine(int)));
     connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
     connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
     connect(code, SIGNAL(breakpointsChanged(int,bool)), debugger, SLOT(changeBreakpoint(int,bool)));
@@ -1100,7 +1103,7 @@ void MainWindow::debugExit()
     disconnect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
                this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
     code->setDebugDisabled();
-    delete debugger;
+    delete debugger; //many actions perform here - deleting of highlighting too
     debugger = 0;
     Tab *currentTab = (Tab *) tabs->currentWidget();
     currentTab->loadOutputFromFile(pathInTemp("output.txt"));
@@ -1108,12 +1111,6 @@ void MainWindow::debugExit()
     debugShowMemoryAction->setChecked(false);
     printLogWithTime(tr("Debugging finished.") + '\n', Qt::darkGreen);
     disableDebugActions();
-}
-
-void MainWindow::highlightDebugLine(int lineNum)
-{
-    Tab *curTab = (Tab *) tabs->widget(tabs->currentIndex());
-    curTab->highlightDebugLine(lineNum);
 }
 
 void MainWindow::debugAnyCommand()

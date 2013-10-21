@@ -103,9 +103,6 @@ signals:
     void stopClick();
     void saveAsmClick();
     void saveExeClick();
-    
-public slots:
-    void highlightDebugLine(int);   
 };
 
 #endif // TAB_H
