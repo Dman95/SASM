@@ -65,7 +65,6 @@ public:
     void saveInputToFile(const QString &filePath);
     void loadOutputFromFile(const QString &filePath);
     void loadCodeFromFile(const QString &filePath);
-    bool isCodeModified();
     QString getCurrentFilePath();
     bool isIoIncIncluded();
     void clearOutput();
@@ -93,7 +92,6 @@ private:
     QPushButton *stopButton;
 
     QString currentFilePath;
-    bool codeModified;
 
     void setFonts();
     void createButtons();
@@ -105,10 +103,8 @@ signals:
     void stopClick();
     void saveAsmClick();
     void saveExeClick();
-    void codeChanged();
     
 public slots:
-    void setCodeModified(bool value = true);
     void highlightDebugLine(int);   
 };
 

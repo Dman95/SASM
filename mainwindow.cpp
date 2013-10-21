@@ -420,7 +420,20 @@ void MainWindow::newFile()
     tab->code->setPlainText(startText);
     tabs->addTab(tab, tr("New"));
     tabs->setCurrentWidget(tab);
-    connect(tab, SIGNAL(codeChanged()), this, SLOT(setProgramBuildedFlagToFalse()));
+    connect(tab->code, SIGNAL(textChanged()), this, SLOT(setProgramBuildedFlagToFalse()));
+    connect(tab->code, SIGNAL(modificationChanged(bool)), this, SLOT(changeCurrentSavedState(bool)));
+}
+
+void MainWindow::changeCurrentSavedState(bool changed)
+{
+    if (changed)
+        tabs->setTabText(tabs->currentIndex(), '*' + tabs->tabText(tabs->currentIndex()));
+    else {
+        QString tabText = tabs->tabText(tabs->currentIndex());
+        if (tabText[0] == '*')
+            tabText.remove(0, 1);
+        tabs->setTabText(tabs->currentIndex(), tabText);
+    }
 }
 
 void MainWindow::openFile()
@@ -596,7 +609,7 @@ bool MainWindow::okToContinue(int index)
         deletingTab = (Tab *) tabs->currentWidget();
     else
         deletingTab = (Tab *) tabs->widget(index);
-    if (deletingTab->isCodeModified()) {
+    if (deletingTab->code->document()->isModified()) {
         QMessageBox msgBox(this);
         QPushButton *yesButton = msgBox.addButton(tr("Yes"), QMessageBox::YesRole);
         msgBox.addButton(tr("No"), QMessageBox::NoRole);

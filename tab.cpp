@@ -45,7 +45,6 @@ Tab::Tab(QWidget *parent) :
 {
     //Setting code field
     code = new CodeEditor;
-    connect(code, SIGNAL(textChanged()), this, SIGNAL(codeChanged()));
 
     //Setting input and output fields
     input = new RuQTextEdit;
@@ -116,9 +115,6 @@ Tab::Tab(QWidget *parent) :
 
     //Setting io and code fonts
     setFonts();
-
-    connect(code, SIGNAL(undoAvailable(bool)), this, SLOT(setCodeModified()));
-    setCodeModified(false);
 }
 
 void Tab::setFonts()
@@ -198,8 +194,22 @@ void Tab::saveCodeToFile(const QString &filePath, bool changeCodeModifiedFlag, b
     out << code->toPlainText();
     if (changeCodeModifiedFlag) {
         currentFilePath = filePath;
-        setCodeModified(false);
+        code->document()->setModified(false);
     }
+    outfile.close();
+}
+
+void Tab::loadCodeFromFile(const QString &filePath)
+{
+    QFile file;
+    file.setFileName(filePath);
+    file.open(QIODevice::ReadOnly);
+    QTextStream text(&file);
+    QString source = text.readAll();
+    code->setPlainText(source);
+    currentFilePath = filePath;
+    code->document()->setModified(false);
+    file.close();
 }
 
 bool Tab::isIoIncIncluded()
@@ -216,6 +226,7 @@ void Tab::saveInputToFile(const QString &filePath)
     outfile.open(QIODevice::WriteOnly | QIODevice::Text);
     QTextStream out(&outfile);
     out << input->toPlainText();
+    outfile.close();
 }
 
 void Tab::loadOutputFromFile(const QString &filePath)
@@ -226,29 +237,7 @@ void Tab::loadOutputFromFile(const QString &filePath)
     QTextStream programOut(&outputFile);
     QString out = programOut.readAll();
     output->setPlainText(out);
-}
-
-void Tab::loadCodeFromFile(const QString &filePath)
-{
-    QFile file;
-    file.setFileName(filePath);
-    file.open(QIODevice::ReadOnly);
-    QTextStream text(&file);
-    QString source = text.readAll();
-    code->setPlainText(source);
-    currentFilePath = filePath;
-    setCodeModified(false);
-}
-
-void Tab::setCodeModified(bool value)
-{
-    //true by default
-    codeModified = value;
-}
-
-bool Tab::isCodeModified()
-{
-    return codeModified;
+    outputFile.close();
 }
 
 void Tab::highlightDebugLine(int num)
