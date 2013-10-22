@@ -630,11 +630,6 @@ bool MainWindow::okToContinue(int index)
 
 void MainWindow::changeCurrentTab(int index)
 {
-    //close find dialog
-    if (findDialog) {
-        findDialog->close();
-        delete findDialog;
-    }
     //set highlighter
     if (tabs->count() == 0)
         return;
@@ -1138,11 +1133,6 @@ void MainWindow::debugRunCommand(QString command)
 
 void MainWindow::find()
 {
-    //remove current line highlight
-    disconnect(((Tab *) tabs->currentWidget())->code, SIGNAL(cursorPositionChanged()),
-               ((Tab *) tabs->currentWidget())->code, SLOT(highlightCurrentLine()));
-    ((Tab *) tabs->currentWidget())->code->setExtraSelections(QList<QTextEdit::ExtraSelection>());
-
     if (!findDialog) {
         findDialog = new FindDialog(this);
         connect(findDialog, SIGNAL(findNext(QString,Qt::CaseSensitivity,bool,bool,QString)),
@@ -1155,70 +1145,80 @@ void MainWindow::find()
 void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool all,
                           bool replace, const QString &replaceText)
 {
+    for (int i = 0; i < tabs->count(); i++) {
+        //clear all highlights and disable highlighting of current line
+        CodeEditor *code = ((Tab *) tabs->widget(i))->code;
+        disconnect(code, SIGNAL(cursorPositionChanged()), code, SLOT(highlightCurrentLine()));
+        code->setExtraSelections(QList<QTextEdit::ExtraSelection>());
+    }
+
     if (pattern.isEmpty()) {
-        //retrieve current line highlight
-        for (int  i = 0; i < tabs->count(); i++) {
-            connect(((Tab *) tabs->widget(i))->code, SIGNAL(cursorPositionChanged()),
-                   ((Tab *) tabs->widget(i))->code, SLOT(highlightCurrentLine()));
-            ((Tab *) tabs->widget(i))->code->highlightCurrentLine();
+        //restore highlight
+        for (int i = 0; i < tabs->count(); i++) {
+            CodeEditor *code = ((Tab *) tabs->widget(i))->code;
+            connect(code, SIGNAL(cursorPositionChanged()), code, SLOT(highlightCurrentLine()));
+            code->highlightCurrentLine();
+            if (code->debugMode)
+                code->highlightDebugLine(code->currentDebugLine);
         }
-    }
-    QTextDocument *document = ((Tab *) tabs->currentWidget())->getCodeDocument();
-    if (!prevFindPattern.isEmpty()) {
-        //reset previous find highlight
-        QTextCursor cursor(document);
-        while (!cursor.isNull() && !cursor.atEnd()) {
-            if (prevCs == Qt::CaseSensitive)
-                cursor = document->find(prevFindPattern, cursor, QTextDocument::FindCaseSensitively);
-            else
-                cursor = document->find(prevFindPattern, cursor, 0);
-            if (!cursor.isNull()) {
-                QTextCharFormat colorFormat;
-                colorFormat.setBackground(QBrush(Qt::white));
-                cursor.setCharFormat(colorFormat);
+    } else {
+        if (all) { //find all
+            for (int i = 0; i < tabs->count(); i++) {
+                QTextEdit::ExtraSelection selection;
+                QList<QTextEdit::ExtraSelection> extraSelections;
+                selection.format.setBackground(QBrush(Qt::green));
+                QTextDocument *document = ((Tab *) tabs->widget(i))->getCodeDocument();
+                QTextCursor newCursor = QTextCursor(document);
+                CodeEditor *code = ((Tab *) tabs->widget(i))->code;
+
+                while (!newCursor.isNull() && !newCursor.atEnd()) {
+                    if (cs == Qt::CaseSensitive)
+                        newCursor = document->find(pattern, newCursor, QTextDocument::FindCaseSensitively);
+                    else
+                        newCursor = document->find(pattern, newCursor, 0);
+                    if (replace && i == tabs->currentIndex()) { //replace mode
+                        newCursor.removeSelectedText();
+                        newCursor.insertText(replaceText);
+                    }
+                    if (!newCursor.isNull()) {
+                        selection.cursor = newCursor;
+                        extraSelections.append(selection);
+                    }
+                }
+
+                //highlight all
+                code->setExtraSelections(extraSelections);
             }
-        }
-    }
-    if (all) { //find all
-        QTextCursor newCursor = QTextCursor(document);
-        while (!newCursor.isNull() && !newCursor.atEnd()) {
-            if (cs == Qt::CaseSensitive)
-                newCursor = document->find(pattern, newCursor, QTextDocument::FindCaseSensitively);
-            else
-                newCursor = document->find(pattern, newCursor, 0);
+        } else { //find next only
+            QTextEdit::ExtraSelection selection;
+            QList<QTextEdit::ExtraSelection> extraSelections;
+            selection.format.setBackground(QBrush(Qt::green));
+            QTextDocument *document = ((Tab *) tabs->currentWidget())->getCodeDocument();
+            CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
+            static QTextCursor newCursor(document);
+            //if documents differ, cursor is ignored in QTextDocument::find()
             if (replace) { //replace mode
                 newCursor.removeSelectedText();
                 newCursor.insertText(replaceText);
             }
-            if (!newCursor.isNull()) {
-                QTextCharFormat colorFormat;
-                colorFormat.setBackground(QBrush(Qt::green));
-                newCursor.setCharFormat(colorFormat);
-            }
-        }
-    } else { //find next only
-        static QTextCursor newCursor(document);
-        if (replace) { //replace mode
-            newCursor.removeSelectedText();
-            newCursor.insertText(replaceText);
-        }
-        if (cs == Qt::CaseSensitive)
-            newCursor = document->find(pattern, newCursor, QTextDocument::FindCaseSensitively);
-        else
-            newCursor = document->find(pattern, newCursor, 0);
-        if (newCursor.isNull()) { //continue from start
             if (cs == Qt::CaseSensitive)
                 newCursor = document->find(pattern, newCursor, QTextDocument::FindCaseSensitively);
             else
                 newCursor = document->find(pattern, newCursor, 0);
-        }
-        if (!newCursor.isNull()) {
-            QTextCharFormat colorFormat;
-            colorFormat.setBackground(QBrush(Qt::green));
-            newCursor.setCharFormat(colorFormat);
+            if (newCursor.isNull()) { //continue from start
+                if (cs == Qt::CaseSensitive)
+                    newCursor = document->find(pattern, newCursor, QTextDocument::FindCaseSensitively);
+                else
+                    newCursor = document->find(pattern, newCursor, 0);
+            }
+            if (!newCursor.isNull()) {
+                selection.cursor = newCursor;
+                extraSelections.append(selection);
+            }
+
+            code->setExtraSelections(extraSelections);
         }
     }
-    prevFindPattern = pattern;
 }
 
 void MainWindow::restorePrevSession(bool notNotify)

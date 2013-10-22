@@ -66,6 +66,8 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     void lineNumberAreaMousePressEvent(QMouseEvent *event);
     int lineNumberAreaWidth();
+    int currentDebugLine;
+    bool debugMode;
 
 public slots:
     void updateDebugLine(int number);
@@ -86,8 +88,6 @@ private slots:
 
 private:
     QWidget *lineNumberArea;
-    int currentDebugLine;
-    bool debugMode;
     int debugAreaWidth;
     QPixmap debugImage;
     QPixmap breakpointImage;

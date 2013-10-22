@@ -150,7 +150,6 @@ private:
 
     //search
     QPointer<FindDialog> findDialog;
-    QString prevFindPattern;
     Qt::CaseSensitivity prevCs;
 
     //settings and help
