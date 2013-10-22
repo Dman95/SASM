@@ -121,7 +121,7 @@ FindDialog::FindDialog(QWidget *parent)
     mainLayout->addLayout(rightLayout);
     setLayout(mainLayout);
 
-    setWindowFlags(Qt::Tool);
+    setWindowFlags(Qt::Dialog);
     setWindowTitle(tr("Find and replace"));
     setFixedHeight(sizeHint().height());
 }

@@ -1111,6 +1111,10 @@ void MainWindow::debugExit()
     currentTab->loadOutputFromFile(pathInTemp("output.txt"));
     debugShowRegistersAction->setChecked(false);
     debugShowMemoryAction->setChecked(false);
+    if (anyCommandDebugWindow) {
+        anyCommandDebugWindow->close();
+        delete anyCommandDebugWindow;
+    }
     printLogWithTime(tr("Debugging finished.") + '\n', Qt::darkGreen);
     disableDebugActions();
 }
@@ -1122,6 +1126,7 @@ void MainWindow::debugAnyCommand()
         connect(anyCommandDebugWindow, SIGNAL(runCommand(QString)), this, SLOT(debugRunCommand(QString)));
     }
     anyCommandDebugWindow->show();
+    anyCommandDebugWindow->activateWindow();
 }
 
 void MainWindow::debugRunCommand(QString command)
