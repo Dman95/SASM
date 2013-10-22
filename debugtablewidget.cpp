@@ -19,14 +19,15 @@ DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType w
     if (type == memoryTable) {
         setSelectionMode(QAbstractItemView::SingleSelection);
         QStringList header;
-        header << tr("Variable") << tr("Value") << tr("Type");
+        header << tr("Variable or expression") << tr("Value") << tr("Type");
         setHorizontalHeaderLabels(header);
         setWindowTitle(tr("Memory"));
         horizontalHeader()->resizeSection(1,
             QFontMetrics(horizontalHeader()->font()).width(tr("Wrong variable or address: \"varName\"") + 10));
         horizontalHeader()->resizeSection(0,
-            qMax(QFontMetrics(horizontalHeader()->font()).width(tr("Add variable...")) + 15,
-                 QFontMetrics(horizontalHeader()->font()).width(tr("Variable")) + 15));
+            qMax(QFontMetrics(horizontalHeader()->font()).width(tr("Add variable...")) + 20,
+                 QFontMetrics(horizontalHeader()->font()).width(tr("Variable or expression")) + 20));
+        horizontalHeader()->setHighlightSections(false);
         adjust(0);
     }
 
