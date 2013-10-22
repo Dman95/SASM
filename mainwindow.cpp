@@ -99,7 +99,8 @@ void MainWindow::initUi()
     settings.beginGroup("MainWindow");
     resize(settings.value("size", QSize(1024, 650)).toSize()); //default 1024x650
     move(settings.value("pos", QPoint(200, 200)).toPoint());
-    setWindowState(windowState() | (Qt::WindowState) settings.value("maximized", (int) Qt::WindowNoState).toInt()); //set maximized
+    //set maximized
+    setWindowState(windowState() | (Qt::WindowState) settings.value("maximized", (int) Qt::WindowNoState).toInt());
     settings.endGroup();
 
     //Get Started window
@@ -125,7 +126,7 @@ void MainWindow::initUi()
     //Create tabs
     tabs = new QTabWidget;
     connect(tabs, SIGNAL(tabCloseRequested(int)), this, SLOT(deleteTab(int)));
-    connect(tabs, SIGNAL(currentChanged(int)), this, SLOT(setHighlighter(int)));
+    connect(tabs, SIGNAL(currentChanged(int)), this, SLOT(changeCurrentTab(int)));
     tabs->setTabShape(QTabWidget::Triangular);
     tabs->setTabsClosable(true);
 
@@ -627,8 +628,14 @@ bool MainWindow::okToContinue(int index)
     return true;
 }
 
-void MainWindow::setHighlighter(int index)
+void MainWindow::changeCurrentTab(int index)
 {
+    //close find dialog
+    if (findDialog) {
+        findDialog->close();
+        delete findDialog;
+    }
+    //set highlighter
     if (tabs->count() == 0)
         return;
     Tab *currentTab = (Tab *) tabs->widget(index);
@@ -1116,7 +1123,7 @@ void MainWindow::debugExit()
 void MainWindow::debugAnyCommand()
 {
     if (!anyCommandDebugWindow) {
-        anyCommandDebugWindow = new CommandDebugWindow;
+        anyCommandDebugWindow = new CommandDebugWindow(this);
         connect(anyCommandDebugWindow, SIGNAL(runCommand(QString)), this, SLOT(debugRunCommand(QString)));
     }
     anyCommandDebugWindow->show();
@@ -1137,7 +1144,7 @@ void MainWindow::find()
     ((Tab *) tabs->currentWidget())->code->setExtraSelections(QList<QTextEdit::ExtraSelection>());
 
     if (!findDialog) {
-        findDialog = new FindDialog;
+        findDialog = new FindDialog(this);
         connect(findDialog, SIGNAL(findNext(QString,Qt::CaseSensitivity,bool,bool,QString)),
                 this, SLOT(findNext(QString,Qt::CaseSensitivity,bool,bool,QString)));
     }
@@ -1145,7 +1152,8 @@ void MainWindow::find()
     findDialog->activateWindow();
 }
 
-void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool all, bool replace, const QString &replaceText)
+void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool all,
+                          bool replace, const QString &replaceText)
 {
     if (pattern.isEmpty()) {
         //retrieve current line highlight
@@ -1218,7 +1226,8 @@ void MainWindow::restorePrevSession(bool notNotify)
     QSettings settings("SASM Project", "SASM");
     int count = settings.value("tabscount", 0).toInt();
     if (count == 0 && !notNotify) {
-        QMessageBox::information(0, QString("SASM"), tr("In the previous session was not open any of the saved tabs!"));
+        QMessageBox::information(0, QString("SASM"),
+                                 tr("In the previous session was not open any of the saved tabs!"));
         return;
     }
     settings.beginGroup("Tabs");
@@ -1268,11 +1277,13 @@ void MainWindow::openSettings()
 {
     QSettings settings("SASM Project", "SASM");
     if (!settingsWindow) {
-        settingsWindow = new QWidget;
+        settingsWindow = new QWidget(this, Qt::Window);
+        settingsWindow->setWindowModality(Qt::WindowModal);
         settingsUi.setupUi(settingsWindow);
         connect(settingsUi.buttonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()), this, SLOT(exitSettings()));
         connect(settingsUi.buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(saveSettings()));
-        connect(settingsUi.buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()), settingsWindow, SLOT(close()));
+        connect(settingsUi.buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
+                settingsWindow, SLOT(close()));
         connect(settingsUi.resetAllButton, SIGNAL(clicked()), this, SLOT(resetAllSettings()));
     }
     settingsUi.startWindow->setCurrentIndex(settings.value("startwindow", 0).toInt());

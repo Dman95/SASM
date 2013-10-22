@@ -65,6 +65,9 @@ CommandDebugWindow::CommandDebugWindow(QWidget *parent) :
     this->setLayout(addLayout);
 
     connect(runButton, SIGNAL(clicked()), this, SLOT(runClick()));
+
+    setWindowTitle(tr("Gdb command"));
+    setWindowFlags(Qt::Tool);
 }
 
 void CommandDebugWindow::runClick()

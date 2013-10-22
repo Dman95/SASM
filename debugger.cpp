@@ -113,7 +113,8 @@ void Debugger::processMessage(QString output)
         return;
     }
 
-    if (c == 1 && output != " ") { //next disassembly top part of code for setting according with program in memory and program in file
+    if (c == 1 && output != " ") {
+        //next disassembly top part of code for setting according with program in memory and program in file
         /*Dump of assembler code for function sasmStartL:
            0x00401390 <+0>:	xor    %eax,%eax
            0x00401392 <+2>:	ret
@@ -124,7 +125,8 @@ void Debugger::processMessage(QString output)
         //count offset
         QRegExp r = QRegExp("0x[0-9a-fA-F]{8}");
         int index = output.indexOf(r);
-        offset = output.mid(index, 10).toUInt(0, 16); //take offset in hexadecimal representation (10 symbols) from string and convert it to int
+        offset = output.mid(index, 10).toUInt(0, 16);
+        //take offset in hexadecimal representation (10 symbols) from string and convert it to int
         c++;
         processLst(); //count accordance
         run(); //perform Debugger::run(), that run program and open I/O files
@@ -176,8 +178,9 @@ void Debugger::processAction(QString output)
             //scan line number in memory
             QRegExp r = QRegExp("0x[0-9a-fA-F]{8}");
             int index = output.indexOf(r);
-            unsigned int lineNumber = output.mid(index, 10).toUInt(0, 16); //take line number in hexadecimal representation
-                                                                           //(10 symbols) in memory from string and convert it to int
+            unsigned int lineNumber = output.mid(index, 10).toUInt(0, 16);
+            //take line number in hexadecimal representation
+            //(10 symbols) in memory from string and convert it to int
 
             //find line number in accordance array and get number line in file with code
             bool found = false;
@@ -248,7 +251,8 @@ void Debugger::processAction(QString output)
             return;
         }
 
-        if (output == QString("\r\n") || output == QString("\n") || output == QString("\r\n\n") || output == QString("\n\n")) //if empty
+        if (output == QString("\r\n") || output == QString("\n") ||
+                output == QString("\r\n\n") || output == QString("\n\n")) //if empty
             return;
     } else { //if program fail
         output = output.mid(failIndex);
@@ -295,7 +299,8 @@ void Debugger::processLst()
     while (!lstStream.atEnd()) {
         QString line = lstStream.readLine();
         if (line.length() <= 37) { //omit strings with data only
-            //if in list : line number, address, data and it is all (without instruction) - omit this string and subtract 1 from offset
+            //if in list : line number, address, data and it is all (without instruction) -
+            //omit this string and subtract 1 from offset
             omitLinesCount++;
             continue;
         }
