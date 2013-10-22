@@ -41,7 +41,7 @@
 #include "finddialog.h"
 
 FindDialog::FindDialog(QWidget *parent)
-    : QDialog(parent)
+    : QWidget(parent)
 {
     searchLabel = new QLabel(tr("Find what:"));
     searchEdit = new QLineEdit;
@@ -93,7 +93,8 @@ FindDialog::FindDialog(QWidget *parent)
     searchLayout = new QHBoxLayout;
     searchLayout->addWidget(searchLabel);
     searchSpacer = new QSpacerItem(
-                replaceLabel->fontMetrics().width(tr("Replace with:")) - searchLabel->fontMetrics().width(tr("Find what:")),
+                replaceLabel->fontMetrics().width(tr("Replace with:")) -
+                searchLabel->fontMetrics().width(tr("Find what:")),
                 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
     searchLayout->addSpacerItem(searchSpacer);
     searchLayout->addWidget(searchEdit);
@@ -120,6 +121,7 @@ FindDialog::FindDialog(QWidget *parent)
     mainLayout->addLayout(rightLayout);
     setLayout(mainLayout);
 
+    setWindowFlags(Qt::Tool);
     setWindowTitle(tr("Find and replace"));
     setFixedHeight(sizeHint().height());
 }
@@ -175,7 +177,7 @@ void FindDialog::replaceAllClicked()
 bool FindDialog::close()
 {
     emit findNext(QString(), Qt::CaseSensitive, true, false);
-    return QDialog::close();
+    return QWidget::close();
 }
 
 void FindDialog::closeEvent(QCloseEvent *e)

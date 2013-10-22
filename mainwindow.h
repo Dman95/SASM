@@ -137,11 +137,11 @@ private:
     CodeEditor *prevCodeEditor;
     QTimer *timer;
     Debugger *debugger;
-    CommandDebugWindow *anyCommandDebugWindow;
+    QPointer<CommandDebugWindow> anyCommandDebugWindow;
     bool programIsBuilded;
     bool ioIncIncluded;
-    DebugTableWidget *registersWindow;
-    DebugTableWidget *memoryWindow;
+    QPointer<DebugTableWidget> registersWindow;
+    QPointer<DebugTableWidget> memoryWindow;
     QList<RuQPlainTextEdit::Watch> watches;
 
     //highlighters
@@ -149,12 +149,12 @@ private:
     Highlighter *settingsHighlighter;
 
     //search
-    FindDialog *findDialog;
+    QPointer<FindDialog> findDialog;
     QString prevFindPattern;
     Qt::CaseSensitivity prevCs;
 
     //settings and help
-    QWidget *settingsWindow;
+    QPointer<QWidget> settingsWindow;
     Ui::SettingsWindow settingsUi;
     QString startText;
     CodeEditor *settingsStartTextEditor;
@@ -186,7 +186,7 @@ public slots:
     void stopProgram();
     void testStopOfProgram();
     void setProgramBuildedFlagToFalse();
-    void setHighlighter(int);
+    void changeCurrentTab(int index);
 
     //debug
     void debug();
@@ -207,7 +207,8 @@ public slots:
 
     //search
     void find();
-    void findNext(const QString &pattern, Qt::CaseSensitivity cs, bool all, bool replace, const QString &replaceText = 0);
+    void findNext(const QString &pattern, Qt::CaseSensitivity cs, bool all, bool replace,
+                  const QString &replaceText = 0);
 
     //settings
     void restorePrevSession(bool notNotify = false);

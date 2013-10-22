@@ -41,7 +41,7 @@
 #ifndef FINDDIALOG_H
 #define FINDDIALOG_H
 
-#include <QDialog>
+#include <QWidget>
 #include <QCheckBox>
 #include <QLabel>
 #include <QLineEdit>
@@ -50,7 +50,7 @@
 #include <QVBoxLayout>
 #include <QCloseEvent>
 
-class FindDialog : public QDialog
+class FindDialog : public QWidget
 {
     Q_OBJECT
 
@@ -61,7 +61,8 @@ public:
     void closeEvent(QCloseEvent *e);
 
 signals:
-    void findNext(const QString &str, Qt::CaseSensitivity cs, bool all, bool replace, const QString &replaceText = 0);
+    void findNext(const QString &str, Qt::CaseSensitivity cs, bool all, bool replace,
+                  const QString &replaceText = 0);
 
 public slots:
     bool close();
