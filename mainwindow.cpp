@@ -66,7 +66,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     //initial variables
     programIsBuilded = false;
-    anyCommandDebugWindow = 0;
     prevCodeEditor = 0;
     findDialog = 0;
     settingsWindow = 0;
@@ -138,11 +137,18 @@ void MainWindow::initUi()
     compilerOut->setFont(compilerOutFont);
     compilerOut->setText(tr("Build log:") + '\n');
 
+    //Create gdb command widget
+    debugAnyCommandWidget = new DebugAnyCommandWidget;
+
     //Add widgets on splitter
     splitter->addWidget(tabs);
     splitter->addWidget(compilerOut);
+    splitter->addWidget(debugAnyCommandWidget);
     int compilerOutSize = 100;
-    splitter->setSizes( QList<int>() << splitter->size().height() - compilerOutSize << compilerOutSize );
+    int debugAnyCommandSize = 20;
+    debugAnyCommandWidget->close();
+    splitter->setSizes( QList<int>() << splitter->size().height() - compilerOutSize - debugAnyCommandSize <<
+                        compilerOutSize << debugAnyCommandSize);
 
     //Restore previous session if it in settings
     if (settings.value("startwindow", 0).toInt() == 1)
@@ -193,7 +199,6 @@ void MainWindow::createMenus()
     buildMenu->addAction(stopAction);
     debugMenu = menuBar()->addMenu(tr("Debug"));
     debugMenu->addAction(debugAction);
-    debugMenu->addAction(debugAnyAction);
     debugMenu->addSeparator();
     debugMenu->addAction(debugContinueAction);
     debugMenu->addAction(debugNextAction);
@@ -320,10 +325,6 @@ void MainWindow::createActions()
     debugShowMemoryAction->setShortcut(QString("Ctrl+M"));
     debugShowMemoryAction->setCheckable(true);
     connect(debugShowMemoryAction, SIGNAL(changed()), this, SLOT(debugShowMemory()));
-
-    debugAnyAction = new QAction(tr("Gdb command"), this);
-    debugAnyAction->setShortcut(QString("Ctrl+G"));
-    connect(debugAnyAction, SIGNAL(triggered()), this, SLOT(debugAnyCommand()));
 
     debugExitAction = new QAction(tr("Exit"), this);
     debugExitAction->setShortcut(QString("Ctrl+Shift+D"));
@@ -560,10 +561,6 @@ void MainWindow::closeAllChildWindows()
     if (settingsWindow) {
         settingsWindow->close();
         delete settingsWindow;
-    }
-    if (anyCommandDebugWindow) {
-        anyCommandDebugWindow->close();
-        delete anyCommandDebugWindow;
     }
     if (help) {
         help->close();
@@ -912,6 +909,7 @@ void MainWindow::debug()
     connect(debugger, SIGNAL(highlightLine(int)), code, SLOT(updateDebugLine(int)));
     connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
     connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
+    connect(debugger, SIGNAL(started()), this, SLOT(showAnyCommandWidget()));
     connect(code, SIGNAL(breakpointsChanged(int,bool)), debugger, SLOT(changeBreakpoint(int,bool)));
     connect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
                this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
@@ -937,7 +935,6 @@ void MainWindow::enableDebugActions()
     debugNextNiAction->setEnabled(true);
     debugShowRegistersAction->setEnabled(true);
     debugShowMemoryAction->setEnabled(true);
-    debugAnyAction->setEnabled(true);
     debugExitAction->setEnabled(true);
 }
 
@@ -949,7 +946,6 @@ void MainWindow::disableDebugActions()
     debugNextNiAction->setEnabled(false);
     debugShowRegistersAction->setEnabled(false);
     debugShowMemoryAction->setEnabled(false);
-    debugAnyAction->setEnabled(false);
     debugExitAction->setEnabled(false);
 }
 
@@ -1109,29 +1105,33 @@ void MainWindow::debugExit()
     debugger = 0;
     Tab *currentTab = (Tab *) tabs->currentWidget();
     currentTab->loadOutputFromFile(pathInTemp("output.txt"));
+    closeAnyCommandWidget();
     debugShowRegistersAction->setChecked(false);
     debugShowMemoryAction->setChecked(false);
-    if (anyCommandDebugWindow) {
-        anyCommandDebugWindow->close();
-        delete anyCommandDebugWindow;
-    }
     printLogWithTime(tr("Debugging finished.") + '\n', Qt::darkGreen);
     disableDebugActions();
 }
 
-void MainWindow::debugAnyCommand()
+void MainWindow::showAnyCommandWidget()
 {
-    if (!anyCommandDebugWindow) {
-        anyCommandDebugWindow = new CommandDebugWindow(this);
-        connect(anyCommandDebugWindow, SIGNAL(runCommand(QString)), this, SLOT(debugRunCommand(QString)));
-    }
-    anyCommandDebugWindow->show();
-    anyCommandDebugWindow->activateWindow();
+    debugAnyCommandWidget->show();
+    debugAnyCommandWidget->setFocusOnLineEdit();
+    connect(debugAnyCommandWidget, SIGNAL(performCommand(QString)), this, SLOT(debugRunCommand(QString)));
+}
+
+void MainWindow::closeAnyCommandWidget()
+{
+    disconnect(debugAnyCommandWidget, SIGNAL(performCommand(QString)), this, SLOT(debugRunCommand(QString)));
+    debugAnyCommandWidget->close();
 }
 
 void MainWindow::debugRunCommand(QString command)
 {
+    printLog("> " + command + "\n", QColor(32, 71, 247));
     debugger->doInput(command + "\n", anyAction);
+    QEventLoop eventLoop;
+    connect(debugger, SIGNAL(ready()), &eventLoop, SLOT(quit()));
+    eventLoop.exec();
     debugShowRegisters();
     debugShowMemory();
 }
@@ -1383,7 +1383,6 @@ void MainWindow::changeActionsState(int widgetIndex)
         debugExitAction->setEnabled(false);
         debugShowRegistersAction->setEnabled(false);
         debugShowMemoryAction->setEnabled(false);
-        debugAnyAction->setEnabled(false);
     } else {
         closeAction->setEnabled(true);
         saveAction->setEnabled(true);

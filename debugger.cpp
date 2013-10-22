@@ -204,8 +204,14 @@ void Debugger::processAction(QString output)
             }
         }
 
-        if (actionType == anyAction && output[output.length() - 1] != '\n') { //add linefeed
-            output += QChar('\n');
+        if (actionType == anyAction) {
+            if (output[output.length() - 1] != '\n')
+                output += QChar('\n');
+            //process as ni or si
+            if (output.indexOf(QRegExp("0x[0-9a-fA-F]{8} in ")) != -1) {
+                actionTypeQueue.enqueue(ni);
+                processAction(output);
+            }
         }
 
         if (actionType == infoMemory) {
@@ -272,6 +278,7 @@ void Debugger::processAction(QString output)
         emit finished();
         return;
     }
+    emit ready();
 }
 
 void Debugger::doInput(QString command, DebugActionType actionType)
