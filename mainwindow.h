@@ -59,6 +59,7 @@
 #include "getstartedwidget.h"
 #include "ui_settings.h"
 #include "debugtablewidget.h"
+#include "debuganycommandwidget.h"
 
 class MainWindow : public QMainWindow
 {
@@ -127,7 +128,6 @@ private:
     QAction *debugExitAction;
     QAction *debugShowRegistersAction;
     QAction *debugShowMemoryAction;
-    QAction *debugAnyAction;
     QAction *settingsAction;
     QAction *helpAction;
     QAction *aboutAction;
@@ -137,12 +137,12 @@ private:
     CodeEditor *prevCodeEditor;
     QTimer *timer;
     Debugger *debugger;
-    QPointer<CommandDebugWindow> anyCommandDebugWindow;
     bool programIsBuilded;
     bool ioIncIncluded;
     QPointer<DebugTableWidget> registersWindow;
     QPointer<DebugTableWidget> memoryWindow;
     QList<RuQPlainTextEdit::Watch> watches;
+    DebugAnyCommandWidget *debugAnyCommandWidget;
 
     //highlighters
     Highlighter *highlighter;
@@ -197,12 +197,13 @@ public slots:
     void debugExit();
     void debugShowRegisters();
     void debugShowMemory();
-    void debugAnyCommand();
     void debugRunCommand(QString command);
     void saveWatches(DebugTableWidget *table);
     void setShowRegistersToUnchecked();
     void setShowMemoryToUnchecked();
     void setShowMemoryToChecked(const RuQPlainTextEdit::Watch &variable);
+    void showAnyCommandWidget();
+    void closeAnyCommandWidget();
 
     //search
     void find();

@@ -116,6 +116,7 @@ signals:
     void started(); //emited when debugger is ready to get commands like step into, etc.
     void printRegisters(Debugger::registersInfo*);
     void printMemory(QList<Debugger::memoryInfo>*);
+    void ready();
 };
 
 #endif // DEBUGGER_H
