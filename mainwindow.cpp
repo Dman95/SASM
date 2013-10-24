@@ -145,8 +145,11 @@ void MainWindow::initUi()
     splitter->addWidget(compilerOut);
     splitter->addWidget(debugAnyCommandWidget);
     int compilerOutSize = 100;
-    int debugAnyCommandSize = 20;
+    int debugAnyCommandSize = debugAnyCommandWidget->height();
     debugAnyCommandWidget->close();
+    tabs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
+    compilerOut->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+    debugAnyCommandWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     splitter->setSizes( QList<int>() << splitter->size().height() - compilerOutSize - debugAnyCommandSize <<
                         compilerOutSize << debugAnyCommandSize);
 
@@ -916,6 +919,7 @@ void MainWindow::debug()
     connect(debugContinueAction, SIGNAL(triggered()), this, SLOT(debugContinue()));
     connect(debugNextAction, SIGNAL(triggered()), this, SLOT(debugNext()));
     connect(debugNextNiAction, SIGNAL(triggered()), this, SLOT(debugNextNi()));
+    connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
     code->setDebugEnabled();
 }
 
@@ -1006,11 +1010,11 @@ void MainWindow::debugShowMemory()
 
                 int type = settings->typeComboBox->currentIndex();
                 QStringList printFormat;
-                printFormat << "p" << "p/x" << "p/t" << "p/c" << "p/d" << "p/u";
+                printFormat << "p" << "p/x" << "p/t" << "p/c" << "p/d" << "p/u" << "p/f";
 
                 int size = settings->sizeComboBox->currentIndex();
                 QStringList sizeFormat;
-                sizeFormat << "int" << "short" << "char";
+                sizeFormat << "int" << "short" << "char" << "long long";
 
                 if (! settings->addressCheckbox->isChecked()) { //watch as variable
                     debugger->doInput(printFormat[type] + " (" + sizeFormat[size] + watchAsArray + ")" +
@@ -1100,6 +1104,7 @@ void MainWindow::debugExit()
     CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
     disconnect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
                this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
+    disconnect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
     code->setDebugDisabled();
     delete debugger; //many actions perform here - deleting of highlighting too
     debugger = 0;
@@ -1116,21 +1121,26 @@ void MainWindow::showAnyCommandWidget()
 {
     debugAnyCommandWidget->show();
     debugAnyCommandWidget->setFocusOnLineEdit();
-    connect(debugAnyCommandWidget, SIGNAL(performCommand(QString)), this, SLOT(debugRunCommand(QString)));
+    connect(debugAnyCommandWidget, SIGNAL(performCommand(QString,bool)),
+            this, SLOT(debugRunCommand(QString,bool)));
 }
 
 void MainWindow::closeAnyCommandWidget()
 {
-    disconnect(debugAnyCommandWidget, SIGNAL(performCommand(QString)), this, SLOT(debugRunCommand(QString)));
+    disconnect(debugAnyCommandWidget, SIGNAL(performCommand(QString,bool)),
+            this, SLOT(debugRunCommand(QString,bool)));
     debugAnyCommandWidget->close();
 }
 
-void MainWindow::debugRunCommand(QString command)
+void MainWindow::debugRunCommand(QString command, bool print)
 {
     printLog("> " + command + "\n", QColor(32, 71, 247));
-    debugger->doInput(command + "\n", anyAction);
     QEventLoop eventLoop;
-    connect(debugger, SIGNAL(ready()), &eventLoop, SLOT(quit()));
+    connect(debugger, SIGNAL(printLog(QString,QColor)), &eventLoop, SLOT(quit()));
+    if (print)
+        debugger->doInput("p " + command + "\n", anyAction);
+    else
+        debugger->doInput(command + "\n", anyAction);
     eventLoop.exec();
     debugShowRegisters();
     debugShowMemory();

@@ -68,6 +68,7 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tm
     process->start(gdb, arguments);
 
     QObject::connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputToBuffer()));
+    QObject::connect(process, SIGNAL(readyReadStandardError()), this, SLOT(readOutputToBuffer()));
 
     bufferTimer = new QTimer;
     QObject::connect(bufferTimer, SIGNAL(timeout()), this, SLOT(processOutput()), Qt::QueuedConnection);
@@ -78,6 +79,7 @@ void Debugger::readOutputToBuffer()
 {
     if (!process)
         return;
+    errorBuffer += process->readAllStandardError();
     buffer += process->readAllStandardOutput();
 }
 
@@ -85,9 +87,11 @@ void Debugger::processOutput()
 {
     bufferTimer->stop();
     int index = buffer.indexOf(QString("(gdb)"));
+    int linefeedIndex = errorBuffer.indexOf("\n");
     if (index != -1) { //if whole message ready to processing (end of whole message is "(gdb)")
-        processMessage(buffer.left(index));
+        processMessage(errorBuffer.left(linefeedIndex) + buffer.left(index));
         buffer.remove(0, index + 5); //remove processed message
+        errorBuffer.remove(0, linefeedIndex + 1);
     }
     bufferTimer->start(10);
 }
@@ -173,8 +177,9 @@ void Debugger::processAction(QString output)
         if (actionType == breakpoint)
             return;
 
-        if (actionType == si || actionType == ni) { //message is: line number + data
-                                                    //print line number and other data
+        if (actionType == si || actionType == ni || actionType == showLine) {
+            //message is: line number + data
+            //print line number and other data if si or ni and print line number only if showLine
             //scan line number in memory
             QRegExp r = QRegExp("0x[0-9a-fA-F]{8}");
             int index = output.indexOf(r);
@@ -200,16 +205,18 @@ void Debugger::processAction(QString output)
 
                 //print string number and all after it
                 //output = QString::number(lineNumber) + tr(" line") + output.mid(output.indexOf("()") + 2);
-                return;
+                if (actionType == showLine)
+                    return;
+                output.remove(0, output.indexOf("()") + 2);
             }
         }
 
-        if (actionType == anyAction) {
+        if (actionType == anyAction) {\
             if (output[output.length() - 1] != '\n')
                 output += QChar('\n');
             //process as ni or si
             if (output.indexOf(QRegExp("0x[0-9a-fA-F]{8} in ")) != -1) {
-                actionTypeQueue.enqueue(ni);
+                actionTypeQueue.enqueue(showLine);
                 processAction(output);
             }
         }
@@ -265,20 +272,13 @@ void Debugger::processAction(QString output)
     }
 
     //print information to log field
-    QTextCursor cursor = QTextCursor(textEdit->document());
-    cursor.movePosition(QTextCursor::End);
-    textEdit->setTextCursor(cursor);
-    textEdit->setTextColor(Qt::black);
-    textEdit->insertPlainText(output);
-    cursor.movePosition(QTextCursor::End);
-    textEdit->setTextCursor(cursor);
+    emit printLog(output);
 
     if (failIndex != -1) {
         QObject::disconnect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputToBuffer()));
         emit finished();
         return;
     }
-    emit ready();
 }
 
 void Debugger::doInput(QString command, DebugActionType actionType)

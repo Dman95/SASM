@@ -75,8 +75,6 @@ public:
     void createButtons();
     void writeSettings();
     void setupEditor(int i);
-    void printLog(const QString & message, const QColor &color);
-    void printLogWithTime(const QString & message, const QColor &color);
     bool okToContinue(int index = -1);
     void setCurrentTabName(const QString &filePath, int index = -1);
     QString pathInTemp(QString path, bool forCygwin = false);
@@ -186,6 +184,8 @@ public slots:
     void testStopOfProgram();
     void setProgramBuildedFlagToFalse();
     void changeCurrentTab(int index);
+    void printLog(const QString & message, const QColor &color);
+    void printLogWithTime(const QString & message, const QColor &color);
 
     //debug
     void debug();
@@ -197,7 +197,7 @@ public slots:
     void debugExit();
     void debugShowRegisters();
     void debugShowMemory();
-    void debugRunCommand(QString command);
+    void debugRunCommand(QString command, bool print);
     void saveWatches(DebugTableWidget *table);
     void setShowRegistersToUnchecked();
     void setShowMemoryToUnchecked();
