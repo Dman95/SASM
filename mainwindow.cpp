@@ -908,11 +908,11 @@ void MainWindow::debug()
     printLogWithTime(tr("Debugging started...") + '\n', Qt::darkGreen);
     QString path = pathInTemp("SASMprog.exe");
     CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
+    showAnyCommandWidget();
     debugger = new Debugger(compilerOut, path, ioIncIncluded, pathInTemp(QString()));
     connect(debugger, SIGNAL(highlightLine(int)), code, SLOT(updateDebugLine(int)));
     connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
     connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
-    connect(debugger, SIGNAL(started()), this, SLOT(showAnyCommandWidget()));
     connect(code, SIGNAL(breakpointsChanged(int,bool)), debugger, SLOT(changeBreakpoint(int,bool)));
     connect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
                this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
@@ -1122,7 +1122,7 @@ void MainWindow::showAnyCommandWidget()
     debugAnyCommandWidget->show();
     debugAnyCommandWidget->setFocusOnLineEdit();
     connect(debugAnyCommandWidget, SIGNAL(performCommand(QString,bool)),
-            this, SLOT(debugRunCommand(QString,bool)));
+            this, SLOT(debugRunCommand(QString,bool)), Qt::QueuedConnection);
 }
 
 void MainWindow::closeAnyCommandWidget()
@@ -1134,6 +1134,8 @@ void MainWindow::closeAnyCommandWidget()
 
 void MainWindow::debugRunCommand(QString command, bool print)
 {
+    disconnect(debugAnyCommandWidget, SIGNAL(performCommand(QString,bool)),
+            this, SLOT(debugRunCommand(QString,bool)));
     printLog("> " + command + "\n", QColor(32, 71, 247));
     QEventLoop eventLoop;
     connect(debugger, SIGNAL(printLog(QString,QColor)), &eventLoop, SLOT(quit()));
@@ -1144,6 +1146,8 @@ void MainWindow::debugRunCommand(QString command, bool print)
     eventLoop.exec();
     debugShowRegisters();
     debugShowMemory();
+    connect(debugAnyCommandWidget, SIGNAL(performCommand(QString,bool)),
+            this, SLOT(debugRunCommand(QString,bool)), Qt::QueuedConnection);
 }
 
 void MainWindow::find()
