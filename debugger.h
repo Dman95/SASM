@@ -51,7 +51,7 @@
 #include <QTimer>
 #include <QQueue>
 
-enum DebugActionType {ni, si, infoRegisters, infoMemory, anyAction, none, breakpoint};
+enum DebugActionType {ni, si, showLine, infoRegisters, infoMemory, anyAction, none, breakpoint};
 
 class Debugger : public QObject
 {
@@ -98,6 +98,7 @@ private:
     QString tmpPath;
 
     QString buffer; //global gdb output buffer
+    QString errorBuffer; //global gdb error buffer
     QTimer *bufferTimer; //timer for checking output and sending ready output to processing with Debugger::processOutput() function
     int watchesCount;
     QList<Debugger::memoryInfo> watches;
@@ -116,7 +117,7 @@ signals:
     void started(); //emited when debugger is ready to get commands like step into, etc.
     void printRegisters(Debugger::registersInfo*);
     void printMemory(QList<Debugger::memoryInfo>*);
-    void ready();
+    void printLog(QString msg, QColor color = QColor(Qt::black));
 };
 
 #endif // DEBUGGER_H

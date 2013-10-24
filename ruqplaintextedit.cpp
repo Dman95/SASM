@@ -219,6 +219,8 @@ RuQPlainTextEdit::Watch RuQPlainTextEdit::variableOnCurrentLine()
         if (temp.indexOf("res") != -1)
             isArray = true;
         temp = temp.right(1);
+        if (temp == "q")
+            variableSize = 3;
         if (temp == "b")
             variableSize = 2;
         if (temp == "w")

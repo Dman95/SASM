@@ -18,11 +18,12 @@ WatchSettinsWidget::WatchSettinsWidget(QWidget *parent) :
     arraySizeEdit->setPlaceholderText(tr("Array size"));
 
     QStringList comboBoxList;
-    comboBoxList << tr("Smart") << tr("Hex") << tr("Bin") << tr("Char") << tr("Int") << tr("UInt");
+    comboBoxList << tr("Smart") << tr("Hex") << tr("Bin") << tr("Char") <<
+                    tr("Int") << tr("UInt") << tr("Float");
     typeComboBox->insertItems(0, comboBoxList);
 
     QStringList sizeBoxList;
-    sizeBoxList << tr("d") << tr("w") << tr("b");
+    sizeBoxList << tr("d") << tr("w") << tr("b") << tr("q");
     sizeComboBox->insertItems(0, sizeBoxList);
 
     addressCheckbox->setChecked(false);

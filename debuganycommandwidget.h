@@ -7,6 +7,7 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QKeyEvent>
+#include <QCheckBox>
 
 class DebugAnyCommandWidget : public QWidget
 {
@@ -17,9 +18,10 @@ public:
     void setFocusOnLineEdit();
     void showPreviousCommand();
     void showNextCommand();
+    int height();
     
 signals:
-    void performCommand(const QString command);
+    void performCommand(const QString command, bool print);
     
 public slots:
     void processCommand();
@@ -32,6 +34,7 @@ private:
     QLineEdit *command;
     QPushButton *performButton;
     QHBoxLayout *layout;
+    QCheckBox *printCheckBox;
     QStringList commands;
     int currentCommandPos;
 };
