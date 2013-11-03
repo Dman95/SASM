@@ -68,6 +68,7 @@ public:
     QString getCurrentFilePath();
     bool isIoIncIncluded();
     void clearOutput();
+    void setFonts();
 
     CodeEditor *code;
 
@@ -93,7 +94,6 @@ private:
 
     QString currentFilePath;
 
-    void setFonts();
     void createButtons();
     
 signals:

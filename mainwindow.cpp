@@ -133,7 +133,7 @@ void MainWindow::initUi()
     compilerOut = new RuQTextEdit;
     compilerOut->setReadOnly(true);
     QFont compilerOutFont;
-    compilerOutFont.setPointSize(11);
+    compilerOutFont.setPointSize(settings.value("fontsize", 12).toInt());
     compilerOut->setFont(compilerOutFont);
     compilerOut->setText(tr("Build log:") + '\n');
 
@@ -908,11 +908,11 @@ void MainWindow::debug()
     printLogWithTime(tr("Debugging started...") + '\n', Qt::darkGreen);
     QString path = pathInTemp("SASMprog.exe");
     CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
-    showAnyCommandWidget();
     debugger = new Debugger(compilerOut, path, ioIncIncluded, pathInTemp(QString()));
     connect(debugger, SIGNAL(highlightLine(int)), code, SLOT(updateDebugLine(int)));
     connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
     connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
+    connect(debugger, SIGNAL(started()), this, SLOT(showAnyCommandWidget()));
     connect(code, SIGNAL(breakpointsChanged(int,bool)), debugger, SLOT(changeBreakpoint(int,bool)));
     connect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
                this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
@@ -1122,7 +1122,7 @@ void MainWindow::showAnyCommandWidget()
     debugAnyCommandWidget->show();
     debugAnyCommandWidget->setFocusOnLineEdit();
     connect(debugAnyCommandWidget, SIGNAL(performCommand(QString,bool)),
-            this, SLOT(debugRunCommand(QString,bool)), Qt::QueuedConnection);
+            this, SLOT(debugRunCommand(QString,bool)));
 }
 
 void MainWindow::closeAnyCommandWidget()
@@ -1134,8 +1134,6 @@ void MainWindow::closeAnyCommandWidget()
 
 void MainWindow::debugRunCommand(QString command, bool print)
 {
-    disconnect(debugAnyCommandWidget, SIGNAL(performCommand(QString,bool)),
-            this, SLOT(debugRunCommand(QString,bool)));
     printLog("> " + command + "\n", QColor(32, 71, 247));
     QEventLoop eventLoop;
     connect(debugger, SIGNAL(printLog(QString,QColor)), &eventLoop, SLOT(quit()));
@@ -1146,8 +1144,6 @@ void MainWindow::debugRunCommand(QString command, bool print)
     eventLoop.exec();
     debugShowRegisters();
     debugShowMemory();
-    connect(debugAnyCommandWidget, SIGNAL(performCommand(QString,bool)),
-            this, SLOT(debugRunCommand(QString,bool)), Qt::QueuedConnection);
 }
 
 void MainWindow::find()
@@ -1299,15 +1295,20 @@ void MainWindow::openSettings()
         settingsWindow = new QWidget(this, Qt::Window);
         settingsWindow->setWindowModality(Qt::WindowModal);
         settingsUi.setupUi(settingsWindow);
-        connect(settingsUi.buttonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()), this, SLOT(exitSettings()));
-        connect(settingsUi.buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(saveSettings()));
-        connect(settingsUi.buttonBox->button(QDialogButtonBox::Cancel), SIGNAL(clicked()),
-                settingsWindow, SLOT(close()));
+        connect(settingsUi.buttonBox->button(QDialogButtonBox::Ok),
+                SIGNAL(clicked()), this, SLOT(exitSettings()));
+        connect(settingsUi.buttonBox->button(QDialogButtonBox::Apply),
+                SIGNAL(clicked()), this, SLOT(saveSettings()));
+        connect(settingsUi.buttonBox->button(QDialogButtonBox::Cancel),
+                SIGNAL(clicked()), settingsWindow, SLOT(close()));
         connect(settingsUi.resetAllButton, SIGNAL(clicked()), this, SLOT(resetAllSettings()));
     }
     settingsUi.startWindow->setCurrentIndex(settings.value("startwindow", 0).toInt());
     settingsUi.codePosition->setCurrentIndex(settings.value("codeposition", 0).toInt());
     settingsUi.language->setCurrentIndex(settings.value("language", 0).toInt());
+    settingsUi.fontComboBox->setCurrentFont(QFont(settings.value("fontfamily",
+                                                                 QString("Courier")).value<QString>()));
+    settingsUi.fontSizeSpinBox->setValue(settings.value("fontsize", 12).toInt());
 
     if (!settingsStartTextEditor) {
         settingsStartTextEditor = new CodeEditor(0, false);
@@ -1330,6 +1331,17 @@ void MainWindow::saveSettings()
     settings.setValue("starttext", settingsStartTextEditor->toPlainText());
     settings.setValue("language", settingsUi.language->currentIndex());
     startText = settingsStartTextEditor->toPlainText();
+
+    //change fonts
+    settings.setValue("fontfamily", settingsUi.fontComboBox->currentFont().family());
+    settings.setValue("fontsize", settingsUi.fontSizeSpinBox->value());
+    for (int i = 0; i < tabs->count(); i++) {
+        Tab *tab = (Tab *) tabs->widget(i);
+        tab->setFonts();
+    }
+    QFont compilerOutFont;
+    compilerOutFont.setPointSize(settings.value("fontsize", 12).toInt());
+    compilerOut->setFont(compilerOutFont);
 }
 
 void MainWindow::exitSettings()

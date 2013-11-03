@@ -66,6 +66,7 @@ public:
     void lineNumberAreaPaintEvent(QPaintEvent *event);
     void lineNumberAreaMousePressEvent(QMouseEvent *event);
     int lineNumberAreaWidth();
+    void repaintLineNumberArea();
     int currentDebugLine;
     bool debugMode;
 

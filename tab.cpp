@@ -119,14 +119,18 @@ Tab::Tab(QWidget *parent) :
 
 void Tab::setFonts()
 {
-    QFont codeFont;
-    codeFont.setPointSize(12);
-    codeFont.setFamily("Courier");
-    codeFont.setFixedPitch(true);
-    code->setFont(codeFont);
+    QSettings settings("SASM Project", "SASM");
 
-    input->setFontPointSize(12);
-    output->setFontPointSize(12);
+    QFont codeFont;
+    codeFont.setPointSize(settings.value("fontsize", 12).toInt());
+    codeFont.setFamily(settings.value("fontfamily", QString("Courier")).value<QString>());
+    code->setFont(codeFont);
+    code->repaintLineNumberArea();
+
+    QFont logFont;
+    logFont.setPointSize(settings.value("fontsize", 12).toInt());
+    input->setFont(logFont);
+    output->setFont(logFont);
 }
 
 void Tab::createButtons()

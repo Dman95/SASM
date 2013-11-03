@@ -176,12 +176,17 @@ void CodeEditor::lineNumberAreaMousePressEvent(QMouseEvent *event)
                 emit breakpointsChanged(lineNumber, true);
             }
 
-            //repaint
-            QRect lineNumberAreaRect(lineNumberArea->x(), lineNumberArea->y(),
-                                     lineNumberArea->width(), lineNumberArea->height());
-            emit updateRequest(lineNumberAreaRect, 0);
+            repaintLineNumberArea();
         }
     }
+}
+
+void CodeEditor::repaintLineNumberArea()
+{
+    //repaint
+    QRect lineNumberAreaRect(lineNumberArea->x(), lineNumberArea->y(),
+                             lineNumberArea->width(), lineNumberArea->height());
+    emit updateRequest(lineNumberAreaRect, 0);
 }
 
 QList<int> *CodeEditor::getBreakpoints()
