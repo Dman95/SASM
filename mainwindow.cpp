@@ -120,11 +120,17 @@ void MainWindow::initUi()
     //Create form
     splitter = new QSplitter;
     splitter->setOrientation(Qt::Vertical);
+    workLayout = new QVBoxLayout;
+    workLayout->addWidget(splitter);
+    workLayout->setMargin(0);
+    workLayout->setSpacing(0);
+    workWidget = new QWidget;
+    workWidget->setLayout(workLayout);
 
     //Stacked widget
     mainWidget = new QStackedWidget;
     mainWidget->addWidget(getStartedWidget);
-    mainWidget->addWidget(splitter);
+    mainWidget->addWidget(workWidget);
     mainWidget->setCurrentIndex(0); //get started
     setCentralWidget(mainWidget);
 
@@ -152,16 +158,13 @@ void MainWindow::initUi()
     //Add widgets on splitter
     splitter->addWidget(tabs);
     splitter->addWidget(compilerOut);
-    splitter->addWidget(debugAnyCommandWidget);
+    workLayout->addWidget(debugAnyCommandWidget);
     int compilerOutSize = 100;
-    int debugAnyCommandSize = debugAnyCommandWidget->height();
     debugAnyCommandWidget->close();
     tabs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
     compilerOut->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     debugAnyCommandWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    splitter->setSizes( QList<int>() << splitter->size().height() - compilerOutSize - debugAnyCommandSize <<
-                        compilerOutSize << debugAnyCommandSize);
-
+    splitter->setSizes(QList<int>() << splitter->size().height() - compilerOutSize);
     //Restore previous session if it in settings
     if (settings.value("startwindow", 0).toInt() == 1)
         restorePrevSession(true);
