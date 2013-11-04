@@ -1449,6 +1449,7 @@ void MainWindow::openHelp()
     help->setWindowState(Qt::WindowMaximized);
     help->setOpenExternalLinks(true);
     help->setWindowTitle(tr("Help"));
+    help->setWindowIcon(QIcon(":images/mainIcon.png"));
     help->show();
 }
 
