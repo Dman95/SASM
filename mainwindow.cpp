@@ -161,10 +161,8 @@ void MainWindow::initUi()
     workLayout->addWidget(debugAnyCommandWidget);
     int compilerOutSize = 100;
     debugAnyCommandWidget->close();
-    tabs->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Maximum);
-    compilerOut->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     debugAnyCommandWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-    splitter->setSizes(QList<int>() << splitter->size().height() - compilerOutSize);
+    splitter->setSizes(QList<int>() << splitter->size().height() - compilerOutSize << compilerOutSize);
     //Restore previous session if it in settings
     if (settings.value("startwindow", 0).toInt() == 1)
         restorePrevSession(true);
