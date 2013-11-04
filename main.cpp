@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
         a.installTranslator(&qtTranslator);
     }
 
-    MainWindow w;
+    MainWindow w(argc, argv);
 
     w.show();
     w.activateWindow();

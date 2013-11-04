@@ -40,7 +40,7 @@
 
 #include "mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent)
+MainWindow::MainWindow(int argc, char **argv, QWidget *parent)
     : QMainWindow(parent)
 {
     this->setWindowTitle("SASM");
@@ -89,6 +89,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     //restore log splitter state
     splitter->restoreState(settings.value("logsplitterstate").toByteArray());
+
+    //open documents from command line
+    for (int i = 1; i < argc; i++) {
+        QString fileName(argv[i]);
+        newFile();
+        Tab *curTab = (Tab *) tabs->currentWidget();
+        curTab->loadCodeFromFile(fileName);
+        setCurrentTabName(fileName);
+    }
 }
 
 void MainWindow::initUi()
@@ -840,7 +849,7 @@ void MainWindow::testStopOfProgram()
         if (runProcess->exitStatus() == QProcess::NormalExit)
             printLogWithTime(tr("The program finished normally.") + '\n', Qt::darkGreen);
         else
-            printLogWithTime(tr("The program crashed.") + '\n', Qt::red);
+            printLogWithTime(tr("The program crashed!") + '\n', Qt::red);
         timer->stop();
     }
 }
