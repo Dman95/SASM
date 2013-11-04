@@ -86,6 +86,8 @@ private:
     GetStartedWidget *getStartedWidget;
     QStackedWidget *mainWidget;
     QSplitter *splitter;
+    QVBoxLayout *workLayout;
+    QWidget *workWidget;
     RuQTextEdit *compilerOut;
     QTabWidget *tabs;
 
