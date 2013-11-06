@@ -179,7 +179,7 @@ void DebugTableWidget::addRegister(const QString &name, const QString &hexValue,
 {
     empty = false;
     if (type == registersTable) {
-        if (item(2, rowNumber)) {
+        if (item(rowNumber, 2)) {
             item(rowNumber, 0)->setText(name);
             item(rowNumber, 1)->setText(hexValue);
             item(rowNumber, 2)->setText(decValue);
