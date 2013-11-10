@@ -183,6 +183,11 @@ void Debugger::processAction(QString output)
             //scan line number in memory
             QRegExp r = QRegExp("0x[0-9a-fA-F]{8}");
             int index = output.indexOf(r);
+
+            //print output
+            if (index > 1)
+                printOutput(output.left(index).right(index - 1));
+
             unsigned int lineNumber = output.mid(index, 10).toUInt(0, 16);
             //take line number in hexadecimal representation
             //(10 symbols) in memory from string and convert it to int
@@ -337,7 +342,6 @@ void Debugger::run()
     doInput(QString("cd " + tmpPath + "\n"), none);
     doInput(QString("run\n"), none);
     doInput(QString("p dup2(open(\"input.txt\",0),0)\n"), none);
-    doInput(QString("p dup2(open(\"output.txt\",1),1)\n"), none);
 }
 
 void Debugger::changeBreakpoint(int lineNumber, bool isAdded)

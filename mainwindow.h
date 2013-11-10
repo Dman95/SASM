@@ -206,6 +206,7 @@ public slots:
     void setShowMemoryToChecked(const RuQPlainTextEdit::Watch &variable);
     void showAnyCommandWidget();
     void closeAnyCommandWidget();
+    void printOutput(QString msg);
 
     //search
     void find();

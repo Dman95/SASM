@@ -118,6 +118,7 @@ signals:
     void printRegisters(Debugger::registersInfo*);
     void printMemory(QList<Debugger::memoryInfo>*);
     void printLog(QString msg, QColor color = QColor(Qt::black));
+    void printOutput(QString msg);
 };
 
 #endif // DEBUGGER_H
