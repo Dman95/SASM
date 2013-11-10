@@ -185,8 +185,13 @@ void Debugger::processAction(QString output)
             int index = output.indexOf(r);
 
             //print output
-            if (index > 1)
-                printOutput(output.left(index).right(index - 1));
+            if (index > 1) {
+                QString msg = output.left(index); //left part - probably ouput of program;
+                msg = msg.right(index - 1); //remove whitespace
+                msg.remove(QRegExp("Breakpoint \\d, "));
+                msg.remove(QRegExp("\nContinuing.\n\n"));
+                printOutput(msg);
+            }
 
             unsigned int lineNumber = output.mid(index, 10).toUInt(0, 16);
             //take line number in hexadecimal representation
