@@ -244,6 +244,11 @@ void Tab::loadOutputFromFile(const QString &filePath)
     outputFile.close();
 }
 
+void Tab::appendOutput(QString msg)
+{
+    output->append(msg);
+}
+
 void Tab::clearOutput()
 {
     output->clear();

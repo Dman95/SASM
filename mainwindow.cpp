@@ -721,12 +721,6 @@ void MainWindow::buildProgram(bool debugMode)
         QString inputPath = pathInTemp("input.txt");
         Tab *currentTab = (Tab *) tabs->currentWidget();
         currentTab->saveInputToFile(inputPath);
-        //create output file
-        QString outputPath = pathInTemp("output.txt");
-        QFile output;
-        output.setFileName(outputPath);
-        output.open(QIODevice::WriteOnly | QIODevice::Text);
-        output.close();
     }
 
     while (! QFile::exists(path)) {
@@ -907,6 +901,12 @@ void MainWindow::setProgramBuildedFlagToFalse()
     programIsBuilded = false;
 }
 
+void MainWindow::printOutput(QString msg)
+{
+    Tab *currentTab = (Tab *) tabs->currentWidget();
+    currentTab->appendOutput(msg);
+}
+
 void MainWindow::debug()
 {
     buildProgram(true);
@@ -930,6 +930,7 @@ void MainWindow::debug()
     connect(debugNextAction, SIGNAL(triggered()), this, SLOT(debugNext()));
     connect(debugNextNiAction, SIGNAL(triggered()), this, SLOT(debugNextNi()));
     connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
+    connect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
     code->setDebugEnabled();
 }
 
@@ -1115,11 +1116,10 @@ void MainWindow::debugExit()
     disconnect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
                this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
     disconnect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
+    disconnect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
     code->setDebugDisabled();
     delete debugger; //many actions perform here - deleting of highlighting too
     debugger = 0;
-    Tab *currentTab = (Tab *) tabs->currentWidget();
-    currentTab->loadOutputFromFile(pathInTemp("output.txt"));
     closeAnyCommandWidget();
     debugShowRegistersAction->setChecked(false);
     debugShowMemoryAction->setChecked(false);

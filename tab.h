@@ -65,6 +65,7 @@ public:
     void saveInputToFile(const QString &filePath);
     void loadOutputFromFile(const QString &filePath);
     void loadCodeFromFile(const QString &filePath);
+    void appendOutput(QString msg);
     QString getCurrentFilePath();
     bool isIoIncIncluded();
     void clearOutput();
