@@ -45,6 +45,7 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tm
 {
     omitLinesCount = 0;
     c = 0;
+    firstAction = true;
     textEdit = tEdit;
     ioIncIncluded = ioInc;
     tmpPath = tmp;
@@ -52,11 +53,11 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tm
         QString gdb = QCoreApplication::applicationDirPath() + "/NASM/MinGW/bin/gdb.exe";
         if (! QFile::exists(gdb))
             gdb = QCoreApplication::applicationDirPath() + "/Windows/NASM/MinGW/bin/gdb.exe";
-        ioIncSize = 726;
+        ioIncSize = 738;
         exitMessage = "mingw_CRTStartup";
     #else
         QString gdb = "gdb";
-        ioIncSize = 710;
+        ioIncSize = 722;
         exitMessage = "libc_start_main";
     #endif
     cExitMessage = "exited normally";
@@ -163,6 +164,25 @@ void Debugger::processMessage(QString output)
 void Debugger::processAction(QString output)
 {
     if (output.indexOf(exitMessage) != -1 || output.indexOf(cExitMessage) != -1) { //if debug finished
+        //print output - message like bottom
+            /*Breakpoint 1, 0x08048510 in sasmStartL ()
+            "
+            " Continuing.
+            abccba123 //program output
+            567 //program output
+            [Inferior 1 (process 5693) exited normally]
+            " */
+        QString continuingMsg("Continuing.\n");
+        QString inferiorMsg("[Inferior ");
+        int continuingIndex = output.indexOf(continuingMsg) + continuingMsg.length();
+        int inferiorIndex = output.indexOf(inferiorMsg);
+        int outputLength = inferiorIndex - continuingIndex;
+        if (outputLength > 0) {
+            QString msg = output.mid(continuingIndex, outputLength); //program output
+            emit printOutput(msg);
+        }
+
+        //exit from debugging
         QObject::disconnect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputToBuffer()));
         emit finished();
         return;
@@ -185,13 +205,16 @@ void Debugger::processAction(QString output)
             int index = output.indexOf(r);
 
             //print output
-            if (index > 1) {
+            if (index > 1 && !firstAction) {
                 QString msg = output.left(index); //left part - probably ouput of program;
-                msg = msg.right(index - 1); //remove whitespace
-                msg.remove(QRegExp("Breakpoint \\d, "));
-                msg.remove(QRegExp("\nContinuing.\n\n"));
-                printOutput(msg);
+                msg.remove(0, 1); //remove first whitespace
+                QString continuingMsg("Continuing.\n");
+                QRegExp breakpointMsg("\nBreakpoint \\d+, ");
+                msg.remove(continuingMsg);
+                msg.remove(breakpointMsg);
+                emit printOutput(msg);
             }
+            firstAction = false;
 
             unsigned int lineNumber = output.mid(index, 10).toUInt(0, 16);
             //take line number in hexadecimal representation
@@ -221,7 +244,7 @@ void Debugger::processAction(QString output)
             }
         }
 
-        if (actionType == anyAction) {\
+        if (actionType == anyAction) {
             if (output[output.length() - 1] != '\n')
                 output += QChar('\n');
             //process as ni or si
