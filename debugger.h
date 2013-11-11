@@ -102,6 +102,7 @@ private:
     QTimer *bufferTimer; //timer for checking output and sending ready output to processing with Debugger::processOutput() function
     int watchesCount;
     QList<Debugger::memoryInfo> watches;
+    bool firstAction;
 
 public slots:
     void readOutputToBuffer();

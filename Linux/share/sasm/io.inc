@@ -25,6 +25,7 @@ CEXTERN putchar
 CEXTERN fgets
 CEXTERN puts
 CEXTERN fputs
+CEXTERN fflush
 
 CEXTERN get_stdin
 CEXTERN get_stdout
@@ -39,6 +40,14 @@ CEXTERN get_stdout
 
 %macro UNALIGN_STACK 0.nolist
     leave
+%endmacro
+
+%macro FFLUSH_STDOUT 0.nolist
+    ALIGN_STACK 4
+    call get_stdout
+    push eax
+    call fflush
+    UNALIGN_STACK
 %endmacro
 
 %macro IS_GPR 1.nolist
@@ -180,6 +189,7 @@ section .text
 
     call fputs
     UNALIGN_STACK
+    FFLUSH_STDOUT
     pop eax
     pop ecx
     pop edx
@@ -303,6 +313,7 @@ section .text
     push %%fmt
     call printf
     UNALIGN_STACK
+    FFLUSH_STDOUT
 
     pop edx
     pop ecx
@@ -414,6 +425,7 @@ section .text
 
     call putchar
     UNALIGN_STACK
+    FFLUSH_STDOUT
 
     pop edx
     pop ecx

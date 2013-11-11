@@ -190,8 +190,12 @@ void Tab::saveCodeToFile(const QString &filePath, bool changeCodeModifiedFlag, b
         #endif
         if (index != -1) {
             index = code->toPlainText().indexOf(QChar(':'), index);
-            if ( code->toPlainText().indexOf(QRegExp("\\s+mov +ebp *, *esp"), index + 1) != index + 1) {
-                code->setPlainText(code->toPlainText().insert(index + 1, QString("\n    mov ebp, esp; for correct debugging")));
+            if (code->toPlainText().indexOf(
+                        QRegExp("\\s+[Mm][Oo][Vv] +[Ee][Bb][Pp] *, *[Ee][Ss][Pp]"), index + 1) != index + 1) {
+                QTextCursor cursor = code->textCursor();
+                cursor.movePosition(QTextCursor::Start);
+                cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
+                cursor.insertText(QString("\n    mov ebp, esp; for correct debugging"));
             }
         }
     }
@@ -246,7 +250,7 @@ void Tab::loadOutputFromFile(const QString &filePath)
 
 void Tab::appendOutput(QString msg)
 {
-    output->append(msg);
+    output->setText(output->toPlainText() + msg);
 }
 
 void Tab::clearOutput()
