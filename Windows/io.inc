@@ -27,6 +27,8 @@
 		%undef _fgets
 	%elifdef _fputs
 		%undef _fputs
+	%elifdef _fflush
+		%undef _fflush
 	%elifdef _get_stdin
 		%undef _get_stdin
 	%elifdef _get_stdout
