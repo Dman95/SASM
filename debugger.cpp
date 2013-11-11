@@ -53,7 +53,7 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tm
         QString gdb = QCoreApplication::applicationDirPath() + "/NASM/MinGW/bin/gdb.exe";
         if (! QFile::exists(gdb))
             gdb = QCoreApplication::applicationDirPath() + "/Windows/NASM/MinGW/bin/gdb.exe";
-        ioIncSize = 738;
+        ioIncSize = 740;
         exitMessage = "mingw_CRTStartup";
     #else
         QString gdb = "gdb";
@@ -172,14 +172,17 @@ void Debugger::processAction(QString output)
             567 //program output
             [Inferior 1 (process 5693) exited normally]
             " */
-        QString continuingMsg("Continuing.\n");
-        QString inferiorMsg("[Inferior ");
-        int continuingIndex = output.indexOf(continuingMsg) + continuingMsg.length();
-        int inferiorIndex = output.indexOf(inferiorMsg);
-        int outputLength = inferiorIndex - continuingIndex;
-        if (outputLength > 0) {
-            QString msg = output.mid(continuingIndex, outputLength); //program output
-            emit printOutput(msg);
+        QRegExp continuingMsg("Continuing.\r?\n");
+        QRegExp inferiorMsg("\\[Inferior ");
+        int continuingIndex = continuingMsg.indexIn(output);
+        int continuingLength = continuingMsg.matchedLength();
+        int inferiorIndex = inferiorMsg.indexIn(output);
+        if (continuingIndex != -1) {
+            int outputLength = inferiorIndex - continuingIndex - continuingLength;
+            if (outputLength > 0) {
+                QString msg = output.mid(continuingIndex + continuingLength, outputLength); //program output
+                emit printOutput(msg);
+            }
         }
 
         //exit from debugging
@@ -208,8 +211,8 @@ void Debugger::processAction(QString output)
             if (index > 1 && !firstAction) {
                 QString msg = output.left(index); //left part - probably ouput of program;
                 msg.remove(0, 1); //remove first whitespace
-                QString continuingMsg("Continuing.\n");
-                QRegExp breakpointMsg("\nBreakpoint \\d+, ");
+                QRegExp continuingMsg("Continuing.\r?\n");
+                QRegExp breakpointMsg("\r?\nBreakpoint \\d+, ");
                 msg.remove(continuingMsg);
                 msg.remove(breakpointMsg);
                 emit printOutput(msg);
