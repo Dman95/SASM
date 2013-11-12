@@ -834,10 +834,17 @@ void MainWindow::runProgram()
     runProcess->setStandardInputFile(input);
     connect(runProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(getOutput()));
     programStopped = false;
+    connect(runProcess, SIGNAL(started()), this, SLOT(startCountProgramTime()));
+    connect(runProcess, SIGNAL(finished(int)), this, SLOT(testStopOfProgram()));
     runProcess->start(program);
 
     timer->start(100);
     //Previous - connect(timer, SIGNAL(timeout()), this, SLOT(testStopOfProgram()));
+}
+
+void MainWindow::startCountProgramTime()
+{
+    programExecutionTime.start();
 }
 
 void MainWindow::getOutput()
@@ -853,9 +860,13 @@ void MainWindow::testStopOfProgram()
         stopAction->setEnabled(false);
         if (!programStopped) {
             if (runProcess->exitStatus() == QProcess::NormalExit)
-                printLogWithTime(tr("The program finished normally.") + '\n', Qt::darkGreen);
+                printLogWithTime(tr("The program finished normally. Execution time: %1 s")
+                                 .arg(programExecutionTime.elapsed() / 1000.0)
+                                 + '\n', Qt::darkGreen);
             else
-                printLogWithTime(tr("The program crashed!") + '\n', Qt::red);
+                printLogWithTime(tr("The program crashed! Execution time: %1 s").
+                                 arg(programExecutionTime.elapsed() / 1000.0)
+                                 + '\n', Qt::red);
             programStopped = true;
         }
         timer->stop();
