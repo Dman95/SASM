@@ -136,6 +136,7 @@ private:
     QProcess *runProcess;
     CodeEditor *prevCodeEditor;
     QTimer *timer;
+    QTime programExecutionTime;
     Debugger *debugger;
     bool programIsBuilded;
     bool ioIncIncluded;
@@ -190,6 +191,7 @@ public slots:
     void changeCurrentTab(int index);
     void printLog(const QString & message, const QColor &color);
     void printLogWithTime(const QString & message, const QColor &color);
+    void startCountProgramTime();
 
     //debug
     void debug();
