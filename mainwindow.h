@@ -143,6 +143,8 @@ private:
     QPointer<DebugTableWidget> memoryWindow;
     QList<RuQPlainTextEdit::Watch> watches;
     DebugAnyCommandWidget *debugAnyCommandWidget;
+    bool programStopped;
+    int outputIndex;
 
     //highlighters
     Highlighter *highlighter;
@@ -206,7 +208,8 @@ public slots:
     void setShowMemoryToChecked(const RuQPlainTextEdit::Watch &variable);
     void showAnyCommandWidget();
     void closeAnyCommandWidget();
-    void printOutput(QString msg);
+    void printOutput(QString msg, int index = -1);
+    void getOutput();
 
     //search
     void find();

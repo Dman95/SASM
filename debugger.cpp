@@ -394,10 +394,15 @@ void Debugger::changeBreakpoint(int lineNumber, bool isAdded)
 
 Debugger::~Debugger() {
     emit highlightLine(-1);
-    doInput("c\n", none);
-    doInput("quit\n", none);
-    process->waitForFinished(2000);
-    process->kill();
+    if (process->state() == QProcess::Running) {
+        doInput("c\n", none);
+        doInput("quit\n", none);
+        process->waitForFinished(1000);
+        if (process->state() == QProcess::Running) { //if still running
+            doInput("quit\n", none);
+            process->terminate();
+        }
+    }
     delete process;
     process = 0;
     lines.clear();

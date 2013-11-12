@@ -75,6 +75,7 @@ MainWindow::MainWindow(int argc, char **argv, QWidget *parent)
     registersWindow = 0;
     memoryWindow = 0;
     debugger = 0;
+    programStopped = true;
 
     timer = new QTimer;
     timer->setInterval(100);
@@ -806,6 +807,11 @@ void MainWindow::buildProgram(bool debugMode)
 
 void MainWindow::runProgram()
 {
+    if (!programStopped) {
+        QMessageBox::information(0, QString("SASM"), tr("The program is already running."));
+        return;
+    }
+    outputIndex = tabs->currentIndex();
     if (!programIsBuilded) {
         buildProgram();
     }
@@ -820,18 +826,24 @@ void MainWindow::runProgram()
     printLogWithTime(tr("The program is executing...") + '\n', Qt::black);
     QCoreApplication::processEvents();
 
-    QString output = pathInTemp("output.txt");
     QString input = pathInTemp("input.txt");
     Tab *currentTab = (Tab *) tabs->currentWidget();
     currentTab->saveInputToFile(input);
 
     QString program = pathInTemp("SASMprog.exe");
     runProcess->setStandardInputFile(input);
-    runProcess->setStandardOutputFile(output);
+    connect(runProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(getOutput()));
+    programStopped = false;
     runProcess->start(program);
 
     timer->start(100);
     //Previous - connect(timer, SIGNAL(timeout()), this, SLOT(testStopOfProgram()));
+}
+
+void MainWindow::getOutput()
+{
+    QString out(runProcess->readAllStandardOutput());
+    printOutput(out, outputIndex);
 }
 
 void MainWindow::testStopOfProgram()
@@ -839,12 +851,13 @@ void MainWindow::testStopOfProgram()
     QCoreApplication::processEvents();
     if (runProcess->state() == QProcess::NotRunning) {
         stopAction->setEnabled(false);
-        Tab *currentTab = (Tab *) tabs->currentWidget();
-        currentTab->loadOutputFromFile(pathInTemp("output.txt"));
-        if (runProcess->exitStatus() == QProcess::NormalExit)
-            printLogWithTime(tr("The program finished normally.") + '\n', Qt::darkGreen);
-        else
-            printLogWithTime(tr("The program crashed!") + '\n', Qt::red);
+        if (!programStopped) {
+            if (runProcess->exitStatus() == QProcess::NormalExit)
+                printLogWithTime(tr("The program finished normally.") + '\n', Qt::darkGreen);
+            else
+                printLogWithTime(tr("The program crashed!") + '\n', Qt::red);
+            programStopped = true;
+        }
         timer->stop();
     }
 }
@@ -865,6 +878,7 @@ void MainWindow::runExeProgram()
 void MainWindow::stopProgram()
 {
     if (timer->isActive()) {
+        programStopped = true;
         timer->stop();
 
         stopAction->setEnabled(false);
@@ -872,7 +886,6 @@ void MainWindow::stopProgram()
         runProcess->kill();
 
         printLogWithTime(tr("The program stopped.") + '\n', Qt::darkGreen);
-        QMessageBox::information(0, QString("SASM"), tr("The program stopped."));
     } else {
         QMessageBox::information(0, QString("SASM"), tr("The program is not running."));
     }
@@ -901,10 +914,14 @@ void MainWindow::setProgramBuildedFlagToFalse()
     programIsBuilded = false;
 }
 
-void MainWindow::printOutput(QString msg)
+void MainWindow::printOutput(QString msg, int index)
 {
-    Tab *currentTab = (Tab *) tabs->currentWidget();
-    currentTab->appendOutput(msg);
+    Tab *tab = 0;
+    if (index != -1) {
+        tab = (Tab *) tabs->widget(index);
+    } else
+        tab = (Tab *) tabs->currentWidget();
+    tab->appendOutput(msg);
 }
 
 void MainWindow::debug()

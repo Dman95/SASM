@@ -250,7 +250,13 @@ void Tab::loadOutputFromFile(const QString &filePath)
 
 void Tab::appendOutput(QString msg)
 {
-    output->setText(output->toPlainText() + msg);
+    msg = output->toPlainText().right(2000) + msg.right(2000);
+    msg = msg.right(2000);
+    output->setText(msg);
+    //scroll
+    QTextCursor cursor = output->textCursor();
+    cursor.movePosition(QTextCursor::End);
+    output->setTextCursor(cursor);
 }
 
 void Tab::clearOutput()
