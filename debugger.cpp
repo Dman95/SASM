@@ -49,6 +49,7 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tm
     textEdit = tEdit;
     ioIncIncluded = ioInc;
     tmpPath = tmp;
+    registersOk = true;
     #ifdef Q_OS_WIN32
         QString gdb = QCoreApplication::applicationDirPath() + "/NASM/MinGW/bin/gdb.exe";
         if (! QFile::exists(gdb))
@@ -213,8 +214,10 @@ void Debugger::processAction(QString output)
                 msg.remove(0, 1); //remove first whitespace
                 QRegExp continuingMsg("Continuing.\r?\n");
                 QRegExp breakpointMsg("\r?\nBreakpoint \\d+, ");
+                QRegExp noSymbolMsg("o symbol \".*\" in current context. ");
                 msg.remove(continuingMsg);
                 msg.remove(breakpointMsg);
+                msg.remove(noSymbolMsg);
                 emit printOutput(msg);
             }
             firstAction = false;
@@ -263,6 +266,7 @@ void Debugger::processAction(QString output)
                     output.indexOf(QString("no debug info")) == -1 && output != QString(" ")) {
                 //if variable exists (isValid = true)
                 isValid = true;
+		output = output.right(output.length() - output.indexOf(QRegExp("\\$\\d+ = .*")) - 1);
                 output = output.right(output.length() - output.indexOf(QChar('=')) - 1);
             }
             memoryInfo info;
@@ -294,6 +298,12 @@ void Debugger::processAction(QString output)
                     registers[i].decValue = registersStream.readLine();
                 } else
                     registersStream >> registers[i].name >> registers[i].hexValue >> registers[i].decValue;
+                if (i == 0 && registers[i].name != "eax" && registersOk) {
+                    doInput(QString("info registers\n"), infoRegisters);
+                    registersOk = false;
+                    delete[] registers;
+                    return;
+                }
             }
             emit printRegisters(registers);
             delete[] registers;

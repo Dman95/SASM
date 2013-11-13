@@ -28,7 +28,7 @@ DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType w
             qMax(QFontMetrics(horizontalHeader()->font()).width(tr("Add variable...")) + 20,
                  QFontMetrics(horizontalHeader()->font()).width(tr("Variable or expression")) + 20));
         horizontalHeader()->setHighlightSections(false);
-        adjust(0);
+        adjust();
     }
 
     if (type == registersTable) {
@@ -44,11 +44,11 @@ DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType w
             QFontMetrics(horizontalHeader()->font()).width("0x99999999") + 10);
         horizontalHeader()->resizeSection(0,
             QFontMetrics(horizontalHeader()->font()).width("Register") + 15);
-        adjust(0);
+        adjust();
         if (geometryRegistersSaved)
             restoreGeometry(registerWindowState);
         else {
-            int tableWidth = frameGeometry().width() + 2;
+            int tableWidth = frameGeometry().width() + 7;
             move(QDesktopWidget().availableGeometry().width() - tableWidth - 50, 175);
         }
     }
@@ -65,7 +65,7 @@ void DebugTableWidget::initializeMemoryWindow(const QList<RuQPlainTextEdit::Watc
         if (geometryMemorySaved) {
             move(memoryX, memoryY);
         } else {
-            int tableWidth = frameGeometry().width() + 2;
+            int tableWidth = frameGeometry().width() + 7;
             move(QDesktopWidget().availableGeometry().width() - tableWidth - 50, 80);
         }
         connect(this, SIGNAL(cellChanged(int,int)), this, SLOT(changeMemoryWindow(int,int)), Qt::QueuedConnection);
@@ -119,9 +119,8 @@ void DebugTableWidget::deleteVariable()
 {
     if (contextMenuLineNumber >= rowCount() - 1) //last line
         return;
-    int height = rowHeight(contextMenuLineNumber);
     this->removeRow(contextMenuLineNumber);
-    adjust(height);
+    adjust();
 }
 
 void DebugTableWidget::addVariable(const QString &variableName, int rowNumber)
@@ -137,13 +136,14 @@ void DebugTableWidget::addVariable(const QString &variableName, int rowNumber)
         connect(settings, SIGNAL(settingsChanged()), this, SIGNAL(debugShowMemory()));
         if (firstTime) {
             horizontalHeader()->resizeSection(2, settings->sumSize());
+	    adjust();
             firstTime = false;
         }
         setItem(rowNumber, 0, name);
         setItem(rowNumber, 1, value);
         setCellWidget(rowNumber, 2, settings);
         item(rowNumber, 1)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable);
-        adjust(rowHeight(rowNumber));
+        adjust();
     }
 }
 
@@ -171,7 +171,7 @@ void DebugTableWidget::addVariable(const RuQPlainTextEdit::Watch &variable, int 
         setItem(rowNumber, 1, value);
         setCellWidget(rowNumber, 2, settings);
         item(rowNumber, 1)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable);
-        adjust(rowHeight(rowNumber));
+        adjust();
     }
 }
 
@@ -230,17 +230,25 @@ void DebugTableWidget::keyPressEvent(QKeyEvent *event)
         QTableWidget::keyPressEvent(event);
 }
 
-void DebugTableWidget::adjust(int shift)
+void DebugTableWidget::adjust()
 {
     int tableHeight, tableWidth;
-    tableHeight = horizontalHeader()->height() + verticalHeader()->length() + 2;
-    tableWidth = horizontalHeader()->length() + 2;
-    QPoint globalPosition = QPoint(frameGeometry().x(), geometry().y());
+    #ifdef Q_OS_WIN32
+	int c = 2;
+    #else
+	int c = 7;
+    #endif
+    tableHeight = horizontalHeader()->height() + verticalHeader()->length() + c;
+    if (firstTime)
+        tableWidth = horizontalHeader()->length() + c;
+    else
+	tableWidth = geometry().width();
+    QPoint globalPosition = QPoint(frameGeometry().x(), frameGeometry().y());
     resize(tableWidth, tableHeight);
     //for correct redrawing
     scroll(1, 0);
     scroll(-1, 0);
-    move(globalPosition.x(), globalPosition.y() - shift); //shift after insertion or removing
+    move(globalPosition.x(), globalPosition.y()); //shift after insertion or removing
 }
 
 DebugTableWidget::~DebugTableWidget()
