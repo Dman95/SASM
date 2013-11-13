@@ -136,7 +136,7 @@ void DebugTableWidget::addVariable(const QString &variableName, int rowNumber)
         connect(settings, SIGNAL(settingsChanged()), this, SIGNAL(debugShowMemory()));
         if (firstTime) {
             horizontalHeader()->resizeSection(2, settings->sumSize());
-	    adjust();
+            adjust();
             firstTime = false;
         }
         setItem(rowNumber, 0, name);
@@ -233,16 +233,8 @@ void DebugTableWidget::keyPressEvent(QKeyEvent *event)
 void DebugTableWidget::adjust()
 {
     int tableHeight, tableWidth;
-    #ifdef Q_OS_WIN32
-	int c = 2;
-    #else
-	int c = 7;
-    #endif
-    tableHeight = horizontalHeader()->height() + verticalHeader()->length() + c;
-    if (firstTime)
-        tableWidth = horizontalHeader()->length() + c;
-    else
-	tableWidth = geometry().width();
+    tableHeight = horizontalHeader()->height() + verticalHeader()->length() + 10;
+    tableWidth = horizontalHeader()->length() + 10;
     QPoint globalPosition = QPoint(frameGeometry().x(), frameGeometry().y());
     resize(tableWidth, tableHeight);
     //for correct redrawing

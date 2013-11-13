@@ -91,14 +91,14 @@ void Debugger::processOutput()
     int index = buffer.indexOf(QString("(gdb)"));
     int linefeedIndex = errorBuffer.indexOf("\n");
     if (index != -1) { //if whole message ready to processing (end of whole message is "(gdb)")
-        processMessage(errorBuffer.left(linefeedIndex) + buffer.left(index));
+        processMessage(buffer.left(index), errorBuffer.left(linefeedIndex));
         buffer.remove(0, index + 5); //remove processed message
         errorBuffer.remove(0, linefeedIndex + 1);
     }
     bufferTimer->start(10);
 }
 
-void Debugger::processMessage(QString output)
+void Debugger::processMessage(QString output, QString error)
 {
     if (c == 0) { //in start wait for printing of start gdb text like this:
         /*GNU gdb (GDB) 7.4
@@ -159,10 +159,10 @@ void Debugger::processMessage(QString output)
     //process all actions after start
     if (c == 3)
         if (output.indexOf(QString("$1 =")) == -1) //input file
-            processAction(output);
+            processAction(output, error);
 }
 
-void Debugger::processAction(QString output)
+void Debugger::processAction(QString output, QString error)
 {
     if (output.indexOf(exitMessage) != -1 || output.indexOf(cExitMessage) != -1) { //if debug finished
         //print output - message like bottom
@@ -214,10 +214,8 @@ void Debugger::processAction(QString output)
                 msg.remove(0, 1); //remove first whitespace
                 QRegExp continuingMsg("Continuing.\r?\n");
                 QRegExp breakpointMsg("\r?\nBreakpoint \\d+, ");
-                QRegExp noSymbolMsg("o symbol \".*\" in current context. ");
                 msg.remove(continuingMsg);
                 msg.remove(breakpointMsg);
-                msg.remove(noSymbolMsg);
                 emit printOutput(msg);
             }
             firstAction = false;
@@ -258,6 +256,12 @@ void Debugger::processAction(QString output)
                 actionTypeQueue.enqueue(showLine);
                 processAction(output);
             }
+            if (!error.isEmpty()) {
+                if (output != " \n")
+                    output = error + output;
+                else
+                    output = error;
+            }
         }
 
         if (actionType == infoMemory) {
@@ -266,11 +270,17 @@ void Debugger::processAction(QString output)
                     output.indexOf(QString("no debug info")) == -1 && output != QString(" ")) {
                 //if variable exists (isValid = true)
                 isValid = true;
-		output = output.right(output.length() - output.indexOf(QRegExp("\\$\\d+ = .*")) - 1);
-                output = output.right(output.length() - output.indexOf(QChar('=')) - 1);
+                int index = output.indexOf(QRegExp("\\$\\d+ = .*"));
+                if (index == -1)
+                    isValid = false;
+                else {
+                    output = output.right(output.length() - index);
+                    output = output.right(output.length() - output.indexOf(QChar('=')) - 1);
+                }
             }
             memoryInfo info;
-            info.value = output;
+            if (isValid)
+                info.value = output;
             info.isValid = isValid;
             watches.append(info);
             if (watchesCount == watches.size()) {
