@@ -91,6 +91,7 @@ private:
     int c; //counter for sequential performing of actions
     bool ioIncIncluded;
     unsigned int ioIncSize;
+    bool registersOk;
 
     QQueue<DebugActionType> actionTypeQueue; //queue of actions type from enum
     QString exitMessage; //message on exit in current platform

@@ -39,7 +39,7 @@ signals:
     void debugShowMemory();
 
 public slots:
-    void adjust(int shift = 0); //own adjust size
+    void adjust(); //own adjust size
     void deleteVariable();
     void addVariable(const QString &variableName, int rowNumber = -1);
     void addVariable(const RuQPlainTextEdit::Watch &variable, int rowNumber = -1);
