@@ -1264,6 +1264,9 @@ void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool a
             if (!newCursor.isNull()) {
                 selection.cursor = newCursor;
                 extraSelections.append(selection);
+                QTextCursor cursor = newCursor;
+                cursor.clearSelection();
+                code->setTextCursor(cursor);
             }
 
             code->setExtraSelections(extraSelections);
