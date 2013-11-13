@@ -108,8 +108,8 @@ private:
 public slots:
     void readOutputToBuffer();
     void processOutput();
-    void processMessage(QString output);
-    void processAction(QString output);
+    void processMessage(QString output, QString error);
+    void processAction(QString output, QString error = QString());
     void doInput(QString command, DebugActionType actionType);
     void changeBreakpoint(int lineNumber, bool isAdded);
 
