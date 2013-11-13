@@ -157,7 +157,7 @@ void Debugger::processMessage(QString output)
 
     //process all actions after start
     if (c == 3)
-        if ((output.indexOf(QString("$1 =")) == -1) && (output.indexOf(QString("$2 =")) == -1))
+        if (output.indexOf(QString("$1 =")) == -1) //input file
             processAction(output);
 }
 
