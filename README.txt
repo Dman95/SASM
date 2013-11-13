@@ -29,7 +29,7 @@ Further print commands:
 1) "qmake" (For installing in specific directory on Linux - print: "qmake PREFIX=<path>". By default SASM installs in "/usr/bin" and "usr/share")
 2) "make" for Linux and "mingw32-make" for Windows.
 3) For Linux: "make install" (command "sasm" will open SASM) or run "sasm" from folder right away or put "sasm" executable file to folder "Linux" (from this folder you can run the program).
-   For Windows: Put "sasm.exe" executable file to folder "Windows". From this folder you can run the program. Alco you can run program right away from compilation folder.
+   For Windows: Put "sasm.exe" executable file to folder "Windows". From this folder you can run the program. Also you can run program right away from compilation folder.
 ===========================================================================
 
 Also you can download already compiled packages 
