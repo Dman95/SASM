@@ -45,6 +45,7 @@ CodeEditor::CodeEditor(QWidget *parent, bool withBeakpoints) :
     breakpointImage(":/images/breakpoint.png")
 {
     hasBreakpoints = withBeakpoints;
+    prevBlockCount = -1;
     this->setDebugMode(false);
     debugAreaWidth = 3 + debugImage.width() + 1;
     this->setWordWrapMode(QTextOption::NoWrap);
@@ -54,6 +55,7 @@ CodeEditor::CodeEditor(QWidget *parent, bool withBeakpoints) :
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
+    connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(shiftBreakpoints(int)));
 
     updateLineNumberAreaWidth(0);
     highlightCurrentLine();
@@ -101,14 +103,6 @@ void CodeEditor::resizeEvent(QResizeEvent *e)
 
 void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
-    //delete invisible breakpoints
-    QMutableListIterator<int> i(breakpoints);
-    while (i.hasNext()) {
-        int num = i.next();
-        if (num > this->document()->blockCount())
-            i.remove();
-    }
-
     //paint on line number area
     QPainter painter(lineNumberArea);
     painter.fillRect(event->rect(), QColor(240, 240, 240));
@@ -298,7 +292,7 @@ void CodeEditor::deleteTab()
 
 void CodeEditor::keyPressEvent(QKeyEvent *e)
 {
-    QString curString = this->textCursor().block().text();
+    QString curString = textCursor().block().text();
     int indentWidth = -1;
     switch (e->key()) {
     case (Qt::Key_Tab) :
@@ -329,6 +323,36 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
     default:
         QPlainTextEdit::keyPressEvent(e);
     }
+}
+
+void CodeEditor::shiftBreakpoints(int blockCount)
+{
+    if (prevBlockCount == -1) {
+        prevBlockCount = this->blockCount();
+        return;
+    }
+    //remove breakpoints in range
+    int changedLine = textCursor().blockNumber() + 1; //blocks starts from 0
+    if (blockCount < prevBlockCount) {
+        for (int i = changedLine + 1; i <= changedLine + prevBlockCount - blockCount; i++) {
+            breakpoints.removeOne(i);
+        }
+    }
+
+    //shift breakpoints
+    if (blockCount > prevBlockCount) {
+        for (int i = 0; i < breakpoints.size(); i++) {
+            if (breakpoints[i] >= changedLine)
+                breakpoints[i] += blockCount - prevBlockCount;
+        }
+    } else {
+        for (int i = 0; i < breakpoints.size(); i++) {
+            if (breakpoints[i] > changedLine)
+                breakpoints[i] += blockCount - prevBlockCount;
+        }
+    }
+    prevBlockCount = blockCount;
+    repaintLineNumberArea();
 }
 
 CodeEditor::~CodeEditor()
