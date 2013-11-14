@@ -95,7 +95,7 @@ private:
 
     QQueue<DebugActionType> actionTypeQueue; //queue of actions type from enum
     QString exitMessage; //message on exit in current platform
-    QString cExitMessage; //message on exit which shows when "continue" command used
+    QRegExp cExitMessage; //message on exit which shows when "continue" command used
     QString tmpPath;
 
     QString buffer; //global gdb output buffer
