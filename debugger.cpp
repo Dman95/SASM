@@ -164,7 +164,9 @@ void Debugger::processMessage(QString output, QString error)
 
 void Debugger::processAction(QString output, QString error)
 {
-    if (output.indexOf(exitMessage) != -1 || output.indexOf(QRegExp(cExitMessage)) != -1) { //if debug finished
+    bool backtrace = (output.indexOf(QRegExp("#\\d+  0x[0-9a-fA-F]{8} in .* ()")) != -1);
+    if ((output.indexOf(exitMessage) != -1 && !backtrace)
+            || output.indexOf(QRegExp(cExitMessage)) != -1) { //if debug finished
         //print output - message like bottom
             /*Breakpoint 1, 0x08048510 in sasmStartL ()
             "
@@ -252,7 +254,8 @@ void Debugger::processAction(QString output, QString error)
             if (output[output.length() - 1] != '\n')
                 output += QChar('\n');
             //process as ni or si
-            if (output.indexOf(QRegExp("0x[0-9a-fA-F]{8} in ")) != -1) {
+            if (output.indexOf(QRegExp("0x[0-9a-fA-F]{8} in ")) != -1
+                    && !backtrace) {
                 actionTypeQueue.enqueue(showLine);
                 processAction(output);
             }
