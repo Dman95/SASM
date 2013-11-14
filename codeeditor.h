@@ -86,6 +86,7 @@ protected:
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
     void updateLineNumberArea(const QRect &, int);
+    void shiftBreakpoints(int blockCount);
 
 private:
     QWidget *lineNumberArea;
@@ -95,6 +96,7 @@ private:
     QList<int> breakpoints; //numbers of lines with breakpoints
     int firstTopMargin;
     bool hasBreakpoints;
+    int prevBlockCount;
 
 signals:
     void breakpointsChanged(int lineNumber, bool isAdded);
