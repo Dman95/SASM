@@ -782,33 +782,30 @@ void MainWindow::buildProgram(bool debugMode)
             QString("Couldn't compute FAST_CWD pointer.  Please report this problem to\r?\n") +
             QString("the public mailing list cygwin@cygwin.com\r?\n"));
     logText.remove(win81CygwinWarning);
-    if (logText.indexOf(QString("error"), 0, Qt::CaseInsensitive) != -1) {
-        printLogWithTime(tr("Warning! Errors have occurred in the build:") + '\n', Qt::red);
-        printLog(logText, Qt::red);
-        QMessageBox::critical(0, tr("Warning!"), tr("Errors have occurred in the build!"));
-        programIsBuilded = false;
-    } else {
-        if (!logText.isEmpty())
-            printLog(logText, Qt::black); //print warnings
 
+    bool builded;
+    if (QFile::exists(pathInTemp("SASMprog.exe")))
+        builded = true;
+    else
+        builded = false;
+    if (!builded) {
+        printLogWithTime(tr("Warning! Errors have occurred in the build:") + '\n', Qt::red);
+
+        //print errors
+        printLog(logText, Qt::red);
         logFile.setFileName(gccOutput);
         logFile.open(QIODevice::ReadOnly);
         QTextStream logLinker(&logFile);
         logText = logLinker.readAll();
         logFile.close();
-
         logText.remove(win81CygwinWarning);
-        if (logText.indexOf(QString("error"), 0, Qt::CaseInsensitive) != -1) {
-            printLogWithTime(tr("Warning! Errors have occurred in the build:") + '\n', Qt::red);
-            printLog(logText, Qt::red);
-            QMessageBox::critical(0, tr("Warning!"), tr("Errors have occurred in the build!"));
-            programIsBuilded = false;
-        } else {
-            if (!logText.isEmpty())
-                printLog(logText, Qt::black); //print warnings
-            printLogWithTime(tr("Built successfully.") + '\n', Qt::darkGreen);
-            programIsBuilded = true;
-        }
+        printLog(logText, Qt::red);
+
+        QMessageBox::critical(0, tr("Warning!"), tr("Errors have occurred in the build!"));
+        programIsBuilded = false;
+    } else {
+        printLogWithTime(tr("Built successfully.") + '\n', Qt::darkGreen);
+        programIsBuilded = true;
     }
 }
 
