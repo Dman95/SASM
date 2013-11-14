@@ -778,6 +778,10 @@ void MainWindow::buildProgram(bool debugMode)
     QTextStream log(&logFile);
     QString logText = log.readAll();
     logFile.close();
+    QRegExp win81CygwinWarning(QString("      \\d+ \\[main\\] nasm \\d+ find_fast_cwd: WARNING: ") +
+            QString("Couldn't compute FAST_CWD pointer.  Please report this problem to\r?\n") +
+            QString("the public mailing list cygwin@cygwin.com\r?\n"));
+    logText.remove(win81CygwinWarning);
     if (logText.indexOf(QString("error"), 0, Qt::CaseInsensitive) != -1) {
         printLogWithTime(tr("Warning! Errors have occurred in the build:") + '\n', Qt::red);
         printLog(logText, Qt::red);
@@ -793,6 +797,7 @@ void MainWindow::buildProgram(bool debugMode)
         logText = logLinker.readAll();
         logFile.close();
 
+        logText.remove(win81CygwinWarning);
         if (logText.indexOf(QString("error"), 0, Qt::CaseInsensitive) != -1) {
             printLogWithTime(tr("Warning! Errors have occurred in the build:") + '\n', Qt::red);
             printLog(logText, Qt::red);
