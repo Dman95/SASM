@@ -778,24 +778,29 @@ void MainWindow::buildProgram(bool debugMode)
     QTextStream log(&logFile);
     QString logText = log.readAll();
     logFile.close();
-    if (!logText.isEmpty()) {
+    if (logText.indexOf(QString("error"), 0, Qt::CaseInsensitive) != -1) {
         printLogWithTime(tr("Warning! Errors have occurred in the build:") + '\n', Qt::red);
         printLog(logText, Qt::red);
         QMessageBox::critical(0, tr("Warning!"), tr("Errors have occurred in the build!"));
         programIsBuilded = false;
     } else {
+        if (!logText.isEmpty())
+            printLog(logText, Qt::black); //print warnings
+
         logFile.setFileName(gccOutput);
         logFile.open(QIODevice::ReadOnly);
         QTextStream logLinker(&logFile);
         logText = logLinker.readAll();
         logFile.close();
 
-        if (!logText.isEmpty()) {
+        if (logText.indexOf(QString("error"), 0, Qt::CaseInsensitive) != -1) {
             printLogWithTime(tr("Warning! Errors have occurred in the build:") + '\n', Qt::red);
             printLog(logText, Qt::red);
             QMessageBox::critical(0, tr("Warning!"), tr("Errors have occurred in the build!"));
             programIsBuilded = false;
         } else {
+            if (!logText.isEmpty())
+                printLog(logText, Qt::black); //print warnings
             printLogWithTime(tr("Built successfully.") + '\n', Qt::darkGreen);
             programIsBuilded = true;
         }
