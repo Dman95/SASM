@@ -61,7 +61,7 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tm
         ioIncSize = 722;
         exitMessage = "libc_start_main";
     #endif
-    cExitMessage = "exited normally";
+    cExitMessage = QRegExp("\\[Inferior .* exited");
 
     QStringList arguments;
     arguments << path;
@@ -164,7 +164,7 @@ void Debugger::processMessage(QString output, QString error)
 
 void Debugger::processAction(QString output, QString error)
 {
-    if (output.indexOf(exitMessage) != -1 || output.indexOf(cExitMessage) != -1) { //if debug finished
+    if (output.indexOf(exitMessage) != -1 || output.indexOf(QRegExp(cExitMessage)) != -1) { //if debug finished
         //print output - message like bottom
             /*Breakpoint 1, 0x08048510 in sasmStartL ()
             "
