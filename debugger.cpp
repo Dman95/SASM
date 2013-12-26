@@ -371,9 +371,9 @@ void Debugger::processLst()
             continue;
         }
         char *s = line.toLocal8Bit().data();
-        unsigned int a, b, c, argumentCount;
-        if ((argumentCount = sscanf(s, "%u %x %x", &a, &b, &c)) >= 2){
-            if (!(argumentCount == 3 && b == 0 && c == 0)) { //exclude 0 0
+        unsigned int a, b, c;
+        if (sscanf(s, "%u %x %x", &a, &b, &c) == 3){
+            if (!(b == 0 && c == 0)) { //exclude 0 0
                 lineNum l;
                 l.numInCode = a - 1 - omitLinesCount; //-1 for missing of sasmStartL:
                 if (ioIncIncluded) {
