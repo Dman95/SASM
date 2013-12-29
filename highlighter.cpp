@@ -168,23 +168,6 @@
          highlightingRules.append(rule);
      }
 
-     //registers
-     QStringList registerPatterns;
-     registerPatterns << "\\beax\\b" << "\\bebx\\b" << "\\becx\\b" <<
-                         "\\bedx\\b" << "\\bebp\\b" << "\\besp\\b" <<
-                         "\\bedi\\b" << "\\besi\\b" << "\\bax\\b" <<
-                         "\\bbx\\b" << "\\bcx\\b" << "\\bdx\\b" <<
-                         "\\bbp\\b" << "\\bsp\\b" << "\\bsi\\b" <<
-                         "\\bdi\\b" << "\\bal\\b" << "\\bah\\b" <<
-                         "\\bbl\\b" << "\\bbh\\b" << "\\bcl\\b" <<
-                         "\\bch\\b" << "\\bdl\\b" << "\\bdh\\b";
-     foreach (const QString &pattern, registerPatterns) {
-         rule.pattern = QRegExp(pattern);
-         rule.pattern.setCaseSensitivity(Qt::CaseInsensitive);
-         rule.format = registerFormat;
-         highlightingRules.append(rule);
-     }
-
      //IO macroses
      rule.format = iomacrosFormat;
      QStringList macrosPatterns;
@@ -250,6 +233,23 @@
      highlightingRules.append(rule);
      rule.pattern = QRegExp("\\b0[xh][0-9A-Fa-f]+\\b"); //hexadecimal notation
      highlightingRules.append(rule);
+
+     //registers
+     QStringList registerPatterns;
+     registerPatterns << "\\beax\\b" << "\\bebx\\b" << "\\becx\\b" <<
+                         "\\bedx\\b" << "\\bebp\\b" << "\\besp\\b" <<
+                         "\\bedi\\b" << "\\besi\\b" << "\\bax\\b" <<
+                         "\\bbx\\b" << "\\bcx\\b" << "\\bdx\\b" <<
+                         "\\bbp\\b" << "\\bsp\\b" << "\\bsi\\b" <<
+                         "\\bdi\\b" << "\\bal\\b" << "\\bah\\b" <<
+                         "\\bbl\\b" << "\\bbh\\b" << "\\bcl\\b" <<
+                         "\\bch\\b" << "\\bdl\\b" << "\\bdh\\b";
+     foreach (const QString &pattern, registerPatterns) {
+         rule.pattern = QRegExp(pattern);
+         rule.pattern.setCaseSensitivity(Qt::CaseInsensitive);
+         rule.format = registerFormat;
+         highlightingRules.append(rule);
+     }
 
      //system instructions and preprocessor commands
      rule.format = systemFormat;
