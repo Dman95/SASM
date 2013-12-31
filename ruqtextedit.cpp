@@ -43,6 +43,12 @@
 RuQTextEdit::RuQTextEdit(QWidget *parent) :
     QTextEdit(parent)
 {
+    QSettings settings("SASM Project", "SASM");
+    QPalette palette = this->palette();
+    palette.setColor(QPalette::Base, settings.value("backgroundcolor", palette.color(QPalette::Base)).value<QColor>());
+    palette.setColor(QPalette::Text, settings.value("fontcolor", palette.color(QPalette::Text)).value<QColor>());
+    this->setPalette(palette);
+
     undoAction = new QAction(tr("Undo"), this);
     undoAction->setShortcut(QKeySequence::Undo);
     connect(undoAction, SIGNAL(triggered()), this, SLOT(undo()));

@@ -43,6 +43,12 @@
 RuQPlainTextEdit::RuQPlainTextEdit(QWidget *parent) :
     QPlainTextEdit(parent)
 {
+    QSettings settings("SASM Project", "SASM");
+    QPalette palette = this->palette();
+    palette.setColor(QPalette::Base, settings.value("backgroundcolor", palette.color(QPalette::Base)).value<QColor>());
+    palette.setColor(QPalette::Text, settings.value("fontcolor", palette.color(QPalette::Text)).value<QColor>());
+    this->setPalette(palette);
+
     setDebugDisabled();
 
     commentAction = new QAction(tr("Comment"), this);

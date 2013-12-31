@@ -48,6 +48,7 @@
 #include <QTextBlock>
 #include <QTextStream>
 #include <QPointer>
+#include <QSettings>
 
 class RuQPlainTextEdit : public QPlainTextEdit
 {

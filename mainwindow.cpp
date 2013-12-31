@@ -76,6 +76,8 @@ MainWindow::MainWindow(int argc, char **argv, QWidget *parent)
     memoryWindow = 0;
     debugger = 0;
     programStopped = true;
+    highlighter = 0;
+    tabs = 0;
 
     timer = new QTimer;
     timer->setInterval(100);
@@ -142,7 +144,6 @@ void MainWindow::initUi()
     tabs = new QTabWidget;
     connect(tabs, SIGNAL(tabCloseRequested(int)), this, SLOT(deleteTab(int)));
     connect(tabs, SIGNAL(currentChanged(int)), this, SLOT(changeCurrentTab(int)));
-    tabs->setTabShape(QTabWidget::Triangular);
     tabs->setTabsClosable(true);
 
     //Create compiler field
@@ -295,7 +296,7 @@ void MainWindow::createActions()
     putTabAction->setShortcut(QString("Tab"));
 
     deleteTabAction = new QAction(tr("Remove indent"), this);
-    deleteTabAction->setShortcut(QString("Ctrl+Tab"));
+    deleteTabAction->setShortcut(QString("Shift+Tab"));
     //Action in edit menu connects in refreshEditMenu function!
 
 
@@ -1336,6 +1337,7 @@ void MainWindow::writeSettings()
 void MainWindow::openSettings()
 {
     QSettings settings("SASM Project", "SASM");
+    //initialize
     if (!settingsWindow) {
         settingsWindow = new QWidget(this, Qt::Window);
         settingsWindow->setWindowModality(Qt::WindowModal);
@@ -1347,7 +1349,75 @@ void MainWindow::openSettings()
         connect(settingsUi.buttonBox->button(QDialogButtonBox::Cancel),
                 SIGNAL(clicked()), settingsWindow, SLOT(close()));
         connect(settingsUi.resetAllButton, SIGNAL(clicked()), this, SLOT(resetAllSettings()));
+
+        //colors
+        colorSignalMapper = new QSignalMapper(this);
+        colorButtons << settingsUi.keywordsColorButton << settingsUi.registersColorButton << //foreground
+                        settingsUi.numbersColorButton << settingsUi.memoryColorButton <<
+                        settingsUi.labelsColorButton << settingsUi.commentsColorButton <<
+                        settingsUi.systemColorButton << settingsUi.iomacroColorButton <<
+                        settingsUi.quotationColorButton <<
+                        settingsUi.keywordsColorButton_2 << settingsUi.registersColorButton_2 << //background
+                        settingsUi.numbersColorButton_2 << settingsUi.memoryColorButton_2 <<
+                        settingsUi.labelsColorButton_2 << settingsUi.commentsColorButton_2 <<
+                        settingsUi.systemColorButton_2 << settingsUi.iomacroColorButton_2 <<
+                        settingsUi.quotationColorButton_2 <<
+                        settingsUi.backgroundColorButton << settingsUi.lineNumberPanelColorButton <<//common
+                        settingsUi.fontColorButton <<
+                        settingsUi.currentLineColorButton << settingsUi.debugLineColorButton;
+
+        defaultColors <<  QColor(Qt::blue) << QColor(153, 0, 204) << //according to colorButtons
+                          QColor(255, 122, 0) << QColor(0, 128, 255) <<
+                          QColor(128, 0, 0) << QColor(Qt::darkGreen) <<
+                          QColor(Qt::darkCyan) << QColor(Qt::blue) <<
+                          QColor(128, 128, 128) <<
+                          QPalette().color(QPalette::Base) << QPalette().color(QPalette::Base) <<
+                          QPalette().color(QPalette::Base) << QPalette().color(QPalette::Base) <<
+                          QPalette().color(QPalette::Base) << QPalette().color(QPalette::Base) <<
+                          QPalette().color(QPalette::Base) << QPalette().color(QPalette::Base) <<
+                          QPalette().color(QPalette::Base) <<
+                          QPalette().color(QPalette::Base) << QPalette().color(QPalette::Window) <<
+                          QPalette().color(QPalette::WindowText) <<
+                          QColor(232, 232, 255) << QColor(235, 200, 40);
+        for (int i = 0; i < colorButtons.size(); i++) {
+            //add color to associative array
+            QString name = colorButtons[i]->objectName();
+            name.remove("Button");
+            name.replace("_2", "bg");
+            name = name.toLower();
+            colorsMap.insert(name, defaultColors[i]);
+
+            connect(colorButtons[i], SIGNAL(clicked()), colorSignalMapper, SLOT(map()));
+            colorSignalMapper->setMapping(colorButtons[i], colorButtons[i]);
+        }
+        connect(colorSignalMapper, SIGNAL(mapped(QWidget*)), this, SLOT(pickColor(QWidget*)));
+
+        //fonts
+        fontsSignalMapper = new QSignalMapper(this);
+        fontCheckBoxes << settingsUi.keywordsBoldCheckBox << settingsUi.registersBoldCheckBox << //bold
+                          settingsUi.numbersBoldCheckBox << settingsUi.memoryBoldCheckBox <<
+                          settingsUi.labelsBoldCheckBox << settingsUi.commentsBoldCheckBox <<
+                          settingsUi.systemBoldCheckBox << settingsUi.iomacroBoldCheckBox <<
+                          settingsUi.quotationBoldCheckBox <<
+                          settingsUi.keywordsItalicCheckBox << settingsUi.registersItalicCheckBox << //italic
+                          settingsUi.numbersItalicCheckBox << settingsUi.memoryItalicCheckBox <<
+                          settingsUi.labelsItalicCheckBox << settingsUi.commentsItalicCheckBox <<
+                          settingsUi.systemItalicCheckBox << settingsUi.iomacroItalicCheckBox <<
+                          settingsUi.quotationItalicCheckBox;
+        for (int i = 0; i < fontCheckBoxes.size(); i++) {
+            //add font to associative array
+            QString name = fontCheckBoxes[i]->objectName();
+            name.remove("CheckBox");
+            name = name.toLower();
+
+            connect(fontCheckBoxes[i], SIGNAL(clicked()), fontsSignalMapper, SLOT(map()));
+            fontsSignalMapper->setMapping(fontCheckBoxes[i], fontCheckBoxes[i]);
+        }
+        connect(fontsSignalMapper, SIGNAL(mapped(QWidget*)), this, SLOT(changeHighlightingFont(QWidget*)));
     }
+
+    //set settings
+    //common
     settingsUi.startWindow->setCurrentIndex(settings.value("startwindow", 0).toInt());
     settingsUi.codePosition->setCurrentIndex(settings.value("codeposition", 0).toInt());
     settingsUi.language->setCurrentIndex(settings.value("language", 0).toInt());
@@ -1365,7 +1435,92 @@ void MainWindow::openSettings()
     }
     settingsStartTextEditor->setPlainText(settings.value("starttext").toString());
 
+    //colors
+    for (int i = 0; i < colorButtons.size(); i++) {
+        //init
+        pickColor((QWidget *) colorButtons[i], true);
+    }
+    //fonts
+    for (int i = 0; i < fontCheckBoxes.size(); i++) {
+        //init
+        changeHighlightingFont((QWidget *) fontCheckBoxes[i], true);
+    }
+
+    settingsUi.currentLineCheckBox->setChecked(settings.value("currentlinemode", true).toBool());
+    connect(settingsUi.currentLineCheckBox, SIGNAL(clicked(bool)), this, SLOT(changeHighlightingLineMode(bool)));
+
     settingsWindow->show();
+}
+
+void MainWindow::pickColor(QWidget *button, bool init)
+{
+    QPushButton *colorButton = (QPushButton *) button;
+    QSettings settings("SASM Project", "SASM");
+    QString name = colorButton->objectName();
+    name.remove("Button");
+    name.replace("_2", "bg");
+    name = name.toLower();
+    if (!init) {
+        QColor color = QColorDialog::getColor(settings.value(name, colorsMap[name]).value<QColor>());
+        if (color.isValid()) {
+            settings.setValue(name, color);
+            if (name == "backgroundcolor") {
+                int r, g, b;
+                color.getRgb(&r, &g, &b);
+                for (int i = 9; i < 18; i++) {
+                    QString buttonName = colorButtons[i]->objectName();
+                    buttonName.remove("Button");
+                    buttonName.replace("_2", "bg");
+                    buttonName = buttonName.toLower();
+                    settings.setValue(buttonName, color);
+                    colorButtons[i]->setStyleSheet(QString("background-color: rgb(%1, %2, %3)").arg(r).arg(g).arg(b));
+                }
+            }
+            //recreate highlighter
+            if (highlighter) {
+                delete highlighter;
+                highlighter = new Highlighter;
+            }
+            if (tabs && tabs->count() > 0) {
+                Tab *currentTab = (Tab *) tabs->currentWidget();
+                highlighter->setDocument(currentTab->getCodeDocument());
+            }
+        }
+    }
+    int r, g, b;
+    QColor color = settings.value(name, colorsMap[name]).value<QColor>();
+    color.getRgb(&r, &g, &b);
+    colorButton->setStyleSheet(QString("background-color: rgb(%1, %2, %3)").arg(r).arg(g).arg(b));
+}
+
+void MainWindow::changeHighlightingFont(QWidget *box, bool init)
+{
+    QCheckBox *checkBox = (QCheckBox *) box;
+    QSettings settings("SASM Project", "SASM");
+    QString name = checkBox->objectName();
+    name.remove("CheckBox");
+    name = name.toLower();
+    if (init) {
+        bool defaultState = (name == "keywordsbold") ? true : false;
+        checkBox->setChecked(settings.value(name, defaultState).toBool());
+    } else {
+        settings.setValue(name, checkBox->isChecked());
+        //recreate highlighter
+        if (highlighter) {
+            delete highlighter;
+            highlighter = new Highlighter;
+        }
+        if (tabs && tabs->count() > 0) {
+            Tab *currentTab = (Tab *) tabs->currentWidget();
+            highlighter->setDocument(currentTab->getCodeDocument());
+        }
+    }
+}
+
+void MainWindow::changeHighlightingLineMode(bool mode)
+{
+    QSettings settings("SASM Project", "SASM");
+    settings.setValue("currentlinemode", mode);
 }
 
 void MainWindow::saveSettings()
