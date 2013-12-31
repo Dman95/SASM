@@ -105,7 +105,8 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     //paint on line number area
     QPainter painter(lineNumberArea);
-    painter.fillRect(event->rect(), QColor(240, 240, 240));
+    QSettings settings("SASM Project", "SASM");
+    painter.fillRect(event->rect(), settings.value("linenumberpanelcolor", this->palette().color(QPalette::Window)).value<QColor>());
 
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
@@ -119,7 +120,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             QString number = QString::number(blockNumber + 1);
-            painter.setPen(Qt::black);
+            painter.setPen(settings.value("fontcolor", this->palette().color(QPalette::Text)).value<QColor>());
             painter.drawText(0, top, lineNumberArea->width() - debugAreaWidth, fontMetrics().height(),
                              Qt::AlignRight, number);
 
@@ -190,13 +191,14 @@ QList<int> *CodeEditor::getBreakpoints()
 
 void CodeEditor::highlightCurrentLine()
 {
-    if (!debugMode) {
+    QSettings settings("SASM Project", "SASM");
+    if (!debugMode && settings.value("currentlinemode", true).toBool()) {
         QList<QTextEdit::ExtraSelection> extraSelections;
 
         if (!isReadOnly()) {
             QTextEdit::ExtraSelection selection;
 
-            QColor lineColor = QColor(232, 232, 255);
+            QColor lineColor = settings.value("currentlinecolor", QColor(232, 232, 255)).value<QColor>();
 
             selection.format.setBackground(lineColor);
             selection.format.setProperty(QTextFormat::FullWidthSelection, true);
@@ -217,7 +219,8 @@ void CodeEditor::highlightDebugLine(int lineNumber)
         if (!isReadOnly()) {
             QTextEdit::ExtraSelection selection;
 
-            QColor lineColor = QColor(235, 200, 40);
+            QSettings settings("SASM Project", "SASM");
+            QColor lineColor = settings.value("debuglinecolor", QColor(235, 200, 40)).value<QColor>();
 
             selection.format.setBackground(lineColor);
             selection.format.setProperty(QTextFormat::FullWidthSelection, true);
@@ -296,9 +299,7 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
     int indentWidth = -1;
     switch (e->key()) {
     case (Qt::Key_Tab) :
-        if (e->modifiers() & Qt::ControlModifier)
-            deleteTab();
-        else
+        if (! (e->modifiers() & Qt::ShiftModifier))
             putTab();
         break;
     case (Qt::Key_Enter) :

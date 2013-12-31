@@ -46,6 +46,7 @@
 #include <QMenu>
 #include <QContextMenuEvent>
 #include <QPointer>
+#include <QSettings>
 
 class RuQTextEdit : public QTextEdit
 {

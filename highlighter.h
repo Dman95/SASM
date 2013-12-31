@@ -42,6 +42,9 @@
 #define HIGHLIGHTER_H
 
 #include <QSyntaxHighlighter>
+#include <QSettings>
+#include <QPalette>
+#include <QTextDocument>
 
 class Highlighter : public QSyntaxHighlighter
 {
@@ -70,6 +73,9 @@ private:
      QTextCharFormat systemFormat;
      QTextCharFormat numberFormat;
      QTextCharFormat iomacrosFormat;
+     QList<QColor> defaultColors;
+     QList<QString> names;
+     QList<QTextCharFormat *> formats;
 };
 
 #endif // HIGHLIGHTER_H

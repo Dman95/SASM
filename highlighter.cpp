@@ -44,27 +44,28 @@
      : QSyntaxHighlighter(parent)
  {
      //setting up text formats
-     keywordFormat.setForeground(Qt::blue);
-     keywordFormat.setFontWeight(QFont::Bold);
+     names << "keywords" << "registers" << "numbers" << "memory" <<
+                   "labels" << "comments" << "system" << "iomacro" <<
+                   "quotation";
+     defaultColors << QColor(Qt::blue) << QColor(153, 0, 204) << //according to colorNames
+                      QColor(255, 122, 0) << QColor(0, 128, 255) <<
+                      QColor(128, 0, 0) << QColor(Qt::darkGreen) <<
+                      QColor(Qt::darkCyan) << QColor(Qt::blue) <<
+                      QColor(128, 128, 128);
 
-     registerFormat.setForeground(QColor(153, 0, 204));
+     formats << &keywordFormat << &registerFormat << &numberFormat << &memoryFormat <<
+                &labelFormat << &commentFormat << &systemFormat << &iomacrosFormat <<
+                &quotationFormat;
 
-     labelWithDotFormat.setForeground(Qt::black);
-
-     labelFormat.setForeground(QColor(128, 0, 0));
-
-     commentFormat.setForeground(Qt::darkGreen);
-
-     quotationFormat.setForeground(QColor(128, 128, 128));
-
-     memoryFormat.setForeground(QColor(0, 128, 255));
-
-     systemFormat.setForeground(Qt::darkCyan);
-
-     numberFormat.setForeground(QColor(255, 122, 0));
-
-     iomacrosFormat.setForeground(Qt::blue);
-
+     QSettings settings("SASM Project", "SASM");
+     for (int i = 0; i < formats.size(); i++) {
+         formats[i]->setForeground(settings.value(names[i] + "color", defaultColors[i]).value<QColor>());
+         formats[i]->setBackground(settings.value(names[i] + "colorbg", QPalette().color(QPalette::Base)).value<QColor>());
+         if (settings.value(names[i] + "bold", (i == 0) ? true : false).toBool())
+             formats[i]->setFontWeight(QFont::Bold);
+         formats[i]->setFontItalic(settings.value(names[i] + "italic", false).toBool());
+     }
+     labelWithDotFormat = this->format(0);
 
      //setting up regular expressions
      HighlightingRule rule;
@@ -207,20 +208,8 @@
      highlightingRules.append(rule);
 
      //labels
-     rule.pattern = QRegExp("\\..+");
-     rule.format = labelWithDotFormat;
-     highlightingRules.append(rule);
-
      rule.pattern = QRegExp("\\S+:");
      rule.format = labelFormat;
-     highlightingRules.append(rule);
-
-     //quotations
-     rule.pattern = QRegExp("\".*\"");
-     rule.format = quotationFormat;
-     highlightingRules.append(rule);
-
-     rule.pattern = QRegExp("'.*'");
      highlightingRules.append(rule);
 
      //numbers
@@ -251,6 +240,14 @@
          highlightingRules.append(rule);
      }
 
+     //.labels and numbers with point
+     rule.pattern = QRegExp("\\..+");
+     rule.format = labelWithDotFormat;
+     highlightingRules.append(rule);
+     rule.pattern = QRegExp("\\b\\d+\\.\\d+\\b");
+     rule.format = numberFormat;
+     highlightingRules.append(rule);
+
      //system instructions and preprocessor commands
      rule.format = systemFormat;
      QStringList systemPatterns;
@@ -267,6 +264,14 @@
          rule.pattern.setCaseSensitivity(Qt::CaseInsensitive);
          highlightingRules.append(rule);
      }
+
+     //quotations
+     rule.pattern = QRegExp("\".*\"");
+     rule.format = quotationFormat;
+     highlightingRules.append(rule);
+
+     rule.pattern = QRegExp("'.*'");
+     highlightingRules.append(rule);
 
      //comments
      rule.pattern = QRegExp(";[^\n]*");

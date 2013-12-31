@@ -50,6 +50,9 @@
 #include <QFileDialog>
 #include <QTime>
 #include <QPointer>
+#include <QColorDialog>
+#include <QSignalMapper>
+#include <QMap>
 #include "tab.h"
 #include "highlighter.h"
 #include "debugger.h"
@@ -163,6 +166,12 @@ private:
     QString saveOpenDirectory; //save and open
     QByteArray tabSplitterState;
     QPointer<QTextBrowser> help;
+    QSignalMapper *colorSignalMapper;
+    QSignalMapper *fontsSignalMapper;
+    QList<QPushButton *> colorButtons;
+    QList<QColor> defaultColors; //according to colorButtons
+    QMap<QString, QColor> colorsMap;
+    QList<QCheckBox *> fontCheckBoxes;
 
     //about close
     bool closeFromCloseAll;
@@ -226,6 +235,9 @@ public slots:
     void changeActionsState(int widgetIndex);
     void saveTabSplitterState();
     void resetAllSettings();
+    void pickColor(QWidget *colorButton, bool init = false);
+    void changeHighlightingFont(QWidget *box, bool init = false);
+    void changeHighlightingLineMode(bool mode);
 
     //closing
     bool deleteTab(int index, bool saveFileName = false);
