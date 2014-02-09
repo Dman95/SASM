@@ -802,7 +802,7 @@ void MainWindow::buildProgram(bool debugMode)
         logText.remove(win81CygwinWarning);
         printLog(logText, Qt::red);
 
-        QMessageBox::critical(0, tr("Warning!"), tr("Errors have occurred in the build!"));
+        //QMessageBox::critical(0, tr("Warning!"), tr("Errors have occurred in the build!"));
         programIsBuilded = false;
     } else {
         printLogWithTime(tr("Built successfully.") + '\n', Qt::darkGreen);
