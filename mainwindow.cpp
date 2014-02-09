@@ -49,9 +49,6 @@ MainWindow::MainWindow(int argc, char **argv, QWidget *parent)
     //restore settings
     QSettings settings("SASM Project", "SASM");
 
-    //set tab splitter state
-    tabSplitterState = settings.value("tabsplitterstate").toByteArray();
-
     //set code field start text
     startText = settings.value("starttext", QString()).toString();
     if (startText.isEmpty()) {
@@ -425,10 +422,13 @@ void MainWindow::refreshEditMenu()
 
 void MainWindow::newFile()
 {
+    if (tabs->count() > 0) {
+        QSettings settings("SASM Project", "SASM");
+        settings.setValue("tabgeometry", ((Tab *) tabs->currentWidget())->saveGeometry());
+        settings.setValue("tabwindowstate", ((Tab *) tabs->currentWidget())->saveState());
+    }
     mainWidget->setCurrentIndex(1); //tabs
     Tab *tab = new Tab;
-    tab->restoreState(tabSplitterState);
-    connect(tab, SIGNAL(splitterMoved(int,int)), this, SLOT(saveTabSplitterState()));
     connect(tab, SIGNAL(buildClick()), this, SLOT(buildProgram()));
     connect(tab, SIGNAL(runClick()), this, SLOT(runProgram()));
     connect(tab, SIGNAL(stopClick()), this, SLOT(stopProgram()));
@@ -592,6 +592,9 @@ void MainWindow::closeAllChildWindows()
 
 bool MainWindow::deleteTab(int index, bool saveFileName)
 {
+    QSettings settings("SASM Project", "SASM");
+    settings.setValue("tabgeometry", ((Tab *) tabs->widget(index))->saveGeometry());
+    settings.setValue("tabwindowstate", ((Tab *) tabs->widget(index))->saveState());
     if (okToContinue(index)) {
         if (debugger && index == tabs->currentIndex())
             debugExit();
@@ -1330,7 +1333,6 @@ void MainWindow::writeSettings()
     settings.setValue("saveopendirectory", saveOpenDirectory);
 
     //splitters state
-    settings.setValue("tabsplitterstate", tabSplitterState);
     settings.setValue("logsplitterstate", splitter->saveState());
 }
 
@@ -1419,7 +1421,6 @@ void MainWindow::openSettings()
     //set settings
     //common
     settingsUi.startWindow->setCurrentIndex(settings.value("startwindow", 0).toInt());
-    settingsUi.codePosition->setCurrentIndex(settings.value("codeposition", 0).toInt());
     settingsUi.language->setCurrentIndex(settings.value("language", 0).toInt());
     settingsUi.fontComboBox->setCurrentFont(QFont(settings.value("fontfamily",
                                                                  QString("Courier")).value<QString>()));
@@ -1527,7 +1528,6 @@ void MainWindow::saveSettings()
 {
     QSettings settings("SASM Project", "SASM");
     settings.setValue("startwindow", settingsUi.startWindow->currentIndex());
-    settings.setValue("codeposition", settingsUi.codePosition->currentIndex());
     settings.setValue("starttext", settingsStartTextEditor->toPlainText());
     settings.setValue("language", settingsUi.language->currentIndex());
     startText = settingsStartTextEditor->toPlainText();
@@ -1641,10 +1641,6 @@ void MainWindow::openHelp()
     help->setWindowTitle(tr("Help"));
     help->setWindowIcon(QIcon(":images/mainIcon.png"));
     help->show();
-}
-
-void MainWindow::saveTabSplitterState(){
-    tabSplitterState = ((Tab *) tabs->currentWidget())->saveState();
 }
 
 void MainWindow::openAbout()

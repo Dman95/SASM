@@ -43,16 +43,16 @@
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QLabel>
 #include <QPushButton>
-#include <QSplitter>
 #include <QSettings>
 #include <QTextStream>
 #include <QFile>
+#include <QMainWindow>
+#include <QDockWidget>
 #include "codeeditor.h"
 #include "ruqtextedit.h"
 
-class Tab : public QSplitter
+class Tab : public QMainWindow
 {
     Q_OBJECT
 
@@ -77,8 +77,6 @@ private:
     //text fields
     QVBoxLayout *inputLayout;
     QVBoxLayout *outputLayout;
-    QLabel *inputLabel;
-    QLabel *outputLabel;
     RuQTextEdit *input;
     RuQTextEdit *output;
     QWidget *inputWidget;

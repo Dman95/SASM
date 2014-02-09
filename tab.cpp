@@ -41,10 +41,11 @@
 #include "tab.h"
 
 Tab::Tab(QWidget *parent) :
-    QSplitter(parent)
+    QMainWindow(parent)
 {
     //Setting code field
     code = new CodeEditor;
+    setCentralWidget(code);
 
     //Setting input and output fields
     input = new RuQTextEdit;
@@ -52,15 +53,7 @@ Tab::Tab(QWidget *parent) :
     output->setReadOnly(true);
     inputLayout = new QVBoxLayout;
     outputLayout = new QVBoxLayout;
-    outputLabel = new QLabel;
-    inputLabel = new QLabel;
-    outputLabel->setText(tr("Output:"));
-    inputLabel->setText(tr("Input:"));
-    inputLabel->setStyleSheet("font-size: 13pt; font-weight: normal;");
-    outputLabel->setStyleSheet("font-size: 13pt; font-weight: normal;");
-    inputLayout->addWidget(inputLabel);
     inputLayout->addWidget(input);
-    outputLayout->addWidget(outputLabel);
     outputLayout->addWidget(output);
 
     //Setting buttons
@@ -75,43 +68,25 @@ Tab::Tab(QWidget *parent) :
     connect(saveAsmButton, SIGNAL(clicked()), this, SIGNAL(saveAsmClick()));
     connect(saveExeButton, SIGNAL(clicked()), this, SIGNAL(saveExeClick()));
 
-    //Place buttons and fields on form
-    inputWidget = new QWidget;
-    outputWidget = new QWidget;
+    setDockOptions(QMainWindow::AllowNestedDocks | QMainWindow::AnimatedDocks);
+
+    QDockWidget *inputDock = new QDockWidget(tr("Input"), this);
+    inputDock->setAllowedAreas(Qt::AllDockWidgetAreas);
+    inputWidget = new QWidget(inputDock);
     inputWidget->setLayout(inputLayout);
+    inputDock->setWidget(inputWidget);
+    inputDock->setFeatures(QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable);
+    addDockWidget(Qt::RightDockWidgetArea, inputDock);
+    inputDock->setObjectName("inputDock");
+
+    QDockWidget *outputDock = new QDockWidget(tr("Output"), this);
+    outputDock->setAllowedAreas(Qt::AllDockWidgetAreas);
+    outputWidget = new QWidget(outputDock);
     outputWidget->setLayout(outputLayout);
-
-    //Place main widgets according to settings
-    QSettings settings("SASM Project", "SASM");
-    //position of code field: 0 - left, 1 - center, 2 - right
-    int codePosition = settings.value("codeposition", 0).toInt();
-    switch (codePosition) {
-        case 0:
-            this->addWidget(code);
-            this->addWidget(inputWidget);
-            this->addWidget(outputWidget);
-            break;
-        case 1:
-            this->addWidget(inputWidget);
-            this->addWidget(code);
-            this->addWidget(outputWidget);
-            break;
-        case 2:
-            this->addWidget(inputWidget);
-            this->addWidget(outputWidget);
-            this->addWidget(code);
-            break;
-    }
-
-    //Setting widget's proportions
-    QSizePolicy size;
-    size.setHorizontalPolicy(QSizePolicy::Expanding);
-    size.setVerticalPolicy(QSizePolicy::Expanding);
-    size.setHorizontalStretch(2);
-    code->setSizePolicy(size);
-    size.setHorizontalStretch(1);
-    inputWidget->setSizePolicy(size);
-    outputWidget->setSizePolicy(size);
+    outputDock->setWidget(outputWidget);
+    outputDock->setFeatures(QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable);
+    addDockWidget(Qt::RightDockWidgetArea, outputDock);
+    outputDock->setObjectName("outputDock");
 
     //Setting io and code fonts
     setFonts();
@@ -131,6 +106,10 @@ void Tab::setFonts()
     logFont.setPointSize(settings.value("fontsize", 12).toInt());
     input->setFont(logFont);
     output->setFont(logFont);
+
+    //restore state
+    restoreGeometry(settings.value("tabgeometry").toByteArray());
+    restoreState(settings.value("tabwindowstate").toByteArray());
 }
 
 void Tab::createButtons()
@@ -274,8 +253,6 @@ Tab::~Tab()
     delete runButton;
     delete stopButton;
 
-    delete inputLabel;
-    delete outputLabel;
     delete input;
     delete output;
 
