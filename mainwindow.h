@@ -53,6 +53,7 @@
 #include <QColorDialog>
 #include <QSignalMapper>
 #include <QMap>
+#include <QSplitter>
 #include "tab.h"
 #include "highlighter.h"
 #include "debugger.h"
@@ -164,7 +165,6 @@ private:
     QString startText;
     CodeEditor *settingsStartTextEditor;
     QString saveOpenDirectory; //save and open
-    QByteArray tabSplitterState;
     QPointer<QTextBrowser> help;
     QSignalMapper *colorSignalMapper;
     QSignalMapper *fontsSignalMapper;
@@ -233,7 +233,6 @@ public slots:
     void saveSettings();
     void exitSettings();
     void changeActionsState(int widgetIndex);
-    void saveTabSplitterState();
     void resetAllSettings();
     void pickColor(QWidget *colorButton, bool init = false);
     void changeHighlightingFont(QWidget *box, bool init = false);
