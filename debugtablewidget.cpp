@@ -14,7 +14,6 @@ DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType w
     type = widgetType;
     firstTime = true;
     verticalHeader()->hide();
-    setWindowFlags(Qt::Tool);
 
     if (type == memoryTable) {
         setSelectionMode(QAbstractItemView::SingleSelection);
@@ -69,8 +68,6 @@ void DebugTableWidget::initializeMemoryWindow(const QList<RuQPlainTextEdit::Watc
             move(QDesktopWidget().availableGeometry().width() - tableWidth - 50, 80);
         }
         connect(this, SIGNAL(cellChanged(int,int)), this, SLOT(changeMemoryWindow(int,int)), Qt::QueuedConnection);
-        show();
-        activateWindow();
     }
 }
 

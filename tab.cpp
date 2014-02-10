@@ -56,18 +56,6 @@ Tab::Tab(QWidget *parent) :
     inputLayout->addWidget(input);
     outputLayout->addWidget(output);
 
-    //Setting buttons
-    createButtons();
-    inputLayout->addLayout(inputButtonsLayout);
-    outputLayout->addLayout(outputButtonsLayout);
-    connect(buildButton, SIGNAL(clicked()), this, SIGNAL(buildClick()));
-    buildButton->setToolTip(QString("Ctrl+F9"));
-    connect(runButton, SIGNAL(clicked()), this, SIGNAL(runClick()));
-    runButton->setToolTip(QString("F9"));
-    connect(stopButton, SIGNAL(clicked()), this, SIGNAL(stopClick()));
-    connect(saveAsmButton, SIGNAL(clicked()), this, SIGNAL(saveAsmClick()));
-    connect(saveExeButton, SIGNAL(clicked()), this, SIGNAL(saveExeClick()));
-
     setDockOptions(QMainWindow::AllowNestedDocks | QMainWindow::AnimatedDocks);
 
     QDockWidget *inputDock = new QDockWidget(tr("Input"), this);
@@ -110,36 +98,6 @@ void Tab::setFonts()
     //restore state
     restoreGeometry(settings.value("tabgeometry").toByteArray());
     restoreState(settings.value("tabwindowstate").toByteArray());
-}
-
-void Tab::createButtons()
-{
-    QSizePolicy size;
-    size.setHorizontalPolicy(QSizePolicy::Fixed);
-
-    inputButtonsLayout = new QHBoxLayout;
-    buildButton = new QPushButton;
-    buildButton->setText(tr("Build"));
-    buildButton->setSizePolicy(size);
-    saveAsmButton = new QPushButton;
-    saveAsmButton->setText(tr("Save .asm"));
-    saveAsmButton->setSizePolicy(size);
-    saveExeButton = new QPushButton;
-    saveExeButton->setText(tr("Save .exe"));
-    saveExeButton->setSizePolicy(size);
-    inputButtonsLayout->addWidget(saveAsmButton);
-    inputButtonsLayout->addWidget(buildButton);
-    inputButtonsLayout->addWidget(saveExeButton);
-
-    outputButtonsLayout = new QHBoxLayout;
-    runButton = new QPushButton;
-    runButton->setText(tr("Run"));
-    runButton->setSizePolicy(size);
-    stopButton = new QPushButton;
-    stopButton->setText(tr("Stop"));
-    stopButton->setSizePolicy(size);
-    outputButtonsLayout->addWidget(runButton);
-    outputButtonsLayout->addWidget(stopButton);
 }
 
 QTextDocument * Tab::getCodeDocument()
@@ -245,14 +203,6 @@ void Tab::clearOutput()
 
 Tab::~Tab()
 {
-    delete inputButtonsLayout;
-    delete outputButtonsLayout;
-    delete buildButton;
-    delete saveAsmButton;
-    delete saveExeButton;
-    delete runButton;
-    delete stopButton;
-
     delete input;
     delete output;
 
