@@ -54,6 +54,7 @@
 #include <QSignalMapper>
 #include <QMap>
 #include <QSplitter>
+#include <QToolBar>
 #include "tab.h"
 #include "highlighter.h"
 #include "debugger.h"
@@ -77,6 +78,7 @@ public:
     void createMenus();
     void createActions();
     void createButtons();
+    void createToolBars();
     void writeSettings();
     void setupEditor(int i);
     bool okToContinue(int index = -1);
@@ -129,12 +131,17 @@ private:
     QAction *debugContinueAction;
     QAction *debugNextAction;
     QAction *debugNextNiAction;
-    QAction *debugExitAction;
     QAction *debugShowRegistersAction;
     QAction *debugShowMemoryAction;
     QAction *settingsAction;
     QAction *helpAction;
     QAction *aboutAction;
+
+    //toolbars
+    QToolBar *fileToolBar;
+    QToolBar *editToolBar;
+    QToolBar *buildToolBar;
+    QToolBar *debugToolBar;
 
     //builder and debugger and all that concern to them
     QProcess *runProcess;
@@ -145,7 +152,9 @@ private:
     bool programIsBuilded;
     bool ioIncIncluded;
     QPointer<DebugTableWidget> registersWindow;
+    QDockWidget *registersDock;
     QPointer<DebugTableWidget> memoryWindow;
+    QDockWidget *memoryDock;
     QList<RuQPlainTextEdit::Watch> watches;
     DebugAnyCommandWidget *debugAnyCommandWidget;
     bool programStopped;
@@ -206,7 +215,7 @@ public slots:
     void debug();
     void debugContinue();
     void enableDebugActions();
-    void disableDebugActions();
+    void disableDebugActions(bool start = false);
     void debugNext();
     void debugNextNi();
     void debugExit();

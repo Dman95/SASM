@@ -43,7 +43,6 @@
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QPushButton>
 #include <QSettings>
 #include <QTextStream>
 #include <QFile>
@@ -82,26 +81,7 @@ private:
     QWidget *inputWidget;
     QWidget *outputWidget;
 
-    //buttons
-    QHBoxLayout *inputButtonsLayout;
-    QHBoxLayout *outputButtonsLayout;
-    QPushButton *buildButton;
-    QPushButton *saveAsmButton;
-    QPushButton *saveExeButton;
-    QPushButton *runButton;
-    QPushButton *stopButton;
-
     QString currentFilePath;
-
-    void createButtons();
-    
-signals:
-    void buildClick();
-    void buildProgram();
-    void runClick();
-    void stopClick();
-    void saveAsmClick();
-    void saveExeClick();
 };
 
 #endif // TAB_H

@@ -1,8 +1,23 @@
 <RCC>
-    <qresource prefix="/images">
-        <file>debugLine.png</file>
-        <file>mainIcon.png</file>
-        <file>smallIcon.png</file>
-        <file>breakpoint.png</file>
+    <qresource prefix="/">
+        <file>images/breakpoint.png</file>
+        <file>images/build.png</file>
+        <file>images/copy.png</file>
+        <file>images/cut.png</file>
+        <file>images/debug.png</file>
+        <file>images/debugLine.png</file>
+        <file>images/mainIcon.png</file>
+        <file>images/new.png</file>
+        <file>images/open.png</file>
+        <file>images/paste.png</file>
+        <file>images/run.png</file>
+        <file>images/save.png</file>
+        <file>images/smallIcon.png</file>
+        <file>images/stop.png</file>
+        <file>images/continue.png</file>
+        <file>images/redo.png</file>
+        <file>images/stepinto.png</file>
+        <file>images/stepover.png</file>
+        <file>images/undo.png</file>
     </qresource>
 </RCC>

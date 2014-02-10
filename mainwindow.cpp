@@ -85,6 +85,7 @@ MainWindow::MainWindow(int argc, char **argv, QWidget *parent)
     initUi();
     createActions();
     createMenus();
+    createToolBars();
     refreshEditMenu();
 
     //restore log splitter state
@@ -219,7 +220,7 @@ void MainWindow::createMenus()
     debugMenu->addAction(debugShowRegistersAction);
     debugMenu->addAction(debugShowMemoryAction);
     debugMenu->addSeparator();
-    debugMenu->addAction(debugExitAction);
+    debugMenu->addAction(stopAction);
     settingsMenu = menuBar()->addMenu(tr("Settings"));
     settingsMenu->addAction(settingsAction);
     helpMenu = menuBar()->addMenu(tr("Help"));
@@ -229,11 +230,11 @@ void MainWindow::createMenus()
 
 void MainWindow::createActions()
 {
-    newAction = new QAction(tr("New"), this);
+    newAction = new QAction(QIcon(":/images/new.png"), tr("New"), this);
     newAction->setShortcut(QKeySequence::New);
     connect(newAction, SIGNAL(triggered()), this, SLOT(newFile()));
 
-    openAction = new QAction(tr("Open"), this);
+    openAction = new QAction(QIcon(":/images/open.png"), tr("Open"), this);
     openAction->setShortcut(QKeySequence::Open);
     connect(openAction, SIGNAL(triggered()), this, SLOT(openFile()));
 
@@ -242,7 +243,7 @@ void MainWindow::createActions()
     connect(closeAction, SIGNAL(triggered()), this, SLOT(closeFile()));
 
     
-    saveAction = new QAction(tr("Save"), this);
+    saveAction = new QAction(QIcon(":/images/save.png"), tr("Save"), this);
     saveAction->setShortcut(QKeySequence::Save);
     connect(saveAction, SIGNAL(triggered()), this, SLOT(saveFile()));
 
@@ -262,19 +263,19 @@ void MainWindow::createActions()
     connect(findAction, SIGNAL(triggered()), this, SLOT(find()));
 
 
-    undoAction = new QAction(tr("Undo"), this);
+    undoAction = new QAction(QIcon(":/images/undo.png"), tr("Undo"), this);
     undoAction->setShortcut(QKeySequence::Undo);
 
-    redoAction = new QAction(tr("Redo"), this);
+    redoAction = new QAction(QIcon(":/images/redo.png"), tr("Redo"), this);
     redoAction->setShortcut(QKeySequence::Redo);
 
-    cutAction = new QAction(tr("Cut"), this);
+    cutAction = new QAction(QIcon(":/images/cut.png"), tr("Cut"), this);
     cutAction->setShortcut(QKeySequence::Cut);
 
-    copyAction = new QAction(tr("Copy"), this);
+    copyAction = new QAction(QIcon(":/images/copy.png"), tr("Copy"), this);
     copyAction->setShortcut(QKeySequence::Copy);
 
-    pasteAction = new QAction(tr("Paste"), this);
+    pasteAction = new QAction(QIcon(":/images/paste.png"), tr("Paste"), this);
     pasteAction->setShortcut(QKeySequence::Paste);
 
     deleteAction = new QAction(tr("Delete"), this);
@@ -297,52 +298,48 @@ void MainWindow::createActions()
     //Action in edit menu connects in refreshEditMenu function!
 
 
-    buildAction = new QAction(tr("Build"), this);
+    buildAction = new QAction(QIcon(":/images/build.png"), tr("Build this"), this);
     buildAction->setShortcut(QString("Ctrl+F9"));
     connect(buildAction, SIGNAL(triggered()), this, SLOT(buildProgram()));
 
-    runAction = new QAction(tr("Run"), this);
+    runAction = new QAction(QIcon(":/images/run.png"), tr("Run"), this);
     runAction->setShortcut(QString("F9"));
     connect(runAction, SIGNAL(triggered()), this, SLOT(runProgram()));
 
     runExeAction = new QAction(tr("Run in new window"), this);
     connect(runExeAction, SIGNAL(triggered()), this, SLOT(runExeProgram()));
 
-    stopAction = new QAction(tr("Stop"), this);
+    stopAction = new QAction(QIcon(":/images/stop.png"), tr("Stop"), this);
     connect(stopAction, SIGNAL(triggered()), this, SLOT(stopProgram()));
     stopAction->setEnabled(false); //enable in runProgram(), disable in stop
 
-    debugAction = new QAction(tr("Debug"), this);
+    debugAction = new QAction(QIcon(":/images/debug.png"), tr("Debug"), this);
     debugAction->setShortcut(QString("Ctrl+D"));
     connect(debugAction, SIGNAL(triggered()), this, SLOT(debug()));
 
-    debugContinueAction = new QAction(tr("Continue"), this);
+    debugContinueAction = new QAction(QIcon(":/images/continue.png"), tr("Continue"), this);
     debugContinueAction->setShortcut(QString("F5"));
     connect(debugContinueAction, SIGNAL(triggered()), this, SLOT(debugContinue()));
 
-    debugNextAction = new QAction(tr("Step into"), this);
+    debugNextAction = new QAction(QIcon(":/images/stepinto.png"), tr("Step into"), this);
     debugNextAction->setShortcut(QString("Shift+F7"));
     connect(debugNextAction, SIGNAL(triggered()), this, SLOT(debugNext()));
 
-    debugNextNiAction = new QAction(tr("Step over"), this);
+    debugNextNiAction = new QAction(QIcon(":/images/stepover.png"), tr("Step over"), this);
     debugNextNiAction->setShortcut(QString("F7"));
     connect(debugNextNiAction, SIGNAL(triggered()), this, SLOT(debugNextNi()));
 
     debugShowRegistersAction = new QAction(tr("Show registers"), this);
     debugShowRegistersAction->setShortcut(QString("Ctrl+R"));
     debugShowRegistersAction->setCheckable(true);
-    connect(debugShowRegistersAction, SIGNAL(changed()), this, SLOT(debugShowRegisters()));
+    connect(debugShowRegistersAction, SIGNAL(changed()), this, SLOT(debugShowRegisters()), Qt::QueuedConnection);
 
     debugShowMemoryAction = new QAction(tr("Show memory"), this);
     debugShowMemoryAction->setShortcut(QString("Ctrl+M"));
     debugShowMemoryAction->setCheckable(true);
-    connect(debugShowMemoryAction, SIGNAL(changed()), this, SLOT(debugShowMemory()));
+    connect(debugShowMemoryAction, SIGNAL(changed()), this, SLOT(debugShowMemory()), Qt::QueuedConnection);
 
-    debugExitAction = new QAction(tr("Exit"), this);
-    debugExitAction->setShortcut(QString("Ctrl+Shift+D"));
-    connect(debugExitAction, SIGNAL(triggered()), this, SLOT(debugExit()));
-
-    disableDebugActions();
+    disableDebugActions(true);
 
 
     settingsAction = new QAction(tr("Settings"), this);
@@ -358,6 +355,40 @@ void MainWindow::createActions()
 
     aboutAction = new QAction(tr("About"), this);
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(openAbout()));
+}
+
+void MainWindow::createToolBars()
+{
+    fileToolBar = addToolBar(tr("File"));
+    fileToolBar->addAction(newAction);
+    fileToolBar->addAction(openAction);
+    fileToolBar->addAction(saveAction);
+    fileToolBar->setObjectName("File");
+
+    editToolBar = addToolBar(tr("Edit"));
+    editToolBar->addAction(undoAction);
+    editToolBar->addAction(redoAction);
+    editToolBar->addAction(cutAction);
+    editToolBar->addAction(copyAction);
+    editToolBar->addAction(pasteAction);
+    editToolBar->setObjectName("Edit");
+
+    buildToolBar = addToolBar(tr("Build"));
+    buildToolBar->addAction(buildAction);
+    buildToolBar->addAction(runAction);
+    buildToolBar->addAction(stopAction);
+    buildToolBar->setObjectName("Build");
+
+    debugToolBar = addToolBar(tr("Debug"));
+    debugToolBar->addAction(debugAction);
+    debugToolBar->addAction(debugContinueAction);
+    debugToolBar->addAction(debugNextAction);
+    debugToolBar->addAction(debugNextNiAction);
+    debugToolBar->addAction(stopAction);
+    debugToolBar->setObjectName("Debug");
+
+    QSettings settings("SASM Project", "SASM");
+    restoreState(settings.value("windowstate").toByteArray());
 }
 
 void MainWindow::refreshEditMenu()
@@ -399,22 +430,11 @@ void MainWindow::refreshEditMenu()
 
         connect(codeEditor, SIGNAL(undoAvailable(bool)), undoAction, SLOT(setEnabled(bool)));
         connect(codeEditor, SIGNAL(redoAvailable(bool)), redoAction, SLOT(setEnabled(bool)));
-
-        QTextCursor textCursor = codeEditor->textCursor();
-
-        commentAction->setEnabled(true);
-        uncommentAction->setEnabled(true);
-        cutAction->setEnabled(true);
-        copyAction->setEnabled(true);
-        deleteAction->setEnabled(true);
-        //if nothing selected
-        if (textCursor.selectionEnd() - textCursor.selectionStart() <= 0) {
-            commentAction->setEnabled(false);
-            uncommentAction->setEnabled(false);
-            cutAction->setEnabled(false);
-            copyAction->setEnabled(false);
-            deleteAction->setEnabled(false);
-        }
+        connect(codeEditor, SIGNAL(copyAvailable(bool)), cutAction, SLOT(setEnabled(bool)));
+        connect(codeEditor, SIGNAL(copyAvailable(bool)), copyAction, SLOT(setEnabled(bool)));
+        connect(codeEditor, SIGNAL(copyAvailable(bool)), commentAction, SLOT(setEnabled(bool)));
+        connect(codeEditor, SIGNAL(copyAvailable(bool)), uncommentAction, SLOT(setEnabled(bool)));
+        connect(codeEditor, SIGNAL(copyAvailable(bool)), deleteAction, SLOT(setEnabled(bool)));
     }
 
     prevCodeEditor = codeEditor;
@@ -429,11 +449,6 @@ void MainWindow::newFile()
     }
     mainWidget->setCurrentIndex(1); //tabs
     Tab *tab = new Tab;
-    connect(tab, SIGNAL(buildClick()), this, SLOT(buildProgram()));
-    connect(tab, SIGNAL(runClick()), this, SLOT(runProgram()));
-    connect(tab, SIGNAL(stopClick()), this, SLOT(stopProgram()));
-    connect(tab, SIGNAL(saveAsmClick()), this, SLOT(saveFile()));
-    connect(tab, SIGNAL(saveExeClick()), this, SLOT(saveExe()));
     tab->code->setPlainText(startText);
     tabs->addTab(tab, tr("New"));
     tabs->setCurrentWidget(tab);
@@ -554,11 +569,12 @@ bool MainWindow::closeApp()
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
-    closeAllChildWindows();
+
     if (!closeFromCloseAll)
-        if (closeApp())
+        if (closeApp()) {
+            closeAllChildWindows();
             e->accept();
-        else
+        } else
             e->ignore();
     else
         e->accept();
@@ -828,6 +844,8 @@ void MainWindow::runProgram()
     }
 
     stopAction->setEnabled(true);
+    debugAction->setEnabled(false);
+    buildAction->setEnabled(false);
 
     ((Tab *) tabs->currentWidget())->clearOutput();
 
@@ -866,6 +884,8 @@ void MainWindow::testStopOfProgram()
     QCoreApplication::processEvents();
     if (runProcess->state() == QProcess::NotRunning) {
         stopAction->setEnabled(false);
+        debugAction->setEnabled(true);
+        buildAction->setEnabled(true);
         if (!programStopped) {
             if (runProcess->exitStatus() == QProcess::NormalExit)
                 printLogWithTime(tr("The program finished normally. Execution time: %1 s")
@@ -986,10 +1006,23 @@ void MainWindow::enableDebugActions()
     debugNextNiAction->setEnabled(true);
     debugShowRegistersAction->setEnabled(true);
     debugShowMemoryAction->setEnabled(true);
-    debugExitAction->setEnabled(true);
+    stopAction->setEnabled(true);
+
+    //change stopAction
+    disconnect(stopAction, SIGNAL(triggered()), this, SLOT(stopProgram()));
+    connect(stopAction, SIGNAL(triggered()), this, SLOT(debugExit()));
+
+    //block run and build
+    buildAction->setEnabled(false);
+    runAction->setEnabled(false);
+
+    //restore windows
+    QSettings settings("SASM Project", "SASM");
+    debugShowRegistersAction->setChecked(settings.value("debugregisters", false).toBool());
+    debugShowMemoryAction->setChecked(settings.value("debugmemory", false).toBool());
 }
 
-void MainWindow::disableDebugActions()
+void MainWindow::disableDebugActions(bool start)
 {
     debugAction->setEnabled(true);
     debugContinueAction->setEnabled(false);
@@ -997,7 +1030,17 @@ void MainWindow::disableDebugActions()
     debugNextNiAction->setEnabled(false);
     debugShowRegistersAction->setEnabled(false);
     debugShowMemoryAction->setEnabled(false);
-    debugExitAction->setEnabled(false);
+    stopAction->setEnabled(false);
+
+    //change stopAction
+    if (!start) {
+        disconnect(stopAction, SIGNAL(triggered()), this, SLOT(debugExit()));
+        connect(stopAction, SIGNAL(triggered()), this, SLOT(stopProgram()));
+    }
+
+    //enable run and build
+    buildAction->setEnabled(true);
+    runAction->setEnabled(true);
 }
 
 void MainWindow::debugContinue()
@@ -1031,8 +1074,11 @@ void MainWindow::debugShowMemory()
 {
     if (debugShowMemoryAction->isChecked()) {
         if (!memoryWindow) {
+            memoryDock = new QDockWidget(tr("Memory"), this);
+            memoryDock->setAllowedAreas(Qt::AllDockWidgetAreas);
+
             //create table
-            memoryWindow = new DebugTableWidget(0, 3, memoryTable, this);
+            memoryWindow = new DebugTableWidget(0, 3, memoryTable, memoryDock);
             connect(memoryWindow, SIGNAL(closeSignal()), this, SLOT(setShowMemoryToUnchecked()));
             connect(memoryWindow, SIGNAL(debugShowMemory()), this, SLOT(debugShowMemory()));
             CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
@@ -1040,6 +1086,15 @@ void MainWindow::debugShowMemory()
                     memoryWindow, SLOT(addVariable(const RuQPlainTextEdit::Watch &)));
             connect(debugger, SIGNAL(printMemory(QList<Debugger::memoryInfo> *)),
                     memoryWindow, SLOT(setValuesFromDebugger(QList<Debugger::memoryInfo> *)));
+
+            memoryDock->setWidget(memoryWindow);
+            memoryDock->setFeatures(QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable);
+            addDockWidget(Qt::TopDockWidgetArea, memoryDock);
+            memoryDock->setObjectName("memoryDock");
+
+            QSettings settings("SASM Project", "SASM");
+            restoreGeometry(settings.value("debuggeometry").toByteArray());
+            restoreState(settings.value("debugstate").toByteArray());
 
             //fill table
             memoryWindow->initializeMemoryWindow(watches);
@@ -1085,6 +1140,9 @@ void MainWindow::debugShowMemory()
             memoryWindow->clear();
             delete memoryWindow;
             memoryWindow = 0;
+            memoryDock->close();
+            delete memoryDock;
+            memoryDock = 0;
         }
 }
 
@@ -1123,10 +1181,22 @@ void MainWindow::debugShowRegisters()
 {
     if (debugShowRegistersAction->isChecked()) {
         if (!registersWindow) {
-            registersWindow = new DebugTableWidget(16, 3, registersTable, this);
+            registersDock = new QDockWidget(tr("Registers"), this);
+            registersDock->setAllowedAreas(Qt::AllDockWidgetAreas);
+
+            registersWindow = new DebugTableWidget(16, 3, registersTable, registersDock);
             connect(registersWindow, SIGNAL(closeSignal()), this, SLOT(setShowRegistersToUnchecked()));
             connect(debugger, SIGNAL(printRegisters(Debugger::registersInfo*)),
                     registersWindow, SLOT(setValuesFromDebugger(Debugger::registersInfo*)));
+
+            registersDock->setWidget(registersWindow);
+            registersDock->setFeatures(QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable);
+            addDockWidget(Qt::RightDockWidgetArea, registersDock);
+            registersDock->setObjectName("registersDock");
+
+            QSettings settings("SASM Project", "SASM");
+            restoreGeometry(settings.value("debuggeometry").toByteArray());
+            restoreState(settings.value("debugstate").toByteArray());
         }
         debugger->doInput(QString("info registers\n"), infoRegisters);
         QEventLoop eventLoop;
@@ -1138,6 +1208,9 @@ void MainWindow::debugShowRegisters()
             registersWindow->clear();
             delete registersWindow;
             registersWindow = 0;
+            registersDock->close();
+            delete registersDock;
+            registersDock = 0;
         }
 }
 
@@ -1148,6 +1221,11 @@ void MainWindow::setShowRegistersToUnchecked()
 
 void MainWindow::debugExit()
 {
+    QSettings settings("SASM Project", "SASM");
+    settings.setValue("debugregisters", debugShowRegistersAction->isChecked());
+    settings.setValue("debugmemory", debugShowMemoryAction->isChecked());
+    settings.setValue("debuggeometry", saveGeometry());
+    settings.setValue("debugstate", saveState());
     CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
     disconnect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
                this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
@@ -1316,6 +1394,7 @@ void MainWindow::writeSettings()
     unsigned int maxFlag = windowState() & Qt::WindowMaximized;
     settings.setValue("maximized", maxFlag);
     settings.endGroup();
+    settings.setValue("windowstate", saveState());
 
     //Opened tabs
     int prevTabsCount = settings.value("tabscount", 0).toInt();
@@ -1606,7 +1685,6 @@ void MainWindow::changeActionsState(int widgetIndex)
         debugContinueAction->setEnabled(false);
         debugNextAction->setEnabled(false);
         debugNextNiAction->setEnabled(false);
-        debugExitAction->setEnabled(false);
         debugShowRegistersAction->setEnabled(false);
         debugShowMemoryAction->setEnabled(false);
     } else {
