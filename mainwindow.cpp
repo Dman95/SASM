@@ -1093,7 +1093,6 @@ void MainWindow::debugShowMemory()
             memoryDock->setObjectName("memoryDock");
 
             QSettings settings("SASM Project", "SASM");
-            restoreGeometry(settings.value("debuggeometry").toByteArray());
             restoreState(settings.value("debugstate").toByteArray());
 
             //fill table
@@ -1195,7 +1194,6 @@ void MainWindow::debugShowRegisters()
             registersDock->setObjectName("registersDock");
 
             QSettings settings("SASM Project", "SASM");
-            restoreGeometry(settings.value("debuggeometry").toByteArray());
             restoreState(settings.value("debugstate").toByteArray());
         }
         debugger->doInput(QString("info registers\n"), infoRegisters);
@@ -1224,7 +1222,6 @@ void MainWindow::debugExit()
     QSettings settings("SASM Project", "SASM");
     settings.setValue("debugregisters", debugShowRegistersAction->isChecked());
     settings.setValue("debugmemory", debugShowMemoryAction->isChecked());
-    settings.setValue("debuggeometry", saveGeometry());
     settings.setValue("debugstate", saveState());
     CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
     disconnect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
