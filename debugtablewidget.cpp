@@ -19,13 +19,8 @@ DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType w
         header << tr("Variable or expression") << tr("Value") << tr("Type");
         setHorizontalHeaderLabels(header);
         setWindowTitle(tr("Memory"));
-        horizontalHeader()->resizeSection(1,
-            QFontMetrics(horizontalHeader()->font()).width(tr("Wrong variable or address: \"varName\"") + 10));
-        horizontalHeader()->resizeSection(0,
-            qMax(QFontMetrics(horizontalHeader()->font()).width(tr("Add variable...")) + 20,
-                 QFontMetrics(horizontalHeader()->font()).width(tr("Variable or expression")) + 20));
         horizontalHeader()->setHighlightSections(false);
-        adjust();
+        resizeColumnsToContents();
     }
 
     if (type == registersTable) {
@@ -34,13 +29,7 @@ DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType w
         header << tr("Register") << tr("Hex") << tr("Integer");
         setHorizontalHeaderLabels(header);
         setWindowTitle(tr("Registers"));
-        horizontalHeader()->resizeSection(2,
-            QFontMetrics(horizontalHeader()->font()).width("<function.sasmMacroE_0.L>") + 10);
-        horizontalHeader()->resizeSection(1,
-            QFontMetrics(horizontalHeader()->font()).width("0x99999999") + 10);
-        horizontalHeader()->resizeSection(0,
-            QFontMetrics(horizontalHeader()->font()).width("Register") + 15);
-        adjust();
+        resizeColumnsToContents();
         if (geometryRegistersSaved)
             restoreGeometry(registerWindowState);
     }
@@ -96,6 +85,7 @@ void DebugTableWidget::changeVariableValue(const QString &value, int rowNumber, 
             item(rowNumber, 1)->setText(value);
         else
             item(rowNumber, 1)->setText(tr("Wrong variable or address: \"%1\"").arg(item(rowNumber, 0)->text()));
+        resizeColumnsToContents();
     }
 }
 
@@ -104,7 +94,7 @@ void DebugTableWidget::deleteVariable()
     if (contextMenuLineNumber >= rowCount() - 1) //last line
         return;
     this->removeRow(contextMenuLineNumber);
-    adjust();
+    resizeColumnsToContents();
 }
 
 void DebugTableWidget::addVariable(const QString &variableName, int rowNumber)
@@ -116,17 +106,15 @@ void DebugTableWidget::addVariable(const QString &variableName, int rowNumber)
         insertRow(rowNumber);
         QTableWidgetItem *name = new QTableWidgetItem(variableName);
         QTableWidgetItem *value = new QTableWidgetItem;
+        QFont monoFont("Courier");
+        monoFont.setStyleHint(QFont::Monospace);
+        value->setFont(monoFont);
         WatchSettinsWidget *settings = new WatchSettinsWidget;
         connect(settings, SIGNAL(settingsChanged()), this, SIGNAL(debugShowMemory()));
-        if (firstTime) {
-            horizontalHeader()->resizeSection(2, settings->sumSize());
-            adjust();
-            firstTime = false;
-        }
         setItem(rowNumber, 0, name);
         setItem(rowNumber, 1, value);
         setCellWidget(rowNumber, 2, settings);
-        adjust();
+        resizeColumnsToContents();
     }
 }
 
@@ -139,6 +127,9 @@ void DebugTableWidget::addVariable(const RuQPlainTextEdit::Watch &variable, int 
         insertRow(rowNumber);
         QTableWidgetItem *name = new QTableWidgetItem(variable.name);
         QTableWidgetItem *value = new QTableWidgetItem;
+        QFont monoFont("Courier");
+        monoFont.setStyleHint(QFont::Monospace);
+        value->setFont(monoFont);
         WatchSettinsWidget *settings = new WatchSettinsWidget;
         settings->sizeComboBox->setCurrentIndex(variable.size);
         settings->typeComboBox->setCurrentIndex(variable.type);
@@ -146,14 +137,10 @@ void DebugTableWidget::addVariable(const RuQPlainTextEdit::Watch &variable, int 
         if (variable.arraySize > 0)
             settings->arraySizeEdit->setText(QString::number(variable.arraySize));
         connect(settings, SIGNAL(settingsChanged()), this, SIGNAL(debugShowMemory()));
-        if (firstTime) {
-            horizontalHeader()->resizeSection(2, settings->sumSize());
-            firstTime = false;
-        }
         setItem(rowNumber, 0, name);
         setItem(rowNumber, 1, value);
         setCellWidget(rowNumber, 2, settings);
-        adjust();
+        resizeColumnsToContents();
     }
 }
 
@@ -179,6 +166,7 @@ void DebugTableWidget::addRegister(const QString &name, const QString &hexValue,
             setItem(rowNumber, 1, hexValueItem);
             setItem(rowNumber, 2, decValueItem);
         }
+        resizeColumnsToContents();
     }
 }
 
@@ -216,17 +204,6 @@ void DebugTableWidget::keyPressEvent(QKeyEvent *event)
         deleteVariable();
     } else
         QTableWidget::keyPressEvent(event);
-}
-
-void DebugTableWidget::adjust()
-{
-    int tableHeight, tableWidth;
-    tableHeight = horizontalHeader()->height() + verticalHeader()->length() + 10;
-    tableWidth = horizontalHeader()->length() + 10;
-    resize(tableWidth, tableHeight);
-    //for correct redrawing
-    scroll(1, 0);
-    scroll(-1, 0);
 }
 
 DebugTableWidget::~DebugTableWidget()
