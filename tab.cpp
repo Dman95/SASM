@@ -87,6 +87,7 @@ void Tab::setFonts()
     QFont codeFont;
     codeFont.setPointSize(settings.value("fontsize", 12).toInt());
     codeFont.setFamily(settings.value("fontfamily", QString("Courier")).value<QString>());
+    codeFont.setStyleHint(QFont::Monospace);
     code->setFont(codeFont);
     code->repaintLineNumberArea();
 

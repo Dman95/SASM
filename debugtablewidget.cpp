@@ -14,7 +14,7 @@ DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType w
     verticalHeader()->hide();
 
     if (type == memoryTable) {
-        setSelectionMode(QAbstractItemView::SingleSelection);
+        setSelectionMode(QAbstractItemView::NoSelection);
         QStringList header;
         header << tr("Variable or expression") << tr("Value") << tr("Type");
         setHorizontalHeaderLabels(header);
@@ -29,7 +29,6 @@ DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType w
     }
 
     if (type == registersTable) {
-        setEditTriggers(QAbstractItemView::NoEditTriggers);
         setSelectionMode(QAbstractItemView::NoSelection);
         QStringList header;
         header << tr("Register") << tr("Hex") << tr("Integer");
@@ -127,7 +126,6 @@ void DebugTableWidget::addVariable(const QString &variableName, int rowNumber)
         setItem(rowNumber, 0, name);
         setItem(rowNumber, 1, value);
         setCellWidget(rowNumber, 2, settings);
-        item(rowNumber, 1)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable);
         adjust();
     }
 }
@@ -155,7 +153,6 @@ void DebugTableWidget::addVariable(const RuQPlainTextEdit::Watch &variable, int 
         setItem(rowNumber, 0, name);
         setItem(rowNumber, 1, value);
         setCellWidget(rowNumber, 2, settings);
-        item(rowNumber, 1)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEditable);
         adjust();
     }
 }
@@ -164,14 +161,20 @@ void DebugTableWidget::addRegister(const QString &name, const QString &hexValue,
 {
     empty = false;
     if (type == registersTable) {
+        QString zeroes;
+        zeroes.fill('0', 10 - hexValue.length());
         if (item(rowNumber, 2)) {
             item(rowNumber, 0)->setText(name);
-            item(rowNumber, 1)->setText(hexValue);
+            item(rowNumber, 1)->setText("0x" + zeroes + hexValue.right(hexValue.length() - 2));
             item(rowNumber, 2)->setText(decValue);
         } else {
             QTableWidgetItem *nameItem = new QTableWidgetItem(name);
-            QTableWidgetItem *hexValueItem = new QTableWidgetItem(hexValue);
+            QTableWidgetItem *hexValueItem = new QTableWidgetItem("0x" + zeroes + hexValue.right(hexValue.length() - 2));
             QTableWidgetItem *decValueItem = new QTableWidgetItem(decValue);
+            QFont monoFont("Courier");
+            monoFont.setStyleHint(QFont::Monospace);
+            hexValueItem->setFont(monoFont);
+            decValueItem->setFont(monoFont);
             setItem(rowNumber, 0, nameItem);
             setItem(rowNumber, 1, hexValueItem);
             setItem(rowNumber, 2, decValueItem);
