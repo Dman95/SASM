@@ -167,8 +167,10 @@ void CodeEditor::lineNumberAreaMousePressEvent(QMouseEvent *event)
                 breakpoints.removeOne(lineNumber);
                 emit breakpointsChanged(lineNumber, false);
             } else {
-                breakpoints.append(lineNumber);
-                emit breakpointsChanged(lineNumber, true);
+                if (codeLines.contains(lineNumber)) {
+                    breakpoints.append(lineNumber);
+                    emit breakpointsChanged(lineNumber, true);
+                }
             }
 
             repaintLineNumberArea();
@@ -375,6 +377,11 @@ bool CodeEditor::isMacroOnCurrentDebugLine()
         }
     }
     return false;
+}
+
+void CodeEditor::updateCodeLines(const QList<unsigned int> &lines)
+{
+    codeLines = lines;
 }
 
 CodeEditor::~CodeEditor()

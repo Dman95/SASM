@@ -985,6 +985,7 @@ void MainWindow::debug()
     connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
     connect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
     connect(debugger, SIGNAL(inMacro()), this, SLOT(debugNextNi()));
+    connect(debugger, SIGNAL(codeLinesIsReady(QList<uint>)), code, SLOT(updateCodeLines(QList<uint>)));
     code->setDebugEnabled();
 }
 

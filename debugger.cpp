@@ -383,10 +383,13 @@ void Debugger::processLst()
                 }
                 l.numInMem = b + offset;
                 lines.append(l);
+                codeLines.append(l.numInCode);
             }
         }
     }
     lst.close();
+
+    emit codeLinesIsReady(codeLines);
 }
 
 void Debugger::run()

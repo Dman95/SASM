@@ -79,6 +79,7 @@ public slots:
     void highlightDebugLine(int lineNumber);
     void setDebugMode(bool mode);
     QList<int> *getBreakpoints();
+    void updateCodeLines(const QList<unsigned int> &lines);
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -95,6 +96,7 @@ private:
     QPixmap debugImage;
     QPixmap breakpointImage;
     QList<int> breakpoints; //numbers of lines with breakpoints
+    QList<unsigned int> codeLines; //numbers on lines with code - for testing of setting breakpoints
     int firstTopMargin;
     bool hasBreakpoints;
     int prevBlockCount;
