@@ -237,7 +237,9 @@ void Debugger::processAction(QString output, QString error)
             }
 
             if (!found) {
-                output = tr("Inside the macro or outside the program.") + '\n';
+                //output = tr("Inside the macro or outside the program.") + '\n';
+                emit inMacro();
+                return;
             } else { //if found highlight and print it
                 //highlight line number
                 emit highlightLine(lineNumber);

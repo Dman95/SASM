@@ -121,6 +121,7 @@ signals:
     void printMemory(QList<Debugger::memoryInfo>*);
     void printLog(QString msg, QColor color = QColor(Qt::black));
     void printOutput(QString msg);
+    void inMacro();
 };
 
 #endif // DEBUGGER_H
