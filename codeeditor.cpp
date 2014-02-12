@@ -356,6 +356,27 @@ void CodeEditor::shiftBreakpoints(int blockCount)
     repaintLineNumberArea();
 }
 
+bool CodeEditor::isMacroOnCurrentDebugLine()
+{
+    if (currentDebugLine > 0) {
+        QTextBlock block = document()->findBlockByLineNumber(currentDebugLine - 1);
+        QString text = block.text();
+        QStringList macrosPatterns;
+        macrosPatterns << "\\bPRINT_DEC\\b" << "\\bPRINT_HEX\\b" <<
+                          "\\bPRINT_CHAR\\b" << "\\bPRINT_STRING\\b" <<
+                          "\\bNEWLINE\\b" << "\\bPRINT_UDEC\\b" <<
+                          "\\bGET_UDEC\\b" << "\\bGET_DEC\\b" <<
+                          "\\bGET_HEX\\b" << "\\bGET_CHAR\\b" <<
+                          "\\bGET_STRING\\b" << "\\bCMAIN\\b" << "\\bCEXTERN\\b";
+        foreach (const QString &pattern, macrosPatterns) {
+            QRegExp regExp(pattern, Qt::CaseSensitive);
+            if (text.indexOf(regExp) != -1)
+                return true;
+        }
+    }
+    return false;
+}
+
 CodeEditor::~CodeEditor()
 {
     delete lineNumberArea;

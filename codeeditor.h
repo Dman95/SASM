@@ -67,6 +67,7 @@ public:
     void lineNumberAreaMousePressEvent(QMouseEvent *event);
     int lineNumberAreaWidth();
     void repaintLineNumberArea();
+    bool isMacroOnCurrentDebugLine();
     int currentDebugLine;
     bool debugMode;
 
