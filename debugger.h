@@ -87,6 +87,7 @@ private:
         unsigned int numInMem;
     };
     QVector<lineNum> lines; //accordance between program lines in memory and in file
+    QList<unsigned int> codeLines; //numbers on lines with code - for testing of setting breakpoints
 
     int c; //counter for sequential performing of actions
     bool ioIncIncluded;
@@ -122,6 +123,7 @@ signals:
     void printLog(QString msg, QColor color = QColor(Qt::black));
     void printOutput(QString msg);
     void inMacro();
+    void codeLinesIsReady(const QList<unsigned int> &lines);
 };
 
 #endif // DEBUGGER_H
