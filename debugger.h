@@ -85,9 +85,12 @@ private:
     struct lineNum {
         unsigned int numInCode;
         unsigned int numInMem;
+        bool operator==(const lineNum& ln)
+        {
+            return ln.numInCode == this->numInCode;
+        }
     };
     QVector<lineNum> lines; //accordance between program lines in memory and in file
-    QList<unsigned int> codeLines; //numbers on lines with code - for testing of setting breakpoints
 
     int c; //counter for sequential performing of actions
     bool ioIncIncluded;
@@ -106,6 +109,8 @@ private:
     QList<Debugger::memoryInfo> watches;
     bool firstAction;
 
+    QList<lineNum> breakPairs;
+
 public slots:
     void readOutputToBuffer();
     void processOutput();
@@ -123,7 +128,6 @@ signals:
     void printLog(QString msg, QColor color = QColor(Qt::black));
     void printOutput(QString msg);
     void inMacro();
-    void codeLinesIsReady(const QList<unsigned int> &lines);
 };
 
 #endif // DEBUGGER_H

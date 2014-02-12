@@ -167,10 +167,30 @@ void CodeEditor::lineNumberAreaMousePressEvent(QMouseEvent *event)
                 breakpoints.removeOne(lineNumber);
                 emit breakpointsChanged(lineNumber, false);
             } else {
-                if (codeLines.contains(lineNumber)) {
-                    breakpoints.append(lineNumber);
-                    emit breakpointsChanged(lineNumber, true);
-                }
+                breakpoints.append(lineNumber);
+                emit breakpointsChanged(lineNumber, true);
+            }
+
+            repaintLineNumberArea();
+        }
+    }
+}
+
+void CodeEditor::setBreakpointOnCurrentLine()
+{
+    if (hasBreakpoints) {
+        int lineNumber = textCursor().blockNumber() + 1;
+        if (lineNumber <= this->document()->lineCount()) {
+            //blocks counting starts with 0
+            lineNumber = document()->findBlockByLineNumber(lineNumber - 1).blockNumber() + 1; //line number to paint
+
+            //add or remove line number in list
+            if (breakpoints.contains(lineNumber)) {
+                breakpoints.removeOne(lineNumber);
+                emit breakpointsChanged(lineNumber, false);
+            } else {
+                breakpoints.append(lineNumber);
+                emit breakpointsChanged(lineNumber, true);
             }
 
             repaintLineNumberArea();
@@ -377,11 +397,6 @@ bool CodeEditor::isMacroOnCurrentDebugLine()
         }
     }
     return false;
-}
-
-void CodeEditor::updateCodeLines(const QList<unsigned int> &lines)
-{
-    codeLines = lines;
 }
 
 CodeEditor::~CodeEditor()

@@ -131,6 +131,7 @@ private:
     QAction *debugContinueAction;
     QAction *debugNextAction;
     QAction *debugNextNiAction;
+    QAction *debugToggleBreakpointAction;
     QAction *debugShowRegistersAction;
     QAction *debugShowMemoryAction;
     QAction *settingsAction;
@@ -219,6 +220,7 @@ public slots:
     void debugNext();
     void debugNextNi();
     void debugExit();
+    void debugToggleBreakpoint();
     void debugShowRegisters();
     void debugShowMemory();
     void debugRunCommand(QString command, bool print);
