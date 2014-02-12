@@ -241,8 +241,11 @@
      }
 
      //.labels and numbers with point
-     rule.pattern = QRegExp("\\..+");
+     rule.pattern = QRegExp("\\.[^\\s:]+[^:]");
      rule.format = labelWithDotFormat;
+     highlightingRules.append(rule);
+     rule.pattern = QRegExp("\\.[^\\s:]+:");
+     rule.format = labelFormat;
      highlightingRules.append(rule);
      rule.pattern = QRegExp("\\b\\d+\\.\\d+\\b");
      rule.format = numberFormat;
