@@ -383,13 +383,10 @@ void Debugger::processLst()
                 }
                 l.numInMem = b + offset;
                 lines.append(l);
-                codeLines.append(l.numInCode);
             }
         }
     }
     lst.close();
-
-    emit codeLinesIsReady(codeLines);
 }
 
 void Debugger::run()
@@ -405,18 +402,30 @@ void Debugger::run()
 
 void Debugger::changeBreakpoint(int lineNumber, bool isAdded)
 {
-    bool found = false;
-    for (int i = lines.count() - 1; i >= 0; i--) //find address of line
-        if ((unsigned int) lineNumber == lines[i].numInCode) {
-            lineNumber = lines[i].numInMem;
-            found = true;
+    unsigned int numInMem = 0;
+    lineNum brkpoint;
+    for (int i = 0; i < lines.count(); i++) //find address of line
+        if ((unsigned int) lineNumber <= lines[i].numInCode) {
+            numInMem = lines[i].numInMem;
             break;
         }
-    if (found) {
-        if (isAdded) //if breakpoint was added then set it
-            doInput(QString("b *0x") + QString::number(lineNumber, 16) + QString("\n"), breakpoint);
-        else //if breakpoint was deleted then remove it
-            doInput(QString("clear *0x") + QString::number(lineNumber, 16) + QString("\n"), breakpoint);
+    brkpoint.numInCode = lineNumber;
+    brkpoint.numInMem = numInMem;
+
+    lineNum pair;
+    int count = 0;
+    foreach (pair, breakPairs) {
+        if (pair.numInMem == numInMem)
+            count++;
+    }
+    if (isAdded) { //if breakpoint was added then set it
+        breakPairs.append(brkpoint);
+        if (count == 0)
+            doInput(QString("b *0x") + QString::number(numInMem, 16) + QString("\n"), breakpoint);
+    } else { //if breakpoint was deleted then remove it
+        breakPairs.removeOne(brkpoint);
+        if (count == 1)
+            doInput(QString("clear *0x") + QString::number(numInMem, 16) + QString("\n"), breakpoint);
     }
 }
 

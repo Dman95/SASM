@@ -75,6 +75,8 @@ MainWindow::MainWindow(int argc, char **argv, QWidget *parent)
     programStopped = true;
     highlighter = 0;
     tabs = 0;
+    memoryDock = 0;
+    registersDock = 0;
 
     timer = new QTimer;
     timer->setInterval(100);
@@ -214,9 +216,10 @@ void MainWindow::createMenus()
     debugMenu->addAction(debugAction);
     debugMenu->addSeparator();
     debugMenu->addAction(debugContinueAction);
-    debugMenu->addAction(debugNextAction);
     debugMenu->addAction(debugNextNiAction);
+    debugMenu->addAction(debugNextAction);
     debugMenu->addSeparator();
+    debugMenu->addAction(debugToggleBreakpointAction);
     debugMenu->addAction(debugShowRegistersAction);
     debugMenu->addAction(debugShowMemoryAction);
     debugMenu->addSeparator();
@@ -239,7 +242,7 @@ void MainWindow::createActions()
     connect(openAction, SIGNAL(triggered()), this, SLOT(openFile()));
 
     closeAction = new QAction(tr("Close file"), this);
-    closeAction->setShortcut(QString("Ctrl+W"));
+    closeAction->setShortcut(QKeySequence::Close);
     connect(closeAction, SIGNAL(triggered()), this, SLOT(closeFile()));
 
     
@@ -259,7 +262,7 @@ void MainWindow::createActions()
     connect(exitAction, SIGNAL(triggered()), this, SLOT(closeApp()));
 
     findAction = new QAction(tr("Find and replace"), this);
-    findAction->setShortcut(QString("Ctrl+F"));
+    findAction->setShortcut(QKeySequence::Find);
     connect(findAction, SIGNAL(triggered()), this, SLOT(find()));
 
 
@@ -285,10 +288,10 @@ void MainWindow::createActions()
     selectAllAction->setShortcut(QKeySequence::SelectAll);
 
     commentAction = new QAction(tr("Comment"), this);
-    commentAction->setShortcut(QString("Ctrl+Shift+Q"));
+    commentAction->setShortcut(QString("Shift+Q"));
 
     uncommentAction = new QAction(tr("Remove comment"), this);
-    uncommentAction->setShortcut(QString("Ctrl+Shift+A"));
+    uncommentAction->setShortcut(QString("Shift+A"));
 
     putTabAction = new QAction(tr("Indent"), this);
     putTabAction->setShortcut(QString("Tab"));
@@ -314,20 +317,24 @@ void MainWindow::createActions()
     stopAction->setEnabled(false); //enable in runProgram(), disable in stop
 
     debugAction = new QAction(QIcon(":/images/debug.png"), tr("Debug"), this);
-    debugAction->setShortcut(QString("Ctrl+D"));
+    debugAction->setShortcut(QString("F5"));
     connect(debugAction, SIGNAL(triggered()), this, SLOT(debug()));
 
     debugContinueAction = new QAction(QIcon(":/images/continue.png"), tr("Continue"), this);
     debugContinueAction->setShortcut(QString("F5"));
     connect(debugContinueAction, SIGNAL(triggered()), this, SLOT(debugContinue()));
 
+    debugNextNiAction = new QAction(QIcon(":/images/stepover.png"), tr("Step over"), this);
+    debugNextNiAction->setShortcut(QString("F10"));
+    connect(debugNextNiAction, SIGNAL(triggered()), this, SLOT(debugNextNi()));
+
     debugNextAction = new QAction(QIcon(":/images/stepinto.png"), tr("Step into"), this);
-    debugNextAction->setShortcut(QString("Shift+F7"));
+    debugNextAction->setShortcut(QString("F11"));
     connect(debugNextAction, SIGNAL(triggered()), this, SLOT(debugNext()));
 
-    debugNextNiAction = new QAction(QIcon(":/images/stepover.png"), tr("Step over"), this);
-    debugNextNiAction->setShortcut(QString("F7"));
-    connect(debugNextNiAction, SIGNAL(triggered()), this, SLOT(debugNextNi()));
+    debugToggleBreakpointAction = new QAction(tr("Toggle breakpoint"), this);
+    debugToggleBreakpointAction->setShortcut(QString("F8"));
+    connect(debugToggleBreakpointAction, SIGNAL(triggered()), this, SLOT(debugToggleBreakpoint()));
 
     debugShowRegistersAction = new QAction(tr("Show registers"), this);
     debugShowRegistersAction->setShortcut(QString("Ctrl+R"));
@@ -382,8 +389,8 @@ void MainWindow::createToolBars()
     debugToolBar = addToolBar(tr("Debug"));
     debugToolBar->addAction(debugAction);
     debugToolBar->addAction(debugContinueAction);
-    debugToolBar->addAction(debugNextAction);
     debugToolBar->addAction(debugNextNiAction);
+    debugToolBar->addAction(debugNextAction);
     debugToolBar->addAction(stopAction);
     debugToolBar->setObjectName("Debug");
 
@@ -985,7 +992,6 @@ void MainWindow::debug()
     connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
     connect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
     connect(debugger, SIGNAL(inMacro()), this, SLOT(debugNextNi()));
-    connect(debugger, SIGNAL(codeLinesIsReady(QList<uint>)), code, SLOT(updateCodeLines(QList<uint>)));
     code->setDebugEnabled();
 }
 
@@ -1065,6 +1071,12 @@ void MainWindow::debugNext()
     }
 }
 
+void MainWindow::debugToggleBreakpoint()
+{
+    CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
+    code->setBreakpointOnCurrentLine();
+}
+
 void MainWindow::debugNextNi()
 {
     disconnect(debugNextNiAction, SIGNAL(triggered()), this, SLOT(debugNextNi()));
@@ -1098,6 +1110,10 @@ void MainWindow::debugShowMemory()
 
             QSettings settings("SASM Project", "SASM");
             restoreState(settings.value("debugstate").toByteArray());
+            if (registersDock)
+                registersDock->show();
+            if (memoryDock)
+                memoryDock->show();
 
             //fill table
             memoryWindow->initializeMemoryWindow(watches);
@@ -1199,6 +1215,10 @@ void MainWindow::debugShowRegisters()
 
             QSettings settings("SASM Project", "SASM");
             restoreState(settings.value("debugstate").toByteArray());
+            if (registersDock)
+                registersDock->show();
+            if (memoryDock)
+                memoryDock->show();
         }
         debugger->doInput(QString("info registers\n"), infoRegisters);
         QEventLoop eventLoop;
@@ -1687,6 +1707,7 @@ void MainWindow::changeActionsState(int widgetIndex)
         debugNextAction->setEnabled(false);
         debugNextNiAction->setEnabled(false);
         debugShowRegistersAction->setEnabled(false);
+        debugToggleBreakpointAction->setEnabled(false);
         debugShowMemoryAction->setEnabled(false);
     } else {
         closeAction->setEnabled(true);
@@ -1702,6 +1723,7 @@ void MainWindow::changeActionsState(int widgetIndex)
         runAction->setEnabled(true);
         runExeAction->setEnabled(true);
         debugAction->setEnabled(true);
+        debugToggleBreakpointAction->setEnabled(true);
     }
 }
 
