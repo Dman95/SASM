@@ -1105,7 +1105,7 @@ void MainWindow::debug()
                this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
     connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
     connect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
-    connect(debugger, SIGNAL(inMacro()), this, SLOT(debugNextNi()));
+    connect(debugger, SIGNAL(inMacro()), this, SLOT(debugNextNi()), Qt::QueuedConnection);
     code->setDebugEnabled();
 }
 
@@ -1164,11 +1164,11 @@ void MainWindow::disableDebugActions(bool start)
 
 void MainWindow::debugContinue()
 {
-    disconnect(debugContinueAction, SIGNAL(triggered()), this, SLOT(debugContinue()));
+    debugContinueAction->setEnabled(false);
     debugger->doInput(QString("c\n"), ni);
     debugShowRegisters();
     debugShowMemory();
-    connect(debugContinueAction, SIGNAL(triggered()), this, SLOT(debugContinue()));
+    debugContinueAction->setEnabled(true);
 }
 
 void MainWindow::debugNext()
@@ -1177,11 +1177,11 @@ void MainWindow::debugNext()
     if (code->isMacroOnCurrentDebugLine()) {
         debugNextNi();
     } else {
-        disconnect(debugNextAction, SIGNAL(triggered()), this, SLOT(debugNext()));
+        debugNextAction->setEnabled(false);
         debugger->doInput(QString("si\n"), si);
         debugShowRegisters();
         debugShowMemory();
-        connect(debugNextAction, SIGNAL(triggered()), this, SLOT(debugNext()));
+        debugNextAction->setEnabled(true);
     }
 }
 
@@ -1193,11 +1193,11 @@ void MainWindow::debugToggleBreakpoint()
 
 void MainWindow::debugNextNi()
 {
-    disconnect(debugNextNiAction, SIGNAL(triggered()), this, SLOT(debugNextNi()));
+    debugNextNiAction->setEnabled(false);
     debugger->doInput(QString("ni\n"), ni);
     debugShowRegisters();
     debugShowMemory();
-    connect(debugNextNiAction, SIGNAL(triggered()), this, SLOT(debugNextNi()));
+    debugNextNiAction->setEnabled(true);
 }
 
 void MainWindow::debugShowMemory()
