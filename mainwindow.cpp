@@ -233,80 +233,162 @@ void MainWindow::createMenus()
 
 void MainWindow::createActions()
 {
+    QSettings keySettings(applicationDataPath() + "/keys.ini", QSettings::IniFormat);
+
     newAction = new QAction(QIcon(":/images/new.png"), tr("New"), this);
-    newAction->setShortcut(QKeySequence::New);
+    QString key = keySettings.value("new", "default").toString();
+    QKeySequence stdKey(QKeySequence::New);
+    if (key == "default")
+        key = stdKey.toString();
+    newAction->setShortcut(key);
     connect(newAction, SIGNAL(triggered()), this, SLOT(newFile()));
 
     openAction = new QAction(QIcon(":/images/open.png"), tr("Open"), this);
-    openAction->setShortcut(QKeySequence::Open);
+    key = keySettings.value("open", "default").toString();
+    stdKey = QKeySequence(QKeySequence::Open);
+    if (key == "default")
+        key = stdKey.toString();
+    openAction->setShortcut(key);
     connect(openAction, SIGNAL(triggered()), this, SLOT(openFile()));
 
     closeAction = new QAction(tr("Close file"), this);
-    closeAction->setShortcut(QKeySequence::Close);
+    key = keySettings.value("close", "default").toString();
+    stdKey = QKeySequence(QKeySequence::Close);
+    if (key == "default")
+        key = stdKey.toString();
+    closeAction->setShortcut(key);
     connect(closeAction, SIGNAL(triggered()), this, SLOT(closeFile()));
 
     
     saveAction = new QAction(QIcon(":/images/save.png"), tr("Save"), this);
-    saveAction->setShortcut(QKeySequence::Save);
+    key = keySettings.value("save", "default").toString();
+    stdKey = QKeySequence(QKeySequence::Save);
+    if (key == "default")
+        key = stdKey.toString();
+    saveAction->setShortcut(key);
     connect(saveAction, SIGNAL(triggered()), this, SLOT(saveFile()));
 
     saveAsAction = new QAction(tr("Save as"), this);
-    saveAsAction->setShortcut(QKeySequence::SaveAs);
+    key = keySettings.value("saveAs", "default").toString();
+    stdKey = QKeySequence(QKeySequence::SaveAs);
+    if (key == "default")
+        key = stdKey.toString();
+    saveAsAction->setShortcut(key);
     connect(saveAsAction, SIGNAL(triggered()), this, SLOT(saveAsFile()));
 
     saveExeAction = new QAction(tr("Save .exe"), this);
     connect(saveExeAction, SIGNAL(triggered()), this, SLOT(saveExe()));
 
     exitAction = new QAction(tr("Exit"), this);
-    exitAction->setShortcut(QString("Ctrl+Q"));
+    key = keySettings.value("exit", "default").toString();
+    stdKey = QKeySequence(QString("Ctrl+Q"));
+    if (key == "default")
+        key = stdKey.toString();
+    exitAction->setShortcut(key);
     connect(exitAction, SIGNAL(triggered()), this, SLOT(closeApp()));
 
     findAction = new QAction(tr("Find and replace"), this);
-    findAction->setShortcut(QKeySequence::Find);
+    key = keySettings.value("find", "default").toString();
+    stdKey = QKeySequence(QKeySequence::Find);
+    if (key == "default")
+        key = stdKey.toString();
+    findAction->setShortcut(key);
     connect(findAction, SIGNAL(triggered()), this, SLOT(find()));
 
 
     undoAction = new QAction(QIcon(":/images/undo.png"), tr("Undo"), this);
-    undoAction->setShortcut(QKeySequence::Undo);
+    key = keySettings.value("undo", "default").toString();
+    stdKey = QKeySequence(QKeySequence::Undo);
+    if (key == "default")
+        key = stdKey.toString();
+    undoAction->setShortcut(key);
 
     redoAction = new QAction(QIcon(":/images/redo.png"), tr("Redo"), this);
-    redoAction->setShortcut(QKeySequence::Redo);
+    key = keySettings.value("redo", "default").toString();
+    stdKey = QKeySequence(QKeySequence::Redo);
+    if (key == "default")
+        key = stdKey.toString();
+    redoAction->setShortcut(key);
 
     cutAction = new QAction(QIcon(":/images/cut.png"), tr("Cut"), this);
-    cutAction->setShortcut(QKeySequence::Cut);
+    key = keySettings.value("cut", "default").toString();
+    stdKey = QKeySequence(QKeySequence::Cut);
+    if (key == "default")
+        key = stdKey.toString();
+    cutAction->setShortcut(key);
 
     copyAction = new QAction(QIcon(":/images/copy.png"), tr("Copy"), this);
-    copyAction->setShortcut(QKeySequence::Copy);
+    key = keySettings.value("copy", "default").toString();
+    stdKey = QKeySequence(QKeySequence::Copy);
+    if (key == "default")
+        key = stdKey.toString();
+    copyAction->setShortcut(key);
 
     pasteAction = new QAction(QIcon(":/images/paste.png"), tr("Paste"), this);
-    pasteAction->setShortcut(QKeySequence::Paste);
+    key = keySettings.value("paste", "default").toString();
+    stdKey = QKeySequence(QKeySequence::Paste);
+    if (key == "default")
+        key = stdKey.toString();
+    pasteAction->setShortcut(key);
 
     deleteAction = new QAction(tr("Delete"), this);
-    deleteAction->setShortcut(QKeySequence::Delete);
+    key = keySettings.value("delete", "default").toString();
+    stdKey = QKeySequence(QKeySequence::Delete);
+    if (key == "default")
+        key = stdKey.toString();
+    deleteAction->setShortcut(key);
 
     selectAllAction = new QAction(tr("Select all"), this);
-    selectAllAction->setShortcut(QKeySequence::SelectAll);
+    key = keySettings.value("selectAll", "default").toString();
+    stdKey = QKeySequence(QKeySequence::SelectAll);
+    if (key == "default")
+        key = stdKey.toString();
+    selectAllAction->setShortcut(key);
 
     commentAction = new QAction(tr("Comment"), this);
-    commentAction->setShortcut(QString("Shift+Q"));
+    key = keySettings.value("comment", "default").toString();
+    stdKey = QKeySequence(QString("Shift+Ctrl+A"));
+    if (key == "default")
+        key = stdKey.toString();
+    commentAction->setShortcut(key);
 
     uncommentAction = new QAction(tr("Remove comment"), this);
-    uncommentAction->setShortcut(QString("Shift+A"));
+    key = keySettings.value("uncomment", "default").toString();
+    stdKey = QKeySequence(QString("Shift+Ctrl+S"));
+    if (key == "default")
+        key = stdKey.toString();
+    uncommentAction->setShortcut(key);
 
     putTabAction = new QAction(tr("Indent"), this);
-    putTabAction->setShortcut(QString("Tab"));
+    key = keySettings.value("putTab", "default").toString();
+    stdKey = QKeySequence(QString("Tab"));
+    if (key == "default")
+        key = stdKey.toString();
+    putTabAction->setShortcut(key);
 
     deleteTabAction = new QAction(tr("Remove indent"), this);
-    deleteTabAction->setShortcut(QString("Shift+Tab"));
+    key = keySettings.value("deleteTab", "default").toString();
+    stdKey = QKeySequence(QString("Shift+Tab"));
+    if (key == "default")
+        key = stdKey.toString();
+    deleteTabAction->setShortcut(key);
     //Action in edit menu connects in refreshEditMenu function!
 
 
     buildAction = new QAction(QIcon(":/images/build.png"), tr("Build this"), this);
-    buildAction->setShortcut(QString("Ctrl+F9"));
+    key = keySettings.value("build", "default").toString();
+    stdKey = QKeySequence(QString("Ctrl+F9"));
+    if (key == "default")
+        key = stdKey.toString();
+    buildAction->setShortcut(key);
     connect(buildAction, SIGNAL(triggered()), this, SLOT(buildProgram()));
 
-    runAction = new QAction(QIcon(":/images/run.png"), tr("Run"), this);
-    runAction->setShortcut(QString("F9"));
+    runAction = new QAction(QIcon(":/images/run.png"), tr("Build and run"), this);
+    key = keySettings.value("run", "default").toString();
+    stdKey = QKeySequence(QString("F9"));
+    if (key == "default")
+        key = stdKey.toString();
+    runAction->setShortcut(key);
     connect(runAction, SIGNAL(triggered()), this, SLOT(runProgram()));
 
     runExeAction = new QAction(tr("Run in new window"), this);
@@ -317,32 +399,60 @@ void MainWindow::createActions()
     stopAction->setEnabled(false); //enable in runProgram(), disable in stop
 
     debugAction = new QAction(QIcon(":/images/debug.png"), tr("Debug"), this);
-    debugAction->setShortcut(QString("F5"));
+    key = keySettings.value("debug", "default").toString();
+    stdKey = QKeySequence(QString("F5"));
+    if (key == "default")
+        key = stdKey.toString();
+    debugAction->setShortcut(key);
     connect(debugAction, SIGNAL(triggered()), this, SLOT(debug()));
 
     debugContinueAction = new QAction(QIcon(":/images/continue.png"), tr("Continue"), this);
-    debugContinueAction->setShortcut(QString("F5"));
+    key = keySettings.value("continue", "default").toString();
+    stdKey = QKeySequence(QString("F5"));
+    if (key == "default")
+        key = stdKey.toString();
+    debugContinueAction->setShortcut(key);
     connect(debugContinueAction, SIGNAL(triggered()), this, SLOT(debugContinue()));
 
     debugNextNiAction = new QAction(QIcon(":/images/stepover.png"), tr("Step over"), this);
-    debugNextNiAction->setShortcut(QString("F10"));
+    key = keySettings.value("stepOver", "default").toString();
+    stdKey = QKeySequence(QString("F10"));
+    if (key == "default")
+        key = stdKey.toString();
+    debugNextNiAction->setShortcut(key);
     connect(debugNextNiAction, SIGNAL(triggered()), this, SLOT(debugNextNi()));
 
     debugNextAction = new QAction(QIcon(":/images/stepinto.png"), tr("Step into"), this);
-    debugNextAction->setShortcut(QString("F11"));
+    key = keySettings.value("stepInto", "default").toString();
+    stdKey = QKeySequence(QString("F11"));
+    if (key == "default")
+        key = stdKey.toString();
+    debugNextAction->setShortcut(key);
     connect(debugNextAction, SIGNAL(triggered()), this, SLOT(debugNext()));
 
     debugToggleBreakpointAction = new QAction(tr("Toggle breakpoint"), this);
-    debugToggleBreakpointAction->setShortcut(QString("F8"));
+    key = keySettings.value("breakpoint", "default").toString();
+    stdKey = QKeySequence(QString("F8"));
+    if (key == "default")
+        key = stdKey.toString();
+    debugToggleBreakpointAction->setShortcut(key);
     connect(debugToggleBreakpointAction, SIGNAL(triggered()), this, SLOT(debugToggleBreakpoint()));
 
     debugShowRegistersAction = new QAction(tr("Show registers"), this);
-    debugShowRegistersAction->setShortcut(QString("Ctrl+R"));
+    key = keySettings.value("showRegisters", "default").toString();
+    stdKey = QKeySequence(QString("Ctrl+R"));
+    if (key == "default")
+        key = stdKey.toString();
+    debugShowRegistersAction->setShortcut(key);
     debugShowRegistersAction->setCheckable(true);
     connect(debugShowRegistersAction, SIGNAL(changed()), this, SLOT(debugShowRegisters()), Qt::QueuedConnection);
 
     debugShowMemoryAction = new QAction(tr("Show memory"), this);
-    debugShowMemoryAction->setShortcut(QString("Ctrl+M"));
+    key = keySettings.value("showMemory", "default").toString();
+    stdKey = QKeySequence(QString("Ctrl+M"));
+    if (key == "default")
+        key = stdKey.toString();
+    debugShowMemoryAction->setShortcut(key);
     debugShowMemoryAction->setCheckable(true);
     connect(debugShowMemoryAction, SIGNAL(changed()), this, SLOT(debugShowMemory()), Qt::QueuedConnection);
 
@@ -357,7 +467,11 @@ void MainWindow::createActions()
     changeActionsState(mainWidget->currentIndex());
 
     helpAction = new QAction(tr("Help"), this);
-    helpAction->setShortcut(QKeySequence::HelpContents);
+    key = keySettings.value("help", "default").toString();
+    stdKey = QKeySequence(QKeySequence::HelpContents);
+    if (key == "default")
+        key = stdKey.toString();
+    helpAction->setShortcut(key);
     connect(helpAction, SIGNAL(triggered()), this, SLOT(openHelp()));
 
     aboutAction = new QAction(tr("About"), this);
@@ -1747,7 +1861,7 @@ void MainWindow::openHelp()
 void MainWindow::openAbout()
 {
     QMessageBox::about(this, tr("About SASM"),
-                       tr("SASM (SimpleASM) 2.1 - simple Open Source IDE for NASM.") + '\n' +
+                       tr("SASM (SimpleASM) 2.2 - simple Open Source IDE for NASM.") + '\n' +
                        tr("Licensed under the GNU GPL v3.0") + '\n' +
                        tr("Based on the Qt.") + '\n' +
                        tr("Copyright © 2013 Dmitriy Manushin") + '\n' +
