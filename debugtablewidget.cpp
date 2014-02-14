@@ -106,9 +106,6 @@ void DebugTableWidget::addVariable(const QString &variableName, int rowNumber)
         insertRow(rowNumber);
         QTableWidgetItem *name = new QTableWidgetItem(variableName);
         QTableWidgetItem *value = new QTableWidgetItem;
-        QFont monoFont("Courier");
-        monoFont.setStyleHint(QFont::Monospace);
-        value->setFont(monoFont);
         WatchSettinsWidget *settings = new WatchSettinsWidget;
         connect(settings, SIGNAL(settingsChanged()), this, SIGNAL(debugShowMemory()));
         setItem(rowNumber, 0, name);
@@ -127,9 +124,6 @@ void DebugTableWidget::addVariable(const RuQPlainTextEdit::Watch &variable, int 
         insertRow(rowNumber);
         QTableWidgetItem *name = new QTableWidgetItem(variable.name);
         QTableWidgetItem *value = new QTableWidgetItem;
-        QFont monoFont("Courier");
-        monoFont.setStyleHint(QFont::Monospace);
-        value->setFont(monoFont);
         WatchSettinsWidget *settings = new WatchSettinsWidget;
         settings->sizeComboBox->setCurrentIndex(variable.size);
         settings->typeComboBox->setCurrentIndex(variable.type);

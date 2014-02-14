@@ -1264,6 +1264,7 @@ void MainWindow::debugShowMemory()
         if (memoryWindow->rowCount() > 1) {
             QEventLoop eventLoop;
             connect(debugger, SIGNAL(printMemory(QList<Debugger::memoryInfo>*)), &eventLoop, SLOT(quit()));
+            connect(debugger, SIGNAL(finished()), &eventLoop, SLOT(quit()));
             eventLoop.exec();
         }
     } else
@@ -1337,6 +1338,7 @@ void MainWindow::debugShowRegisters()
         debugger->doInput(QString("info registers\n"), infoRegisters);
         QEventLoop eventLoop;
         connect(debugger, SIGNAL(printRegisters(Debugger::registersInfo*)), &eventLoop, SLOT(quit()));
+        connect(debugger, SIGNAL(finished()), &eventLoop, SLOT(quit()));
         eventLoop.exec();
     } else
         if (registersWindow) {
