@@ -214,22 +214,27 @@ QList<int> *CodeEditor::getBreakpoints()
 void CodeEditor::highlightCurrentLine()
 {
     QSettings settings("SASM Project", "SASM");
-    if (!debugMode && settings.value("currentlinemode", true).toBool()) {
-        QList<QTextEdit::ExtraSelection> extraSelections;
+    if (!debugMode) {
+        if (settings.value("currentlinemode", true).toBool()) {
+            QList<QTextEdit::ExtraSelection> extraSelections;
 
-        if (!isReadOnly()) {
-            QTextEdit::ExtraSelection selection;
+            if (!isReadOnly()) {
+                QTextEdit::ExtraSelection selection;
 
-            QColor lineColor = settings.value("currentlinecolor", QColor(232, 232, 255)).value<QColor>();
+                QColor lineColor = settings.value("currentlinecolor", QColor(232, 232, 255)).value<QColor>();
 
-            selection.format.setBackground(lineColor);
-            selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-            selection.cursor = textCursor();
-            selection.cursor.clearSelection();
-            extraSelections.append(selection);
+                selection.format.setBackground(lineColor);
+                selection.format.setProperty(QTextFormat::FullWidthSelection, true);
+                selection.cursor = textCursor();
+                selection.cursor.clearSelection();
+                extraSelections.append(selection);
+            }
+
+            setExtraSelections(extraSelections);
+        } else {
+            QList<QTextEdit::ExtraSelection> extraSelections; //empty
+            setExtraSelections(extraSelections);
         }
-
-        setExtraSelections(extraSelections);
     }
 }
 
