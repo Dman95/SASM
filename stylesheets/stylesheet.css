@@ -292,6 +292,31 @@ Full-Width Styles
   border-bottom-right-radius: 2px;
 }
 
+#flagru {
+  display: block;
+  position: absolute;
+  top: 50px;
+  right: 43px;
+  width: 16px;
+  height: 11px;
+}
+
+#flagen {
+  display: block;
+  position: absolute;
+  top: 50px;
+  right: 15px;
+  width: 16px;
+  height: 11px;
+}
+
+img.langimg {
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+}
+
 #header_wrap {
   background: #212121;
   background: -moz-linear-gradient(top, #373737, #212121);

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="SASM : SASM - simple crossplatform IDE for NASM assembly language" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>SASM - simple crossplatform IDE for NASM assembly language</title>
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-41457512-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+  </head>
+
+  <body>
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="flagru" href="/" title="Русский"><img class="langimg" src="images/flagru.png"></a>
+          <a id="flagen" href="english.html" title="English"><img class="langimg" src="images/flagen.png"></a>
+          <a id="forkme_banner" href="https://github.com/Dman95/SASM">View on GitHub</a>
+
+          <h1 id="project_title">SASM</h1>
+          <h2 id="project_tagline">Simple crossplatform IDE for NASM assembly language</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/Dman95/SASM/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/Dman95/SASM/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="sasm" class="anchor" href="#sasm"><span class="octicon octicon-link"></span></a>SASM</h1>
+
+<p>SASM (SimpleASM) - simple Open Source crossplatform IDE for NASM assembly language. SASM has syntax highlighting and debugger. The program works out of the box and is great for beginners to learn assembly language. SASM is translated into Russian and English. Licensed under the GNU GPL v3.0. Based on the Qt.</p>
+
+<p><img src="images/Screenshot1.png" alt="SASM"></p>
+
+<p><span style="font-size:25pt;"><a href="SASMSetup.exe">Download for Windows</a></span></br><span style="font-size:25pt;"><a href="https://build.opensuse.org/package/show/home:Dman95/SASM">Download for Linux</a></span></p>
+<p>To load SASM for Linux choose your distribution in window "Build Results" on the right.</p>
+<p>Also you can build SASM from sources, placed in <a href="https://github.com/Dman95/SASM">GitHub repository</a>.</p>
+
+<h2>
+<a name="-" class="anchor" href="#-"><span class="octicon octicon-link"></span></a>About the program</h2>
+
+<p>In SASM you can easily develop and execute programs, written in NASM assembly language. Enter code in form and simply run your program. In Windows SASM can execute programs in separate window. Enter your input data in "Input" docking field. In "Output" field you can see the result of the execution of the program. Wherein all messages and compilation errors will be shown in the form on the bottom. You can save source or already compiled (exe) code of your program to file and load your programs from file.</p> 
+<p>SASM supports working with many opened projects – new files are opened and created in new tabs. At the exit from SASM current set of opened files saved. At the next start you can restore previous session. In settings you can set font, color scheme and initial text. SASM is translated into Russian and English. All dialog windows in SASM is docking - you can choose one of many positions of them position. Also it is possible to reassign the hot keys.</p>
+<p>Standard "Edit" menu extended with abilities to comment/uncomment piece of source code and to create/delete indent with 4 spaces (Tab/Shift+Tab).</p>
+<p>In my program you can debug programs using the interface to the debugger gdb. You can watch values of variables and registers. Also you can set breakpoints and move through debugged program. In additional it is possible to perform any gdb command and see its result in the log on the bottom part of window.</p>
+<p><img src="images/Screenshot2.png" alt="SASM"></p>
+
+<h2><a name="-" class="anchor" href="#-"><span class="octicon octicon-link"></span></a>"io.inc" macro library</h2>
+<p>SASM includes crossplatform input/output library "io.inc". It contains I/O macro and 2 additional macro: CMAIN - entry point and CEXTERN for invoking functions, located in C language libraries ("CEXTERN printf" for example).
+<table border="0" cellspacing="0" cellpadding="0">
+<thead>
+<tr>
+<td width="242">Macro name</td>
+<td width="390">Description</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td width="242" valign="top"><a name="PRINT_UDEC">PRINT_UDEC</a> <em>size, data</em></p>
+<p><a name="PRINT_DEC">PRINT_DEC</a><em> size, data</em></td>
+<td width="390" valign="top">Print number <em>data</em> in decimal representation. <em>size</em> – number, giving size of <em>data</em> in bytes - 1, 2 or 4.
+<em>data</em> must be number or symbol constant, name of variable, register or address expression without size qualifier (byte[], etc.). PRINT_UDEC print number as unsigned, PRINT_DEC — as signed.</td>
+</tr>
+<tr>
+<td width="242" valign="top"><a name="PRINT_HEX">PRINT_HEX</a> <em>size, data</em></td>
+<td width="390" valign="top">Similarly previous, but data is printed in hexadeximal representation.</td>
+</tr>
+<tr>
+<td width="242" valign="top"><a name="PRINT_CHAR">PRINT_CHAR</a> <em>ch</em></td>
+<td width="390" valign="top">Print symbol <em>ch</em>. <em>ch</em> - number or symbol constant, name of variable, register or address expression without size qualifier (byte[], etc.).</td>
+</tr>
+<tr>
+<td width="242" valign="top"><a name="PRINT_STRING">PRINT_STRING</a> <em>data</em></td>
+<td width="390" valign="top">Print null-terminated text string. <em>data</em> - string constant, name of variable or address expression without size qualifier (byte[], etc.).</td>
+</tr>
+<tr>
+<td width="242" valign="top"><a name="NEWLINE">NEWLINE</a></td>
+<td width="390" valign="top">Print newline ('\n').</td>
+</tr>
+<tr>
+<td width="242" valign="top"><a name="GET_UDEC">GET_UDEC</a> <em>size</em>, <em>data</em></p>
+<p><a name="GET_DEC">GET_DEC</a> <em>size</em>, <em>data</em></td>
+<td width="390" valign="top">Input number data in decimal representation from stdin. <em>size</em> – number, giving size of <em>data</em> in bytes - 1, 2 or 4. <em>data</em> must be name of variable or register or address expression without size qualifier (byte[], etc.). GET_UDEC input number as unsigned, GET_DEC — as signed. It is not allowed to use esp register.</td>
+</tr>
+<tr>
+<td width="242" valign="top"><a name="GET_HEX">GET_HEX</a> <em>size, data</em></td>
+<td width="390" valign="top">Similarly previous, but data is entered in hexadeximal representation with 0x prefix.</td>
+</tr>
+<tr>
+<td width="242" valign="top"><a name="GET_CHAR">GET_CHAR</a> <em>data</em></td>
+<td width="390" valign="top">Similarly previous, but macro reads one symbol only.</td>
+</tr>
+<tr>
+<td width="242" valign="top"><a name="GET_STRING">GET_STRING</a> <em>data, maxsz</em></td>
+<td width="390" valign="top">Input string with length less than <em>maxsz</em>. Reading stoppes on EOF or newline and "\n" writes in buffer. In the end of string  0 character is added to the end. <em>data</em> - name of variable or address expression without size qualifier (byte[], etc.). <em>maxsz</em> - register or number constant.</td>
+</tr>
+</tbody>
+</table>
+
+<h2><a name="-" class="anchor" href="#-"><span class="octicon octicon-link"></span></a>Implementation</h2>
+<h3><a name="windows" class="anchor" href="#windows"><span class="octicon octicon-link"></span></a>Windows</h3>
+<p>As NASM compiler used nasm 2.10.05, run under Cygwin included in SASM, as linker - gcc 4.6.2.</p>
+<p>Also SASM contains gdb debugger from MinGW and "io.inc" macro library.</p>
+<p>On Windows SASM is ready for work immediately after installation.</p>
+
+<h3><a name="linux" class="anchor" href="#linux"><span class="octicon octicon-link"></span></a>Linux</h3>
+
+<p>For correct working on Linux must be installed next packages: nasm, gcc, gdb (for debugging).</p>
+
+<h2><a name="changes" class="anchor" href="#changes"><span class="octicon octicon-link"></span></a>Changelog:</h2>
+
+<p>16.02.2014 - version 2.2 - significantly improvements of SASM interface and usability. Full color and syntax highlighting customization. All widgets become docking windows with many variants of them location. Register and memory widgets improved, ability of saving their state. Breakpoints improved. Macro debugging improved. Icons and toolbars added. Hotkeys improvements and ability of them rebinding.</p>
+<p>13.11.2013 - version 2.1 - many bugs fixed, compatibility problems fixed - installation packages for a lot of Linux systems created, compatibility with Qt 4 added, making from sources improved. Many improvements added, functionality expanded. In debugger added: registers and memory watches, breakpoints, continue command; improved: performing gdb commands, current line highlighting, sequential output in debugging, "io.inc" macro changed. Compilation in temporary folder. Mark of unsaved document. Sequential output in programs. Status of finishing of program. Time of execution of program. Font choosing. Help updated. New icon. Yet many minor improvements and features.</p>
+<p>04.06.2013 - version 2.0 - debugger has implemented, highlighting has been improved, many files support added, SASM (new name) has been rewrited on Qt and has become Open Source and crossplatform. Sources and new site is placed on GitHub.</p>
+<p>21.04.2013 - version 1.0.4 - CEXTERN bug fixed.</p>
+<p>18.03.2013 - version 1.0.3 - highlighting bug fixed, MASM bug fixed.</p>
+<p>10.03.2013 - version 1.0.2 - bugs fixed, code autosaving added.</p>
+<p>07.03.2013 - first version of SASM - 1.0.0.</p>
+<p></p>
+<p>Wishes and reports send to e-mail: <a href="mailto: Dman1095@gmail.com">Dman1095@gmail.com</a> or left on <a href="https://github.com/Dman95/SASM/issues">GitHub issues</a>.</p>
+
+<p>Copyright © 2013 Dmitriy Manushin</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">SASM maintained by <a href="https://github.com/Dman95">Dman95</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
