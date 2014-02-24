@@ -1869,7 +1869,8 @@ void MainWindow::openAbout()
                        tr("Copyright © 2013 Dmitriy Manushin") + '\n' +
                        tr("Development and idea - Dmitriy Manushin") + '\n' +
                        tr("Icon and advices - Alick Gaybullaev") + '\n' + '\n' +
-                       tr("Wishes and error messages are sent to the e-mail: Dman1095@gmail.com") + '\n' + '\n' +
+                       tr("Wishes and error messages are sent to the e-mail: Dman1095@gmail.com") + '\n' +
+                       tr("More information on the site: http://dman95.github.io/SASM/") + '\n' + '\n' +
                        tr("Donate:") + '\n' +
                        tr("WMZ - Z282016332582") + '\n' +
                        tr("WMR - R331674303467"));

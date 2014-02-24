@@ -97,7 +97,7 @@
         <translation type="obsolete">Неправильное имя &quot;%1&quot;</translation>
     </message>
     <message>
-        <location filename="debugtablewidget.cpp" line="190"/>
+        <location filename="debugtablewidget.cpp" line="184"/>
         <source>Delete watch</source>
         <translation>Удалить</translation>
     </message>
@@ -236,7 +236,7 @@
     <message>
         <location filename="mainwindow.cpp" line="229"/>
         <location filename="mainwindow.cpp" line="469"/>
-        <location filename="mainwindow.cpp" line="1856"/>
+        <location filename="mainwindow.cpp" line="1858"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
@@ -342,7 +342,7 @@
         <translation>Построить</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1864"/>
+        <location filename="mainwindow.cpp" line="1866"/>
         <source>SASM (SimpleASM) 2.2 - simple Open Source IDE for NASM.</source>
         <translation>SASM (SimpleASM) 2.2 - простая Open Source среда разработки на языке ассемблера NASM.</translation>
     </message>
@@ -464,7 +464,7 @@ All files (*.*)</source>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="764"/>
-        <location filename="mainwindow.cpp" line="1772"/>
+        <location filename="mainwindow.cpp" line="1774"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
@@ -475,7 +475,7 @@ All files (*.*)</source>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="766"/>
-        <location filename="mainwindow.cpp" line="1773"/>
+        <location filename="mainwindow.cpp" line="1775"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -522,7 +522,7 @@ All files (*.*)</source>
         <translation type="obsolete">Программа завершена аварийно!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1868"/>
+        <location filename="mainwindow.cpp" line="1870"/>
         <source>Development and idea - Dmitriy Manushin</source>
         <translation>Идея и разработка - Дмитрий Манушин</translation>
     </message>
@@ -539,7 +539,7 @@ All files (*.*)</source>
         <translation type="obsolete">Integer</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1317"/>
+        <location filename="mainwindow.cpp" line="1318"/>
         <source>Registers</source>
         <translation>Регистры</translation>
     </message>
@@ -568,7 +568,7 @@ All files (*.*)</source>
         <translation>Внимание! В ходе построения обнаружены ошибки:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1774"/>
+        <location filename="mainwindow.cpp" line="1776"/>
         <source>Warning!</source>
         <translation>Внимание!</translation>
     </message>
@@ -627,24 +627,24 @@ All files (*.*)</source>
         <translation>Память</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1375"/>
+        <location filename="mainwindow.cpp" line="1377"/>
         <source>Debugging finished.</source>
         <oldsource>Debugging finished.
 </oldsource>
         <translation>Отладка завершена.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1507"/>
+        <location filename="mainwindow.cpp" line="1509"/>
         <source>In the previous session was not open any of the saved tabs!</source>
         <translation>В предыдущей сессии не было открыто ни одной сохранённой вкладки!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1775"/>
+        <location filename="mainwindow.cpp" line="1777"/>
         <source>All settings will be deleted and all unsaved data will be lost. Are you sure?</source>
         <translation>Все настройки будут удалены, а несохранённые данные потеряны! Вы уверены?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1863"/>
+        <location filename="mainwindow.cpp" line="1865"/>
         <source>About SASM</source>
         <translation>О программе</translation>
     </message>
@@ -653,17 +653,17 @@ All files (*.*)</source>
         <translation type="obsolete">SASM (SimpleASM) 2.0 Beta - простая Open Source среда разработки на языке ассемблера NASM.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1865"/>
+        <location filename="mainwindow.cpp" line="1867"/>
         <source>Licensed under the GNU GPL v3.0</source>
         <translation>Распространяется по лицензии GNU GPL v3.0</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1866"/>
+        <location filename="mainwindow.cpp" line="1868"/>
         <source>Based on the Qt.</source>
         <translation>Основана на Qt.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1867"/>
+        <location filename="mainwindow.cpp" line="1869"/>
         <source>Copyright © 2013 Dmitriy Manushin</source>
         <oldsource>Copyright Â© 2013 Dmitriy Manushin</oldsource>
         <translation>Copyright © 2013 Дмитрий Манушин</translation>
@@ -673,12 +673,12 @@ All files (*.*)</source>
         <translation type="obsolete">Разработка - Dmitriy Manushin</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1869"/>
+        <location filename="mainwindow.cpp" line="1871"/>
         <source>Icon and advices - Alick Gaybullaev</source>
         <translation>Иконка и советы - Алик Гайбуллаев</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1870"/>
+        <location filename="mainwindow.cpp" line="1872"/>
         <source>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com</source>
         <oldsource>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com
 
@@ -686,17 +686,22 @@ All files (*.*)</source>
         <translation>Пожелания и сообщения об ошибках отправляйте на адрес Dman1095@gmail.com</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1871"/>
+        <location filename="mainwindow.cpp" line="1873"/>
+        <source>More information on the site: http://dman95.github.io/SASM/</source>
+        <translation>Сайт программы: http://dman95.github.io/SASM/</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1874"/>
         <source>Donate:</source>
         <translation>Donate:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1872"/>
+        <location filename="mainwindow.cpp" line="1875"/>
         <source>WMZ - Z282016332582</source>
         <translation>WMZ - Z282016332582</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1873"/>
+        <location filename="mainwindow.cpp" line="1876"/>
         <source>WMR - R331674303467</source>
         <translation>WMR - R331674303467</translation>
     </message>
