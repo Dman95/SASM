@@ -108,7 +108,7 @@ You can toggle breakpoint, clicking on line number or pressing F8 with cursor on
 Typing name of variable, address or any expression over text "Add variable..." and size (b - byte (1), w - word (2), d - double word (4), q - quad word (8)), in "Value" field you will see value of expression. 
 Also you can add variable from code, clicking right mouse button on line with variable and choose "Watch".
 In expressions you can use any operator of C language (*, &, +, -, *, /, %, !, >, &, |, &lt;&lt;, sizeof, etc.), registers should have $ prefix ($eax for example). 
-If you want to watch memory on address you shold check "Address" checkbox on the right.
+If you want to watch memory on address you should check "Address" checkbox on the right.
 Output format is determined in the first drop-down menu (format Smart trying to choose the most suitable type of display).
 To watch contents of array specify the number of elements in the array in "array size" field.
 To remove watches click right mouse button on it and choose "Delete watch" or press Del button.
@@ -121,7 +121,7 @@ If you press Enter with empty command, last command will be performed. Results o
 In expressions you can use any operator of C language (*, &, +, -, *, /, %, !, >, &, |, &lt;&lt;, sizeof, etc.), registers should have $ prefix ($eax for example).
 For example, if you want to know, what is placed on top of stack, you might enter expression: "*((int *)$esp)" with "Print" checkbox checked or simply enter command "p *((int *)$esp)".
 <BR>
-To set value to variable or register you shoud enter "p" before assignment operator ("p $eax = 5") or perform assignment in "Print" mode (if "Print" checkbox is checked).
+To set value to variable or register you should enter "p" before assignment operator ("p $eax = 5") or perform assignment in "Print" mode (if "Print" checkbox is checked).
 <BR>
 Also you can enter "help" command in "GDB command" field to show gdb commands help.
 <P>&nbsp;</P>
