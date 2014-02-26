@@ -946,6 +946,15 @@ void MainWindow::buildProgram(bool debugMode)
         programIsBuilded = false;
     } else {
         printLogWithTime(tr("Built successfully.") + '\n', Qt::darkGreen);
+        //print warnings
+        printLog(logText, Qt::red);
+        logFile.setFileName(gccOutput);
+        logFile.open(QIODevice::ReadOnly);
+        QTextStream logLinker(&logFile);
+        logText = logLinker.readAll();
+        logFile.close();
+        logText.remove(win81CygwinWarning);
+        printLog(logText, Qt::red);
         programIsBuilded = true;
     }
 }
