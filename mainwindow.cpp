@@ -1847,7 +1847,14 @@ void MainWindow::openHelp()
 {
     help = new QTextBrowser;
     help->setAttribute(Qt::WA_DeleteOnClose);
-    QFile helpFile(":help/help.html");
+    QFile helpFile;
+    QSettings settings("SASM Project", "SASM");
+    if (settings.value("language", 0).toInt() == 0) { //russian language
+        helpFile.setFileName(":help/help.html");
+    } else { //english language
+        helpFile.setFileName(":help/helpENG.html");
+    }
+
     helpFile.open(QFile::ReadOnly);
     QTextStream helpText(&helpFile);
     helpText.setCodec("utf-8");
