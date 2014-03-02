@@ -51,8 +51,10 @@ int main(int argc, char *argv[])
 
     QTranslator translator, qtTranslator;
     QSettings settings("SASM Project", "SASM");
-    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-    QTextCodec::setCodecForCStrings(codec);
+    #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+        QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+        QTextCodec::setCodecForCStrings(codec);
+    #endif
     if (! settings.contains("language")) { //language choosing
         QMessageBox msgBox;
         QPushButton *rusButton = msgBox.addButton(QString("Русский"), QMessageBox::NoRole);
