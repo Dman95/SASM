@@ -43,6 +43,7 @@
 #include <QTranslator>
 #include <QTextCodec>
 #include <QSettings>
+#include <QPushButton>
 
 int main(int argc, char *argv[])
 {
@@ -50,7 +51,23 @@ int main(int argc, char *argv[])
 
     QTranslator translator, qtTranslator;
     QSettings settings("SASM Project", "SASM");
-    if (settings.value("language", 0).toInt() == 0) {//russian language
+    QTextCodec *codec = QTextCodec::codecForName("UTF-8");
+    QTextCodec::setCodecForCStrings(codec);
+    if (! settings.contains("language")) { //language choosing
+        QMessageBox msgBox;
+        QPushButton *rusButton = msgBox.addButton(QString("Русский"), QMessageBox::NoRole);
+        QPushButton *engButton = msgBox.addButton(QString("English"), QMessageBox::NoRole);
+        msgBox.setWindowTitle(QString("Choose language"));
+        msgBox.setText(QString("Choose language / Выберите язык"));
+        msgBox.exec();
+
+        if (msgBox.clickedButton() == rusButton) {
+            settings.setValue("language", 0);
+        } else if (msgBox.clickedButton() == engButton) {
+            settings.setValue("language", 1);
+        }
+    }
+    if (settings.value("language", 0).toInt() == 0) { //russian language
         translator.load(":/translations/language_ru.qm");
         a.installTranslator(&translator);
 
