@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="ru_RU">
+<TS version="2.1" language="ru_RU">
 <context>
     <name>CommandDebugWindow</name>
     <message>
@@ -345,6 +345,11 @@
         <location filename="mainwindow.cpp" line="1882"/>
         <source>SASM (SimpleASM) 2.2 - simple Open Source IDE for NASM.</source>
         <translation>SASM (SimpleASM) 2.2 - простая Open Source среда разработки на языке ассемблера NASM.</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1894"/>
+        <source>Yandex.Money - 410012181834380</source>
+        <translation>Яндекс.Деньги - 410012181834380</translation>
     </message>
     <message>
         <source>Run</source>
@@ -693,15 +698,20 @@ All files (*.*)</source>
     <message>
         <location filename="mainwindow.cpp" line="1890"/>
         <source>Donate:</source>
-        <translation>Donate:</translation>
+        <translation>Поддержите проект:</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1891"/>
+        <source>PayPal - Dman1095@gmail.com</source>
+        <translation>PayPal - Dman1095@gmail.com</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1892"/>
         <source>WMZ - Z282016332582</source>
         <translation>WMZ - Z282016332582</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1892"/>
+        <location filename="mainwindow.cpp" line="1893"/>
         <source>WMR - R331674303467</source>
         <translation>WMR - R331674303467</translation>
     </message>

@@ -1888,8 +1888,11 @@ void MainWindow::openAbout()
                        tr("Wishes and error messages are sent to the e-mail: Dman1095@gmail.com") + '\n' +
                        tr("More information on the site: http://dman95.github.io/SASM/") + '\n' + '\n' +
                        tr("Donate:") + '\n' +
+                       tr("PayPal - Dman1095@gmail.com") + '\n' +
                        tr("WMZ - Z282016332582") + '\n' +
-                       tr("WMR - R331674303467"));
+                       tr("WMR - R331674303467") + '\n' +
+                       tr("Yandex.Money - 410012181834380")
+                       );
 }
 
 bool MainWindow::removeDirRecuresively(const QString &dirName){
