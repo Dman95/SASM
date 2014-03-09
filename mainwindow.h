@@ -71,7 +71,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
     
 public:
-    MainWindow(int argc, char **argv, QWidget *parent = 0);
+    MainWindow(const QStringList & args, QWidget *parent = 0);
     ~MainWindow();
 
     void initUi();
