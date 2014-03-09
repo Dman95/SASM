@@ -40,7 +40,7 @@
 
 #include "mainwindow.h"
 
-MainWindow::MainWindow(int argc, char **argv, QWidget *parent)
+MainWindow::MainWindow(const QStringList &args, QWidget *parent)
     : QMainWindow(parent)
 {
     this->setWindowTitle("SASM");
@@ -94,8 +94,8 @@ MainWindow::MainWindow(int argc, char **argv, QWidget *parent)
     splitter->restoreState(settings.value("logsplitterstate").toByteArray());
 
     //open documents from command line
-    for (int i = 1; i < argc; i++) {
-        QString fileName(argv[i]);
+    for (int i = 1; i < args.size(); i++) {
+        QString fileName = args[i];
         newFile();
         Tab *curTab = (Tab *) tabs->currentWidget();
         curTab->loadCodeFromFile(fileName);
@@ -668,6 +668,7 @@ void MainWindow::saveExe()
     if (saveFileName.isEmpty())
         return;
     QFile exeFile(pathInTemp("SASMprog.exe"));
+    QFile::remove(saveFileName);
     exeFile.copy(saveFileName);
 }
 
