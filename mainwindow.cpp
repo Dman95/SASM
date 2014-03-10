@@ -875,8 +875,8 @@ void MainWindow::buildProgram(bool debugMode)
         QString objFormat = "elf32";
     #endif
     QStringList nasmArguments;
-    nasmArguments << "-g" << "-f" << objFormat << pathInTemp("program.asm", true) << "-l" <<
-                     pathInTemp("program.lst", true) << "-o" << pathInTemp("program.o", true);
+    nasmArguments << "-g" << "-f" << objFormat << pathInTemp("program.asm", false) << "-l" <<
+                     pathInTemp("program.lst", false) << "-o" << pathInTemp("program.o", false);
     QProcess nasmProcess;
     QString nasmOutput = pathInTemp("compilererror.txt");
     nasmProcess.setStandardOutputFile(nasmOutput);
