@@ -848,6 +848,8 @@ void MainWindow::buildProgram(bool debugMode)
     QFile::remove(path);
     QString exePath = pathInTemp("SASMprog.exe");
     QFile::remove(exePath);
+    QString oPath = pathInTemp("program.o");
+    QFile::remove(oPath);
 
     while (QFile::exists(path)) {
     }
@@ -866,17 +868,21 @@ void MainWindow::buildProgram(bool debugMode)
     while (! QFile::exists(path)) {
     }
 
+    QSettings settings("SASM Project", "SASM");
     //NASM
     #ifdef Q_OS_WIN32
         QString nasm = applicationDataPath() + "/NASM/nasm.exe";
-        QString objFormat = "win32";
+        QString nasmOptions = "-g -f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
     #else
         QString nasm = "nasm";
-        QString objFormat = "elf32";
+        QString nasmOptions = "-g -f elf32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
     #endif
-    QStringList nasmArguments;
-    nasmArguments << "-g" << "-f" << objFormat << pathInTemp("program.asm", false) << "-l" <<
-                     pathInTemp("program.lst", false) << "-o" << pathInTemp("program.o", false);
+    if (settings.contains("assemblyoptions"))
+        nasmOptions = settings.value("assemblyoptions").toString();
+    nasmOptions.replace("$SOURCE$", pathInTemp("program.asm", false));
+    nasmOptions.replace("$LSTOUTPUT$", pathInTemp("program.lst", false));
+    nasmOptions.replace("$PROGRAM.OBJ$", pathInTemp("program.o", false));
+    QStringList nasmArguments = nasmOptions.split(QChar(' '));
     QProcess nasmProcess;
     QString nasmOutput = pathInTemp("compilererror.txt");
     nasmProcess.setStandardOutputFile(nasmOutput);
@@ -886,11 +892,18 @@ void MainWindow::buildProgram(bool debugMode)
     nasmProcess.waitForFinished();
 
     //GCC
+    QString gccOptions = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m32";
+    if (settings.contains("linkingoptions"))
+        gccOptions = settings.value("linkingoptions").toString();
+    //macro.c compilation/copying
     QString stdioMacros = pathInTemp("macro.o");
     QFile macro;
     #ifdef Q_OS_WIN32
         QString gcc = applicationDataPath() + "/NASM/MinGW/bin/gcc.exe";
-        macro.setFileName(applicationDataPath() + "/NASM/macro.o");
+        if (gccOptions.contains("-m64", Qt::CaseInsensitive) || nasmOptions.contains("64"))
+            macro.setFileName(applicationDataPath() + "/NASM/macro64.o");
+        else
+            macro.setFileName(applicationDataPath() + "/NASM/macro.o");
         macro.copy(stdioMacros);
     #else
         QString gcc = "gcc";
@@ -899,14 +912,20 @@ void MainWindow::buildProgram(bool debugMode)
 
         //macro.c compilation
         QStringList gccMArguments;
-        gccMArguments << "-x" << "c" << pathInTemp("macro.c") << "-c" << "-g" << "-o" << stdioMacros << "-m32";
+        gccMArguments << "-x" << "c" << pathInTemp("macro.c") << "-c" << "-g" << "-o" << stdioMacros;
+        if (gccOptions.contains("-m64", Qt::CaseInsensitive) || nasmOptions.contains("64"))
+            gccMArguments << "-m64";
+        else
+            gccMArguments << "-m32";
         QProcess gccMProcess;
         gccMProcess.start(gcc, gccMArguments);
         gccMProcess.waitForFinished();
     #endif
     //final linking
-    QStringList gccArguments;
-    gccArguments << pathInTemp("program.o") << stdioMacros << "-g" << "-o" << pathInTemp("SASMprog.exe") << "-m32";
+    gccOptions.replace("$PROGRAM.OBJ$", pathInTemp("program.o"));
+    gccOptions.replace("$MACRO.OBJ$", stdioMacros);
+    gccOptions.replace("$PROGRAM$", pathInTemp("SASMprog.exe"));
+    QStringList gccArguments = gccOptions.split(QChar(' '));
     QProcess gccProcess;
     QString gccOutput = pathInTemp("linkererror.txt");
     gccProcess.setStandardOutputFile(gccOutput);
@@ -1649,7 +1668,7 @@ void MainWindow::openSettings()
     settingsUi.startWindow->setCurrentIndex(settings.value("startwindow", 0).toInt());
     settingsUi.language->setCurrentIndex(settings.value("language", 0).toInt());
     settingsUi.fontComboBox->setCurrentFont(QFont(settings.value("fontfamily",
-                                                                 QString("Courier")).value<QString>()));
+                                                                 QString("Courier New")).value<QString>()));
     settingsUi.fontSizeSpinBox->setValue(settings.value("fontsize", 12).toInt());
 
     if (!settingsStartTextEditor) {
@@ -1675,6 +1694,17 @@ void MainWindow::openSettings()
 
     settingsUi.currentLineCheckBox->setChecked(settings.value("currentlinemode", true).toBool());
     connect(settingsUi.currentLineCheckBox, SIGNAL(clicked(bool)), this, SLOT(changeHighlightingLineMode(bool)));
+
+    //build options
+    #ifdef Q_OS_WIN32
+        QString options = "-g -f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
+    #else
+        QString options = "-g -f elf32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
+    #endif
+    settingsUi.assemblyOptionsEdit->setText(settings.value("assemblyoptions", options).toString());
+
+    QString linkerOptions = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m32";
+    settingsUi.linkingOptionsEdit->setText(settings.value("linkingoptions", linkerOptions).toString());
 
     settingsWindow->show();
 }
@@ -1768,6 +1798,10 @@ void MainWindow::saveSettings()
     QFont compilerOutFont;
     compilerOutFont.setPointSize(settings.value("fontsize", 12).toInt());
     compilerOut->setFont(compilerOutFont);
+
+    //build options
+    settings.setValue("assemblyoptions", settingsUi.assemblyOptionsEdit->text());
+    settings.setValue("linkingoptions", settingsUi.linkingOptionsEdit->text());
 }
 
 void MainWindow::exitSettings()
