@@ -122,7 +122,7 @@
                          "\\bSETNL\\b" << "\\bSETNLE\\b" << "\\bSETNO\\b" << "\\bSETNP\\b" <<
                          "\\bSETNS\\b" << "\\bSETNZ\\b" << "\\bSETO\\b" << "\\bSETP\\b" <<
                          "\\bSETPE\\b" << "\\bSETPO\\b" << "\\bSETS\\b" << "\\bSETZ\\b" <<
-                         "\\bSHLD\\b" << "\\bSHRD\\b" << "\\bSTOSD\\b" << "\\bOUTSD\\b" <<
+                         "\\bSHLD\\b" << "\\bSHRD\\b" << "\\bSTOSD\\b" <<
                          "\\bPOPAD\\b" << "\\bPOPFD\\b" << "\\bPUSHAD\\b" << "\\bPUSHFD\\b" <<
                          "\\bSCASD\\b" << "\\bBSWAP\\b" << "\\bCMPXCHG\\b" << "\\bINVD\\b" <<
                          "\\bINVLPG\\b" << "\\bWBINVD\\b" << "\\bXADD\\b" << "\\bCPUID\\b" <<
@@ -161,7 +161,15 @@
                          "\\bFSTENVD\\b" << "\\bFUCOM\\b" << "\\bFUCOMP\\b" << "\\bFUCOMPP\\b" <<
                          "\\bFCMOVB\\b" << "\\bFCMOVBE\\b" << "\\bFCMOVE\\b" << "\\bFCMOVNB\\b" <<
                          "\\bFCMOVNBE\\b" << "\\bFCMOVNE\\b" << "\\bFCMOVNU\\b" << "\\bFCMOVU\\b" <<
-                         "\\bFCOMI\\b" << "\\bFCOMIP\\b" << "\\bFUCOMI\\b" << "\\bFUCOMIP\\b";
+                         "\\bFCOMI\\b" << "\\bFCOMIP\\b" << "\\bFUCOMI\\b" << "\\bFUCOMIP\\b" <<
+                         "\\bCDQE\\b" << "\\bCQO\\b" << "\\bMOVMSKPS\\b" << "\\bMOVMSKPD\\b" <<
+                         "\\bPOPCNT\\b" << "\\bLZCNT\\b" << "\\bCMPSQ\\b" << "\\bSCASQ\\b" <<
+                         "\\bMOVSQ\\b" << "\\bLODSQ\\b" << "\\bSTOSQ\\b" << "\\bJRCXZ\\b" <<
+                         "\\bIRETQ\\b" << "\\bPUSHFQ\\b" << "\\bPOPFQ\\b" << "\\bCMPXCHG16B\\b" <<
+                         "\\bJRCXZ\\b" << "\\bINSB\\b" << "\\bINSW\\b" << "\\bOUTSB\\b" <<
+                         "\\bOUTSW\\b" << "\\bLFENCE\\b" << "\\bSFENCE\\b" << "\\bMFENCE\\b" <<
+                         "\\bPREFETCH\\b" << "\\bPREFETCHL\\b" << "\\bPREFETCHW\\b" << "\\bCLFLUSH\\b" <<
+                         "\\bSYSENTER\\b" << "\\bSYSEXIT\\b" << "\\bSYSCALL\\b" << "\\bSYSRET\\b";
      foreach (const QString &pattern, keywordPatterns) {
          rule.pattern = QRegExp(pattern);
          rule.pattern.setCaseSensitivity(Qt::CaseInsensitive);
@@ -196,7 +204,8 @@
                        "\\bbyte[\\s\\[]" << "\\bword[\\s\\[]" <<
                        "\\bdword[\\s\\[]" << "\\bqword[\\s\\[]" <<
                        "\\btword[\\s\\[]" << "\\boword[\\s\\[]" <<
-                       "\\yword[\\s\\[]";
+                       "\\yword[\\s\\[]" << "\\bDEFAULT\\b" <<
+                       "\\bABS\\b" << "\\bREL\\b";
      foreach (const QString &pattern, memoryPatterns) {
          rule.pattern = QRegExp(pattern);
          rule.pattern.setCaseSensitivity(Qt::CaseInsensitive);
@@ -232,7 +241,22 @@
                          "\\bbp\\b" << "\\bsp\\b" << "\\bsi\\b" <<
                          "\\bdi\\b" << "\\bal\\b" << "\\bah\\b" <<
                          "\\bbl\\b" << "\\bbh\\b" << "\\bcl\\b" <<
-                         "\\bch\\b" << "\\bdl\\b" << "\\bdh\\b";
+                         "\\bch\\b" << "\\bdl\\b" << "\\bdh\\b" <<
+                         "\\brax\\b" << "\\brbx\\b" << "\\brcx\\b" << //x64
+                         "\\brdx\\b" << "\\brbp\\b" << "\\brsp\\b" <<
+                         "\\brdi\\b" << "\\brsi\\b" << "\\bspl\\b" <<
+                         "\\bbpl\\b" << "\\bsil\\b" << "\\bdil\\b" <<
+                         "\\br8\\b" << "\\br8d\\b" << "\\br8w\\b" <<
+                         "\\br8b\\b" << "\\br9\\b" << "\\br9d\\b" <<
+                         "\\br9w\\b" << "\\br9b\\b" << "\\br10\\b" <<
+                         "\\br10d\\b" << "\\br10w\\b" << "\\br10b\\b" <<
+                         "\\br11\\b" << "\\br11d\\b" << "\\br11w\\b" <<
+                         "\\br11b\\b" << "\\br12\\b" << "\\br12d\\b" <<
+                         "\\br12w\\b" << "\\br12b\\b" << "\\br13\\b" <<
+                         "\\br13d\\b" << "\\br13w\\b" << "\\br13b\\b" <<
+                         "\\br14\\b" << "\\br14d\\b" << "\\br14w\\b" <<
+                         "\\br14b\\b" << "\\br15\\b" << "\\br15d\\b" <<
+                         "\\br15w\\b" << "\\br15b\\b";
      foreach (const QString &pattern, registerPatterns) {
          rule.pattern = QRegExp(pattern);
          rule.pattern.setCaseSensitivity(Qt::CaseInsensitive);
