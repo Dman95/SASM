@@ -844,15 +844,9 @@ void MainWindow::buildProgram(bool debugMode)
         return;
     }
 
+    QString tempPath = pathInTemp(QString());
+    removeDirRecuresively(tempPath);
     QString path = pathInTemp("program.asm");
-    QFile::remove(path);
-    QString exePath = pathInTemp("SASMprog.exe");
-    QFile::remove(exePath);
-    QString oPath = pathInTemp("program.o");
-    QFile::remove(oPath);
-
-    while (QFile::exists(path)) {
-    }
 
     Tab *currentTab = (Tab *) tabs->currentWidget();
     ioIncIncluded = currentTab->isIoIncIncluded();
@@ -877,6 +871,14 @@ void MainWindow::buildProgram(bool debugMode)
         QString nasm = "nasm";
         QString nasmOptions = "-g -f elf32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
     #endif
+    QFile ioInc;
+    if (settings.value("mode", QString("x86")).toString() == "x86") {
+        ioInc.setFileName(applicationDataPath() + "/io.inc");
+    } else {
+        ioInc.setFileName(applicationDataPath() + "/io64.inc");
+    }
+    QString ioIncPath = pathInTemp("io.inc");
+    ioInc.copy(ioIncPath);
     if (settings.contains("assemblyoptions"))
         nasmOptions = settings.value("assemblyoptions").toString();
     nasmOptions.replace("$SOURCE$", pathInTemp("program.asm", false));
@@ -887,7 +889,7 @@ void MainWindow::buildProgram(bool debugMode)
     QString nasmOutput = pathInTemp("compilererror.txt");
     nasmProcess.setStandardOutputFile(nasmOutput);
     nasmProcess.setStandardErrorFile(nasmOutput, QIODevice::Append);
-    nasmProcess.setWorkingDirectory(applicationDataPath());
+    nasmProcess.setWorkingDirectory(tempPath);
     nasmProcess.start(nasm, nasmArguments);
     nasmProcess.waitForFinished();
 
@@ -899,11 +901,14 @@ void MainWindow::buildProgram(bool debugMode)
     QString stdioMacros = pathInTemp("macro.o");
     QFile macro;
     #ifdef Q_OS_WIN32
-        QString gcc = applicationDataPath() + "/NASM/MinGW/bin/gcc.exe";
-        if (gccOptions.contains("-m64", Qt::CaseInsensitive) || nasmOptions.contains("64"))
-            macro.setFileName(applicationDataPath() + "/NASM/macro64.o");
-        else
+        QString gcc;
+        if (settings.value("mode", QString("x86")).toString() == "x86") {
             macro.setFileName(applicationDataPath() + "/NASM/macro.o");
+            gcc = applicationDataPath() + "/NASM/MinGW/bin/gcc.exe";
+        } else {
+            macro.setFileName(applicationDataPath() + "/NASM/macro64.o");
+            gcc = applicationDataPath() + "/NASM/MinGW64/bin/gcc.exe";
+        }
         macro.copy(stdioMacros);
     #else
         QString gcc = "gcc";
@@ -913,10 +918,10 @@ void MainWindow::buildProgram(bool debugMode)
         //macro.c compilation
         QStringList gccMArguments;
         gccMArguments << "-x" << "c" << pathInTemp("macro.c") << "-c" << "-g" << "-o" << stdioMacros;
-        if (gccOptions.contains("-m64", Qt::CaseInsensitive) || nasmOptions.contains("64"))
-            gccMArguments << "-m64";
-        else
+        if (settings.value("mode", QString("x86")).toString() == "x86")
             gccMArguments << "-m32";
+        else
+            gccMArguments << "-m64";
         QProcess gccMProcess;
         gccMProcess.start(gcc, gccMArguments);
         gccMProcess.waitForFinished();
@@ -1661,6 +1666,10 @@ void MainWindow::openSettings()
             fontsSignalMapper->setMapping(fontCheckBoxes[i], fontCheckBoxes[i]);
         }
         connect(fontsSignalMapper, SIGNAL(mapped(QWidget*)), this, SLOT(changeHighlightingFont(QWidget*)));
+
+        connect(settingsUi.currentLineCheckBox, SIGNAL(clicked(bool)), this, SLOT(changeHighlightingLineMode(bool)));
+
+        connect(settingsUi.x86RadioButton, SIGNAL(toggled(bool)), this, SLOT(changeMode(bool)));
     }
 
     //set settings
@@ -1693,7 +1702,6 @@ void MainWindow::openSettings()
     }
 
     settingsUi.currentLineCheckBox->setChecked(settings.value("currentlinemode", true).toBool());
-    connect(settingsUi.currentLineCheckBox, SIGNAL(clicked(bool)), this, SLOT(changeHighlightingLineMode(bool)));
 
     //build options
     #ifdef Q_OS_WIN32
@@ -1706,7 +1714,39 @@ void MainWindow::openSettings()
     QString linkerOptions = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m32";
     settingsUi.linkingOptionsEdit->setText(settings.value("linkingoptions", linkerOptions).toString());
 
+    //mode
+    if (settings.value("mode", QString("x86")).toString() == "x86")
+        settingsUi.x86RadioButton->setChecked(true);
+    else
+        settingsUi.x64RadioButton->setChecked(true);
+
     settingsWindow->show();
+}
+
+void MainWindow::changeMode(bool x86)
+{
+    QSettings settings("SASM Project", "SASM");
+    if (x86) {
+        QString options = settingsUi.assemblyOptionsEdit->text();
+        options.replace("64", "32");
+        settingsUi.assemblyOptionsEdit->setText(options);
+        options = settingsUi.linkingOptionsEdit->text();
+        options.replace("64", "32");
+        settingsUi.linkingOptionsEdit->setText(options);
+        settingsStartTextEditor->setPlainText(
+            QString("%include \"io.inc\"\n\nsection .text\nglobal CMAIN\n") +
+            QString("CMAIN:\n    ;write your code here\n    xor eax, eax\n    ret"));
+    } else {
+        QString options = settingsUi.assemblyOptionsEdit->text();
+        options.replace("32", "64");
+        settingsUi.assemblyOptionsEdit->setText(options);
+        options = settingsUi.linkingOptionsEdit->text();
+        options.replace("32", "64");
+        settingsUi.linkingOptionsEdit->setText(options);
+        settingsStartTextEditor->setPlainText(
+            QString("%include \"io.inc\"\n\nsection .text\nglobal CMAIN\n") +
+            QString("CMAIN:\n    ;write your code here\n    xor rax, rax\n    ret"));
+    }
 }
 
 void MainWindow::pickColor(QWidget *button, bool init)
@@ -1802,6 +1842,12 @@ void MainWindow::saveSettings()
     //build options
     settings.setValue("assemblyoptions", settingsUi.assemblyOptionsEdit->text());
     settings.setValue("linkingoptions", settingsUi.linkingOptionsEdit->text());
+
+    //mode
+    if (settingsUi.x86RadioButton->isChecked())
+        settings.setValue("mode", QString("x86"));
+    else
+        settings.setValue("mode", QString("x64"));
 }
 
 void MainWindow::exitSettings()
