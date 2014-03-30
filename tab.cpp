@@ -128,12 +128,23 @@ void Tab::saveCodeToFile(const QString &filePath, bool changeCodeModifiedFlag, b
         #endif
         if (index != -1) {
             index = code->toPlainText().indexOf(QChar(':'), index);
-            if (code->toPlainText().indexOf(
-                        QRegExp("\\s+[Mm][Oo][Vv] +[Ee][Bb][Pp] *, *[Ee][Ss][Pp]"), index + 1) != index + 1) {
-                QTextCursor cursor = code->textCursor();
-                cursor.movePosition(QTextCursor::Start);
-                cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
-                cursor.insertText(QString("\n    mov ebp, esp; for correct debugging"));
+            QSettings settings("SASM Project", "SASM");
+            if (settings.value("mode", QString("x86")).toString() == "x86") {
+                if (code->toPlainText().indexOf(
+                            QRegExp("\\s+[Mm][Oo][Vv] +[Ee][Bb][Pp] *, *[Ee][Ss][Pp]"), index + 1) != index + 1) {
+                    QTextCursor cursor = code->textCursor();
+                    cursor.movePosition(QTextCursor::Start);
+                    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
+                    cursor.insertText(QString("\n    mov ebp, esp; for correct debugging"));
+                }
+            } else {
+                if (code->toPlainText().indexOf(
+                            QRegExp("\\s+[Mm][Oo][Vv] +[Rr][Bb][Pp] *, *[Rr][Ss][Pp]"), index + 1) != index + 1) {
+                    QTextCursor cursor = code->textCursor();
+                    cursor.movePosition(QTextCursor::Start);
+                    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
+                    cursor.insertText(QString("\n    mov rbp, rsp; for correct debugging"));
+                }
             }
         }
     }
