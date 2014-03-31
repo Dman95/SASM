@@ -737,4 +737,3 @@ section .text
     sasmMacroFuncE sasmMacroCount
 %endmacro
 %endif
-

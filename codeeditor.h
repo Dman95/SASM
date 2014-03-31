@@ -101,7 +101,7 @@ private:
     int prevBlockCount;
 
 signals:
-    void breakpointsChanged(int lineNumber, bool isAdded);
+    void breakpointsChanged(quint64 lineNumber, bool isAdded);
 };
 
 
