@@ -43,6 +43,7 @@
 Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tmp, QWidget *parent)
     : QObject(parent)
 {
+    QSettings settings("SASM Project", "SASM");
     omitLinesCount = 0;
     c = 0;
     firstAction = true;
@@ -50,15 +51,32 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tm
     ioIncIncluded = ioInc;
     tmpPath = tmp;
     registersOk = true;
+    //determine ioIncSize
+    QString ioIncPath =  tmpPath + "io.inc";
+    QFile ioIncFile(ioIncPath);
+    ioIncFile.open(QFile::ReadOnly);
+    QTextStream stream(&ioIncFile);
+    ioIncSize = 0;
+    while (!stream.atEnd()) {
+        stream.readLine();
+        ioIncSize++;
+    }
+    ioIncFile.close();
     #ifdef Q_OS_WIN32
-        QString gdb = QCoreApplication::applicationDirPath() + "/NASM/MinGW/bin/gdb.exe";
-        if (! QFile::exists(gdb))
-            gdb = QCoreApplication::applicationDirPath() + "/Windows/NASM/MinGW/bin/gdb.exe";
-        ioIncSize = 740;
-        exitMessage = "mingw_CRTStartup";
+        QString gdb;
+        if (settings.value("mode", QString("x86")).toString() == "x86") {
+            gdb = QCoreApplication::applicationDirPath() + "/NASM/MinGW/bin/gdb.exe";
+            if (! QFile::exists(gdb))
+                gdb = QCoreApplication::applicationDirPath() + "/Windows/NASM/MinGW/bin/gdb.exe";
+            exitMessage = "mingw_CRTStartup";
+        } else {
+            gdb = QCoreApplication::applicationDirPath() + "/NASM/MinGW64/bin/gdb.exe";
+            if (! QFile::exists(gdb))
+                gdb = QCoreApplication::applicationDirPath() + "/Windows/NASM/MinGW64/bin/gdb.exe";
+            exitMessage = "__fu0__set_invalid_parameter_handler";
+        }
     #else
         QString gdb = "gdb";
-        ioIncSize = 722;
         exitMessage = "libc_start_main";
     #endif
     cExitMessage = QRegExp("\\[Inferior .* exited");
@@ -129,9 +147,9 @@ void Debugger::processMessage(QString output, QString error)
         //we need first number (0x00401390)
 
         //count offset
-        QRegExp r = QRegExp("0x[0-9a-fA-F]{8}");
-        int index = output.indexOf(r);
-        offset = output.mid(index, 10).toUInt(0, 16);
+        QRegExp r = QRegExp("0x[0-9a-fA-F]{8,16}");
+        int index = r.indexIn(output);
+        offset = output.mid(index, r.matchedLength()).toULongLong(0, 16);
         //take offset in hexadecimal representation (10 symbols) from string and convert it to int
         c++;
         processLst(); //count accordance
@@ -164,9 +182,9 @@ void Debugger::processMessage(QString output, QString error)
 
 void Debugger::processAction(QString output, QString error)
 {
-    bool backtrace = (output.indexOf(QRegExp("#\\d+  0x[0-9a-fA-F]{8} in .* ()")) != -1);
-    if ((output.indexOf(exitMessage) != -1 && !backtrace)
-            || output.indexOf(QRegExp(cExitMessage)) != -1) { //if debug finished
+    bool backtrace = (output.indexOf(QRegExp("#\\d+  0x[0-9a-fA-F]{8,16} in .* ()")) != -1);
+    if ((output.indexOf(exitMessage) != -1 && !backtrace) ||
+            output.indexOf(QRegExp(cExitMessage)) != -1) { //if debug finished
         //print output - message like bottom
             /*Breakpoint 1, 0x08048510 in sasmStartL ()
             "
@@ -194,8 +212,9 @@ void Debugger::processAction(QString output, QString error)
         return;
     }
 
-    if (actionTypeQueue.isEmpty())
+    if (actionTypeQueue.isEmpty()) {
         return;
+    }
     DebugActionType actionType = actionTypeQueue.dequeue();
 
     int failIndex = output.indexOf(QString("Program received signal")); //program was completed incorrectly
@@ -207,8 +226,9 @@ void Debugger::processAction(QString output, QString error)
             //message is: line number + data
             //print line number and other data if si or ni and print line number only if showLine
             //scan line number in memory
-            QRegExp r = QRegExp("0x[0-9a-fA-F]{8}");
-            int index = output.indexOf(r);
+            QRegExp r = QRegExp("0x[0-9a-fA-F]{8,16}");
+            int index = r.indexIn(output);
+
 
             //print output
             if (index > 1 && !firstAction) {
@@ -222,7 +242,7 @@ void Debugger::processAction(QString output, QString error)
             }
             firstAction = false;
 
-            unsigned int lineNumber = output.mid(index, 10).toUInt(0, 16);
+            quint64 lineNumber = output.mid(index, r.matchedLength()).toULongLong(0, 16);
             //take line number in hexadecimal representation
             //(10 symbols) in memory from string and convert it to int
 
@@ -256,7 +276,7 @@ void Debugger::processAction(QString output, QString error)
             if (output[output.length() - 1] != '\n')
                 output += QChar('\n');
             //process as ni or si
-            if (output.indexOf(QRegExp("0x[0-9a-fA-F]{8} in ")) != -1
+            if (output.indexOf(QRegExp("0x[0-9a-fA-F]{8,16} in ")) != -1
                     && !backtrace) {
                 actionTypeQueue.enqueue(showLine);
                 processAction(output);
@@ -281,6 +301,10 @@ void Debugger::processAction(QString output, QString error)
                 else {
                     output = output.right(output.length() - index);
                     output = output.right(output.length() - output.indexOf(QChar('=')) - 1);
+                    for (int i = output.size() - 1; i >= 0; i--) {
+                        if (output[i].isSpace())
+                            output.remove(i, 1);
+                    }
                 }
             }
             memoryInfo info;
@@ -289,7 +313,7 @@ void Debugger::processAction(QString output, QString error)
             info.isValid = isValid;
             watches.append(info);
             if (watchesCount == watches.size()) {
-                emit printMemory(&watches);
+                emit printMemory(watches);
                 watches.clear();
             }
             return;
@@ -297,31 +321,59 @@ void Debugger::processAction(QString output, QString error)
 
         if (actionType == infoRegisters) {
             QTextStream registersStream(&output);
-            registersInfo *registers = new registersInfo[16];
-            for (int i = 0; i < 16; i++) {
-                if (i == 9) {
-                    registersStream >> registers[i].name >> registers[i].hexValue;
-                    registersStream.skipWhiteSpace();
-                    registers[i].decValue = registersStream.readLine();
-                } else if (i == 8) {
-                    registersStream >> registers[i].name >> registers[i].hexValue;
-                    registersStream.skipWhiteSpace();
-                    char c;
-                    registersStream >> c;
-                    while (c != ' ')
+            QList<registersInfo> registers;
+            registersInfo info;
+            QSettings settings("SASM Project", "SASM");
+            if (settings.value("mode", QString("x86")).toString() == "x86") {
+                for (int i = 0; i < 16; i++) {
+                    if (i == 9) {
+                        registersStream >> info.name >> info.hexValue;
+                        registersStream.skipWhiteSpace();
+                        info.decValue = registersStream.readLine();
+                    } else if (i == 8) {
+                        registersStream >> info.name >> info.hexValue;
+                        registersStream.skipWhiteSpace();
+                        char c;
                         registersStream >> c;
-                    registers[i].decValue = registersStream.readLine();
-                } else
-                    registersStream >> registers[i].name >> registers[i].hexValue >> registers[i].decValue;
-                if (i == 0 && registers[i].name != "eax" && registersOk) {
-                    doInput(QString("info registers\n"), infoRegisters);
-                    registersOk = false;
-                    delete[] registers;
-                    return;
+                        while (c != ' ')
+                            registersStream >> c;
+                        info.decValue = registersStream.readLine();
+                    } else {
+                        registersStream >> info.name >> info.hexValue >> info.decValue;
+                    }
+                    registers.append(info);
+                    if (i == 0 && info.name != "eax" && registersOk) {
+                        doInput(QString("info registers\n"), infoRegisters);
+                        registersOk = false;
+                        return;
+                    }
+                }
+            } else { //x64
+                for (int i = 0; i < 24; i++) {
+                    if (i == 17) {
+                        registersStream >> info.name >> info.hexValue;
+                        registersStream.skipWhiteSpace();
+                        info.decValue = registersStream.readLine();
+                    } else if (i == 16) {
+                        registersStream >> info.name >> info.hexValue;
+                        registersStream.skipWhiteSpace();
+                        char c;
+                        registersStream >> c;
+                        while (c != ' ')
+                            registersStream >> c;
+                        info.decValue = registersStream.readLine();
+                    } else {
+                        registersStream >> info.name >> info.hexValue >> info.decValue;
+                    }
+                    registers.append(info);
+                    if (i == 0 && info.name != "rax" && registersOk) {
+                        doInput(QString("info registers\n"), infoRegisters);
+                        registersOk = false;
+                        return;
+                    }
                 }
             }
             emit printRegisters(registers);
-            delete[] registers;
             return;
         }
 
@@ -373,8 +425,8 @@ void Debugger::processLst()
             continue;
         }
         char *s = line.toLocal8Bit().data();
-        unsigned int a, b, c;
-        if (sscanf(s, "%u %x %x", &a, &b, &c) == 3){
+        quint64 a, b, c;
+        if (sscanf(s, "%llu %llx %llx", &a, &b, &c) == 3){
             if (!(b == 0 && c == 0)) { //exclude 0 0
                 lineNum l;
                 l.numInCode = a - 1 - omitLinesCount; //-1 for missing of sasmStartL:
@@ -400,12 +452,12 @@ void Debugger::run()
     doInput(QString("p dup2(open(\"input.txt\",0),0)\n"), none);
 }
 
-void Debugger::changeBreakpoint(int lineNumber, bool isAdded)
+void Debugger::changeBreakpoint(quint64 lineNumber, bool isAdded)
 {
-    unsigned int numInMem = 0;
+    quint64 numInMem = 0;
     lineNum brkpoint;
     for (int i = 0; i < lines.count(); i++) //find address of line
-        if ((unsigned int) lineNumber <= lines[i].numInCode) {
+        if (lineNumber <= lines[i].numInCode) {
             numInMem = lines[i].numInMem;
             break;
         }

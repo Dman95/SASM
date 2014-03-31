@@ -50,6 +50,8 @@
 #include <QCoreApplication>
 #include <QTimer>
 #include <QQueue>
+#include <QSettings>
+#include <QFile>
 
 enum DebugActionType {ni, si, showLine, infoRegisters, infoMemory, anyAction, none, breakpoint};
 
@@ -79,13 +81,13 @@ private:
 
     QProcess *process;
     QTextEdit *textEdit;
-    unsigned int offset; //offset between program code in memory and in file
-    unsigned int omitLinesCount; //for skipping strings from section .data - for processLst()
+    quint64 offset; //offset between program code in memory and in file
+    quint64 omitLinesCount; //for skipping strings from section .data - for processLst()
 
     struct lineNum {
-        unsigned int numInCode;
-        unsigned int numInMem;
-        bool operator==(const lineNum& ln)
+        quint64 numInCode;
+        quint64 numInMem;
+        bool operator ==(const lineNum& ln)
         {
             return ln.numInCode == this->numInCode;
         }
@@ -94,7 +96,7 @@ private:
 
     int c; //counter for sequential performing of actions
     bool ioIncIncluded;
-    unsigned int ioIncSize;
+    quint64 ioIncSize; //without last \n
     bool registersOk;
 
     QQueue<DebugActionType> actionTypeQueue; //queue of actions type from enum
@@ -117,14 +119,14 @@ public slots:
     void processMessage(QString output, QString error);
     void processAction(QString output, QString error = QString());
     void doInput(QString command, DebugActionType actionType);
-    void changeBreakpoint(int lineNumber, bool isAdded);
+    void changeBreakpoint(quint64 lineNumber, bool isAdded);
 
 signals:
     void highlightLine(int); //highlight current debug line
     void finished();
     void started(); //emited when debugger is ready to get commands like step into, etc.
-    void printRegisters(Debugger::registersInfo*);
-    void printMemory(QList<Debugger::memoryInfo>*);
+    void printRegisters(QList<Debugger::registersInfo>);
+    void printMemory(QList<Debugger::memoryInfo>);
     void printLog(QString msg, QColor color = QColor(Qt::black));
     void printOutput(QString msg);
     void inMacro();

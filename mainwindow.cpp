@@ -445,7 +445,7 @@ void MainWindow::createActions()
         key = stdKey.toString();
     debugShowRegistersAction->setShortcut(key);
     debugShowRegistersAction->setCheckable(true);
-    connect(debugShowRegistersAction, SIGNAL(changed()), this, SLOT(debugShowRegisters()), Qt::QueuedConnection);
+    connect(debugShowRegistersAction, SIGNAL(toggled(bool)), this, SLOT(debugShowRegisters()), Qt::QueuedConnection);
 
     debugShowMemoryAction = new QAction(tr("Show memory"), this);
     key = keySettings.value("showMemory", "default").toString();
@@ -454,7 +454,7 @@ void MainWindow::createActions()
         key = stdKey.toString();
     debugShowMemoryAction->setShortcut(key);
     debugShowMemoryAction->setCheckable(true);
-    connect(debugShowMemoryAction, SIGNAL(changed()), this, SLOT(debugShowMemory()), Qt::QueuedConnection);
+    connect(debugShowMemoryAction, SIGNAL(toggled(bool)), this, SLOT(debugShowMemory()), Qt::QueuedConnection);
 
     disableDebugActions(true);
 
@@ -1134,7 +1134,7 @@ void MainWindow::debug()
     connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
     connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
     connect(debugger, SIGNAL(started()), this, SLOT(showAnyCommandWidget()));
-    connect(code, SIGNAL(breakpointsChanged(int,bool)), debugger, SLOT(changeBreakpoint(int,bool)));
+    connect(code, SIGNAL(breakpointsChanged(quint64,bool)), debugger, SLOT(changeBreakpoint(quint64,bool)));
     connect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
                this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
     connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
@@ -1248,8 +1248,8 @@ void MainWindow::debugShowMemory()
             CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
             connect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
                     memoryWindow, SLOT(addVariable(const RuQPlainTextEdit::Watch &)));
-            connect(debugger, SIGNAL(printMemory(QList<Debugger::memoryInfo> *)),
-                    memoryWindow, SLOT(setValuesFromDebugger(QList<Debugger::memoryInfo> *)));
+            connect(debugger, SIGNAL(printMemory(QList<Debugger::memoryInfo>)),
+                    memoryWindow, SLOT(setValuesFromDebugger(QList<Debugger::memoryInfo>)));
 
             memoryDock->setWidget(memoryWindow);
             memoryDock->setFeatures(QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable);
@@ -1297,7 +1297,7 @@ void MainWindow::debugShowMemory()
         }
         if (memoryWindow->rowCount() > 1) {
             QEventLoop eventLoop;
-            connect(debugger, SIGNAL(printMemory(QList<Debugger::memoryInfo>*)), &eventLoop, SLOT(quit()));
+            connect(debugger, SIGNAL(printMemory(QList<Debugger::memoryInfo>)), &eventLoop, SLOT(quit()));
             connect(debugger, SIGNAL(finished()), &eventLoop, SLOT(quit()));
             eventLoop.exec();
         }
@@ -1352,17 +1352,23 @@ void MainWindow::debugShowRegisters()
             registersDock = new QDockWidget(tr("Registers"), this);
             registersDock->setAllowedAreas(Qt::AllDockWidgetAreas);
 
-            registersWindow = new DebugTableWidget(16, 3, registersTable, registersDock);
+            int regCount;
+            QSettings settings("SASM Project", "SASM");
+            if (settings.value("mode", QString("x86")).toString() == "x86") {
+                regCount = 16;
+            } else {
+                regCount = 24;
+            }
+            registersWindow = new DebugTableWidget(regCount, 3, registersTable, registersDock);
             connect(registersWindow, SIGNAL(closeSignal()), this, SLOT(setShowRegistersToUnchecked()));
-            connect(debugger, SIGNAL(printRegisters(Debugger::registersInfo*)),
-                    registersWindow, SLOT(setValuesFromDebugger(Debugger::registersInfo*)));
+            connect(debugger, SIGNAL(printRegisters(QList<Debugger::registersInfo>)),
+                    registersWindow, SLOT(setValuesFromDebugger(QList<Debugger::registersInfo>)));
 
             registersDock->setWidget(registersWindow);
             registersDock->setFeatures(QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable);
             addDockWidget(Qt::RightDockWidgetArea, registersDock);
             registersDock->setObjectName("registersDock");
 
-            QSettings settings("SASM Project", "SASM");
             restoreState(settings.value("debugstate").toByteArray());
             if (registersDock)
                 registersDock->show();
@@ -1371,7 +1377,7 @@ void MainWindow::debugShowRegisters()
         }
         debugger->doInput(QString("info registers\n"), infoRegisters);
         QEventLoop eventLoop;
-        connect(debugger, SIGNAL(printRegisters(Debugger::registersInfo*)), &eventLoop, SLOT(quit()));
+        connect(debugger, SIGNAL(printRegisters(QList<Debugger::registersInfo>)), &eventLoop, SLOT(quit()));
         connect(debugger, SIGNAL(finished()), &eventLoop, SLOT(quit()));
         eventLoop.exec();
     } else

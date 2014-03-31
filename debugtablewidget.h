@@ -44,8 +44,8 @@ public slots:
     void changeVariableValue(const QString &value, int rowNumber, bool isValid);
     void addRegister(const QString &name, const QString &hexValue, const QString &decValue, int rowNumber);
     void changeMemoryWindow(int row, int column);
-    void setValuesFromDebugger(QList<Debugger::memoryInfo> *watches);
-    void setValuesFromDebugger(Debugger::registersInfo *registers);
+    void setValuesFromDebugger(QList<Debugger::memoryInfo> watches);
+    void setValuesFromDebugger(QList<Debugger::registersInfo> registers);
 
 private:
     int contextMenuLineNumber;
