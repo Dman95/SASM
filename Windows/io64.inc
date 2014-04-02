@@ -870,6 +870,8 @@ section .text
         %else ; %$reg_size = 8
             mov rdx, %2
         %endif
+    %else
+        mov rdx, %2
     %endif
     %pop
     mov rcx, %1
@@ -913,6 +915,8 @@ section .text
         %else ; %$reg_size = 8
             mov rdx, %2
         %endif
+    %else
+        mov rdx, %2
     %endif
     %pop
     mov rcx, rdi

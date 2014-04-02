@@ -690,6 +690,8 @@ section .text
         %else ; %$reg_size = 4
             mov esi, %2
         %endif
+    %else
+        mov esi, %2
     %endif
     %pop
     
@@ -732,6 +734,8 @@ section .text
         %else ; %$reg_size = 4
             mov esi, %2
         %endif
+    %else
+        mov esi, %2
     %endif
     %pop
 
