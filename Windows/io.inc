@@ -1,17 +1,30 @@
 %ifndef IO_SYS
 %define IO_SYS
-%assign sasmMacroCount 0
 
-%macro sasmMacroFunc 1.nolist ;func for debug
-    call .sasmMacro_%1
-    jmp .sasmMacroE_%1
-    .sasmMacro_%1:
+%macro sasmMacroFunc 0.nolist ;func for debug
+    %push sasmMacroFunc
+    call %$sasmMacro
+    jmp %$sasmMacroE
+    %$sasmMacro:
+    jmp %%after_data
+section .data
+    %$sasmRetAddr dd 0
+section .text
+    %%after_data:
+    push ebx
+    mov ebx, dword[esp + 4]
+    mov dword[%$sasmRetAddr], ebx
+    mov ebx, dword[esp]
+    mov dword[esp + 4], ebx
+    pop ebx
+    pop ebx
 %endmacro
 
-%macro sasmMacroFuncE 1.nolist ;exit
+%macro sasmMacroFuncE 0.nolist ;exit
+    push dword[%$sasmRetAddr]
     ret
-    .sasmMacroE_%1:
-    %assign sasmMacroCount sasmMacroCount+1
+    %$sasmMacroE:
+    %pop
 %endmacro
 
 %macro CEXTERN 1.nolist
@@ -141,7 +154,7 @@ CEXTERN get_stdout
 
 
 %macro PRINT_STRING 1.nolist
-    sasmMacroFunc sasmMacroCount
+    sasmMacroFunc
     IS_GPR %1
     %if %$is_reg = 1
     %error "Register as parameter is not supported"
@@ -212,7 +225,7 @@ section .text
     pop ecx
     pop edx
     popf
-    sasmMacroFuncE sasmMacroCount
+    sasmMacroFuncE
 %endmacro
 
 %macro NEWLINE 0.nolist
@@ -343,25 +356,25 @@ section .text
 %endmacro
 
 %macro PRINT_DEC 2.nolist
-    sasmMacroFunc sasmMacroCount
+    sasmMacroFunc
     ___PRINT_NUM_COMMON %1, %2, "d", movsx
-    sasmMacroFuncE sasmMacroCount
+    sasmMacroFuncE
 %endmacro
 
 %macro PRINT_UDEC 2.nolist
-    sasmMacroFunc sasmMacroCount
+    sasmMacroFunc
     ___PRINT_NUM_COMMON %1, %2, "u", movzx
-    sasmMacroFuncE sasmMacroCount
+    sasmMacroFuncE
 %endmacro
 
 %macro PRINT_HEX 2.nolist
-    sasmMacroFunc sasmMacroCount
+    sasmMacroFunc
     ___PRINT_NUM_COMMON %1, %2, "x", movzx
-    sasmMacroFuncE sasmMacroCount
+    sasmMacroFuncE
 %endmacro
 
 %macro PRINT_CHAR 1.nolist
-    sasmMacroFunc sasmMacroCount
+    sasmMacroFunc
 
     jmp %%after_data
 section .data
@@ -451,7 +464,7 @@ section .text
     popf    
 
     %pop ; IS_REG
-    sasmMacroFuncE sasmMacroCount
+    sasmMacroFuncE
 %endmacro
 
 
@@ -549,26 +562,26 @@ section .text
 %endmacro
 
 %macro GET_HEX 2.nolist
-    sasmMacroFunc sasmMacroCount
+    sasmMacroFunc
     ___GET_NUM_COMMON %1, %2, "x", movzx
-    sasmMacroFuncE sasmMacroCount
+    sasmMacroFuncE
 %endmacro
 
 %macro GET_DEC 2.nolist
-    sasmMacroFunc sasmMacroCount
+    sasmMacroFunc
     ___GET_NUM_COMMON %1, %2, "d", movsx
-    sasmMacroFuncE sasmMacroCount
+    sasmMacroFuncE
 %endmacro
 
 %macro GET_UDEC 2.nolist
-    sasmMacroFunc sasmMacroCount
+    sasmMacroFunc
     ___GET_NUM_COMMON %1, %2, "u", movzx
-    sasmMacroFuncE sasmMacroCount
+    sasmMacroFuncE
 %endmacro
 
 
 %macro GET_CHAR 1.nolist
-    sasmMacroFunc sasmMacroCount
+    sasmMacroFunc
 
     jmp %%after_data
 section .data
@@ -652,12 +665,12 @@ section .text
 %endif
 
     %pop ; IS_REG
-    sasmMacroFuncE sasmMacroCount
+    sasmMacroFuncE
 %endmacro
 
 
 %macro GET_STRING 2.nolist
-    sasmMacroFunc sasmMacroCount
+    sasmMacroFunc
 
     IS_GPR %1
 
@@ -684,6 +697,20 @@ section .text
 
 %ifid %1
 ; variable (hope so)
+    push esi
+    ;count
+    IS_GPR %2
+    %if %$is_reg = 1 
+        %if %$reg_size = 1
+            movzx esi, %2
+        %elif %$reg_size = 2
+            movzx esi, %2
+        %else ; %$reg_size = 4
+            mov esi, %2
+        %endif
+    %endif
+    %pop
+    
     pushf
     push eax
     push ecx
@@ -693,7 +720,7 @@ section .text
     UNALIGN_STACK
     ALIGN_STACK 12
     push eax
-    push %2 ; count
+    push esi ; count
     push %1
 %elifnum %1
     %error "Incorrect 1st parameter (number)"
@@ -711,6 +738,20 @@ section .text
     ; may use register esp, need to take care
     mov dword [%%tmp], edi
     lea edi, %1
+    
+    push esi
+    ;count
+    IS_GPR %2
+    %if %$is_reg = 1 
+        %if %$reg_size = 1
+            movzx esi, %2
+        %elif %$reg_size = 2
+            movzx esi, %2
+        %else ; %$reg_size = 4
+            mov esi, %2
+        %endif
+    %endif
+    %pop
 
     pushf
     push eax
@@ -721,7 +762,7 @@ section .text
     UNALIGN_STACK
     ALIGN_STACK 12
     push eax    
-    push %2 ; count
+    push esi ; count
     push edi
  
     mov edi, dword [%%tmp]
@@ -734,6 +775,8 @@ section .text
     pop ecx
     pop eax
     popf
-    sasmMacroFuncE sasmMacroCount
+    pop esi
+    sasmMacroFuncE
 %endmacro
 %endif
+
