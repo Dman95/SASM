@@ -280,12 +280,37 @@
      QStringList systemPatterns;
      systemPatterns << "\\btimes\\b" << "\\bsection +\\.bss\\b" <<
                        "\\bsection +\\.text\\b" << "\\bsection +\\.data\\b" <<
-                       "\\bglobal\\b" << "\\%include\\b" << "\\%define\\b" <<
-                       "\\%assign\\b" << "\\%macro\\b" << "\\%endmacro\\b" <<
-                       "\\%0\\b" << "\\%rotate\\b" << "\\%rep\\b" <<
-                       "\\%endrep\\b" <<"\\%ifdef\\b" << "\\%endif\\b" <<
-                       "\\%elif\\b" << "\\%else\\b" << "\\%if\\b" <<
-                       "\\bsection +\\.rodata\\b" << "\\bextern\\b";
+                       "\\bglobal\\b" << "\\bsection +\\.rodata\\b" <<
+                       "\\bextern\\b" <<
+                       "\\%arg\\b" << "\\%assign\\b" << "\\%clear\\b" <<      //macro
+                       "\\%comment\\b" << "\\%define\\b" << "\\%defstr\\b" <<
+                       "\\%deftok\\b" << "\\%depend\\b" <<
+                       "\\%line\\b" << "\\%local\\b" << "\\%macro\\b" <<
+                       "\\%n\\b" << "\\%pathsearch\\b" << "\\%pop\\b" <<
+                       "\\%push\\b" << "\\%rep\\b" << "\\%repl\\b" <<
+                       "\\%rotate\\b" << "\\%stacksize\\b" << "\\%strcat\\b" <<
+                       "\\%strlen\\b" << "\\%substr\\b" << "\\%undef\\b" <<
+                       "\\%unmacro\\b" << "\\%use\\b" << "\\%warning\\b" <<
+                       "\\%xdefine\\b" << "\\%endcomment\\b" << "\\%endif\\b" <<
+                       "\\%endmacro\\b" << "\\%endrep\\b" << "\\%error\\b" <<
+                       "\\%exitrep\\b" << "\\%fatal\\b" << "\\%idefine\\b" <<
+                       "\\%else\\b" << "\\%imacro\\b" << "\\%include\\b" <<
+                       "\\%if\\b" << "\\%ifctx\\b" << "\\%ifdef\\b" <<           //ifs
+                       "\\%ifempty\\b" << "\\%ifenv\\b" << "\\%ifidn\\b" <<
+                       "\\%ifidni\\b" << "\\%ifmacro\\b" << "\\%ifstr\\b" <<
+                       "\\%iftoken\\b" << "\\%ifnum\\b" << "\\%ifid\\b" <<
+                       "\\%elif\\b" << "\\%elifctx\\b" << "\\%elifdef\\b" <<     //elifs
+                       "\\%elifempty\\b" << "\\%elifenv\\b" << "\\%elifidn\\b" <<
+                       "\\%elifidni\\b" << "\\%elifmacro\\b" << "\\%elifstr\\b" <<
+                       "\\%eliftoken\\b" << "\\%elifnum\\b" << "\\%elifid\\b" <<
+                       "\\%ifn\\b" << "\\%ifnctx\\b" << "\\%ifndef\\b" <<           //ifns
+                       "\\%ifnempty\\b" << "\\%ifnenv\\b" << "\\%ifnidn\\b" <<
+                       "\\%ifnidni\\b" << "\\%ifnmacro\\b" << "\\%ifnstr\\b" <<
+                       "\\%ifntoken\\b" << "\\%ifnnum\\b" << "\\%ifnid\\b" <<
+                       "\\%elifn\\b" << "\\%elifnctx\\b" << "\\%elifndef\\b" <<     //elifns
+                       "\\%elifnempty\\b" << "\\%elifnenv\\b" << "\\%elifnidn\\b" <<
+                       "\\%elifnidni\\b" << "\\%elifnmacro\\b" << "\\%elifnstr\\b" <<
+                       "\\%elifntoken\\b" << "\\%elifnnum\\b" << "\\%elifnid\\b";
      foreach (const QString &pattern, systemPatterns) {
          rule.pattern = QRegExp(pattern);
          rule.pattern.setCaseSensitivity(Qt::CaseInsensitive);
@@ -298,6 +323,9 @@
      highlightingRules.append(rule);
 
      rule.pattern = QRegExp("'.*'");
+     highlightingRules.append(rule);
+
+     rule.pattern = QRegExp("`.*`");
      highlightingRules.append(rule);
 
      //comments

@@ -1271,8 +1271,18 @@ void MainWindow::debugShowMemory()
             if (memoryWindow->cellWidget(i, 2)) {
                 WatchSettinsWidget *settings = (WatchSettinsWidget *) memoryWindow->cellWidget(i, 2);
 
+                int arraySize = 0;
+
+                int size = settings->sizeComboBox->currentIndex();
+                QStringList sizeFormat;
+                sizeFormat << "int" << "short" << "char" << "long long";
+
                 bool ok;
-                int arraySize = settings->arraySizeEdit->text().toInt(&ok);
+                arraySize = settings->arraySizeEdit->text().toInt(&ok);
+                if (!ok && sizeFormat[size] == "long long") {
+                    arraySize = 1;
+                    ok = true;
+                }
                 QString watchAsArray;
                 if (ok && arraySize > 0)
                     watchAsArray = "[" + QString::number(arraySize) + "]";
@@ -1280,10 +1290,6 @@ void MainWindow::debugShowMemory()
                 int type = settings->typeComboBox->currentIndex();
                 QStringList printFormat;
                 printFormat << "p" << "p/x" << "p/t" << "p/c" << "p/d" << "p/u" << "p/f";
-
-                int size = settings->sizeComboBox->currentIndex();
-                QStringList sizeFormat;
-                sizeFormat << "int" << "short" << "char" << "long long";
 
                 if (! settings->addressCheckbox->isChecked()) { //watch as variable
                     debugger->doInput(printFormat[type] + " (" + sizeFormat[size] + watchAsArray + ")" +
