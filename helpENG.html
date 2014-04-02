@@ -22,6 +22,9 @@ Standard "Edit" menu extended with abilities to comment/uncomment piece of sourc
 Starting with version 2.2 it is possible to reassign the hotkeys. File with them located on the path "Linux/share/sasm/keys.ini" ("/usr/share/sasm/keys.ini" if SASM was installed) in Linux and on the path "Windows/keys.ini" in Windows.
 </P>
 <P>
+Starting with version 2.3 SASM supports 2 modes - x64 and x86. You can choose mode in settings on "Build" tab. "io.inc" macro library works with both modes. Also there you can change assembler and linker options.
+</P>
+<P>
 &nbsp;
 </P>
 <H3>"io.inc" macro library</H3>
@@ -42,7 +45,7 @@ SASM includes crossplatform input/output library "io.inc". It contains I/O macro
 <tr>
 <td width="242" valign="top"><a name="PRINT_UDEC">PRINT_UDEC</a> <em>size, data</em></p>
 <p><a name="PRINT_DEC">PRINT_DEC</a><em> size, data</em></td>
-<td width="390" valign="top">Print number <em>data</em> in decimal representation. <em>size</em> – number, giving size of <em>data</em> in bytes - 1, 2 or 4.
+<td width="390" valign="top">Print number <em>data</em> in decimal representation. <em>size</em> – number, giving size of <em>data</em> in bytes - 1, 2, 4 or 8 (x64).
 <em>data</em> must be number or symbol constant, name of variable, register or address expression without size qualifier (byte[], etc.). PRINT_UDEC print number as unsigned, PRINT_DEC — as signed.</td>
 </tr>
 <tr>
@@ -64,7 +67,7 @@ SASM includes crossplatform input/output library "io.inc". It contains I/O macro
 <tr>
 <td width="242" valign="top"><a name="GET_UDEC">GET_UDEC</a> <em>size</em>, <em>data</em></p>
 <p><a name="GET_DEC">GET_DEC</a> <em>size</em>, <em>data</em></td>
-<td width="390" valign="top">Input number data in decimal representation from stdin. <em>size</em> – number, giving size of <em>data</em> in bytes - 1, 2 or 4. <em>data</em> must be name of variable or register or address expression without size qualifier (byte[], etc.). GET_UDEC input number as unsigned, GET_DEC — as signed. It is not allowed to use esp register.</td>
+<td width="390" valign="top">Input number data in decimal representation from stdin. <em>size</em> – number, giving size of <em>data</em> in bytes - 1, 2, 4 or 8 (x64). <em>data</em> must be name of variable or register or address expression without size qualifier (byte[], etc.). GET_UDEC input number as unsigned, GET_DEC — as signed. It is not allowed to use esp register.</td>
 </tr>
 <tr>
 <td width="242" valign="top"><a name="GET_HEX">GET_HEX</a> <em>size, data</em></td>
@@ -127,7 +130,7 @@ Also you can enter "help" command in "GDB command" field to show gdb commands he
 <P>&nbsp;</P>
 <H3>Implementation:</H3>
 <H4>Windows</H4>
-<P>As NASM compiler used nasm 2.11.02, as linker - gcc 4.6.2. Also SASM contains gdb debugger from MinGW and "io.inc" macro library. On Windows SASM is ready for work immediately after installation.</P>
+<P>As NASM compiler used nasm 2.11.02, as linker - gcc 4.6.2 from MinGW (gcc 4.8.1 from MinGW64 in x64 mode). . Also SASM contains gdb debugger from MinGW and "io.inc" macro library. On Windows SASM is ready for work immediately after installation.</P>
 <H4>Linux</H4>
 <P>
 For correct working on Linux must be installed next packages: nasm, gcc, gdb (for debugging).</P>
@@ -142,7 +145,7 @@ If you have something does not work, check the following items:
 Program enter point should be marked with global label _main (in Windows) or main (in Linux) or CMAIN from "io.inc" (see initial text).
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">2)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
-Before debugging make all functions formed frames (mov ebp, esp). This rule should be done for all functions, including main.
+Before debugging make all functions formed frames (mov ebp, esp or mov rbp, rsp). This rule should be done for all functions, including main.
 if this condition is not met, the correct work of the debugger is not guaranteed.
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">3)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
