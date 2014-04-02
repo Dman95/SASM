@@ -378,8 +378,10 @@ section .text
     %elif %$reg_size = 4
         movsx rax, %2
         %ifidni %4, movzx
+            pushfq
             shl rax, 32
             shr rax, 32
+            popfq
         %endif
     %else ; %$reg_size = 8
         mov rax, %2
@@ -411,8 +413,10 @@ section .text
     %elif %1 = 4
         movsx rax, dword [%2]
         %ifidni %4, movzx
+            pushfq
             shl rax, 32
             shr rax, 32
+            popfq
         %endif
     %else ; %1 = 8
         mov rax, qword [%2]
@@ -456,8 +460,10 @@ section .text
     %elif %1 = 4
         movsx rax, dword %2
         %ifidni %4, movzx
+            pushfq
             shl rax, 32
             shr rax, 32
+            popfq
         %endif
     %else ; %1 = 8
         mov rax, qword %2
@@ -523,8 +529,10 @@ section .text
         movzx rax, %1
     %elif %$reg_size = 4
         movsx rax, %1
+        pushfq
         shl rax, 32
         shr rax, 32
+        popfq
     %else ; %$reg_size = 8
         mov rax, %1
     %endif
@@ -702,8 +710,10 @@ section .text
         %else ; 4
             movsx %2, dword [%%read_tmp]
             %ifidni %4, movzx
+                pushfq
                 shl %2, 32
                 shr %2, 32
+                popfq
             %endif
         %endif
     %endif
@@ -844,7 +854,24 @@ section .text
     push r9
     push r10
     push r11
-    mov rdx, %2; count
+    ;count
+    IS_GPR %2
+    %if %$is_reg = 1 
+        %if %$reg_size = 1
+            movzx rdx, %2
+        %elif %$reg_size = 2
+            movzx rdx, %2
+        %elif %$reg_size = 4
+            movsx rdx, %2
+            pushfq
+            shl rdx, 32
+            shr rdx, 32
+            popfq
+        %else ; %$reg_size = 8
+            mov rdx, %2
+        %endif
+    %endif
+    %pop
     mov rcx, %1
     ALIGN_STACK
     call get_stdin
@@ -870,10 +897,27 @@ section .text
     push r9
     push r10
     push r11
+    ;count
+    IS_GPR %2
+    %if %$is_reg = 1 
+        %if %$reg_size = 1
+            movzx rdx, %2
+        %elif %$reg_size = 2
+            movzx rdx, %2
+        %elif %$reg_size = 4
+            movsx rdx, %2
+            pushfq
+            shl rdx, 32
+            shr rdx, 32
+            popfq
+        %else ; %$reg_size = 8
+            mov rdx, %2
+        %endif
+    %endif
+    %pop
+    mov rcx, rdi
     ALIGN_STACK
     call get_stdin
-    mov rdx, %2; count
-    mov rcx, rdi
     mov r8, rax
     mov rdi, qword[%%tmp]
 %endif
