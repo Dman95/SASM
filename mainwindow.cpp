@@ -868,7 +868,7 @@ void MainWindow::buildProgram(bool debugMode)
         QString nasm = applicationDataPath() + "/NASM/nasm.exe";
         QString nasmOptions = "-g -f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
     #else
-        QString nasm = "nasm";
+        QString nasm = "as"; //first and one occurence of assembler!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         QString nasmOptions = "-g -f elf32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
     #endif
     QFile ioInc;
@@ -1682,6 +1682,9 @@ void MainWindow::openSettings()
         connect(settingsUi.currentLineCheckBox, SIGNAL(clicked(bool)), this, SLOT(changeHighlightingLineMode(bool)));
 
         connect(settingsUi.x86RadioButton, SIGNAL(toggled(bool)), this, SLOT(changeMode(bool)));
+
+        connect(settingsUi.nasmRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
+        connect(settingsUi.gasRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
     }
 
     //set settings
@@ -1732,32 +1735,82 @@ void MainWindow::openSettings()
     else
         settingsUi.x64RadioButton->setChecked(true);
 
+    //assemler
+    QString assembler = settings.value("assembler", QString("NASM")).toString();
+    if (assembler == "NASM")
+        settingsUi.nasmRadioButton->setChecked(true);
+    else if (assembler == "GAS") {
+        settingsUi.gasRadioButton->setChecked(true);
+    }
+
     settingsWindow->show();
+}
+
+void MainWindow::changeAssembler()
+{
+    if (settingsUi.nasmRadioButton->isChecked()) { //NASM
+        if (settingsUi.x86RadioButton->isChecked()) { //x86
+            #ifdef Q_OS_WIN32
+                QString options = "-g -f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
+            #else
+                QString options = "-g -f elf32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
+            #endif
+            settingsUi.assemblyOptionsEdit->setText(options);
+        } else { //x64
+            #ifdef Q_OS_WIN32
+                QString options = "-g -f win64 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
+            #else
+                QString options = "-g -f elf64 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
+            #endif
+            settingsUi.assemblyOptionsEdit->setText(options);
+        }
+    } else if (settingsUi.gasRadioButton->isChecked()) { //GAS
+        if (settingsUi.x86RadioButton->isChecked()) { //x86
+            QString options = "$SOURCE$ -o $PROGRAM.OBJ$ --32 -a=$LSTOUTPUT$";
+            settingsUi.assemblyOptionsEdit->setText(options);
+        } else { //x64
+            QString options = "$SOURCE$ -o $PROGRAM.OBJ$ --64 -a=$LSTOUTPUT$";
+            settingsUi.assemblyOptionsEdit->setText(options);
+        }
+    }
+    changeStartText();
 }
 
 void MainWindow::changeMode(bool x86)
 {
-    QSettings settings("SASM Project", "SASM");
+    QString from, to;
     if (x86) {
-        QString options = settingsUi.assemblyOptionsEdit->text();
-        options.replace("64", "32");
-        settingsUi.assemblyOptionsEdit->setText(options);
-        options = settingsUi.linkingOptionsEdit->text();
-        options.replace("64", "32");
-        settingsUi.linkingOptionsEdit->setText(options);
-        settingsStartTextEditor->setPlainText(
-            QString("%include \"io.inc\"\n\nsection .text\nglobal CMAIN\n") +
-            QString("CMAIN:\n    ;write your code here\n    xor eax, eax\n    ret"));
+        from = "64";
+        to = "32";
     } else {
-        QString options = settingsUi.assemblyOptionsEdit->text();
-        options.replace("32", "64");
-        settingsUi.assemblyOptionsEdit->setText(options);
-        options = settingsUi.linkingOptionsEdit->text();
-        options.replace("32", "64");
-        settingsUi.linkingOptionsEdit->setText(options);
-        settingsStartTextEditor->setPlainText(
-            QString("%include \"io.inc\"\n\nsection .text\nglobal CMAIN\n") +
-            QString("CMAIN:\n    ;write your code here\n    xor rax, rax\n    ret"));
+        from = "32";
+        to = "64";
+    }
+    QString options = settingsUi.assemblyOptionsEdit->text();
+    options.replace(from, to);
+    settingsUi.assemblyOptionsEdit->setText(options);
+    options = settingsUi.linkingOptionsEdit->text();
+    options.replace(from, to);
+    settingsUi.linkingOptionsEdit->setText(options);
+    changeStartText();
+}
+
+void MainWindow::changeStartText()
+{
+    if (settingsUi.nasmRadioButton->isChecked()) { //NASM
+        if (settingsUi.x86RadioButton->isChecked()) { //x86
+            settingsStartTextEditor->setPlainText(QString("%include \"io.inc\"\n\nsection .text\nglobal CMAIN\n") +
+                                                  QString("CMAIN:\n    ;write your code here\n    xor eax, eax\n    ret"));
+        } else { //x64
+            settingsStartTextEditor->setPlainText(QString("%include \"io.inc\"\n\nsection .text\nglobal CMAIN\n") +
+                                                  QString("CMAIN:\n    ;write your code here\n    xor rax, rax\n    ret"));
+        }
+    } else if (settingsUi.gasRadioButton->isChecked()) { //GAS
+        if (settingsUi.x86RadioButton->isChecked()) { //x86
+            settingsStartTextEditor->setPlainText(".text\n.global main\nmain:\n    xorl  %eax, %eax\n    ret\n");
+        } else { //x64
+            settingsStartTextEditor->setPlainText(".text\n.global main\nmain:\n    xorq  %rax, %rax\n    ret\n");
+        }
     }
 }
 
@@ -1860,6 +1913,13 @@ void MainWindow::saveSettings()
         settings.setValue("mode", QString("x86"));
     else
         settings.setValue("mode", QString("x64"));
+
+    //assembler
+    if (settingsUi.nasmRadioButton->isChecked())
+        settings.setValue("assembler", QString("NASM"));
+    else if (settingsUi.gasRadioButton->isChecked()) {
+        settings.setValue("assembler", QString("GAS"));
+    }
 }
 
 void MainWindow::exitSettings()
