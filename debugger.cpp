@@ -408,6 +408,7 @@ void Debugger::setWatchesCount(int count)
     watchesCount = count;
 }
 
+#define GAS
 void Debugger::processLst()
 {
     //set accordance with .lst file and program in memory
@@ -417,6 +418,27 @@ void Debugger::processLst()
     QTextStream lstStream(&lst);
 
     while (!lstStream.atEnd()) {
+        #ifdef GAS
+        QString line = lstStream.readLine();
+        if (line.length() <= 19) { //omit strings with data only
+            //if in list : line number, address, data and it is all (without instruction) -
+            //omit this string and subtract 1 from offset
+            continue;
+        }
+        char *s = line.toLocal8Bit().data();
+        quint64 a, b, c;
+        if (sscanf(s, "%llu %llx %llx", &a, &b, &c) == 3){
+            if (!(b == 0 && c == 0)) { //exclude 0 0
+                lineNum l;
+                l.numInCode = a - 1; //-1 for missing of sasmStartL:
+                if (ioIncIncluded) {
+                    l.numInCode -= ioIncSize;
+                }
+                l.numInMem = b + offset;
+                lines.append(l);
+            }
+        }
+        #else
         QString line = lstStream.readLine();
         if (line.length() <= 37) { //omit strings with data only
             //if in list : line number, address, data and it is all (without instruction) -
@@ -437,6 +459,7 @@ void Debugger::processLst()
                 lines.append(l);
             }
         }
+        #endif
     }
     lst.close();
 }

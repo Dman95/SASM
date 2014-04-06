@@ -129,7 +129,7 @@ void Tab::saveCodeToFile(const QString &filePath, bool changeCodeModifiedFlag, b
         if (index != -1) {
             index = code->toPlainText().indexOf(QChar(':'), index);
             QSettings settings("SASM Project", "SASM");
-            if (settings.value("mode", QString("x86")).toString() == "x86") {
+            /*if (settings.value("mode", QString("x86")).toString() == "x86") {
                 if (code->toPlainText().indexOf(
                             QRegExp("\\s+[Mm][Oo][Vv] +[Ee][Bb][Pp] *, *[Ee][Ss][Pp]"), index + 1) != index + 1) {
                     QTextCursor cursor = code->textCursor();
@@ -145,7 +145,7 @@ void Tab::saveCodeToFile(const QString &filePath, bool changeCodeModifiedFlag, b
                     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
                     cursor.insertText(QString("\n    mov rbp, rsp; for correct debugging"));
                 }
-            }
+            }*/
         }
     }
     out << code->toPlainText();

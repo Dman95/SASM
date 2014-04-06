@@ -242,6 +242,8 @@ public slots:
     void restorePrevSession(bool notNotify = false);
     void openSettings();
     void changeMode(bool x86);
+    void changeAssembler();
+    void changeStartText();
     void saveSettings();
     void exitSettings();
     void changeActionsState(int widgetIndex);
