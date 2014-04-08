@@ -63,6 +63,11 @@ private:
      };
      QVector<HighlightingRule> highlightingRules;
 
+     QRegExp commentStartExpression;
+     QRegExp commentEndExpression;
+
+     bool multiLineComments;
+
      QTextCharFormat keywordFormat;
      QTextCharFormat commentFormat;
      QTextCharFormat quotationFormat;

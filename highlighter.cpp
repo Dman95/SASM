@@ -58,6 +58,7 @@
                 &quotationFormat;
 
      QSettings settings("SASM Project", "SASM");
+     QString assembler = settings.value("assembler", QString("NASM")).toString();
      for (int i = 0; i < formats.size(); i++) {
          formats[i]->setForeground(settings.value(names[i] + "color", defaultColors[i]).value<QColor>());
          formats[i]->setBackground(settings.value(names[i] + "colorbg", QPalette().color(QPalette::Base)).value<QColor>());
@@ -176,45 +177,74 @@
          rule.format = keywordFormat;
          highlightingRules.append(rule);
      }
+     if (assembler == "GAS") {
+         foreach (QString pattern, keywordPatterns) {
+             rule.format = keywordFormat;
+             //with prefix
+             int index = pattern.length() - 2;
+             pattern.insert(index, 'b');
+             rule.pattern = QRegExp(pattern);
+             rule.pattern.setCaseSensitivity(Qt::CaseInsensitive);
+             highlightingRules.append(rule);
+             pattern[index] = 'w';
+             rule.pattern = QRegExp(pattern);
+             rule.pattern.setCaseSensitivity(Qt::CaseInsensitive);
+             highlightingRules.append(rule);
+             pattern[index] = 'l';
+             rule.pattern = QRegExp(pattern);
+             rule.pattern.setCaseSensitivity(Qt::CaseInsensitive);
+             highlightingRules.append(rule);
+             pattern[index] = 'q';
+             rule.pattern = QRegExp(pattern);
+             rule.pattern.setCaseSensitivity(Qt::CaseInsensitive);
+             highlightingRules.append(rule);
+         }
+     }
 
      //IO macroses
-     rule.format = iomacrosFormat;
-     QStringList macrosPatterns;
-     macrosPatterns << "\\bPRINT_DEC\\b" << "\\bPRINT_HEX\\b" <<
-                       "\\bPRINT_CHAR\\b" << "\\bPRINT_STRING\\b" <<
-                       "\\bNEWLINE\\b" << "\\bPRINT_UDEC\\b" <<
-                       "\\bGET_UDEC\\b" << "\\bGET_DEC\\b" <<
-                       "\\bGET_HEX\\b" << "\\bGET_CHAR\\b" <<
-                       "\\bGET_STRING\\b" << "\\bCMAIN\\b" << "\\bCEXTERN\\b";
-     foreach (const QString &pattern, macrosPatterns) {
-         rule.pattern = QRegExp(pattern);
-         rule.pattern.setCaseSensitivity(Qt::CaseSensitive);
-         highlightingRules.append(rule);
+     if (assembler == "NASM") {
+         rule.format = iomacrosFormat;
+         QStringList macrosPatterns;
+         macrosPatterns << "\\bPRINT_DEC\\b" << "\\bPRINT_HEX\\b" <<
+                           "\\bPRINT_CHAR\\b" << "\\bPRINT_STRING\\b" <<
+                           "\\bNEWLINE\\b" << "\\bPRINT_UDEC\\b" <<
+                           "\\bGET_UDEC\\b" << "\\bGET_DEC\\b" <<
+                           "\\bGET_HEX\\b" << "\\bGET_CHAR\\b" <<
+                           "\\bGET_STRING\\b" << "\\bCMAIN\\b" << "\\bCEXTERN\\b";
+         foreach (const QString &pattern, macrosPatterns) {
+             rule.pattern = QRegExp(pattern);
+             rule.pattern.setCaseSensitivity(Qt::CaseSensitive);
+             highlightingRules.append(rule);
+         }
      }
 
      //memory
      rule.format = memoryFormat;
      QStringList memoryPatterns;
-     memoryPatterns << "\\bresb\\b" << "\\bresw\\b" << "\\bresd\\b" <<
-                       "\\bresq\\b" << "\\brest\\b" << "\\breso\\b" <<
-                       "\\bresy\\b" << "\\bddq\\b" << "\\bresdq\\b" <<
-                       "\\bdb\\b" << "\\bdw\\b" << "\\bdd\\b" <<
-                       "\\bdq\\b" << "\\bdt\\b" << "\\bdo\\b" <<
-                       "\\bdy\\b" << "\\bequ\\b" <<
-                       "\\bbyte[\\s\\[]" << "\\bword[\\s\\[]" <<
-                       "\\bdword[\\s\\[]" << "\\bqword[\\s\\[]" <<
-                       "\\btword[\\s\\[]" << "\\boword[\\s\\[]" <<
-                       "\\yword[\\s\\[]" << "\\bDEFAULT\\b" <<
-                       "\\bABS\\b" << "\\bREL\\b";
+     if (assembler == "NASM") {
+         rule.pattern = QRegExp("\\[");
+         highlightingRules.append(rule);
+         rule.pattern = QRegExp("\\]");
+         highlightingRules.append(rule);
+         memoryPatterns << "\\bresb\\b" << "\\bresw\\b" << "\\bresd\\b" <<
+                           "\\bresq\\b" << "\\brest\\b" << "\\breso\\b" <<
+                           "\\bresy\\b" << "\\bddq\\b" << "\\bresdq\\b" <<
+                           "\\bdb\\b" << "\\bdw\\b" << "\\bdd\\b" <<
+                           "\\bdq\\b" << "\\bdt\\b" << "\\bdo\\b" <<
+                           "\\bdy\\b" << "\\bequ\\b" <<
+                           "\\bbyte[\\s\\[]" << "\\bword[\\s\\[]" <<
+                           "\\bdword[\\s\\[]" << "\\bqword[\\s\\[]" <<
+                           "\\btword[\\s\\[]" << "\\boword[\\s\\[]" <<
+                           "\\yword[\\s\\[]" << "\\bDEFAULT\\b" <<
+                           "\\bABS\\b" << "\\bREL\\b";
+     } else if (assembler == "GAS") {
+         memoryPatterns << "\\(" << "\\)";
+     }
      foreach (const QString &pattern, memoryPatterns) {
          rule.pattern = QRegExp(pattern);
          rule.pattern.setCaseSensitivity(Qt::CaseInsensitive);
          highlightingRules.append(rule);
      }
-     rule.pattern = QRegExp("\\[");
-     highlightingRules.append(rule);
-     rule.pattern = QRegExp("\\]");
-     highlightingRules.append(rule);
 
      //labels
      rule.pattern = QRegExp("\\S+:");
@@ -223,13 +253,13 @@
 
      //numbers
      rule.format = numberFormat;
-     rule.pattern = QRegExp("\\b\\d+[bod]?\\b");
+     rule.pattern = QRegExp("[\\-\\+]?\\d+[bod]?\\b");
      highlightingRules.append(rule);
-     rule.pattern = QRegExp("\\b0[bo]\\d+\\b");
+     rule.pattern = QRegExp("0[bo]\\d+\\b");
      highlightingRules.append(rule);
-     rule.pattern = QRegExp("\\b[0-9A-Fa-f]+h\\b"); //hexadecimal notation
+     rule.pattern = QRegExp("[0-9A-Fa-f]+h\\b"); //hexadecimal notation
      highlightingRules.append(rule);
-     rule.pattern = QRegExp("\\b0[xh][0-9A-Fa-f]+\\b"); //hexadecimal notation
+     rule.pattern = QRegExp("0[xh][0-9A-Fa-f]+\\b"); //hexadecimal notation
      highlightingRules.append(rule);
 
      //registers
@@ -263,6 +293,15 @@
          rule.format = registerFormat;
          highlightingRules.append(rule);
      }
+     if (assembler == "GAS") {
+         foreach (const QString &pattern, registerPatterns) {
+             rule.format = registerFormat;
+             rule.pattern = QRegExp('%' + pattern);
+             rule.pattern.setCaseSensitivity(Qt::CaseInsensitive);
+             highlightingRules.append(rule);
+         }
+     }
+
 
      //.labels and numbers with point
      rule.pattern = QRegExp("\\.[^\\s:]+[^:]");
@@ -271,51 +310,56 @@
      rule.pattern = QRegExp("\\.[^\\s:]+:");
      rule.format = labelFormat;
      highlightingRules.append(rule);
-     rule.pattern = QRegExp("\\b\\d+\\.\\d+\\b");
+     rule.pattern = QRegExp("[\\-\\+]?\\d+\\.\\d+\\b");
      rule.format = numberFormat;
      highlightingRules.append(rule);
 
      //system instructions and preprocessor commands
      rule.format = systemFormat;
      QStringList systemPatterns;
-     systemPatterns << "\\btimes\\b" << "\\bsection +\\.bss\\b" <<
-                       "\\bsection +\\.text\\b" << "\\bsection +\\.data\\b" <<
-                       "\\bglobal\\b" << "\\bsection +\\.rodata\\b" <<
-                       "\\bextern\\b" <<
-                       "\\%arg\\b" << "\\%assign\\b" << "\\%clear\\b" <<      //macro
-                       "\\%comment\\b" << "\\%define\\b" << "\\%defstr\\b" <<
-                       "\\%deftok\\b" << "\\%depend\\b" <<
-                       "\\%line\\b" << "\\%local\\b" << "\\%macro\\b" <<
-                       "\\%n\\b" << "\\%pathsearch\\b" << "\\%pop\\b" <<
-                       "\\%push\\b" << "\\%rep\\b" << "\\%repl\\b" <<
-                       "\\%rotate\\b" << "\\%stacksize\\b" << "\\%strcat\\b" <<
-                       "\\%strlen\\b" << "\\%substr\\b" << "\\%undef\\b" <<
-                       "\\%unmacro\\b" << "\\%use\\b" << "\\%warning\\b" <<
-                       "\\%xdefine\\b" << "\\%endcomment\\b" << "\\%endif\\b" <<
-                       "\\%endmacro\\b" << "\\%endrep\\b" << "\\%error\\b" <<
-                       "\\%exitrep\\b" << "\\%fatal\\b" << "\\%idefine\\b" <<
-                       "\\%else\\b" << "\\%imacro\\b" << "\\%include\\b" <<
-                       "\\%if\\b" << "\\%ifctx\\b" << "\\%ifdef\\b" <<           //ifs
-                       "\\%ifempty\\b" << "\\%ifenv\\b" << "\\%ifidn\\b" <<
-                       "\\%ifidni\\b" << "\\%ifmacro\\b" << "\\%ifstr\\b" <<
-                       "\\%iftoken\\b" << "\\%ifnum\\b" << "\\%ifid\\b" <<
-                       "\\%elif\\b" << "\\%elifctx\\b" << "\\%elifdef\\b" <<     //elifs
-                       "\\%elifempty\\b" << "\\%elifenv\\b" << "\\%elifidn\\b" <<
-                       "\\%elifidni\\b" << "\\%elifmacro\\b" << "\\%elifstr\\b" <<
-                       "\\%eliftoken\\b" << "\\%elifnum\\b" << "\\%elifid\\b" <<
-                       "\\%ifn\\b" << "\\%ifnctx\\b" << "\\%ifndef\\b" <<           //ifns
-                       "\\%ifnempty\\b" << "\\%ifnenv\\b" << "\\%ifnidn\\b" <<
-                       "\\%ifnidni\\b" << "\\%ifnmacro\\b" << "\\%ifnstr\\b" <<
-                       "\\%ifntoken\\b" << "\\%ifnnum\\b" << "\\%ifnid\\b" <<
-                       "\\%elifn\\b" << "\\%elifnctx\\b" << "\\%elifndef\\b" <<     //elifns
-                       "\\%elifnempty\\b" << "\\%elifnenv\\b" << "\\%elifnidn\\b" <<
-                       "\\%elifnidni\\b" << "\\%elifnmacro\\b" << "\\%elifnstr\\b" <<
-                       "\\%elifntoken\\b" << "\\%elifnnum\\b" << "\\%elifnid\\b";
+     if (assembler == "NASM") {
+         systemPatterns << "\\btimes\\b" << "\\bsection\\b" << "\\.bss\\b" <<
+                           "\\.text\\b" << "\\.data\\b" <<
+                           "\\bglobal\\b" << "\\.rodata\\b" <<
+                           "\\bextern\\b" <<
+                           "\\%arg\\b" << "\\%assign\\b" << "\\%clear\\b" <<      //macro
+                           "\\%comment\\b" << "\\%define\\b" << "\\%defstr\\b" <<
+                           "\\%deftok\\b" << "\\%depend\\b" <<
+                           "\\%line\\b" << "\\%local\\b" << "\\%macro\\b" <<
+                           "\\%n\\b" << "\\%pathsearch\\b" << "\\%pop\\b" <<
+                           "\\%push\\b" << "\\%rep\\b" << "\\%repl\\b" <<
+                           "\\%rotate\\b" << "\\%stacksize\\b" << "\\%strcat\\b" <<
+                           "\\%strlen\\b" << "\\%substr\\b" << "\\%undef\\b" <<
+                           "\\%unmacro\\b" << "\\%use\\b" << "\\%warning\\b" <<
+                           "\\%xdefine\\b" << "\\%endcomment\\b" << "\\%endif\\b" <<
+                           "\\%endmacro\\b" << "\\%endrep\\b" << "\\%error\\b" <<
+                           "\\%exitrep\\b" << "\\%fatal\\b" << "\\%idefine\\b" <<
+                           "\\%else\\b" << "\\%imacro\\b" << "\\%include\\b" <<
+                           "\\%if\\b" << "\\%ifctx\\b" << "\\%ifdef\\b" <<           //ifs
+                           "\\%ifempty\\b" << "\\%ifenv\\b" << "\\%ifidn\\b" <<
+                           "\\%ifidni\\b" << "\\%ifmacro\\b" << "\\%ifstr\\b" <<
+                           "\\%iftoken\\b" << "\\%ifnum\\b" << "\\%ifid\\b" <<
+                           "\\%elif\\b" << "\\%elifctx\\b" << "\\%elifdef\\b" <<     //elifs
+                           "\\%elifempty\\b" << "\\%elifenv\\b" << "\\%elifidn\\b" <<
+                           "\\%elifidni\\b" << "\\%elifmacro\\b" << "\\%elifstr\\b" <<
+                           "\\%eliftoken\\b" << "\\%elifnum\\b" << "\\%elifid\\b" <<
+                           "\\%ifn\\b" << "\\%ifnctx\\b" << "\\%ifndef\\b" <<           //ifns
+                           "\\%ifnempty\\b" << "\\%ifnenv\\b" << "\\%ifnidn\\b" <<
+                           "\\%ifnidni\\b" << "\\%ifnmacro\\b" << "\\%ifnstr\\b" <<
+                           "\\%ifntoken\\b" << "\\%ifnnum\\b" << "\\%ifnid\\b" <<
+                           "\\%elifn\\b" << "\\%elifnctx\\b" << "\\%elifndef\\b" <<     //elifns
+                           "\\%elifnempty\\b" << "\\%elifnenv\\b" << "\\%elifnidn\\b" <<
+                           "\\%elifnidni\\b" << "\\%elifnmacro\\b" << "\\%elifnstr\\b" <<
+                           "\\%elifntoken\\b" << "\\%elifnnum\\b" << "\\%elifnid\\b";
+     } else if (assembler == "GAS") {
+         systemPatterns << "\\.\\w+\\b";
+     }
      foreach (const QString &pattern, systemPatterns) {
          rule.pattern = QRegExp(pattern);
          rule.pattern.setCaseSensitivity(Qt::CaseInsensitive);
          highlightingRules.append(rule);
      }
+
 
      //quotations
      rule.pattern = QRegExp("\".*\"");
@@ -329,9 +373,19 @@
      highlightingRules.append(rule);
 
      //comments
-     rule.pattern = QRegExp(";[^\n]*");
-     rule.format = commentFormat;
-     highlightingRules.append(rule);
+     commentStartExpression = QRegExp("/\\*");
+     commentEndExpression = QRegExp("\\*/");
+     if (assembler == "NASM") {
+         rule.pattern = QRegExp(";[^\n]*");
+         rule.format = commentFormat;
+         highlightingRules.append(rule);
+         multiLineComments = false;
+     } else if (assembler == "GAS") {
+         rule.format = commentFormat;
+         rule.pattern = QRegExp("#[^\n]*");
+         highlightingRules.append(rule);
+         multiLineComments = true;
+     }
  }
 
  void Highlighter::highlightBlock(const QString &text)
@@ -343,6 +397,26 @@
              int length = expression.matchedLength();
              setFormat(index, length, rule.format);
              index = expression.indexIn(text, index + length);
+         }
+     }
+
+     if (multiLineComments) {
+         setCurrentBlockState(0);
+         int startIndex = 0;
+         if (previousBlockState() != 1)
+             startIndex = commentStartExpression.indexIn(text);
+         while (startIndex >= 0) {
+             int endIndex = commentEndExpression.indexIn(text, startIndex);
+             int commentLength;
+             if (endIndex == -1) {
+                 setCurrentBlockState(1);
+                 commentLength = text.length() - startIndex;
+             } else {
+                 commentLength = endIndex - startIndex
+                                 + commentEndExpression.matchedLength();
+             }
+             setFormat(startIndex, commentLength, commentFormat);
+             startIndex = commentStartExpression.indexIn(text, startIndex + commentLength);
          }
      }
  }

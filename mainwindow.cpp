@@ -1820,6 +1820,21 @@ void MainWindow::changeStartText()
     }
 }
 
+void MainWindow::recreateHighlighter()
+{
+    if (highlighter) {
+        delete highlighter;
+        highlighter = new Highlighter;
+    }
+    if (tabs && tabs->count() > 0) {
+        Tab *currentTab = (Tab *) tabs->currentWidget();
+        highlighter->setDocument(currentTab->getCodeDocument());
+    }
+    delete settingsHighlighter;
+    settingsHighlighter = new Highlighter;
+    settingsHighlighter->setDocument(settingsStartTextEditor->document());
+}
+
 void MainWindow::pickColor(QWidget *button, bool init)
 {
     QPushButton *colorButton = (QPushButton *) button;
@@ -1844,15 +1859,7 @@ void MainWindow::pickColor(QWidget *button, bool init)
                     colorButtons[i]->setStyleSheet(QString("background-color: rgb(%1, %2, %3)").arg(r).arg(g).arg(b));
                 }
             }
-            //recreate highlighter
-            if (highlighter) {
-                delete highlighter;
-                highlighter = new Highlighter;
-            }
-            if (tabs && tabs->count() > 0) {
-                Tab *currentTab = (Tab *) tabs->currentWidget();
-                highlighter->setDocument(currentTab->getCodeDocument());
-            }
+            recreateHighlighter();
         }
     }
     int r, g, b;
@@ -1873,15 +1880,7 @@ void MainWindow::changeHighlightingFont(QWidget *box, bool init)
         checkBox->setChecked(settings.value(name, defaultState).toBool());
     } else {
         settings.setValue(name, checkBox->isChecked());
-        //recreate highlighter
-        if (highlighter) {
-            delete highlighter;
-            highlighter = new Highlighter;
-        }
-        if (tabs && tabs->count() > 0) {
-            Tab *currentTab = (Tab *) tabs->currentWidget();
-            highlighter->setDocument(currentTab->getCodeDocument());
-        }
+        recreateHighlighter();
     }
 }
 
@@ -1921,10 +1920,14 @@ void MainWindow::saveSettings()
         settings.setValue("mode", QString("x64"));
 
     //assembler
+    QString prevAssembler = settings.value("assembler", QString("NASM")).toString();
     if (settingsUi.nasmRadioButton->isChecked())
         settings.setValue("assembler", QString("NASM"));
     else if (settingsUi.gasRadioButton->isChecked()) {
         settings.setValue("assembler", QString("GAS"));
+    }
+    if (prevAssembler != settings.value("assembler", QString("NASM"))) {
+        recreateHighlighter();
     }
 }
 

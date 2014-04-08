@@ -251,6 +251,7 @@ public slots:
     void pickColor(QWidget *colorButton, bool init = false);
     void changeHighlightingFont(QWidget *box, bool init = false);
     void changeHighlightingLineMode(bool mode);
+    void recreateHighlighter();
 
     //closing
     bool deleteTab(int index, bool saveFileName = false);
