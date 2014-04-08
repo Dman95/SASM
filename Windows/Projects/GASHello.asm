@@ -2,13 +2,13 @@
 msg:
     .asciz "Hello, world!\n"
  
-.extern printf
+.extern _printf
 .text
-    .global main # entry point
-main:
+    .global _main # entry point
+_main:
     movl %esp, %ebp # for correct debugging
     pushl $msg
-    call printf
+    call _printf
     addl $4, %esp
     xorl %eax, %eax
     ret

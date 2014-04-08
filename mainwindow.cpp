@@ -864,12 +864,20 @@ void MainWindow::buildProgram(bool debugMode)
 
     QSettings settings("SASM Project", "SASM");
     //NASM (or other assembler)
+    QString assembler = settings.value("assembler", QString("NASM")).toString();
+    QString nasm;
     #ifdef Q_OS_WIN32
-        QString nasm = applicationDataPath() + "/NASM/nasm.exe";
+        if (assembler == "NASM")
+            nasm = applicationDataPath() + "/NASM/nasm.exe";
+        else if (assembler == "GAS") {
+            if (settings.value("mode", QString("x86")).toString() == "x86") {
+                nasm = applicationDataPath() + "/NASM/MinGW/bin/as.exe";
+            } else {
+                nasm = applicationDataPath() + "/NASM/MinGW64/bin/as.exe";
+            }
+        }
         QString nasmOptions = "-g -f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
     #else
-        QString assembler = settings.value("assembler", QString("NASM")).toString();
-        QString nasm;
         if (assembler == "NASM")
             nasm = "nasm";
         else if (assembler == "GAS") {
