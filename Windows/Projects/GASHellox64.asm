@@ -8,6 +8,7 @@ msg:
     .global main # entry point
 main:
     movq %rsp, %rbp #for correct debugging
+    subq $32, %rsp
     andq $-16, %rsp
     movq $msg, %rcx
     call printf
