@@ -863,12 +863,18 @@ void MainWindow::buildProgram(bool debugMode)
     }
 
     QSettings settings("SASM Project", "SASM");
-    //NASM
+    //NASM (or other assembler)
     #ifdef Q_OS_WIN32
         QString nasm = applicationDataPath() + "/NASM/nasm.exe";
         QString nasmOptions = "-g -f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
     #else
-        QString nasm = "as"; //first and one occurence of assembler!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        QString assembler = settings.value("assembler", QString("NASM")).toString();
+        QString nasm;
+        if (assembler == "NASM")
+            nasm = "nasm";
+        else if (assembler == "GAS") {
+            nasm = "as";
+        }
         QString nasmOptions = "-g -f elf32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
     #endif
     QFile ioInc;
