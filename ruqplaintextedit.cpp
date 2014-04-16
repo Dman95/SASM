@@ -47,7 +47,7 @@ RuQPlainTextEdit::RuQPlainTextEdit(QWidget *parent) :
     QPalette palette = this->palette();
     palette.setColor(QPalette::Base, settings.value("backgroundcolor", palette.color(QPalette::Base)).value<QColor>());
     palette.setColor(QPalette::Text, settings.value("fontcolor", palette.color(QPalette::Text)).value<QColor>());
-    this->setPalette(palette);
+    setPalette(palette);
 
     setDebugDisabled();
 
@@ -116,7 +116,7 @@ QMenu * RuQPlainTextEdit::createMenu()
         deleteAction->setEnabled(true);
     }
 
-    if (this->isReadOnly()) {
+    if (isReadOnly()) {
         cutAction->setVisible(false);
         pasteAction->setVisible(false);
         deleteAction->setVisible(false);
@@ -160,7 +160,7 @@ QMenu * RuQPlainTextEdit::createMenu()
 void RuQPlainTextEdit::contextMenuEvent(QContextMenuEvent *e)
 {
     QMouseEvent leftClick(QEvent::MouseButtonPress, e->pos(), Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
-    this->mousePressEvent(&leftClick);
+    mousePressEvent(&leftClick);
     contextMenu = createMenu();
     contextMenu->exec(e->globalPos());
     if (!contextMenu.isNull())
@@ -175,7 +175,7 @@ void RuQPlainTextEdit::deleteSelected()
 
 void RuQPlainTextEdit::commentSelectedCode()
 {
-    QTextCursor cursor = this->textCursor();
+    QTextCursor cursor = textCursor();
     QString selected = cursor.selectedText().replace(QString(QChar::ParagraphSeparator),
                                                     QString(QChar::ParagraphSeparator) + QString(';'));
     selected.insert(0, QChar(';'));
@@ -185,7 +185,7 @@ void RuQPlainTextEdit::commentSelectedCode()
 
 void RuQPlainTextEdit::uncommentSelectedCode()
 {
-    QTextCursor cursor = this->textCursor();
+    QTextCursor cursor = textCursor();
     QString selected = cursor.selectedText().replace(QString(QChar::ParagraphSeparator) + QString(';'),
                                                      QString(QChar::ParagraphSeparator));
     if (selected[0] == QChar(';'))

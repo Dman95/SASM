@@ -47,7 +47,7 @@ RuQTextEdit::RuQTextEdit(QWidget *parent) :
     QPalette palette = this->palette();
     palette.setColor(QPalette::Base, settings.value("backgroundcolor", palette.color(QPalette::Base)).value<QColor>());
     palette.setColor(QPalette::Text, settings.value("fontcolor", palette.color(QPalette::Text)).value<QColor>());
-    this->setPalette(palette);
+    setPalette(palette);
 
     undoAction = new QAction(tr("Undo"), this);
     undoAction->setShortcut(QKeySequence::Undo);
@@ -102,7 +102,7 @@ void RuQTextEdit::contextMenuEvent(QContextMenuEvent *e)
         deleteAction->setEnabled(true);
     }
 
-    if (this->isReadOnly()) {
+    if (isReadOnly()) {
         undoAction->setVisible(false);
         redoAction->setVisible(false);
         cutAction->setVisible(false);

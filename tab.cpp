@@ -103,7 +103,7 @@ void Tab::setFonts()
 
 QTextDocument * Tab::getCodeDocument()
 {
-    return this->code->document();
+    return code->document();
 }
 
 QString Tab::getCurrentFilePath()

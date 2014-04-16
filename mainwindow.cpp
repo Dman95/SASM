@@ -43,7 +43,7 @@
 MainWindow::MainWindow(const QStringList &args, QWidget *parent)
     : QMainWindow(parent)
 {
-    this->setWindowTitle("SASM");
+    setWindowTitle("SASM");
     setWindowIcon(QIcon(":images/mainIcon.png"));
 
     //restore settings
@@ -685,7 +685,7 @@ bool MainWindow::closeApp()
     }
     writeSettings();
     closeFromCloseAll = true;
-    this->close();
+    close();
     return true;
 }
 
@@ -1971,7 +1971,7 @@ void MainWindow::resetAllSettings()
     settings.clear();
 
     closeFromCloseAll = true;
-    this->close();
+    close();
 }
 
 void MainWindow::changeActionsState(int widgetIndex)

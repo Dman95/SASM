@@ -89,7 +89,7 @@ private:
         quint64 numInMem;
         bool operator ==(const lineNum& ln)
         {
-            return ln.numInCode == this->numInCode;
+            return ln.numInCode == numInCode;
         }
     };
     QVector<lineNum> lines; //accordance between program lines in memory and in file

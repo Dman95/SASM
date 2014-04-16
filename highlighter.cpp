@@ -66,7 +66,7 @@
              formats[i]->setFontWeight(QFont::Bold);
          formats[i]->setFontItalic(settings.value(names[i] + "italic", false).toBool());
      }
-     labelWithDotFormat = this->format(0);
+     labelWithDotFormat = format(0);
 
      //setting up regular expressions
      HighlightingRule rule;
