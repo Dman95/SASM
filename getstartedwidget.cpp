@@ -90,7 +90,7 @@ GetStartedWidget::GetStartedWidget(QWidget *parent) :
     layout->addSpacerItem(bottomSpacer);
 
 
-    this->setLayout(layout);
+    setLayout(layout);
 }
 
 GetStartedWidget::~GetStartedWidget()

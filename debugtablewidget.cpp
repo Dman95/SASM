@@ -93,7 +93,7 @@ void DebugTableWidget::deleteVariable()
 {
     if (contextMenuLineNumber >= rowCount() - 1) //last line
         return;
-    this->removeRow(contextMenuLineNumber);
+    removeRow(contextMenuLineNumber);
     resizeColumnsToContents();
 }
 
@@ -176,7 +176,7 @@ void DebugTableWidget::closeEvent(QCloseEvent *) {
 void DebugTableWidget::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::RightButton && type == memoryTable) {
-        contextMenuLineNumber = this->itemAt(event->pos())->row();
+        contextMenuLineNumber = itemAt(event->pos())->row();
         setCurrentCell(contextMenuLineNumber, 0);
         if (contextMenuLineNumber >= rowCount() - 1) //last line
             return;

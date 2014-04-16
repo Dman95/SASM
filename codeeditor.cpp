@@ -46,9 +46,9 @@ CodeEditor::CodeEditor(QWidget *parent, bool withBeakpoints) :
 {
     hasBreakpoints = withBeakpoints;
     prevBlockCount = -1;
-    this->setDebugMode(false);
+    setDebugMode(false);
     debugAreaWidth = 3 + debugImage.width() + 1;
-    this->setWordWrapMode(QTextOption::NoWrap);
+    setWordWrapMode(QTextOption::NoWrap);
     firstTopMargin = contentOffset().y();
     lineNumberArea = new LineNumberArea(this);
 
@@ -106,7 +106,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     //paint on line number area
     QPainter painter(lineNumberArea);
     QSettings settings("SASM Project", "SASM");
-    painter.fillRect(event->rect(), settings.value("linenumberpanelcolor", this->palette().color(QPalette::Window)).value<QColor>());
+    painter.fillRect(event->rect(), settings.value("linenumberpanelcolor", palette().color(QPalette::Window)).value<QColor>());
 
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
@@ -120,7 +120,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             QString number = QString::number(blockNumber + 1);
-            painter.setPen(settings.value("fontcolor", this->palette().color(QPalette::Text)).value<QColor>());
+            painter.setPen(settings.value("fontcolor", palette().color(QPalette::Text)).value<QColor>());
             painter.drawText(0, top, lineNumberArea->width() - debugAreaWidth, fontMetrics().height(),
                              Qt::AlignRight, number);
 
@@ -150,15 +150,15 @@ void CodeEditor::lineNumberAreaMousePressEvent(QMouseEvent *event)
         //counting line number
         int lineNumber = 0;
         int sumHeight = 0;
-        QTextBlock block = this->firstVisibleBlock();
+        QTextBlock block = firstVisibleBlock();
         while (block.isValid() && event->y() > sumHeight) {
             sumHeight += blockBoundingGeometry(block).height();
             block = block.next();
             lineNumber++;
         }
-        lineNumber += this->verticalScrollBar()->value(); //+ invisible lines
+        lineNumber += verticalScrollBar()->value(); //+ invisible lines
 
-        if (lineNumber <= this->document()->lineCount()) {
+        if (lineNumber <= document()->lineCount()) {
             //blocks counting starts with 0
             lineNumber = document()->findBlockByLineNumber(lineNumber - 1).blockNumber() + 1; //line number to paint
 
@@ -180,7 +180,7 @@ void CodeEditor::setBreakpointOnCurrentLine()
 {
     if (hasBreakpoints) {
         int lineNumber = textCursor().blockNumber() + 1;
-        if (lineNumber <= this->document()->lineCount()) {
+        if (lineNumber <= document()->lineCount()) {
             //blocks counting starts with 0
             lineNumber = document()->findBlockByLineNumber(lineNumber - 1).blockNumber() + 1; //line number to paint
 
@@ -251,7 +251,7 @@ void CodeEditor::highlightDebugLine(int lineNumber)
 
             selection.format.setBackground(lineColor);
             selection.format.setProperty(QTextFormat::FullWidthSelection, true);
-            selection.cursor = QTextCursor(this->document());
+            selection.cursor = QTextCursor(document());
             selection.cursor.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, lineNumber - 1);
             selection.cursor.clearSelection();
             setTextCursor(selection.cursor); //scroll to debugging line
@@ -286,9 +286,9 @@ void CodeEditor::setDebugMode(bool mode)
 
 void CodeEditor::putTab()
 {
-    QTextCursor cursor = this->textCursor();
+    QTextCursor cursor = textCursor();
     if (cursor.selectionEnd() - cursor.selectionStart() <= 0) {
-        this->insertPlainText("    ");
+        insertPlainText("    ");
     } else {
         QString selected =
                 cursor.selectedText().replace(QString(QChar::ParagraphSeparator),
@@ -301,7 +301,7 @@ void CodeEditor::putTab()
 
 void CodeEditor::deleteTab()
 {
-    QTextCursor cursor = this->textCursor();
+    QTextCursor cursor = textCursor();
     if (cursor.selectionEnd() - cursor.selectionStart() <= 0) {
         //delete 4 spaces (tab)
         cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, 4);
@@ -334,17 +334,17 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
         while (curString[++indentWidth] == ' ');
         QPlainTextEdit::keyPressEvent(e);
         for (int i = 0; i < indentWidth; i++)
-            this->insertPlainText(" ");
+            insertPlainText(" ");
         break;
     case (Qt::Key_Q) :
         if ((e->modifiers() & Qt::ShiftModifier) && (e->modifiers() & Qt::ControlModifier))
-            this->commentSelectedCode();
+            commentSelectedCode();
         else
             QPlainTextEdit::keyPressEvent(e);
         break;
     case (Qt::Key_A) :
         if ((e->modifiers() & Qt::ShiftModifier) && (e->modifiers() & Qt::ControlModifier))
-            this->uncommentSelectedCode();
+            uncommentSelectedCode();
         else
             QPlainTextEdit::keyPressEvent(e);
         break;
