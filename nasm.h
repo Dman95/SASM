@@ -38,45 +38,30 @@
 **
 ****************************************************************************/
 
-#ifndef DEBUGANYCOMMANDWIDGET_H
-#define DEBUGANYCOMMANDWIDGET_H
+#ifndef NASM_H
+#define NASM_H
 
-#include <QWidget>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QHBoxLayout>
-#include <QKeyEvent>
-#include <QCheckBox>
+#include "assembler.h"
 
-class DebugAnyCommandWidget : public QWidget
+class NASM : public Assembler
 {
     Q_OBJECT
 public:
-    explicit DebugAnyCommandWidget(QWidget *parent = 0);
-    ~DebugAnyCommandWidget();
-    void setFocusOnLineEdit();
-    void showPreviousCommand();
-    void showNextCommand();
-    int height();
+    explicit NASM(QObject *parent = 0);
+    QString getAssemblerPath();
+    void parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset);
+    void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
+                             QList<QTextCharFormat *> &formats,
+                             bool &multiLineComments,
+                             QRegExp &commentStartExpression,
+                             QRegExp &commentEndExpression);
+    QString getStartText();
+    QString debugString();
     
 signals:
-    void performCommand(const QString command, bool print);
     
 public slots:
-    void processCommand();
-
-protected:
-    void keyPressEvent(QKeyEvent *event);
-
-private:
-    QLabel *anyCommandLabel;
-    QLineEdit *command;
-    QPushButton *performButton;
-    QHBoxLayout *layout;
-    QCheckBox *printCheckBox;
-    QStringList commands;
-    int currentCommandPos;
+    
 };
 
-#endif // DEBUGANYCOMMANDWIDGET_H
+#endif // NASM_H

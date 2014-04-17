@@ -52,6 +52,7 @@
 #include <QQueue>
 #include <QSettings>
 #include <QFile>
+#include "assembler.h"
 
 enum DebugActionType {ni, si, showLine, infoRegisters, infoMemory, anyAction, none, breakpoint};
 
@@ -60,7 +61,7 @@ class Debugger : public QObject
     Q_OBJECT
 
 public:
-    Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tmp, QWidget *parent = 0);
+    Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tmp, Assembler *assembler, QWidget *parent = 0);
     ~Debugger();
     void setWatchesCount(int count);
 
@@ -75,6 +76,8 @@ public:
         bool isValid;
     };
 
+    typedef Assembler::LineNum LineNum;
+
 private:
     void processLst();
     void run();
@@ -82,17 +85,8 @@ private:
     QProcess *process;
     QTextEdit *textEdit;
     quint64 offset; //offset between program code in memory and in file
-    quint64 omitLinesCount; //for skipping strings from section .data - for processLst()
 
-    struct lineNum {
-        quint64 numInCode;
-        quint64 numInMem;
-        bool operator ==(const lineNum& ln)
-        {
-            return ln.numInCode == numInCode;
-        }
-    };
-    QVector<lineNum> lines; //accordance between program lines in memory and in file
+    QVector<LineNum> lines; //accordance between program lines in memory and in file
 
     int c; //counter for sequential performing of actions
     bool ioIncIncluded;
@@ -111,7 +105,9 @@ private:
     QList<Debugger::memoryInfo> watches;
     bool firstAction;
 
-    QList<lineNum> breakPairs;
+    QList<LineNum> breakPairs;
+
+    Assembler *assembler;
 
 public slots:
     void readOutputToBuffer();

@@ -44,7 +44,11 @@ SOURCES += main.cpp\
     getstartedwidget.cpp \
     debugtablewidget.cpp \
     watchsettinswidget.cpp \
-    debuganycommandwidget.cpp
+    debuganycommandwidget.cpp \
+    assembler.cpp \
+    nasm.cpp \
+    gas.cpp \
+    common.cpp
 
 HEADERS  += mainwindow.h \
     tab.h \
@@ -57,7 +61,11 @@ HEADERS  += mainwindow.h \
     getstartedwidget.h \
     debugtablewidget.h \
     watchsettinswidget.h \
-    debuganycommandwidget.h
+    debuganycommandwidget.h \
+    assembler.h \
+    nasm.h \
+    gas.h \
+    common.h
 
 FORMS += settings.ui
 

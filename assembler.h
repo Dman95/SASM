@@ -38,45 +38,53 @@
 **
 ****************************************************************************/
 
-#ifndef DEBUGANYCOMMANDWIDGET_H
-#define DEBUGANYCOMMANDWIDGET_H
+#ifndef ASSEMBLER_H
+#define ASSEMBLER_H
 
-#include <QWidget>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QHBoxLayout>
-#include <QKeyEvent>
-#include <QCheckBox>
+#include <QObject>
+#include <QMap>
+#include <QList>
+#include <QRegExp>
+#include <QFile>
+#include <QTextStream>
+#include <QVector>
+#include <QTextCharFormat>
+#include <QSettings>
+#include <QPalette>
+#include "common.h"
 
-class DebugAnyCommandWidget : public QWidget
+class Assembler : public QObject //Abstract class
 {
     Q_OBJECT
 public:
-    explicit DebugAnyCommandWidget(QWidget *parent = 0);
-    ~DebugAnyCommandWidget();
-    void setFocusOnLineEdit();
-    void showPreviousCommand();
-    void showNextCommand();
-    int height();
-    
+    struct LineNum {
+        quint64 numInCode;
+        quint64 numInMem;
+        bool operator ==(const LineNum& ln)
+        {
+            return ln.numInCode == numInCode;
+        }
+    };
+    struct HighlightingRule
+    {
+        QRegExp pattern;
+        QTextCharFormat format;
+    };
+    explicit Assembler(QObject *parent = 0);
+    virtual QString getAssemblerPath() = 0;
+    virtual void parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset) = 0;
+    virtual void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
+                                     QList<QTextCharFormat *> &formats,
+                                     bool &multiLineComments,
+                                     QRegExp &commentStartExpression,
+                                     QRegExp &commentEndExpression) = 0;
+    virtual QString getStartText() = 0;
+    virtual QString debugString() = 0;
+
 signals:
-    void performCommand(const QString command, bool print);
     
 public slots:
-    void processCommand();
-
-protected:
-    void keyPressEvent(QKeyEvent *event);
-
-private:
-    QLabel *anyCommandLabel;
-    QLineEdit *command;
-    QPushButton *performButton;
-    QHBoxLayout *layout;
-    QCheckBox *printCheckBox;
-    QStringList commands;
-    int currentCommandPos;
+    
 };
 
-#endif // DEBUGANYCOMMANDWIDGET_H
+#endif // ASSEMBLER_H
