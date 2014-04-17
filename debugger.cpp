@@ -40,17 +40,17 @@
 
 #include "debugger.h"
 
-Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tmp, QWidget *parent)
+Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tmp, Assembler *assembler, QWidget *parent)
     : QObject(parent)
 {
     QSettings settings("SASM Project", "SASM");
-    omitLinesCount = 0;
     c = 0;
     firstAction = true;
     textEdit = tEdit;
     ioIncIncluded = ioInc;
     tmpPath = tmp;
     registersOk = true;
+    this->assembler = assembler;
     //determine ioIncSize
     QString ioIncPath =  tmpPath + "io.inc";
     QFile ioIncFile(ioIncPath);
@@ -417,56 +417,10 @@ void Debugger::processLst()
     //set accordance with .lst file and program in memory
     QFile lst;
     lst.setFileName(tmpPath + "program.lst");
-    lst.open(QIODevice::ReadOnly);
-    QTextStream lstStream(&lst);
-
-    while (!lstStream.atEnd()) {
-        QSettings settings("SASM Project", "SASM");
-        QString assembler = settings.value("assembler", QString("NASM")).toString();
-        if (assembler == "NASM") {
-            QString line = lstStream.readLine();
-            if (line.length() <= 37) { //omit strings with data only
-                //if in list : line number, address, data and it is all (without instruction) -
-                //omit this string and subtract 1 from offset
-                omitLinesCount++;
-                continue;
-            }
-            char *s = line.toLocal8Bit().data();
-            quint64 a, b, c;
-            if (sscanf(s, "%llu %llx %llx", &a, &b, &c) == 3){
-                if (!(b == 0 && c == 0)) { //exclude 0 0
-                    lineNum l;
-                    l.numInCode = a - 1 - omitLinesCount; //-1 for missing of sasmStartL:
-                    if (ioIncIncluded) {
-                        l.numInCode -= ioIncSize;
-                    }
-                    l.numInMem = b + offset;
-                    lines.append(l);
-                }
-            }
-        } else if (assembler == "GAS") {
-            QString line = lstStream.readLine();
-            if (line.length() <= 19) { //omit strings with data only
-                //if in list : line number, address, data and it is all (without instruction) -
-                //omit this string and subtract 1 from offset
-                continue;
-            }
-            char *s = line.toLocal8Bit().data();
-            quint64 a, b, c;
-            if (sscanf(s, "%llu %llx %llx", &a, &b, &c) == 3){
-                if (!(b == 0 && c == 0)) { //exclude 0 0
-                    lineNum l;
-                    l.numInCode = a - 1; //-1 for missing of sasmStartL:
-                    if (ioIncIncluded) {
-                        l.numInCode -= ioIncSize;
-                    }
-                    l.numInMem = b + offset;
-                    lines.append(l);
-                }
-            }
-        }
+    if (lst.open(QIODevice::ReadOnly)) {
+        assembler->parseLstFile(lst, lines, ioIncIncluded, ioIncSize, offset);
+        lst.close();
     }
-    lst.close();
 }
 
 void Debugger::run()
@@ -483,7 +437,7 @@ void Debugger::run()
 void Debugger::changeBreakpoint(quint64 lineNumber, bool isAdded)
 {
     quint64 numInMem = 0;
-    lineNum brkpoint;
+    LineNum brkpoint;
     for (int i = 0; i < lines.count(); i++) //find address of line
         if (lineNumber <= lines[i].numInCode) {
             numInMem = lines[i].numInMem;
@@ -492,7 +446,7 @@ void Debugger::changeBreakpoint(quint64 lineNumber, bool isAdded)
     brkpoint.numInCode = lineNumber;
     brkpoint.numInMem = numInMem;
 
-    lineNum pair;
+    LineNum pair;
     int count = 0;
     foreach (pair, breakPairs) {
         if (pair.numInMem == numInMem)

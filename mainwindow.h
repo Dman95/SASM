@@ -65,6 +65,10 @@
 #include "ui_settings.h"
 #include "debugtablewidget.h"
 #include "debuganycommandwidget.h"
+#include "assembler.h"
+#include "nasm.h"
+#include "gas.h"
+#include "common.h"
 
 class MainWindow : public QMainWindow
 {
@@ -85,7 +89,6 @@ public:
     void setCurrentTabName(const QString &filePath, int index = -1);
     QString pathInTemp(QString path, bool forCygwin = false);
     bool removeDirRecuresively(const QString &dirName);
-    QString applicationDataPath();
 
 private:
     //ui
@@ -160,6 +163,7 @@ private:
     DebugAnyCommandWidget *debugAnyCommandWidget;
     bool programStopped;
     int outputIndex;
+    Assembler *assembler;
 
     //highlighters
     Highlighter *highlighter;
@@ -182,6 +186,7 @@ private:
     QList<QColor> defaultColors; //according to colorButtons
     QMap<QString, QColor> colorsMap;
     QList<QCheckBox *> fontCheckBoxes;
+    QSettings settings;
 
     //about close
     bool closeFromCloseAll;
@@ -252,6 +257,7 @@ public slots:
     void changeHighlightingFont(QWidget *box, bool init = false);
     void changeHighlightingLineMode(bool mode);
     void recreateHighlighter();
+    void recreateAssembler();
 
     //closing
     bool deleteTab(int index, bool saveFileName = false);

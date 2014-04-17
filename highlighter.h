@@ -45,42 +45,25 @@
 #include <QSettings>
 #include <QPalette>
 #include <QTextDocument>
+#include "assembler.h"
 
 class Highlighter : public QSyntaxHighlighter
 {
 public:
-     Highlighter(QTextDocument *parent = 0);
+     Highlighter(Assembler *assembler, QTextDocument *parent = 0);
      ~Highlighter();
 
 protected:
      void highlightBlock(const QString &text);
 
 private:
-     struct HighlightingRule
-     {
-         QRegExp pattern;
-         QTextCharFormat format;
-     };
+     typedef Assembler::HighlightingRule HighlightingRule;
      QVector<HighlightingRule> highlightingRules;
 
      QRegExp commentStartExpression;
      QRegExp commentEndExpression;
-
      bool multiLineComments;
-
-     QTextCharFormat keywordFormat;
      QTextCharFormat commentFormat;
-     QTextCharFormat quotationFormat;
-     QTextCharFormat registerFormat;
-     QTextCharFormat labelFormat;
-     QTextCharFormat labelWithDotFormat;
-     QTextCharFormat memoryFormat;
-     QTextCharFormat systemFormat;
-     QTextCharFormat numberFormat;
-     QTextCharFormat iomacrosFormat;
-     QList<QColor> defaultColors;
-     QList<QString> names;
-     QList<QTextCharFormat *> formats;
 };
 
 #endif // HIGHLIGHTER_H

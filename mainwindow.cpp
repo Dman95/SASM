@@ -41,13 +41,10 @@
 #include "mainwindow.h"
 
 MainWindow::MainWindow(const QStringList &args, QWidget *parent)
-    : QMainWindow(parent)
+    : QMainWindow(parent), settings("SASM Project", "SASM")
 {
     setWindowTitle("SASM");
     setWindowIcon(QIcon(":images/mainIcon.png"));
-
-    //restore settings
-    QSettings settings("SASM Project", "SASM");
 
     //set code field start text
     startText = settings.value("starttext", QString()).toString();
@@ -59,7 +56,7 @@ MainWindow::MainWindow(const QStringList &args, QWidget *parent)
     }
 
     //set save and open directory
-    saveOpenDirectory = settings.value("saveopendirectory", QString(applicationDataPath() + "/Projects")).toString();
+    saveOpenDirectory = settings.value("saveopendirectory", QString(Common::applicationDataPath() + "/Projects")).toString();
 
     //initial variables
     programIsBuilded = false;
@@ -77,6 +74,10 @@ MainWindow::MainWindow(const QStringList &args, QWidget *parent)
     tabs = 0;
     memoryDock = 0;
     registersDock = 0;
+
+    //initialize assembler
+    assembler = 0;
+    recreateAssembler();
 
     timer = new QTimer;
     timer->setInterval(100);
@@ -106,7 +107,6 @@ MainWindow::MainWindow(const QStringList &args, QWidget *parent)
 void MainWindow::initUi()
 {
     //Resize
-    QSettings settings("SASM Project", "SASM");
     settings.beginGroup("MainWindow");
     resize(settings.value("size", QSize(1024, 650)).toSize()); //default 1024x650
     move(settings.value("pos", QPoint(200, 200)).toPoint());
@@ -138,7 +138,7 @@ void MainWindow::initUi()
     setCentralWidget(mainWidget);
 
     //Create highlighter
-    highlighter = new Highlighter();
+    highlighter = new Highlighter(assembler);
 
     //Create tabs
     tabs = new QTabWidget;
@@ -233,7 +233,7 @@ void MainWindow::createMenus()
 
 void MainWindow::createActions()
 {
-    QSettings keySettings(applicationDataPath() + "/keys.ini", QSettings::IniFormat);
+    QSettings keySettings(Common::applicationDataPath() + "/keys.ini", QSettings::IniFormat);
 
     newAction = new QAction(QIcon(":/images/new.png"), tr("New"), this);
     QString key = keySettings.value("new", "default").toString();
@@ -508,7 +508,6 @@ void MainWindow::createToolBars()
     debugToolBar->addAction(stopAction);
     debugToolBar->setObjectName("Debug");
 
-    QSettings settings("SASM Project", "SASM");
     restoreState(settings.value("windowstate").toByteArray());
 }
 
@@ -564,7 +563,6 @@ void MainWindow::refreshEditMenu()
 void MainWindow::newFile()
 {
     if (tabs->count() > 0) {
-        QSettings settings("SASM Project", "SASM");
         settings.setValue("tabgeometry", ((Tab *) tabs->currentWidget())->saveGeometry());
         settings.setValue("tabwindowstate", ((Tab *) tabs->currentWidget())->saveState());
     }
@@ -730,7 +728,6 @@ void MainWindow::closeAllChildWindows()
 
 bool MainWindow::deleteTab(int index, bool saveFileName)
 {
-    QSettings settings("SASM Project", "SASM");
     settings.setValue("tabgeometry", ((Tab *) tabs->widget(index))->saveGeometry());
     settings.setValue("tabwindowstate", ((Tab *) tabs->widget(index))->saveState());
     if (okToContinue(index)) {
@@ -806,35 +803,9 @@ QString MainWindow::pathInTemp(QString path, bool forCygwin)
     return temp + "/SASM/" + path;
 }
 
-QString MainWindow::applicationDataPath()
-{
-    #ifdef Q_OS_WIN32
-        QString appDir = QCoreApplication::applicationDirPath();
-        if (! QFile::exists(appDir + "/NASM")) {
-            appDir = QCoreApplication::applicationDirPath() + "/Windows";
-        }
-        if (! QFile::exists(appDir + "/NASM")) {
-            appDir = QCoreApplication::applicationDirPath();
-        }
-        return appDir;
-    #else
-        QString path = QCoreApplication::applicationDirPath();
-        QString appDir = path.left(path.length() - 4) + QString("/share/sasm"); //replace /bin with /share/sasm
-        if (! QFile::exists(appDir)) {
-            appDir = QCoreApplication::applicationDirPath() + "/share/sasm";
-        }
-        if (! QFile::exists(appDir)) {
-            appDir = QCoreApplication::applicationDirPath() + "/Linux/share/sasm";
-        }
-        if (! QFile::exists(appDir)) {
-            appDir = QCoreApplication::applicationDirPath();
-        }
-        return appDir;
-    #endif
-}
-
 void MainWindow::buildProgram(bool debugMode)
 {
+    using Common::applicationDataPath;
     printLogWithTime(tr("Build started...") + '\n', Qt::black);
     QCoreApplication::processEvents();
 
@@ -862,28 +833,12 @@ void MainWindow::buildProgram(bool debugMode)
     while (! QFile::exists(path)) {
     }
 
-    QSettings settings("SASM Project", "SASM");
-    //NASM (or other assembler)
-    QString assembler = settings.value("assembler", QString("NASM")).toString();
-    QString nasm;
+    //assembler
+    QString assemblerPath = assembler->getAssemblerPath();
     #ifdef Q_OS_WIN32
-        if (assembler == "NASM")
-            nasm = applicationDataPath() + "/NASM/nasm.exe";
-        else if (assembler == "GAS") {
-            if (settings.value("mode", QString("x86")).toString() == "x86") {
-                nasm = applicationDataPath() + "/NASM/MinGW/bin/as.exe";
-            } else {
-                nasm = applicationDataPath() + "/NASM/MinGW64/bin/as.exe";
-            }
-        }
-        QString nasmOptions = "-g -f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
+        QString assemblerOptions = "-g -f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
     #else
-        if (assembler == "NASM")
-            nasm = "nasm";
-        else if (assembler == "GAS") {
-            nasm = "as";
-        }
-        QString nasmOptions = "-g -f elf32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
+        QString assemblerOptions = "-g -f elf32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
     #endif
     QFile ioInc;
     if (settings.value("mode", QString("x86")).toString() == "x86") {
@@ -894,18 +849,18 @@ void MainWindow::buildProgram(bool debugMode)
     QString ioIncPath = pathInTemp("io.inc");
     ioInc.copy(ioIncPath);
     if (settings.contains("assemblyoptions"))
-        nasmOptions = settings.value("assemblyoptions").toString();
-    nasmOptions.replace("$SOURCE$", pathInTemp("program.asm", false));
-    nasmOptions.replace("$LSTOUTPUT$", pathInTemp("program.lst", false));
-    nasmOptions.replace("$PROGRAM.OBJ$", pathInTemp("program.o", false));
-    QStringList nasmArguments = nasmOptions.split(QChar(' '));
-    QProcess nasmProcess;
-    QString nasmOutput = pathInTemp("compilererror.txt");
-    nasmProcess.setStandardOutputFile(nasmOutput);
-    nasmProcess.setStandardErrorFile(nasmOutput, QIODevice::Append);
-    nasmProcess.setWorkingDirectory(tempPath);
-    nasmProcess.start(nasm, nasmArguments);
-    nasmProcess.waitForFinished();
+        assemblerOptions = settings.value("assemblyoptions").toString();
+    assemblerOptions.replace("$SOURCE$", pathInTemp("program.asm", false));
+    assemblerOptions.replace("$LSTOUTPUT$", pathInTemp("program.lst", false));
+    assemblerOptions.replace("$PROGRAM.OBJ$", pathInTemp("program.o", false));
+    QStringList assemblerArguments = assemblerOptions.split(QChar(' '));
+    QProcess assemblerProcess;
+    QString assemblerOutput = pathInTemp("compilererror.txt");
+    assemblerProcess.setStandardOutputFile(assemblerOutput);
+    assemblerProcess.setStandardErrorFile(assemblerOutput, QIODevice::Append);
+    assemblerProcess.setWorkingDirectory(tempPath);
+    assemblerProcess.start(assemblerPath, assemblerArguments);
+    assemblerProcess.waitForFinished();
 
     //GCC
     QString gccOptions = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m32";
@@ -953,7 +908,7 @@ void MainWindow::buildProgram(bool debugMode)
     gccProcess.waitForFinished();
 
     QFile logFile;
-    logFile.setFileName(nasmOutput);
+    logFile.setFileName(assemblerOutput);
     logFile.open(QIODevice::ReadOnly);
     QTextStream log(&logFile);
     QString logText = log.readAll();
@@ -1143,7 +1098,7 @@ void MainWindow::debug()
     printLogWithTime(tr("Debugging started...") + '\n', Qt::darkGreen);
     QString path = pathInTemp("SASMprog.exe");
     CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
-    debugger = new Debugger(compilerOut, path, ioIncIncluded, pathInTemp(QString()));
+    debugger = new Debugger(compilerOut, path, ioIncIncluded, pathInTemp(QString()), assembler);
     connect(debugger, SIGNAL(highlightLine(int)), code, SLOT(updateDebugLine(int)));
     connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
     connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
@@ -1184,7 +1139,6 @@ void MainWindow::enableDebugActions()
     runAction->setEnabled(false);
 
     //restore windows
-    QSettings settings("SASM Project", "SASM");
     debugShowRegistersAction->setChecked(settings.value("debugregisters", false).toBool());
     debugShowMemoryAction->setChecked(settings.value("debugmemory", false).toBool());
 }
@@ -1270,7 +1224,6 @@ void MainWindow::debugShowMemory()
             addDockWidget(Qt::TopDockWidgetArea, memoryDock);
             memoryDock->setObjectName("memoryDock");
 
-            QSettings settings("SASM Project", "SASM");
             restoreState(settings.value("debugstate").toByteArray());
             if (registersDock)
                 registersDock->show();
@@ -1373,7 +1326,6 @@ void MainWindow::debugShowRegisters()
             registersDock->setAllowedAreas(Qt::AllDockWidgetAreas);
 
             int regCount;
-            QSettings settings("SASM Project", "SASM");
             if (settings.value("mode", QString("x86")).toString() == "x86") {
                 regCount = 16;
             } else {
@@ -1419,7 +1371,6 @@ void MainWindow::setShowRegistersToUnchecked()
 
 void MainWindow::debugExit()
 {
-    QSettings settings("SASM Project", "SASM");
     settings.setValue("debugregisters", debugShowRegistersAction->isChecked());
     settings.setValue("debugmemory", debugShowMemoryAction->isChecked());
     settings.setValue("debugstate", saveState());
@@ -1562,7 +1513,6 @@ void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool a
 
 void MainWindow::restorePrevSession(bool notNotify)
 {
-    QSettings settings("SASM Project", "SASM");
     int count = settings.value("tabscount", 0).toInt();
     if (count == 0 && !notNotify) {
         QMessageBox::information(0, QString("SASM"),
@@ -1582,8 +1532,6 @@ void MainWindow::restorePrevSession(bool notNotify)
 
 void MainWindow::writeSettings()
 {
-    QSettings settings("SASM Project", "SASM");
-
     //GUI
     settings.beginGroup("MainWindow");
     settings.setValue("size", size());
@@ -1614,7 +1562,6 @@ void MainWindow::writeSettings()
 
 void MainWindow::openSettings()
 {
-    QSettings settings("SASM Project", "SASM");
     //initialize
     if (!settingsWindow) {
         settingsWindow = new QWidget(this, Qt::Window);
@@ -1711,7 +1658,7 @@ void MainWindow::openSettings()
 
     if (!settingsStartTextEditor) {
         settingsStartTextEditor = new CodeEditor(0, false);
-        settingsHighlighter = new Highlighter;
+        settingsHighlighter = new Highlighter(assembler);
         settingsHighlighter->setDocument(settingsStartTextEditor->document());
         QVBoxLayout *startTextLayout = new QVBoxLayout;
         startTextLayout->addWidget(settingsStartTextEditor);
@@ -1832,21 +1779,34 @@ void MainWindow::recreateHighlighter()
 {
     if (highlighter) {
         delete highlighter;
-        highlighter = new Highlighter;
+        highlighter = new Highlighter(assembler);
     }
     if (tabs && tabs->count() > 0) {
         Tab *currentTab = (Tab *) tabs->currentWidget();
         highlighter->setDocument(currentTab->getCodeDocument());
     }
     delete settingsHighlighter;
-    settingsHighlighter = new Highlighter;
+    settingsHighlighter = new Highlighter(assembler);
     settingsHighlighter->setDocument(settingsStartTextEditor->document());
+}
+
+void MainWindow::recreateAssembler()
+{
+    QString assemblerName = settings.value("assembler", QString("NASM")).toString();
+    if (assembler) {
+        delete assembler;
+        assembler = 0;
+    }
+    if (assemblerName == "NASM") {
+        assembler = new NASM;
+    } else if (assemblerName == "GAS") {
+        assembler = new GAS;
+    }
 }
 
 void MainWindow::pickColor(QWidget *button, bool init)
 {
     QPushButton *colorButton = (QPushButton *) button;
-    QSettings settings("SASM Project", "SASM");
     QString name = colorButton->objectName();
     name.remove("Button");
     name.replace("_2", "bg");
@@ -1879,7 +1839,6 @@ void MainWindow::pickColor(QWidget *button, bool init)
 void MainWindow::changeHighlightingFont(QWidget *box, bool init)
 {
     QCheckBox *checkBox = (QCheckBox *) box;
-    QSettings settings("SASM Project", "SASM");
     QString name = checkBox->objectName();
     name.remove("CheckBox");
     name = name.toLower();
@@ -1894,13 +1853,11 @@ void MainWindow::changeHighlightingFont(QWidget *box, bool init)
 
 void MainWindow::changeHighlightingLineMode(bool mode)
 {
-    QSettings settings("SASM Project", "SASM");
     settings.setValue("currentlinemode", mode);
 }
 
 void MainWindow::saveSettings()
 {
-    QSettings settings("SASM Project", "SASM");
     settings.setValue("startwindow", settingsUi.startWindow->currentIndex());
     settings.setValue("starttext", settingsStartTextEditor->toPlainText());
     settings.setValue("language", settingsUi.language->currentIndex());
@@ -1935,6 +1892,7 @@ void MainWindow::saveSettings()
         settings.setValue("assembler", QString("GAS"));
     }
     if (prevAssembler != settings.value("assembler", QString("NASM"))) {
+        recreateAssembler();
         recreateHighlighter();
     }
 }
@@ -1958,8 +1916,6 @@ void MainWindow::resetAllSettings()
     if (msgBox.clickedButton() == cancelButton) {
         return;
     }
-
-    QSettings settings("SASM Project", "SASM");
 
     settings.remove("MainWindow/size");
     settings.remove("MainWindow/pos");
@@ -2027,7 +1983,6 @@ void MainWindow::openHelp()
     help = new QTextBrowser;
     help->setAttribute(Qt::WA_DeleteOnClose);
     QFile helpFile;
-    QSettings settings("SASM Project", "SASM");
     if (settings.value("language", 0).toInt() == 0) { //russian language
         helpFile.setFileName(":help/help.html");
     } else { //english language
