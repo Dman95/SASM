@@ -40,8 +40,8 @@
 
 #include "nasm.h"
 
-NASM::NASM(QObject *parent) :
-    Assembler(parent)
+NASM::NASM(bool x86, QObject *parent) :
+    Assembler(x86, parent)
 {
 }
 
@@ -80,6 +80,70 @@ void NASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioI
             }
         }
     }
+}
+
+QString NASM::getStartText()
+{
+    if (isx86()) {
+        return QString("%include \"io.inc\"\n\nsection .text\nglobal CMAIN\n") +
+               QString("CMAIN:\n    ;write your code here\n    xor eax, eax\n    ret");
+    } else {
+        return QString("%include \"io.inc\"\n\nsection .text\nglobal CMAIN\n") +
+               QString("CMAIN:\n    ;write your code here\n    xor rax, rax\n    ret");
+    }
+}
+
+void NASM::putDebugString(CodeEditor *code)
+{
+    //add : mov ebp, esp for making frame for correct debugging if this code has not been added yet
+    int index = code->toPlainText().indexOf(QRegExp("CMAIN:|main:"));
+    if (index != -1) {
+        index = code->toPlainText().indexOf(QChar(':'), index);
+        if (isx86()) {
+            if (code->toPlainText().indexOf(
+                        QRegExp("\\s+[Mm][Oo][Vv] +[Ee][Bb][Pp] *, *[Ee][Ss][Pp]"), index + 1) != index + 1) {
+                QTextCursor cursor = code->textCursor();
+                cursor.movePosition(QTextCursor::Start);
+                cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
+                cursor.insertText(QString("\n    mov ebp, esp; for correct debugging"));
+            }
+        } else {
+            if (code->toPlainText().indexOf(
+                        QRegExp("\\s+[Mm][Oo][Vv] +[Rr][Bb][Pp] *, *[Rr][Ss][Pp]"), index + 1) != index + 1) {
+                QTextCursor cursor = code->textCursor();
+                cursor.movePosition(QTextCursor::Start);
+                cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
+                cursor.insertText(QString("\n    mov rbp, rsp; for correct debugging"));
+            }
+        }
+    }
+}
+
+QString NASM::getAssemblerOptions()
+{
+    QString options;
+    #ifdef Q_OS_WIN32
+        if (isx86())
+            options = "-g -f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
+        else
+            options = "-g -f win64 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
+    #else
+        if (isx86())
+            options = "-g -f elf32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
+        else
+            options = "-g -f elf64 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
+    #endif
+    return options;
+}
+
+QString NASM::getLinkerOptions()
+{
+    QString options;
+    if (isx86())
+        options = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m32";
+    else
+        options = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m64";
+    return options;
 }
 
 void NASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
@@ -368,13 +432,4 @@ void NASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
     multiLineComments = false;
     commentStartExpression = QRegExp();
     commentEndExpression = QRegExp();
-}
-
-QString NASM::getStartText()
-{
-}
-
-QString NASM::debugString()
-{
-    return "";
 }

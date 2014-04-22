@@ -111,7 +111,7 @@ QString Tab::getCurrentFilePath()
     return currentFilePath;
 }
 
-void Tab::saveCodeToFile(const QString &filePath, bool changeCodeModifiedFlag, bool debugMode)
+void Tab::saveCodeToFile(const QString &filePath, Assembler *assembler, bool changeCodeModifiedFlag, bool debugMode)
 {
     QFile outfile;
     outfile.setFileName(filePath);
@@ -119,77 +119,8 @@ void Tab::saveCodeToFile(const QString &filePath, bool changeCodeModifiedFlag, b
     QTextStream out(&outfile);
     if (debugMode) {
         out << "sasmStartL:\n";
-        //add : mov ebp, esp for making frame for correct debugging if this code has not been added yet
-        int index;
-        #ifdef Q_OS_WIN32
-            index = code->toPlainText().indexOf(QRegExp("CMAIN:|_main:"));
-        #else
-            index = code->toPlainText().indexOf(QRegExp("CMAIN:|main:"));
-        #endif
-        if (index != -1) {
-            index = code->toPlainText().indexOf(QChar(':'), index);
-            QSettings settings("SASM Project", "SASM");
-            QString assembler = settings.value("assembler", QString("NASM")).toString();
-            if (assembler == "NASM")
-                if (settings.value("mode", QString("x86")).toString() == "x86") {
-                    if (code->toPlainText().indexOf(
-                                QRegExp("\\s+[Mm][Oo][Vv] +[Ee][Bb][Pp] *, *[Ee][Ss][Pp]"), index + 1) != index + 1) {
-                        QTextCursor cursor = code->textCursor();
-                        cursor.movePosition(QTextCursor::Start);
-                        cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
-                        cursor.insertText(QString("\n    mov ebp, esp; for correct debugging"));
-                    }
-                } else {
-                    if (code->toPlainText().indexOf(
-                                QRegExp("\\s+[Mm][Oo][Vv] +[Rr][Bb][Pp] *, *[Rr][Ss][Pp]"), index + 1) != index + 1) {
-                        QTextCursor cursor = code->textCursor();
-                        cursor.movePosition(QTextCursor::Start);
-                        cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
-                        cursor.insertText(QString("\n    mov rbp, rsp; for correct debugging"));
-                    }
-                }
-            else if (assembler == "GAS") {
-                int intelIndex = code->toPlainText().lastIndexOf("intel_syntax", index + 1);
-                int attIndex = code->toPlainText().lastIndexOf("att_syntax", index + 1);
-                if (intelIndex == -1 || attIndex > intelIndex) { //AT&T syntax
-                    if (settings.value("mode", QString("x86")).toString() == "x86") {
-                        if (code->toPlainText().indexOf(
-                                    QRegExp("\\s+[Mm][Oo][Vv][Ll] +%?[Ee][Ss][Pp] *, *%?[Ee][Bb][Pp]"), index + 1) != index + 1) {
-                            QTextCursor cursor = code->textCursor();
-                            cursor.movePosition(QTextCursor::Start);
-                            cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
-                            cursor.insertText(QString("\n    movl %esp, %ebp #for correct debugging"));
-                        }
-                    } else {
-                        if (code->toPlainText().indexOf(
-                                    QRegExp("\\s+[Mm][Oo][Vv][Qq] +%?[Rr][Ss][Pp] *, *%?[Rr][Bb][Pp]"), index + 1) != index + 1) {
-                            QTextCursor cursor = code->textCursor();
-                            cursor.movePosition(QTextCursor::Start);
-                            cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
-                            cursor.insertText(QString("\n    movq %rsp, %rbp #for correct debugging"));
-                        }
-                    }
-                } else { //Intel syntax
-                    if (settings.value("mode", QString("x86")).toString() == "x86") {
-                        if (code->toPlainText().indexOf(
-                                    QRegExp("\\s+[Mm][Oo][Vv] +%?[Ee][Bb][Pp] *, *%?[Ee][Ss][Pp]"), index + 1) != index + 1) {
-                            QTextCursor cursor = code->textCursor();
-                            cursor.movePosition(QTextCursor::Start);
-                            cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
-                            cursor.insertText(QString("\n    mov %ebp, %esp #for correct debugging"));
-                        }
-                    } else {
-                        if (code->toPlainText().indexOf(
-                                    QRegExp("\\s+[Mm][Oo][Vv] +%?[Rr][Bb][Pp] *, *%?[Rr][Ss][Pp]"), index + 1) != index + 1) {
-                            QTextCursor cursor = code->textCursor();
-                            cursor.movePosition(QTextCursor::Start);
-                            cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
-                            cursor.insertText(QString("\n    mov %rbp, %rsp #for correct debugging"));
-                        }
-                    }
-                }
-            }
-        }
+
+        assembler->putDebugString(code);
     }
     out << code->toPlainText();
     if (changeCodeModifiedFlag) {

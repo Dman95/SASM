@@ -40,14 +40,21 @@
 
 #include "gas.h"
 
-GAS::GAS(QObject *parent) :
-    Assembler(parent)
+GAS::GAS(bool x86, QObject *parent) :
+    Assembler(x86, parent)
 {
 }
 
 QString GAS::getAssemblerPath()
 {
-    return "";
+    #ifdef Q_OS_WIN32
+        if (isx86())
+            return Common::applicationDataPath() + "/NASM/MinGW/bin/as.exe";
+        else
+            return Common::applicationDataPath() + "/NASM/MinGW64/bin/as.exe";
+    #else
+        return "as";
+    #endif
 }
 
 void GAS::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset)
@@ -74,6 +81,83 @@ void GAS::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIn
             }
         }
     }
+}
+
+QString GAS::getStartText()
+{
+    if (isx86()) {
+        return QString(".text\n.global main\nmain:\n    xorl  %eax, %eax\n    ret\n");
+    } else {
+        return QString(".text\n.global main\nmain:\n    xorq  %rax, %rax\n    ret\n");
+    }
+}
+
+void GAS::putDebugString(CodeEditor *code)
+{
+    //add : mov ebp, esp for making frame for correct debugging if this code has not been added yet
+    int index = code->toPlainText().indexOf(QRegExp("CMAIN:|main:"));
+    if (index != -1) {
+        index = code->toPlainText().indexOf(QChar(':'), index);
+        int intelIndex = code->toPlainText().lastIndexOf("intel_syntax", index + 1);
+        int attIndex = code->toPlainText().lastIndexOf("att_syntax", index + 1);
+        if (intelIndex == -1 || attIndex > intelIndex) { //AT&T syntax
+            if (isx86()) {
+                if (code->toPlainText().indexOf(
+                            QRegExp("\\s+[Mm][Oo][Vv][Ll] +%?[Ee][Ss][Pp] *, *%?[Ee][Bb][Pp]"), index + 1) != index + 1) {
+                    QTextCursor cursor = code->textCursor();
+                    cursor.movePosition(QTextCursor::Start);
+                    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
+                    cursor.insertText(QString("\n    movl %esp, %ebp #for correct debugging"));
+                }
+            } else {
+                if (code->toPlainText().indexOf(
+                            QRegExp("\\s+[Mm][Oo][Vv][Qq] +%?[Rr][Ss][Pp] *, *%?[Rr][Bb][Pp]"), index + 1) != index + 1) {
+                    QTextCursor cursor = code->textCursor();
+                    cursor.movePosition(QTextCursor::Start);
+                    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
+                    cursor.insertText(QString("\n    movq %rsp, %rbp #for correct debugging"));
+                }
+            }
+        } else { //Intel syntax
+            if (isx86()) {
+                if (code->toPlainText().indexOf(
+                            QRegExp("\\s+[Mm][Oo][Vv] +%?[Ee][Bb][Pp] *, *%?[Ee][Ss][Pp]"), index + 1) != index + 1) {
+                    QTextCursor cursor = code->textCursor();
+                    cursor.movePosition(QTextCursor::Start);
+                    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
+                    cursor.insertText(QString("\n    mov %ebp, %esp #for correct debugging"));
+                }
+            } else {
+                if (code->toPlainText().indexOf(
+                            QRegExp("\\s+[Mm][Oo][Vv] +%?[Rr][Bb][Pp] *, *%?[Rr][Ss][Pp]"), index + 1) != index + 1) {
+                    QTextCursor cursor = code->textCursor();
+                    cursor.movePosition(QTextCursor::Start);
+                    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
+                    cursor.insertText(QString("\n    mov %rbp, %rsp #for correct debugging"));
+                }
+            }
+        }
+    }
+}
+
+QString GAS::getAssemblerOptions()
+{
+    QString options;
+        if (isx86())
+            options = "$SOURCE$ -o $PROGRAM.OBJ$ --32 -a=$LSTOUTPUT$";
+        else
+            options = "$SOURCE$ -o $PROGRAM.OBJ$ --64 -a=$LSTOUTPUT$";
+    return options;
+}
+
+QString GAS::getLinkerOptions()
+{
+    QString options;
+    if (isx86())
+        options = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m32";
+    else
+        options = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m64";
+    return options;
 }
 
 void GAS::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
@@ -322,14 +406,4 @@ void GAS::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlighting
     rule.pattern = QRegExp("#[^\n]*");
     highlightingRules.append(rule);
     multiLineComments = true;
-}
-
-QString GAS::getStartText()
-{
-    return "";
-}
-
-QString GAS::debugString()
-{
-    return "";
 }

@@ -187,6 +187,11 @@ private:
     QMap<QString, QColor> colorsMap;
     QList<QCheckBox *> fontCheckBoxes;
     QSettings settings;
+    QString backupAssembler;
+    QString backupMode;
+    QString backupAssemblerOptions;
+    QString backupLinkerOptions;
+    QString backupStartText;
 
     //about close
     bool closeFromCloseAll;
@@ -257,7 +262,10 @@ public slots:
     void changeHighlightingFont(QWidget *box, bool init = false);
     void changeHighlightingLineMode(bool mode);
     void recreateHighlighter();
-    void recreateAssembler();
+    void recreateAssembler(bool start = false);
+    void initAssemblerSettings(bool firstOpening);
+    void backupSettings();
+    void restoreSettingsAndExit();
 
     //closing
     bool deleteTab(int index, bool saveFileName = false);

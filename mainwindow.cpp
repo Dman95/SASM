@@ -46,15 +46,6 @@ MainWindow::MainWindow(const QStringList &args, QWidget *parent)
     setWindowTitle("SASM");
     setWindowIcon(QIcon(":images/mainIcon.png"));
 
-    //set code field start text
-    startText = settings.value("starttext", QString()).toString();
-    if (startText.isEmpty()) {
-        settings.setValue("starttext",
-            QString("%include \"io.inc\"\n\nsection .text\nglobal CMAIN\n") +
-            QString("CMAIN:\n    ;write your code here\n    xor eax, eax\n    ret"));
-        startText = settings.value("starttext", QString()).toString();
-    }
-
     //set save and open directory
     saveOpenDirectory = settings.value("saveopendirectory", QString(Common::applicationDataPath() + "/Projects")).toString();
 
@@ -77,7 +68,14 @@ MainWindow::MainWindow(const QStringList &args, QWidget *parent)
 
     //initialize assembler
     assembler = 0;
-    recreateAssembler();
+    recreateAssembler(true);
+
+    //set code field start text
+    startText = settings.value("starttext", QString()).toString();
+    if (startText.isEmpty()) {
+        settings.setValue("starttext", assembler->getStartText());
+        startText = assembler->getStartText();
+    }
 
     timer = new QTimer;
     timer->setInterval(100);
@@ -630,7 +628,7 @@ bool MainWindow::saveFile(int index)
     if (filePath.isEmpty()) {
         return saveAsFile(index);
     } else {
-        tab->saveCodeToFile(filePath);
+        tab->saveCodeToFile(filePath, assembler);
         return true;
     }
 }
@@ -647,7 +645,7 @@ bool MainWindow::saveAsFile(int index)
         tab = (Tab *) tabs->currentWidget();
     else
         tab = (Tab *) tabs->widget(index);
-    tab->saveCodeToFile(fileName);
+    tab->saveCodeToFile(fileName, assembler);
     setCurrentTabName(fileName, index);
     return true;
 }
@@ -821,7 +819,7 @@ void MainWindow::buildProgram(bool debugMode)
 
     Tab *currentTab = (Tab *) tabs->currentWidget();
     ioIncIncluded = currentTab->isIoIncIncluded();
-    currentTab->saveCodeToFile(path, false, debugMode);
+    currentTab->saveCodeToFile(path, assembler, false, debugMode);
 
     if (debugMode) {
         //save input to file
@@ -1572,7 +1570,7 @@ void MainWindow::openSettings()
         connect(settingsUi.buttonBox->button(QDialogButtonBox::Apply),
                 SIGNAL(clicked()), this, SLOT(saveSettings()));
         connect(settingsUi.buttonBox->button(QDialogButtonBox::Cancel),
-                SIGNAL(clicked()), settingsWindow, SLOT(close()));
+                SIGNAL(clicked()), this, SLOT(restoreSettingsAndExit()));
         connect(settingsUi.resetAllButton, SIGNAL(clicked()), this, SLOT(resetAllSettings()));
 
         //colors
@@ -1642,10 +1640,10 @@ void MainWindow::openSettings()
 
         connect(settingsUi.currentLineCheckBox, SIGNAL(clicked(bool)), this, SLOT(changeHighlightingLineMode(bool)));
 
-        connect(settingsUi.x86RadioButton, SIGNAL(toggled(bool)), this, SLOT(changeMode(bool)));
-
-        connect(settingsUi.nasmRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
-        connect(settingsUi.gasRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
+        backupSettings();
+        initAssemblerSettings(true);
+    } else {
+        initAssemblerSettings(false);
     }
 
     //set settings
@@ -1655,16 +1653,6 @@ void MainWindow::openSettings()
     settingsUi.fontComboBox->setCurrentFont(QFont(settings.value("fontfamily",
                                                                  QString("Courier New")).value<QString>()));
     settingsUi.fontSizeSpinBox->setValue(settings.value("fontsize", 12).toInt());
-
-    if (!settingsStartTextEditor) {
-        settingsStartTextEditor = new CodeEditor(0, false);
-        settingsHighlighter = new Highlighter(assembler);
-        settingsHighlighter->setDocument(settingsStartTextEditor->document());
-        QVBoxLayout *startTextLayout = new QVBoxLayout;
-        startTextLayout->addWidget(settingsStartTextEditor);
-        settingsUi.startTextWidget->setLayout(startTextLayout);
-    }
-    settingsStartTextEditor->setPlainText(settings.value("starttext").toString());
 
     //colors
     for (int i = 0; i < colorButtons.size(); i++) {
@@ -1678,101 +1666,144 @@ void MainWindow::openSettings()
     }
 
     settingsUi.currentLineCheckBox->setChecked(settings.value("currentlinemode", true).toBool());
+    settingsWindow->show();
+}
+
+void MainWindow::initAssemblerSettings(bool firstOpening)
+{
+    if (firstOpening) {
+        /******************************************************************************
+                                assembler dependent options begin
+        ******************************************************************************/
+        connect(settingsUi.nasmRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
+        connect(settingsUi.gasRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
+        /******************************************************************************
+                                assembler dependent options end
+        ******************************************************************************/
+
+        connect(settingsUi.x86RadioButton, SIGNAL(toggled(bool)), this, SLOT(changeMode(bool)));
+
+        //Start text editor
+        settingsStartTextEditor = new CodeEditor(0, false);
+        settingsHighlighter = new Highlighter(assembler);
+        settingsHighlighter->setDocument(settingsStartTextEditor->document());
+        QVBoxLayout *startTextLayout = new QVBoxLayout;
+        startTextLayout->addWidget(settingsStartTextEditor);
+        settingsUi.startTextWidget->setLayout(startTextLayout);
+    }
+
+    settingsStartTextEditor->setPlainText(settings.value("starttext").toString());
 
     //build options
-    #ifdef Q_OS_WIN32
-        QString options = "-g -f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
-    #else
-        QString options = "-g -f elf32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
-    #endif
+    QString options = assembler->getAssemblerOptions();
     settingsUi.assemblyOptionsEdit->setText(settings.value("assemblyoptions", options).toString());
 
-    QString linkerOptions = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m32";
+    QString linkerOptions = assembler->getLinkerOptions();
     settingsUi.linkingOptionsEdit->setText(settings.value("linkingoptions", linkerOptions).toString());
 
+    disconnect(settingsUi.x86RadioButton, SIGNAL(toggled(bool)), this, SLOT(changeMode(bool)));
     //mode
-    if (settings.value("mode", QString("x86")).toString() == "x86")
+    if (assembler->isx86())
         settingsUi.x86RadioButton->setChecked(true);
     else
         settingsUi.x64RadioButton->setChecked(true);
+    connect(settingsUi.x86RadioButton, SIGNAL(toggled(bool)), this, SLOT(changeMode(bool)));
 
-    //assemler
-    QString assembler = settings.value("assembler", QString("NASM")).toString();
-    if (assembler == "NASM")
+    /******************************************************************************
+                            assembler dependent options begin
+    ******************************************************************************/
+    QString assemblerName = settings.value("assembler", QString("NASM")).toString();
+    if (assemblerName == "NASM")
         settingsUi.nasmRadioButton->setChecked(true);
-    else if (assembler == "GAS") {
+    else if (assemblerName == "GAS") {
         settingsUi.gasRadioButton->setChecked(true);
     }
-
-    settingsWindow->show();
+    /******************************************************************************
+                            assembler dependent options end
+    ******************************************************************************/
 }
 
 void MainWindow::changeAssembler()
 {
-    if (settingsUi.nasmRadioButton->isChecked()) { //NASM
-        if (settingsUi.x86RadioButton->isChecked()) { //x86
-            #ifdef Q_OS_WIN32
-                QString options = "-g -f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
-            #else
-                QString options = "-g -f elf32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
-            #endif
-            settingsUi.assemblyOptionsEdit->setText(options);
-        } else { //x64
-            #ifdef Q_OS_WIN32
-                QString options = "-g -f win64 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
-            #else
-                QString options = "-g -f elf64 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
-            #endif
-            settingsUi.assemblyOptionsEdit->setText(options);
-        }
-    } else if (settingsUi.gasRadioButton->isChecked()) { //GAS
-        if (settingsUi.x86RadioButton->isChecked()) { //x86
-            QString options = "$SOURCE$ -o $PROGRAM.OBJ$ --32 -a=$LSTOUTPUT$";
-            settingsUi.assemblyOptionsEdit->setText(options);
-        } else { //x64
-            QString options = "$SOURCE$ -o $PROGRAM.OBJ$ --64 -a=$LSTOUTPUT$";
-            settingsUi.assemblyOptionsEdit->setText(options);
-        }
+    /******************************************************************************
+                            assembler dependent options begin
+    ******************************************************************************/
+    if (settingsUi.nasmRadioButton->isChecked())
+        settings.setValue("assembler", QString("NASM"));
+    else if (settingsUi.gasRadioButton->isChecked()) {
+        settings.setValue("assembler", QString("GAS"));
     }
-    changeStartText();
+    recreateAssembler();
+    /******************************************************************************
+                            assembler dependent options end
+    ******************************************************************************/
 }
 
 void MainWindow::changeMode(bool x86)
 {
-    QString from, to;
-    if (x86) {
-        from = "64";
-        to = "32";
-    } else {
-        from = "32";
-        to = "64";
+    if (x86)
+        settings.setValue("mode", QString("x86"));
+    else
+        settings.setValue("mode", QString("x64"));
+    recreateAssembler();
+}
+
+void MainWindow::recreateAssembler(bool start)
+{
+    if (assembler) {
+        delete assembler;
+        assembler = 0;
     }
-    QString options = settingsUi.assemblyOptionsEdit->text();
-    options.replace(from, to);
-    settingsUi.assemblyOptionsEdit->setText(options);
-    options = settingsUi.linkingOptionsEdit->text();
-    options.replace(from, to);
-    settingsUi.linkingOptionsEdit->setText(options);
-    changeStartText();
+    bool x86 = true;
+    if (settings.value("mode", QString("x86")).toString() != "x86")
+        x86 = false;
+    /******************************************************************************
+                            assembler dependent options begin
+    ******************************************************************************/
+    QString assemblerName = settings.value("assembler", QString("NASM")).toString();
+    if (assemblerName == "NASM") {
+        assembler = new NASM(x86);
+    } else if (assemblerName == "GAS") {
+        assembler = new GAS(x86);
+    }
+    /******************************************************************************
+                            assembler dependent options end
+    ******************************************************************************/
+
+    if (!start) {
+        settingsUi.assemblyOptionsEdit->setText(assembler->getAssemblerOptions());
+        settingsUi.linkingOptionsEdit->setText(assembler->getLinkerOptions());
+        settings.setValue("assemblyoptions", assembler->getAssemblerOptions());
+        settings.setValue("linkingoptions", assembler->getLinkerOptions());
+        changeStartText();
+        recreateHighlighter();
+    }
 }
 
 void MainWindow::changeStartText()
 {
-    if (settingsUi.nasmRadioButton->isChecked()) { //NASM
-        if (settingsUi.x86RadioButton->isChecked()) { //x86
-            settingsStartTextEditor->setPlainText(QString("%include \"io.inc\"\n\nsection .text\nglobal CMAIN\n") +
-                                                  QString("CMAIN:\n    ;write your code here\n    xor eax, eax\n    ret"));
-        } else { //x64
-            settingsStartTextEditor->setPlainText(QString("%include \"io.inc\"\n\nsection .text\nglobal CMAIN\n") +
-                                                  QString("CMAIN:\n    ;write your code here\n    xor rax, rax\n    ret"));
-        }
-    } else if (settingsUi.gasRadioButton->isChecked()) { //GAS
-        if (settingsUi.x86RadioButton->isChecked()) { //x86
-            settingsStartTextEditor->setPlainText(".text\n.global main\nmain:\n    xorl  %eax, %eax\n    ret\n");
-        } else { //x64
-            settingsStartTextEditor->setPlainText(".text\n.global main\nmain:\n    xorq  %rax, %rax\n    ret\n");
-        }
-    }
+    settingsStartTextEditor->setPlainText(assembler->getStartText());
+    settings.setValue("starttext", assembler->getStartText());
+}
+
+void MainWindow::backupSettings()
+{
+    backupAssembler = settings.value("assembler", QString("NASM")).toString();
+    backupMode = settings.value("mode", QString("x86")).toString();
+    backupAssemblerOptions = settings.value("assemblyoptions", assembler->getAssemblerOptions()).toString();
+    backupLinkerOptions = settings.value("linkingoptions", assembler->getLinkerOptions()).toString();
+    backupStartText = settings.value("starttext", assembler->getStartText()).toString();
+}
+
+void MainWindow::restoreSettingsAndExit()
+{
+    settings.setValue("assembler", backupAssembler);
+    settings.setValue("mode", backupMode);
+    recreateAssembler();
+    settings.setValue("assemblyoptions", backupAssemblerOptions);
+    settings.setValue("linkingoptions", backupLinkerOptions);
+    settings.setValue("starttext", backupStartText);
+    settingsWindow->close();
 }
 
 void MainWindow::recreateHighlighter()
@@ -1790,18 +1821,28 @@ void MainWindow::recreateHighlighter()
     settingsHighlighter->setDocument(settingsStartTextEditor->document());
 }
 
-void MainWindow::recreateAssembler()
+void MainWindow::saveSettings()
 {
-    QString assemblerName = settings.value("assembler", QString("NASM")).toString();
-    if (assembler) {
-        delete assembler;
-        assembler = 0;
+    settings.setValue("startwindow", settingsUi.startWindow->currentIndex());
+    settings.setValue("language", settingsUi.language->currentIndex());
+    startText = settingsStartTextEditor->toPlainText();
+
+    //change fonts
+    settings.setValue("fontfamily", settingsUi.fontComboBox->currentFont().family());
+    settings.setValue("fontsize", settingsUi.fontSizeSpinBox->value());
+    for (int i = 0; i < tabs->count(); i++) {
+        Tab *tab = (Tab *) tabs->widget(i);
+        tab->setFonts();
     }
-    if (assemblerName == "NASM") {
-        assembler = new NASM;
-    } else if (assemblerName == "GAS") {
-        assembler = new GAS;
-    }
+    QFont compilerOutFont;
+    compilerOutFont.setPointSize(settings.value("fontsize", 12).toInt());
+    compilerOut->setFont(compilerOutFont);
+
+    settings.setValue("assemblyoptions", settingsUi.assemblyOptionsEdit->text());
+    settings.setValue("linkingoptions", settingsUi.linkingOptionsEdit->text());
+    settings.setValue("starttext", settingsStartTextEditor->document()->toPlainText());
+
+    backupSettings();
 }
 
 void MainWindow::pickColor(QWidget *button, bool init)
@@ -1854,47 +1895,6 @@ void MainWindow::changeHighlightingFont(QWidget *box, bool init)
 void MainWindow::changeHighlightingLineMode(bool mode)
 {
     settings.setValue("currentlinemode", mode);
-}
-
-void MainWindow::saveSettings()
-{
-    settings.setValue("startwindow", settingsUi.startWindow->currentIndex());
-    settings.setValue("starttext", settingsStartTextEditor->toPlainText());
-    settings.setValue("language", settingsUi.language->currentIndex());
-    startText = settingsStartTextEditor->toPlainText();
-
-    //change fonts
-    settings.setValue("fontfamily", settingsUi.fontComboBox->currentFont().family());
-    settings.setValue("fontsize", settingsUi.fontSizeSpinBox->value());
-    for (int i = 0; i < tabs->count(); i++) {
-        Tab *tab = (Tab *) tabs->widget(i);
-        tab->setFonts();
-    }
-    QFont compilerOutFont;
-    compilerOutFont.setPointSize(settings.value("fontsize", 12).toInt());
-    compilerOut->setFont(compilerOutFont);
-
-    //build options
-    settings.setValue("assemblyoptions", settingsUi.assemblyOptionsEdit->text());
-    settings.setValue("linkingoptions", settingsUi.linkingOptionsEdit->text());
-
-    //mode
-    if (settingsUi.x86RadioButton->isChecked())
-        settings.setValue("mode", QString("x86"));
-    else
-        settings.setValue("mode", QString("x64"));
-
-    //assembler
-    QString prevAssembler = settings.value("assembler", QString("NASM")).toString();
-    if (settingsUi.nasmRadioButton->isChecked())
-        settings.setValue("assembler", QString("NASM"));
-    else if (settingsUi.gasRadioButton->isChecked()) {
-        settings.setValue("assembler", QString("GAS"));
-    }
-    if (prevAssembler != settings.value("assembler", QString("NASM"))) {
-        recreateAssembler();
-        recreateHighlighter();
-    }
 }
 
 void MainWindow::exitSettings()

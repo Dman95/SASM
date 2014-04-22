@@ -50,6 +50,7 @@
 #include <QDockWidget>
 #include "codeeditor.h"
 #include "ruqtextedit.h"
+#include "assembler.h"
 
 class Tab : public QMainWindow
 {
@@ -60,7 +61,7 @@ public:
     virtual ~Tab();
 
     QTextDocument *getCodeDocument();
-    void saveCodeToFile(const QString &filePath, bool changeCodeModifiedFlag = true, bool debugMode = false);
+    void saveCodeToFile(const QString &filePath, Assembler *assembler, bool changeCodeModifiedFlag = true, bool debugMode = false);
     void saveInputToFile(const QString &filePath);
     void loadOutputFromFile(const QString &filePath);
     void loadCodeFromFile(const QString &filePath);

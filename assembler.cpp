@@ -40,7 +40,13 @@
 
 #include "assembler.h"
 
-Assembler::Assembler(QObject *parent) :
+Assembler::Assembler(bool x86, QObject *parent) :
     QObject(parent)
 {
+    this->x86 = x86;
+}
+
+bool Assembler::isx86()
+{
+    return x86;
 }
