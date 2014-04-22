@@ -52,6 +52,7 @@
 #include <QSettings>
 #include <QPalette>
 #include "common.h"
+#include "codeeditor.h"
 
 class Assembler : public QObject //Abstract class
 {
@@ -70,7 +71,8 @@ public:
         QRegExp pattern;
         QTextCharFormat format;
     };
-    explicit Assembler(QObject *parent = 0);
+    bool x86;
+    explicit Assembler(bool x86, QObject *parent = 0);
     virtual QString getAssemblerPath() = 0;
     virtual void parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset) = 0;
     virtual void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
@@ -79,7 +81,10 @@ public:
                                      QRegExp &commentStartExpression,
                                      QRegExp &commentEndExpression) = 0;
     virtual QString getStartText() = 0;
-    virtual QString debugString() = 0;
+    virtual void putDebugString(CodeEditor *code) = 0;
+    virtual QString getAssemblerOptions() = 0;
+    virtual QString getLinkerOptions() = 0;
+    bool isx86();
 
 signals:
     

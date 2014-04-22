@@ -47,7 +47,7 @@ class GAS : public Assembler
 {
     Q_OBJECT
 public:
-    explicit GAS(QObject *parent = 0);
+    explicit GAS(bool x86, QObject *parent = 0);
     QString getAssemblerPath();
     void parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset);
     void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
@@ -56,7 +56,9 @@ public:
                              QRegExp &commentStartExpression,
                              QRegExp &commentEndExpression);
     QString getStartText();
-    QString debugString();
+    void putDebugString(CodeEditor *code);
+    QString getAssemblerOptions();
+    QString getLinkerOptions();
     
 signals:
     
