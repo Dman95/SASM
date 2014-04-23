@@ -66,6 +66,8 @@
 #include "debugtablewidget.h"
 #include "debuganycommandwidget.h"
 
+#define SASM_VERSION "2.3.1"
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
