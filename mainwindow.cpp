@@ -1017,7 +1017,7 @@ void MainWindow::runProgram()
     programStopped = false;
     connect(runProcess, SIGNAL(started()), this, SLOT(startCountProgramTime()));
     connect(runProcess, SIGNAL(finished(int)), this, SLOT(testStopOfProgram()));
-    runProcess->start(program);
+    runProcess->start(program, QStringList());
 
     timer->start(100);
     //Previous - connect(timer, SIGNAL(timeout()), this, SLOT(testStopOfProgram()));
