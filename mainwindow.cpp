@@ -881,10 +881,10 @@ void MainWindow::buildProgram(bool debugMode)
     ioInc.copy(ioIncPath);
     if (settings.contains("assemblyoptions"))
         nasmOptions = settings.value("assemblyoptions").toString();
-    nasmOptions.replace("$SOURCE$", pathInTemp("program.asm", false));
-    nasmOptions.replace("$LSTOUTPUT$", pathInTemp("program.lst", false));
-    nasmOptions.replace("$PROGRAM.OBJ$", pathInTemp("program.o", false));
     QStringList nasmArguments = nasmOptions.split(QChar(' '));
+    nasmArguments.replaceInStrings("$SOURCE$", pathInTemp("program.asm", false));
+    nasmArguments.replaceInStrings("$LSTOUTPUT$", pathInTemp("program.lst", false));
+    nasmArguments.replaceInStrings("$PROGRAM.OBJ$", pathInTemp("program.o", false));
     QProcess nasmProcess;
     QString nasmOutput = pathInTemp("compilererror.txt");
     nasmProcess.setStandardOutputFile(nasmOutput);
@@ -927,10 +927,10 @@ void MainWindow::buildProgram(bool debugMode)
         gccMProcess.waitForFinished();
     #endif
     //final linking
-    gccOptions.replace("$PROGRAM.OBJ$", pathInTemp("program.o"));
-    gccOptions.replace("$MACRO.OBJ$", stdioMacros);
-    gccOptions.replace("$PROGRAM$", pathInTemp("SASMprog.exe"));
     QStringList gccArguments = gccOptions.split(QChar(' '));
+    gccArguments.replaceInStrings("$PROGRAM.OBJ$", pathInTemp("program.o"));
+    gccArguments.replaceInStrings("$MACRO.OBJ$", stdioMacros);
+    gccArguments.replaceInStrings("$PROGRAM$", pathInTemp("SASMprog.exe"));
     QProcess gccProcess;
     QString gccOutput = pathInTemp("linkererror.txt");
     gccProcess.setStandardOutputFile(gccOutput);
