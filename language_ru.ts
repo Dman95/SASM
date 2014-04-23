@@ -343,8 +343,17 @@
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1975"/>
+        <source>SASM (SimpleASM) </source>
+        <translation>SASM (SimpleASM) </translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1975"/>
+        <source> - simple Open Source IDE for NASM.</source>
+        <translation> - простая Open Source среда разработки на языке ассемблера NASM.</translation>
+    </message>
+    <message>
         <source>SASM (SimpleASM) 2.3 - simple Open Source IDE for NASM.</source>
-        <translation>SASM (SimpleASM) 2.3 - простая Open Source среда разработки на языке ассемблера NASM.</translation>
+        <translation type="vanished">SASM (SimpleASM) 2.3 - простая Open Source среда разработки на языке ассемблера NASM.</translation>
     </message>
     <message>
         <source>SASM (SimpleASM) 2.2 - simple Open Source IDE for NASM.</source>
