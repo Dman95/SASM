@@ -132,7 +132,7 @@ void Debugger::processMessage(QString output, QString error)
         done.
         (gdb)*/
 
-        doInput(QString("disas sasmStartL\n"), none);
+        doInput(QString("disas main\n"), none);
         c++;
         return;
     }
@@ -418,6 +418,9 @@ void Debugger::processLst()
     QFile lst;
     lst.setFileName(tmpPath + "program.lst");
     if (lst.open(QIODevice::ReadOnly)) {
+        offset -= assembler->getMainOffset(lst);
+        lst.close();
+        lst.open(QIODevice::ReadOnly);
         assembler->parseLstFile(lst, lines, ioIncIncluded, ioIncSize, offset);
         lst.close();
     }
