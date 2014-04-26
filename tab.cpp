@@ -118,8 +118,6 @@ void Tab::saveCodeToFile(const QString &filePath, Assembler *assembler, bool cha
     outfile.open(QIODevice::WriteOnly | QIODevice::Text);
     QTextStream out(&outfile);
     if (debugMode) {
-        out << "sasmStartL:\n";
-
         assembler->putDebugString(code);
     }
     out << code->toPlainText();

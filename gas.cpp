@@ -57,27 +57,65 @@ QString GAS::getAssemblerPath()
     #endif
 }
 
+quint64 GAS::getMainOffset(QFile &lst) {
+    QTextStream lstStream(&lst);
+    QRegExp mainLabel("main:");
+    bool flag = false;
+    while (!lstStream.atEnd()) {
+        QString line = lstStream.readLine();
+        if (flag) {
+            if (line.length() <= 19) { //omit strings with data only
+                //if in list : line number, address, data and it is all (without instruction) -
+                //omit this string
+                continue;
+            }
+            char *s = line.toLocal8Bit().data();
+            quint64 a, b, c;
+            if (sscanf(s, "%llu %llx %llx", &a, &b, &c) == 3) {
+                if (!(b == 0 && c == 0)) { //exclude 0 0
+                    return b;
+                }
+            }
+        } else {
+            if (line.indexOf(mainLabel) != -1)
+                flag = true;
+        }
+    }
+    return 0;
+}
+
 void GAS::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset)
 {
+    bool inTextSection = false;
+    QRegExp sectionTextRegExp("\\.text");
+    QRegExp sectionBssRegExp("\\.bss");
+    QRegExp sectionDataRegExp("\\.data");
     QTextStream lstStream(&lst);
     while (!lstStream.atEnd()) {
         QString line = lstStream.readLine();
+        if (line.indexOf(sectionTextRegExp) != -1) {
+            inTextSection = true;
+        } else if (line.indexOf(sectionDataRegExp) != -1 || line.indexOf(sectionBssRegExp) != -1) {
+            inTextSection = false;
+        }
         if (line.length() <= 19) { //omit strings with data only
             //if in list : line number, address, data and it is all (without instruction) -
             //omit this string and subtract 1 from offset
             continue;
         }
-        char *s = line.toLocal8Bit().data();
-        quint64 a, b, c;
-        if (sscanf(s, "%llu %llx %llx", &a, &b, &c) == 3){
-            if (!(b == 0 && c == 0)) { //exclude 0 0
-                LineNum l;
-                l.numInCode = a - 1; //-1 for missing of sasmStartL:
-                if (ioIncIncluded) {
-                    l.numInCode -= ioIncSize;
+        if (inTextSection) {
+            char *s = line.toLocal8Bit().data();
+            quint64 a, b, c;
+            if (sscanf(s, "%llu %llx %llx", &a, &b, &c) == 3){
+                if (!(b == 0 && c == 0)) { //exclude 0 0
+                    LineNum l;
+                    l.numInCode = a; //-1 for missing of sasmStartL:
+                    if (ioIncIncluded) {
+                        l.numInCode -= ioIncSize;
+                    }
+                    l.numInMem = b + offset;
+                    lines.append(l);
                 }
-                l.numInMem = b + offset;
-                lines.append(l);
             }
         }
     }

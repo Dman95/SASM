@@ -49,6 +49,7 @@ class GAS : public Assembler
 public:
     explicit GAS(bool x86, QObject *parent = 0);
     QString getAssemblerPath();
+    quint64 getMainOffset(QFile &lst);
     void parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset);
     void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
                              QList<QTextCharFormat *> &formats,
