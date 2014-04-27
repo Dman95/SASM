@@ -812,6 +812,8 @@ void MainWindow::buildProgram(bool debugMode)
     while (! QFile::exists(path)) {
     }
 
+    QString stdioMacros = Common::pathInTemp("macro.o");
+
     //assembler
     QString assemblerPath = assembler->getAssemblerPath();
     #ifdef Q_OS_WIN32
@@ -819,25 +821,19 @@ void MainWindow::buildProgram(bool debugMode)
     #else
         QString assemblerOptions = "-g -f elf32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
     #endif
-    QFile ioInc;
-    if (settings.value("mode", QString("x86")).toString() == "x86") {
-        ioInc.setFileName(applicationDataPath() + "/io.inc");
-    } else {
-        ioInc.setFileName(applicationDataPath() + "/io64.inc");
-    }
-    QString ioIncPath = Common::pathInTemp("io.inc");
-    ioInc.copy(ioIncPath);
     if (settings.contains("assemblyoptions"))
         assemblerOptions = settings.value("assemblyoptions").toString();
     assemblerOptions.replace("$SOURCE$", Common::pathInTemp("program.asm"));
     assemblerOptions.replace("$LSTOUTPUT$", Common::pathInTemp("program.lst"));
     assemblerOptions.replace("$PROGRAM.OBJ$", Common::pathInTemp("program.o"));
+    assemblerOptions.replace("$PROGRAM$", Common::pathInTemp("SASMprog.exe"));
+    assemblerOptions.replace("$MACRO.OBJ$", stdioMacros);
     QStringList assemblerArguments = assemblerOptions.split(QChar(' '));
     QProcess assemblerProcess;
     QString assemblerOutput = Common::pathInTemp("compilererror.txt");
     assemblerProcess.setStandardOutputFile(assemblerOutput);
     assemblerProcess.setStandardErrorFile(assemblerOutput, QIODevice::Append);
-    assemblerProcess.setWorkingDirectory(tempPath);
+    assemblerProcess.setWorkingDirectory(applicationDataPath() + "/include");
     assemblerProcess.start(assemblerPath, assemblerArguments);
     assemblerProcess.waitForFinished();
 
@@ -846,7 +842,6 @@ void MainWindow::buildProgram(bool debugMode)
     if (settings.contains("linkingoptions"))
         gccOptions = settings.value("linkingoptions").toString();
     //macro.c compilation/copying
-    QString stdioMacros = Common::pathInTemp("macro.o");
     QFile macro;
     #ifdef Q_OS_WIN32
         QString gcc;
@@ -878,6 +873,8 @@ void MainWindow::buildProgram(bool debugMode)
     gccOptions.replace("$PROGRAM.OBJ$", Common::pathInTemp("program.o"));
     gccOptions.replace("$MACRO.OBJ$", stdioMacros);
     gccOptions.replace("$PROGRAM$", Common::pathInTemp("SASMprog.exe"));
+    gccOptions.replace("$SOURCE$", Common::pathInTemp("program.asm"));
+    gccOptions.replace("$LSTOUTPUT$", Common::pathInTemp("program.lst"));
     QStringList gccArguments = gccOptions.split(QChar(' '));
     QProcess gccProcess;
     QString gccOutput = Common::pathInTemp("linkererror.txt");

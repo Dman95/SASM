@@ -143,7 +143,8 @@ void Tab::loadCodeFromFile(const QString &filePath)
 
 bool Tab::isIoIncIncluded()
 {
-    if (code->toPlainText().indexOf(QString("io.inc")) == -1)
+    if (code->toPlainText().indexOf(QString("io.inc")) == -1
+            && code->toPlainText().indexOf(QString("io64.inc")) == -1)
         return false;
     return true;
 }

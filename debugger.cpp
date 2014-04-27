@@ -52,27 +52,30 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tm
     registersOk = true;
     this->assembler = assembler;
     //determine ioIncSize
-    QString ioIncPath =  tmpPath + "io.inc";
-    QFile ioIncFile(ioIncPath);
-    ioIncFile.open(QFile::ReadOnly);
-    QTextStream stream(&ioIncFile);
-    ioIncSize = 0;
-    while (!stream.atEnd()) {
-        stream.readLine();
-        ioIncSize++;
-    }
-    ioIncFile.close();
+    #ifdef Q_OS_WIN32
+        if (this->assembler->isx86()) {
+            ioIncSize = 786;
+        } else {
+            ioIncSize = 940;
+        }
+    #else
+        if (this->assembler->isx86()) {
+            ioIncSize = 768;
+        } else {
+            ioIncSize = 994;
+        }
+    #endif
     #ifdef Q_OS_WIN32
         QString gdb;
         if (settings.value("mode", QString("x86")).toString() == "x86") {
-            gdb = QCoreApplication::applicationDirPath() + "/NASM/MinGW/bin/gdb.exe";
+            gdb = QCoreApplication::applicationDirPath() + "/MinGW/bin/gdb.exe";
             if (! QFile::exists(gdb))
-                gdb = QCoreApplication::applicationDirPath() + "/Windows/NASM/MinGW/bin/gdb.exe";
+                gdb = QCoreApplication::applicationDirPath() + "/Windows/MinGW/bin/gdb.exe";
             exitMessage = "mingw_CRTStartup";
         } else {
-            gdb = QCoreApplication::applicationDirPath() + "/NASM/MinGW64/bin/gdb.exe";
+            gdb = QCoreApplication::applicationDirPath() + "/MinGW64/bin/gdb.exe";
             if (! QFile::exists(gdb))
-                gdb = QCoreApplication::applicationDirPath() + "/Windows/NASM/MinGW64/bin/gdb.exe";
+                gdb = QCoreApplication::applicationDirPath() + "/Windows/MinGW64/bin/gdb.exe";
             exitMessage = "__fu0__set_invalid_parameter_handler";
         }
     #else

@@ -1,4 +1,4 @@
-%include "io.inc"
+%include "io64.inc"
 
 section .data
     msg db 'Hello, world!', 0
