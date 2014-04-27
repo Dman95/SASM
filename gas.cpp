@@ -49,9 +49,9 @@ QString GAS::getAssemblerPath()
 {
     #ifdef Q_OS_WIN32
         if (isx86())
-            return Common::applicationDataPath() + "/NASM/MinGW/bin/as.exe";
+            return Common::applicationDataPath() + "/GAS/32/as.exe";
         else
-            return Common::applicationDataPath() + "/NASM/MinGW64/bin/as.exe";
+            return Common::applicationDataPath() + "/GAS/64/as.exe";
     #else
         return "as";
     #endif
@@ -124,7 +124,11 @@ void GAS::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIn
 QString GAS::getStartText()
 {
     if (isx86()) {
-        return QString(".text\n.global main\nmain:\n    # write your code here\n    xorl  %eax, %eax\n    ret\n");
+        #ifdef Q_OS_WIN32
+            return QString(".text\n.global _main\n_main:\n    # write your code here\n    xorl  %eax, %eax\n    ret\n");
+        #else
+            return QString(".text\n.global main\nmain:\n    # write your code here\n    xorl  %eax, %eax\n    ret\n");
+        #endif
     } else {
         return QString(".text\n.global main\nmain:\n    # write your code here\n    xorq  %rax, %rax\n    ret\n");
     }
