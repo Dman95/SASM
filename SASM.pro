@@ -48,7 +48,8 @@ SOURCES += main.cpp\
     assembler.cpp \
     nasm.cpp \
     gas.cpp \
-    common.cpp
+    common.cpp \
+    fasm.cpp
 
 HEADERS  += mainwindow.h \
     tab.h \
@@ -65,7 +66,8 @@ HEADERS  += mainwindow.h \
     assembler.h \
     nasm.h \
     gas.h \
-    common.h
+    common.h \
+    fasm.h
 
 FORMS += settings.ui
 

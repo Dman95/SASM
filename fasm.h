@@ -38,17 +38,35 @@
 **
 ****************************************************************************/
 
-#ifndef COMMON_H
-#define COMMON_H
+#ifndef FASM_H
+#define FASM_H
 
-#include <QString>
-#include <QCoreApplication>
-#include <QFile>
-#include <QDir>
+#include <QProcess>
+#include "assembler.h"
 
-namespace Common {
-    QString applicationDataPath();
-    QString pathInTemp(QString path);
-}
+class FASM : public Assembler
+{
+    Q_OBJECT
+public:
+    explicit FASM(bool x86, QObject *parent = 0);
+    QString getAssemblerPath();
+    quint64 getMainOffset(QFile &lstOut);
+    void parseLstFile(QFile &lstOut, QVector<Assembler::LineNum> &lines, bool, quint64, quint64 offset);
+    void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
+                             QList<QTextCharFormat *> &formats,
+                             bool &multiLineComments,
+                             QRegExp &commentStartExpression,
+                             QRegExp &commentEndExpression);
+    QString getStartText();
+    void putDebugString(CodeEditor *code);
+    QString getAssemblerOptions();
+    QString getLinkerOptions();
+    QString getListingFilePath(QFile &lstOut);
 
-#endif // COMMON_H
+signals:
+
+public slots:
+
+};
+
+#endif // FASM_H

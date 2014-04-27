@@ -69,6 +69,7 @@
 #include "nasm.h"
 #include "gas.h"
 #include "common.h"
+#include "fasm.h"
 
 class MainWindow : public QMainWindow
 {
@@ -87,7 +88,6 @@ public:
     void setupEditor(int i);
     bool okToContinue(int index = -1);
     void setCurrentTabName(const QString &filePath, int index = -1);
-    QString pathInTemp(QString path, bool forCygwin = false);
     bool removeDirRecuresively(const QString &dirName);
 
 private:
