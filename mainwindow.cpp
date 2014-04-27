@@ -663,7 +663,7 @@ void MainWindow::saveExe()
     saveOpenDirectory = saveFileName;
     if (saveFileName.isEmpty())
         return;
-    QFile exeFile(pathInTemp("SASMprog.exe"));
+    QFile exeFile(Common::pathInTemp("SASMprog.exe"));
     QFile::remove(saveFileName);
     exeFile.copy(saveFileName);
 }
@@ -782,25 +782,6 @@ void MainWindow::changeCurrentTab(int index)
     highlighter->setDocument(currentTab->getCodeDocument());
 }
 
-QString MainWindow::pathInTemp(QString path, bool forCygwin)
-{
-    QString temp = QDir::tempPath();
-    QChar lastSymbol = temp[temp.length() - 1];
-    if (lastSymbol == QChar('/') || lastSymbol == QChar('\\')) {
-        temp.chop(1);
-    }
-    if (! QFile::exists(temp + "/SASM")) {
-        QDir().mkpath(temp + "/SASM");
-    }
-    if (forCygwin) {
-        #ifdef Q_OS_WIN32
-            temp.remove(1, 1);
-            temp = "/cygdrive/" + temp;
-        #endif
-    }
-    return temp + "/SASM/" + path;
-}
-
 void MainWindow::buildProgram(bool debugMode)
 {
     using Common::applicationDataPath;
@@ -813,9 +794,9 @@ void MainWindow::buildProgram(bool debugMode)
         return;
     }
 
-    QString tempPath = pathInTemp(QString());
+    QString tempPath = Common::pathInTemp(QString());
     removeDirRecuresively(tempPath);
-    QString path = pathInTemp("program.asm");
+    QString path = Common::pathInTemp("program.asm");
 
     Tab *currentTab = (Tab *) tabs->currentWidget();
     ioIncIncluded = currentTab->isIoIncIncluded();
@@ -823,7 +804,7 @@ void MainWindow::buildProgram(bool debugMode)
 
     if (debugMode) {
         //save input to file
-        QString inputPath = pathInTemp("input.txt");
+        QString inputPath = Common::pathInTemp("input.txt");
         Tab *currentTab = (Tab *) tabs->currentWidget();
         currentTab->saveInputToFile(inputPath);
     }
@@ -844,16 +825,16 @@ void MainWindow::buildProgram(bool debugMode)
     } else {
         ioInc.setFileName(applicationDataPath() + "/io64.inc");
     }
-    QString ioIncPath = pathInTemp("io.inc");
+    QString ioIncPath = Common::pathInTemp("io.inc");
     ioInc.copy(ioIncPath);
     if (settings.contains("assemblyoptions"))
         assemblerOptions = settings.value("assemblyoptions").toString();
-    assemblerOptions.replace("$SOURCE$", pathInTemp("program.asm", false));
-    assemblerOptions.replace("$LSTOUTPUT$", pathInTemp("program.lst", false));
-    assemblerOptions.replace("$PROGRAM.OBJ$", pathInTemp("program.o", false));
+    assemblerOptions.replace("$SOURCE$", Common::pathInTemp("program.asm"));
+    assemblerOptions.replace("$LSTOUTPUT$", Common::pathInTemp("program.lst"));
+    assemblerOptions.replace("$PROGRAM.OBJ$", Common::pathInTemp("program.o"));
     QStringList assemblerArguments = assemblerOptions.split(QChar(' '));
     QProcess assemblerProcess;
-    QString assemblerOutput = pathInTemp("compilererror.txt");
+    QString assemblerOutput = Common::pathInTemp("compilererror.txt");
     assemblerProcess.setStandardOutputFile(assemblerOutput);
     assemblerProcess.setStandardErrorFile(assemblerOutput, QIODevice::Append);
     assemblerProcess.setWorkingDirectory(tempPath);
@@ -865,7 +846,7 @@ void MainWindow::buildProgram(bool debugMode)
     if (settings.contains("linkingoptions"))
         gccOptions = settings.value("linkingoptions").toString();
     //macro.c compilation/copying
-    QString stdioMacros = pathInTemp("macro.o");
+    QString stdioMacros = Common::pathInTemp("macro.o");
     QFile macro;
     #ifdef Q_OS_WIN32
         QString gcc;
@@ -880,11 +861,11 @@ void MainWindow::buildProgram(bool debugMode)
     #else
         QString gcc = "gcc";
         macro.setFileName(applicationDataPath() + "/NASM/macro.c");
-        macro.copy(pathInTemp("macro.c"));
+        macro.copy(Common::pathInTemp("macro.c"));
 
         //macro.c compilation
         QStringList gccMArguments;
-        gccMArguments << "-x" << "c" << pathInTemp("macro.c") << "-c" << "-g" << "-o" << stdioMacros;
+        gccMArguments << "-x" << "c" << Common::pathInTemp("macro.c") << "-c" << "-g" << "-o" << stdioMacros;
         if (settings.value("mode", QString("x86")).toString() == "x86")
             gccMArguments << "-m32";
         else
@@ -894,12 +875,12 @@ void MainWindow::buildProgram(bool debugMode)
         gccMProcess.waitForFinished();
     #endif
     //final linking
-    gccOptions.replace("$PROGRAM.OBJ$", pathInTemp("program.o"));
+    gccOptions.replace("$PROGRAM.OBJ$", Common::pathInTemp("program.o"));
     gccOptions.replace("$MACRO.OBJ$", stdioMacros);
-    gccOptions.replace("$PROGRAM$", pathInTemp("SASMprog.exe"));
+    gccOptions.replace("$PROGRAM$", Common::pathInTemp("SASMprog.exe"));
     QStringList gccArguments = gccOptions.split(QChar(' '));
     QProcess gccProcess;
-    QString gccOutput = pathInTemp("linkererror.txt");
+    QString gccOutput = Common::pathInTemp("linkererror.txt");
     gccProcess.setStandardOutputFile(gccOutput);
     gccProcess.setStandardErrorFile(gccOutput, QIODevice::Append);
     gccProcess.start(gcc, gccArguments);
@@ -910,14 +891,13 @@ void MainWindow::buildProgram(bool debugMode)
     logFile.open(QIODevice::ReadOnly);
     QTextStream log(&logFile);
     QString logText = log.readAll();
+    if (settings.value("assembler", QString("NASM")).toString() == "FASM" && logText.count(QChar('\n')) == 2
+            && logText.contains(QRegExp(" bytes\\.")))
+        logText.clear();
     logFile.close();
-    QRegExp win81CygwinWarning(QString("      \\d+ \\[main\\] nasm \\d+ find_fast_cwd: WARNING: ") +
-            QString("Couldn't compute FAST_CWD pointer.  Please report this problem to\r?\n") +
-            QString("the public mailing list cygwin@cygwin.com\r?\n"));
-    logText.remove(win81CygwinWarning);
 
     bool builded;
-    if (QFile::exists(pathInTemp("SASMprog.exe")))
+    if (QFile::exists(Common::pathInTemp("SASMprog.exe")))
         builded = true;
     else
         builded = false;
@@ -931,7 +911,6 @@ void MainWindow::buildProgram(bool debugMode)
         QTextStream logLinker(&logFile);
         logText = logLinker.readAll();
         logFile.close();
-        logText.remove(win81CygwinWarning);
         printLog(logText, Qt::red);
 
         //QMessageBox::critical(0, tr("Warning!"), tr("Errors have occurred in the build!"));
@@ -945,7 +924,6 @@ void MainWindow::buildProgram(bool debugMode)
         QTextStream logLinker(&logFile);
         logText = logLinker.readAll();
         logFile.close();
-        logText.remove(win81CygwinWarning);
         printLog(logText, Qt::red);
         programIsBuilded = true;
     }
@@ -974,11 +952,11 @@ void MainWindow::runProgram()
     printLogWithTime(tr("The program is executing...") + '\n', Qt::black);
     QCoreApplication::processEvents();
 
-    QString input = pathInTemp("input.txt");
+    QString input = Common::pathInTemp("input.txt");
     Tab *currentTab = (Tab *) tabs->currentWidget();
     currentTab->saveInputToFile(input);
 
-    QString program = pathInTemp("SASMprog.exe");
+    QString program = Common::pathInTemp("SASMprog.exe");
     runProcess->setStandardInputFile(input);
     connect(runProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(getOutput()));
     programStopped = false;
@@ -1032,7 +1010,7 @@ void MainWindow::runExeProgram()
        return;
     }
 
-    QString program = pathInTemp("SASMprog.exe");
+    QString program = Common::pathInTemp("SASMprog.exe");
     runProcess->startDetached(program);
 }
 
@@ -1094,9 +1072,9 @@ void MainWindow::debug()
     }
     ((Tab *) tabs->currentWidget())->clearOutput();
     printLogWithTime(tr("Debugging started...") + '\n', Qt::darkGreen);
-    QString path = pathInTemp("SASMprog.exe");
+    QString path = Common::pathInTemp("SASMprog.exe");
     CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
-    debugger = new Debugger(compilerOut, path, ioIncIncluded, pathInTemp(QString()), assembler);
+    debugger = new Debugger(compilerOut, path, ioIncIncluded, Common::pathInTemp(QString()), assembler);
     connect(debugger, SIGNAL(highlightLine(int)), code, SLOT(updateDebugLine(int)));
     connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
     connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
@@ -1677,6 +1655,7 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
         ******************************************************************************/
         connect(settingsUi.nasmRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
         connect(settingsUi.gasRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
+        connect(settingsUi.fasmRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
         /******************************************************************************
                                 assembler dependent options end
         ******************************************************************************/
@@ -1717,6 +1696,8 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
         settingsUi.nasmRadioButton->setChecked(true);
     else if (assemblerName == "GAS") {
         settingsUi.gasRadioButton->setChecked(true);
+    } else if (assemblerName == "FASM") {
+        settingsUi.fasmRadioButton->setChecked(true);
     }
     /******************************************************************************
                             assembler dependent options end
@@ -1732,6 +1713,8 @@ void MainWindow::changeAssembler()
         settings.setValue("assembler", QString("NASM"));
     else if (settingsUi.gasRadioButton->isChecked()) {
         settings.setValue("assembler", QString("GAS"));
+    } else if (settingsUi.fasmRadioButton->isChecked()) {
+        settings.setValue("assembler", QString("FASM"));
     }
     recreateAssembler();
     /******************************************************************************
@@ -1765,6 +1748,8 @@ void MainWindow::recreateAssembler(bool start)
         assembler = new NASM(x86);
     } else if (assemblerName == "GAS") {
         assembler = new GAS(x86);
+    } else if (assemblerName == "FASM") {
+        assembler = new FASM(x86);
     }
     /******************************************************************************
                             assembler dependent options end
@@ -2046,5 +2031,5 @@ bool MainWindow::removeDirRecuresively(const QString &dirName){
 MainWindow::~MainWindow()
 {
     //delete all temporary files
-    removeDirRecuresively(pathInTemp(QString()));
+    removeDirRecuresively(Common::pathInTemp(QString()));
 }

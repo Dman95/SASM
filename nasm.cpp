@@ -108,7 +108,7 @@ void NASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioI
             if (sscanf(s, "%llu %llx %llx", &a, &b, &c) == 3) {
                 if (!(b == 0 && c == 0)) { //exclude 0 0
                     LineNum l;
-                    l.numInCode = a - omitLinesCount; //-1 for missing of sasmStartL:
+                    l.numInCode = a - omitLinesCount;
                     if (ioIncIncluded) {
                         l.numInCode -= ioIncSize;
                     }
@@ -452,6 +452,14 @@ void NASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
         highlightingRules.append(rule);
     }
 
+    //comments
+    rule.pattern = QRegExp(";[^\n\"'`]*");
+    rule.format = commentFormat;
+    highlightingRules.append(rule);
+    multiLineComments = false;
+    commentStartExpression = QRegExp();
+    commentEndExpression = QRegExp();
+
     //quotations
     rule.pattern = QRegExp("\".*\"");
     rule.format = quotationFormat;
@@ -462,12 +470,4 @@ void NASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
 
     rule.pattern = QRegExp("`.*`");
     highlightingRules.append(rule);
-
-    //comments
-    rule.pattern = QRegExp(";[^\n]*");
-    rule.format = commentFormat;
-    highlightingRules.append(rule);
-    multiLineComments = false;
-    commentStartExpression = QRegExp();
-    commentEndExpression = QRegExp();
 }

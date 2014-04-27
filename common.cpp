@@ -66,3 +66,16 @@ QString Common::applicationDataPath()
         return appDir;
     #endif
 }
+
+QString Common::pathInTemp(QString path)
+{
+    QString temp = QDir::tempPath();
+    QChar lastSymbol = temp[temp.length() - 1];
+    if (lastSymbol == QChar('/') || lastSymbol == QChar('\\')) {
+        temp.chop(1);
+    }
+    if (! QFile::exists(temp + "/SASM")) {
+        QDir().mkpath(temp + "/SASM");
+    }
+    return temp + "/SASM/" + path;
+}
