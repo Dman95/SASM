@@ -126,7 +126,7 @@ QString NASM::getStartText()
         return QString("%include \"io.inc\"\n\nsection .text\nglobal CMAIN\n") +
                QString("CMAIN:\n    ;write your code here\n    xor eax, eax\n    ret");
     } else {
-        return QString("%include \"io.inc\"\n\nsection .text\nglobal CMAIN\n") +
+        return QString("%include \"io64.inc\"\n\nsection .text\nglobal CMAIN\n") +
                QString("CMAIN:\n    ;write your code here\n    xor rax, rax\n    ret");
     }
 }
