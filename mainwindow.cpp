@@ -788,8 +788,8 @@ void MainWindow::buildProgram(bool debugMode)
     printLogWithTime(tr("Build started...") + '\n', Qt::black);
     QCoreApplication::processEvents();
 
-    if (! QFile::exists(applicationDataPath() + "/NASM")) {
-        printLogWithTime(tr("Error! Directory NASM does not exist. Please reinstall the program.") + '\n', Qt::red);
+    if (! QFile::exists(applicationDataPath())) {
+        printLogWithTime(tr("Error! Program directory does not exist. Please reinstall the program.") + '\n', Qt::red);
         QMessageBox::critical(0, tr("Error!"), tr("Directory NASM does not exist. Please reinstall the program."));
         return;
     }
@@ -852,10 +852,10 @@ void MainWindow::buildProgram(bool debugMode)
         QString gcc;
         if (settings.value("mode", QString("x86")).toString() == "x86") {
             macro.setFileName(applicationDataPath() + "/NASM/macro.o");
-            gcc = applicationDataPath() + "/NASM/MinGW/bin/gcc.exe";
+            gcc = applicationDataPath() + "/MinGW/bin/gcc.exe";
         } else {
             macro.setFileName(applicationDataPath() + "/NASM/macro64.o");
-            gcc = applicationDataPath() + "/NASM/MinGW64/bin/gcc.exe";
+            gcc = applicationDataPath() + "/MinGW64/bin/gcc.exe";
         }
         macro.copy(stdioMacros);
     #else

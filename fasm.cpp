@@ -130,10 +130,10 @@ QString FASM::getStartText()
 {
     #ifdef Q_OS_WIN32
         if (isx86()) {
-            return QString("format PE\n\nsection '.text' executable\npublic main\n") +
-                   QString("main:\n    ;write your code here\n    xor eax, eax\n    ret");
+            return QString("format ELF\n\nsection '.text' executable\npublic _main\n") +
+                   QString("_main:\n    ;write your code here\n    xor eax, eax\n    ret");
         } else {
-            return QString("format PE64\n\nsection '.text' executable\npublic main\n") +
+            return QString("format ELF64\n\nsection '.text' executable\npublic main\n") +
                    QString("main:\n    ;write your code here\n    xor rax, rax\n    ret");
         }
     #else
