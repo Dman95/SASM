@@ -350,13 +350,13 @@ void FASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
 
     //numbers
     rule.format = numberFormat;
-    rule.pattern = QRegExp("[\\-\\+]?\\d+[bod]?\\b");
+    rule.pattern = QRegExp("\\b[\\-\\+]?\\d+[bod]?\\b");
     highlightingRules.append(rule);
-    rule.pattern = QRegExp("0[bo]\\d+\\b");
+    rule.pattern = QRegExp("\\b0[bo]\\d+\\b");
     highlightingRules.append(rule);
-    rule.pattern = QRegExp("[0-9A-Fa-f]+h\\b"); //hexadecimal notation
+    rule.pattern = QRegExp("\\b[0-9A-Fa-f]+h\\b"); //hexadecimal notation
     highlightingRules.append(rule);
-    rule.pattern = QRegExp("0[xh][0-9A-Fa-f]+\\b"); //hexadecimal notation
+    rule.pattern = QRegExp("\\b0[xh][0-9A-Fa-f]+\\b"); //hexadecimal notation
     highlightingRules.append(rule);
 
     //registers
@@ -398,7 +398,7 @@ void FASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
     rule.pattern = QRegExp("\\.[^\\s:]+:");
     rule.format = labelFormat;
     highlightingRules.append(rule);
-    rule.pattern = QRegExp("[\\-\\+]?\\d+\\.\\d+\\b");
+    rule.pattern = QRegExp("\\b[\\-\\+]?\\d+\\.\\d+\\b");
     rule.format = numberFormat;
     highlightingRules.append(rule);
 
