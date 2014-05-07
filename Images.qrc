@@ -19,5 +19,6 @@
         <file>images/stepinto.png</file>
         <file>images/stepover.png</file>
         <file>images/undo.png</file>
+        <file>images/debugPause.png</file>
     </qresource>
 </RCC>

@@ -213,7 +213,6 @@ void MainWindow::createMenus()
     debugMenu = menuBar()->addMenu(tr("Debug"));
     debugMenu->addAction(debugAction);
     debugMenu->addSeparator();
-    debugMenu->addAction(debugContinueAction);
     debugMenu->addAction(debugNextNiAction);
     debugMenu->addAction(debugNextAction);
     debugMenu->addSeparator();
@@ -402,15 +401,8 @@ void MainWindow::createActions()
     if (key == "default")
         key = stdKey.toString();
     debugAction->setShortcut(key);
+    debugKey = key;
     connect(debugAction, SIGNAL(triggered()), this, SLOT(debug()));
-
-    debugContinueAction = new QAction(QIcon(":/images/continue.png"), tr("Continue"), this);
-    key = keySettings.value("continue", "default").toString();
-    stdKey = QKeySequence(QString("F5"));
-    if (key == "default")
-        key = stdKey.toString();
-    debugContinueAction->setShortcut(key);
-    connect(debugContinueAction, SIGNAL(triggered()), this, SLOT(debugContinue()));
 
     debugNextNiAction = new QAction(QIcon(":/images/stepover.png"), tr("Step over"), this);
     key = keySettings.value("stepOver", "default").toString();
@@ -500,7 +492,6 @@ void MainWindow::createToolBars()
 
     debugToolBar = addToolBar(tr("Debug"));
     debugToolBar->addAction(debugAction);
-    debugToolBar->addAction(debugContinueAction);
     debugToolBar->addAction(debugNextNiAction);
     debugToolBar->addAction(debugNextAction);
     debugToolBar->addAction(stopAction);
@@ -816,6 +807,8 @@ void MainWindow::buildProgram(bool debugMode)
 
     //assembler
     QString assemblerPath = assembler->getAssemblerPath();
+    if (settings.contains("assemblerpath"))
+        assemblerPath = settings.value("assemblerpath").toString();
     #ifdef Q_OS_WIN32
         QString assemblerOptions = "-g -f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
     #else
@@ -838,23 +831,22 @@ void MainWindow::buildProgram(bool debugMode)
     assemblerProcess.waitForFinished();
 
     //GCC
-    QString gccOptions = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m32";
+    QString linkerOptions = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m32";
     if (settings.contains("linkingoptions"))
-        gccOptions = settings.value("linkingoptions").toString();
+        linkerOptions = settings.value("linkingoptions").toString();
     //macro.c compilation/copying
     QFile macro;
     #ifdef Q_OS_WIN32
-        QString gcc;
+        QString linker = settings.value("linkerpath", applicationDataPath() + "/MinGW/bin/gcc.exe").toString();
         if (settings.value("mode", QString("x86")).toString() == "x86") {
             macro.setFileName(applicationDataPath() + "/NASM/macro.o");
-            gcc = applicationDataPath() + "/MinGW/bin/gcc.exe";
         } else {
             macro.setFileName(applicationDataPath() + "/NASM/macro64.o");
-            gcc = applicationDataPath() + "/MinGW64/bin/gcc.exe";
         }
         macro.copy(stdioMacros);
     #else
         QString gcc = "gcc";
+        QString linker = settings.value("linkerpath", "gcc").toString();
         macro.setFileName(applicationDataPath() + "/NASM/macro.c");
         macro.copy(Common::pathInTemp("macro.c"));
 
@@ -870,18 +862,18 @@ void MainWindow::buildProgram(bool debugMode)
         gccMProcess.waitForFinished();
     #endif
     //final linking
-    gccOptions.replace("$PROGRAM.OBJ$", Common::pathInTemp("program.o"));
-    gccOptions.replace("$MACRO.OBJ$", stdioMacros);
-    gccOptions.replace("$PROGRAM$", Common::pathInTemp("SASMprog.exe"));
-    gccOptions.replace("$SOURCE$", Common::pathInTemp("program.asm"));
-    gccOptions.replace("$LSTOUTPUT$", Common::pathInTemp("program.lst"));
-    QStringList gccArguments = gccOptions.split(QChar(' '));
-    QProcess gccProcess;
-    QString gccOutput = Common::pathInTemp("linkererror.txt");
-    gccProcess.setStandardOutputFile(gccOutput);
-    gccProcess.setStandardErrorFile(gccOutput, QIODevice::Append);
-    gccProcess.start(gcc, gccArguments);
-    gccProcess.waitForFinished();
+    linkerOptions.replace("$PROGRAM.OBJ$", Common::pathInTemp("program.o"));
+    linkerOptions.replace("$MACRO.OBJ$", stdioMacros);
+    linkerOptions.replace("$PROGRAM$", Common::pathInTemp("SASMprog.exe"));
+    linkerOptions.replace("$SOURCE$", Common::pathInTemp("program.asm"));
+    linkerOptions.replace("$LSTOUTPUT$", Common::pathInTemp("program.lst"));
+    QStringList linkerArguments = linkerOptions.split(QChar(' '));
+    QProcess linkerProcess;
+    QString linkerOutput = Common::pathInTemp("linkererror.txt");
+    linkerProcess.setStandardOutputFile(linkerOutput);
+    linkerProcess.setStandardErrorFile(linkerOutput, QIODevice::Append);
+    linkerProcess.start(linker, linkerArguments);
+    linkerProcess.waitForFinished();
 
     QFile logFile;
     logFile.setFileName(assemblerOutput);
@@ -903,7 +895,7 @@ void MainWindow::buildProgram(bool debugMode)
 
         //print errors
         printLog(logText, Qt::red);
-        logFile.setFileName(gccOutput);
+        logFile.setFileName(linkerOutput);
         logFile.open(QIODevice::ReadOnly);
         QTextStream logLinker(&logFile);
         logText = logLinker.readAll();
@@ -916,7 +908,7 @@ void MainWindow::buildProgram(bool debugMode)
         printLogWithTime(tr("Built successfully.") + '\n', Qt::darkGreen);
         //print warnings
         printLog(logText, Qt::red);
-        logFile.setFileName(gccOutput);
+        logFile.setFileName(linkerOutput);
         logFile.open(QIODevice::ReadOnly);
         QTextStream logLinker(&logFile);
         logText = logLinker.readAll();
@@ -1062,31 +1054,65 @@ void MainWindow::printOutput(QString msg, int index)
 
 void MainWindow::debug()
 {
-    buildProgram(true);
-    if (!programIsBuilded) {
-        printLogWithTime(tr("Before debugging you need to build the program.") + '\n', Qt::red);
-        return;
+    if (!debugger) { //start debugger
+        debuggerWasStarted = false;
+        buildProgram(true);
+        if (!programIsBuilded) {
+            printLogWithTime(tr("Before debugging you need to build the program.") + '\n', Qt::red);
+            return;
+        }
+        ((Tab *) tabs->currentWidget())->clearOutput();
+        printLogWithTime(tr("Debugging started...") + '\n', Qt::darkGreen);
+        QString path = Common::pathInTemp("SASMprog.exe");
+        CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
+        debugger = new Debugger(compilerOut, path, ioIncIncluded, Common::pathInTemp(QString()), assembler);
+        connect(debugger, SIGNAL(highlightLine(int)), code, SLOT(updateDebugLine(int)));
+        connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
+        connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
+        connect(debugger, SIGNAL(started()), this, SLOT(showAnyCommandWidget()));
+        connect(code, SIGNAL(breakpointsChanged(quint64,bool)), debugger, SLOT(changeBreakpoint(quint64,bool)));
+        connect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
+                   this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
+        connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
+        connect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
+        connect(debugger, SIGNAL(inMacro()), this, SLOT(debugNextNi()), Qt::QueuedConnection);
+        connect(debugger, SIGNAL(wasStopped()), this, SLOT(changeDebugActionToStart()));
+        code->setDebugEnabled();
+    } else { //pause or continue debugger
+        debugAction->setEnabled(false);
+        if (debugger->isStopped()) {
+            debugAction->setText(tr("Pause"));
+            debugAction->setIcon(QIcon(":/images/debugPause.png"));
+            debugger->doInput(QString("c\n"), ni);
+            debugAction->setShortcut(QString());
+        } else {
+            debugAction->setText(tr("Continue"));
+            debugAction->setIcon(QIcon(":/images/continue.png"));
+            debugAction->setShortcut(debugKey);
+            debugger->pause();
+        }
+        debugAction->setEnabled(true);
     }
-    ((Tab *) tabs->currentWidget())->clearOutput();
-    printLogWithTime(tr("Debugging started...") + '\n', Qt::darkGreen);
-    QString path = Common::pathInTemp("SASMprog.exe");
-    CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
-    debugger = new Debugger(compilerOut, path, ioIncIncluded, Common::pathInTemp(QString()), assembler);
-    connect(debugger, SIGNAL(highlightLine(int)), code, SLOT(updateDebugLine(int)));
-    connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
-    connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
-    connect(debugger, SIGNAL(started()), this, SLOT(showAnyCommandWidget()));
-    connect(code, SIGNAL(breakpointsChanged(quint64,bool)), debugger, SLOT(changeBreakpoint(quint64,bool)));
-    connect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
-               this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
-    connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
-    connect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
-    connect(debugger, SIGNAL(inMacro()), this, SLOT(debugNextNi()), Qt::QueuedConnection);
-    code->setDebugEnabled();
+}
+
+void MainWindow::changeDebugActionToStart()
+{
+    debugAction->setText(tr("Continue"));
+    debugAction->setIcon(QIcon(":/images/continue.png"));
+    debugAction->setShortcut(debugKey);
+    if (!debuggerWasStarted)
+        debuggerWasStarted = true;
+    else {
+        debugShowRegisters();
+        debugShowMemory();
+    }
 }
 
 void MainWindow::enableDebugActions()
 {
+    debugAction->setText(tr("Continue"));
+    debugAction->setIcon(QIcon(":/images/continue.png"));
+
     //set all user's breakpoints
     CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
     int lineNumber;
@@ -1095,8 +1121,6 @@ void MainWindow::enableDebugActions()
     }
 
     //enable all actions
-    debugAction->setEnabled(false);
-    debugContinueAction->setEnabled(true);
     debugNextAction->setEnabled(true);
     debugNextNiAction->setEnabled(true);
     debugShowRegistersAction->setEnabled(true);
@@ -1118,8 +1142,9 @@ void MainWindow::enableDebugActions()
 
 void MainWindow::disableDebugActions(bool start)
 {
-    debugAction->setEnabled(true);
-    debugContinueAction->setEnabled(false);
+    debugAction->setText(tr("Debug"));
+    debugAction->setIcon(QIcon(":/images/debug.png"));
+
     debugNextAction->setEnabled(false);
     debugNextNiAction->setEnabled(false);
     debugShowRegistersAction->setEnabled(false);
@@ -1137,15 +1162,6 @@ void MainWindow::disableDebugActions(bool start)
     runAction->setEnabled(true);
 }
 
-void MainWindow::debugContinue()
-{
-    debugContinueAction->setEnabled(false);
-    debugger->doInput(QString("c\n"), ni);
-    debugShowRegisters();
-    debugShowMemory();
-    debugContinueAction->setEnabled(true);
-}
-
 void MainWindow::debugNext()
 {
     CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
@@ -1154,8 +1170,6 @@ void MainWindow::debugNext()
     } else {
         debugNextAction->setEnabled(false);
         debugger->doInput(QString("si\n"), si);
-        debugShowRegisters();
-        debugShowMemory();
         debugNextAction->setEnabled(true);
     }
 }
@@ -1170,8 +1184,6 @@ void MainWindow::debugNextNi()
 {
     debugNextNiAction->setEnabled(false);
     debugger->doInput(QString("ni\n"), ni);
-    debugShowRegisters();
-    debugShowMemory();
     debugNextNiAction->setEnabled(true);
 }
 
@@ -1206,46 +1218,47 @@ void MainWindow::debugShowMemory()
             //fill table
             memoryWindow->initializeMemoryWindow(watches);
         }
-        debugger->setWatchesCount(memoryWindow->rowCount() - 1);
-        for (int i = 0; i < memoryWindow->rowCount() - 1; i++) {
-            if (memoryWindow->cellWidget(i, 2)) {
-                WatchSettinsWidget *settings = (WatchSettinsWidget *) memoryWindow->cellWidget(i, 2);
+        if (debugger->isStopped()) {
+            debugger->setWatchesCount(memoryWindow->rowCount() - 1);
+            for (int i = 0; i < memoryWindow->rowCount() - 1; i++) {
+                if (memoryWindow->cellWidget(i, 2)) {
+                    WatchSettinsWidget *settings = (WatchSettinsWidget *) memoryWindow->cellWidget(i, 2);
 
-                int arraySize = 0;
+                    int arraySize = 0;
 
-                int size = settings->sizeComboBox->currentIndex();
-                QStringList sizeFormat;
-                sizeFormat << "int" << "short" << "char" << "long long";
+                    int size = settings->sizeComboBox->currentIndex();
+                    QStringList sizeFormat;
+                    sizeFormat << "int" << "short" << "char" << "long long";
 
-                bool ok;
-                arraySize = settings->arraySizeEdit->text().toInt(&ok);
-                if (!ok && sizeFormat[size] == "long long") {
-                    arraySize = 1;
-                    ok = true;
-                }
-                QString watchAsArray;
-                if (ok && arraySize > 0)
-                    watchAsArray = "[" + QString::number(arraySize) + "]";
+                    bool ok;
+                    arraySize = settings->arraySizeEdit->text().toInt(&ok);
+                    if (!ok && sizeFormat[size] == "long long") {
+                        arraySize = 1;
+                        ok = true;
+                    }
+                    QString watchAsArray;
+                    if (ok && arraySize > 0)
+                        watchAsArray = "[" + QString::number(arraySize) + "]";
 
-                int type = settings->typeComboBox->currentIndex();
-                QStringList printFormat;
-                printFormat << "p" << "p/x" << "p/t" << "p/c" << "p/d" << "p/u" << "p/f";
+                    int type = settings->typeComboBox->currentIndex();
+                    QStringList printFormat;
+                    printFormat << "p" << "p/x" << "p/t" << "p/c" << "p/d" << "p/u" << "p/f";
 
-                if (! settings->addressCheckbox->isChecked()) { //watch as variable
-                    debugger->doInput(printFormat[type] + " (" + sizeFormat[size] + watchAsArray + ")" +
-                                      memoryWindow->item(i, 0)->text() + "\n", infoMemory);
-                } else { //watch as random address
-                    debugger->doInput(printFormat[type] + " (" + sizeFormat[size] + watchAsArray + ")" +
-                                      "*((" + sizeFormat[size] + "*) " + memoryWindow->item(i, 0)->text() + ")" +
-                                      "\n", infoMemory);
+                    if (! settings->addressCheckbox->isChecked()) { //watch as variable
+                        debugger->doInput(printFormat[type] + " (" + sizeFormat[size] + watchAsArray + ")" +
+                                          memoryWindow->item(i, 0)->text() + "\n", infoMemory);
+                    } else { //watch as random address
+                        debugger->doInput(printFormat[type] + " (" + sizeFormat[size] + watchAsArray + ")" +
+                                          "*((" + sizeFormat[size] + "*) " + memoryWindow->item(i, 0)->text() + ")" +
+                                          "\n", infoMemory);
+                    }
                 }
             }
-        }
-        if (memoryWindow->rowCount() > 1) {
-            QEventLoop eventLoop;
-            connect(debugger, SIGNAL(printMemory(QList<Debugger::memoryInfo>)), &eventLoop, SLOT(quit()));
-            connect(debugger, SIGNAL(finished()), &eventLoop, SLOT(quit()));
-            eventLoop.exec();
+            static SignalLocker locker;
+            if (memoryWindow->rowCount() > 1 && locker.tryLock()) {
+                connect(debugger, SIGNAL(printMemory(QList<Debugger::memoryInfo>)), &locker, SLOT(unlock()), Qt::UniqueConnection);
+                connect(debugger, SIGNAL(finished()), &locker, SLOT(unlock()), Qt::UniqueConnection);
+            }
         }
     } else
         if (memoryWindow) {
@@ -1320,11 +1333,12 @@ void MainWindow::debugShowRegisters()
             if (memoryDock)
                 memoryDock->show();
         }
-        debugger->doInput(QString("info registers\n"), infoRegisters);
-        QEventLoop eventLoop;
-        connect(debugger, SIGNAL(printRegisters(QList<Debugger::registersInfo>)), &eventLoop, SLOT(quit()));
-        connect(debugger, SIGNAL(finished()), &eventLoop, SLOT(quit()));
-        eventLoop.exec();
+        static SignalLocker locker;
+        if (debugger->isStopped() && locker.tryLock()) {
+            connect(debugger, SIGNAL(printRegisters(QList<Debugger::registersInfo>)), &locker, SLOT(unlock()), Qt::UniqueConnection);
+            connect(debugger, SIGNAL(finished()), &locker, SLOT(unlock()), Qt::UniqueConnection);
+            debugger->doInput(QString("info registers\n"), infoRegisters);
+        }
     } else
         if (registersWindow) {
             registersWindow->close();
@@ -1379,16 +1393,16 @@ void MainWindow::closeAnyCommandWidget()
 
 void MainWindow::debugRunCommand(QString command, bool print)
 {
-    printLog("> " + command + "\n", QColor(32, 71, 247));
-    QEventLoop eventLoop;
-    connect(debugger, SIGNAL(printLog(QString,QColor)), &eventLoop, SLOT(quit()));
-    if (print)
-        debugger->doInput("p " + command + "\n", anyAction);
-    else
-        debugger->doInput(command + "\n", anyAction);
-    eventLoop.exec();
-    debugShowRegisters();
-    debugShowMemory();
+    static SignalLocker locker;
+    if (debugger->isStopped() && locker.tryLock()) {
+        connect(debugger, SIGNAL(printLog(QString,QColor)), &locker, SLOT(unlock()), Qt::UniqueConnection);
+        connect(debugger, SIGNAL(finished()), &locker, SLOT(unlock()), Qt::UniqueConnection);
+        printLog("> " + command + "\n", QColor(32, 71, 247));
+        if (print)
+            debugger->doInput("p " + command + "\n", anyAction);
+        else
+            debugger->doInput(command + "\n", anyAction);
+    }
 }
 
 void MainWindow::find()
@@ -1677,6 +1691,15 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
     QString linkerOptions = assembler->getLinkerOptions();
     settingsUi.linkingOptionsEdit->setText(settings.value("linkingoptions", linkerOptions).toString());
 
+    QString assemblerPath = assembler->getAssemblerPath();
+    settingsUi.assemblerPathEdit->setText(settings.value("assemblerpath", assemblerPath).toString());
+
+#ifdef Q_OS_WIN32
+    settingsUi.linkerPathEdit->setText(settings.value("linkerpath", Common::applicationDataPath() + "/MinGW/bin/gcc.exe").toString());
+#else
+    settingsUi.linkerPathEdit->setText(settings.value("linkerpath", "gcc").toString());
+#endif
+
     disconnect(settingsUi.x86RadioButton, SIGNAL(toggled(bool)), this, SLOT(changeMode(bool)));
     //mode
     if (assembler->isx86())
@@ -1755,8 +1778,10 @@ void MainWindow::recreateAssembler(bool start)
     if (!start) {
         settingsUi.assemblyOptionsEdit->setText(assembler->getAssemblerOptions());
         settingsUi.linkingOptionsEdit->setText(assembler->getLinkerOptions());
+        settingsUi.assemblerPathEdit->setText(assembler->getAssemblerPath());
         settings.setValue("assemblyoptions", assembler->getAssemblerOptions());
         settings.setValue("linkingoptions", assembler->getLinkerOptions());
+        settings.setValue("assemblerpath", assembler->getAssemblerPath());
         changeStartText();
         recreateHighlighter();
     }
@@ -1773,6 +1798,7 @@ void MainWindow::backupSettings()
     backupAssembler = settings.value("assembler", QString("NASM")).toString();
     backupMode = settings.value("mode", QString("x86")).toString();
     backupAssemblerOptions = settings.value("assemblyoptions", assembler->getAssemblerOptions()).toString();
+    backupAssemblerPath = settings.value("assemblerpath", assembler->getAssemblerPath()).toString();
     backupLinkerOptions = settings.value("linkingoptions", assembler->getLinkerOptions()).toString();
     backupStartText = settings.value("starttext", assembler->getStartText()).toString();
 }
@@ -1783,6 +1809,7 @@ void MainWindow::restoreSettingsAndExit()
     settings.setValue("mode", backupMode);
     recreateAssembler();
     settings.setValue("assemblyoptions", backupAssemblerOptions);
+    settings.setValue("assemblerpath", backupAssemblerPath);
     settings.setValue("linkingoptions", backupLinkerOptions);
     settings.setValue("starttext", backupStartText);
     settingsWindow->close();
@@ -1822,6 +1849,8 @@ void MainWindow::saveSettings()
 
     settings.setValue("assemblyoptions", settingsUi.assemblyOptionsEdit->text());
     settings.setValue("linkingoptions", settingsUi.linkingOptionsEdit->text());
+    settings.setValue("assemblerpath", settingsUi.assemblerPathEdit->text());
+    settings.setValue("linkerpath", settingsUi.linkerPathEdit->text());
     settings.setValue("starttext", settingsStartTextEditor->document()->toPlainText());
 
     backupSettings();
@@ -1936,7 +1965,6 @@ void MainWindow::changeActionsState(int widgetIndex)
         runExeAction->setEnabled(false);
         stopAction->setEnabled(false);
         debugAction->setEnabled(false);
-        debugContinueAction->setEnabled(false);
         debugNextAction->setEnabled(false);
         debugNextNiAction->setEnabled(false);
         debugShowRegistersAction->setEnabled(false);

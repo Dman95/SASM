@@ -49,7 +49,8 @@ SOURCES += main.cpp\
     nasm.cpp \
     gas.cpp \
     common.cpp \
-    fasm.cpp
+    fasm.cpp \
+    signallocker.cpp
 
 HEADERS  += mainwindow.h \
     tab.h \
@@ -67,7 +68,8 @@ HEADERS  += mainwindow.h \
     nasm.h \
     gas.h \
     common.h \
-    fasm.h
+    fasm.h \
+    signallocker.h
 
 FORMS += settings.ui
 

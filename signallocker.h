@@ -38,59 +38,25 @@
 **
 ****************************************************************************/
 
-#ifndef ASSEMBLER_H
-#define ASSEMBLER_H
+#ifndef SIGNALLOCKER_H
+#define SIGNALLOCKER_H
 
 #include <QObject>
-#include <QMap>
-#include <QList>
-#include <QRegExp>
-#include <QFile>
-#include <QTextStream>
-#include <QVector>
-#include <QTextCharFormat>
-#include <QSettings>
-#include <QPalette>
-#include "common.h"
-#include "codeeditor.h"
 
-class Assembler : public QObject //Abstract class
+class SignalLocker : public QObject
 {
     Q_OBJECT
+    bool locked;
 public:
-    struct LineNum {
-        quint64 numInCode;
-        quint64 numInMem;
-        bool operator ==(const LineNum& ln)
-        {
-            return ln.numInCode == numInCode;
-        }
-    };
-    struct HighlightingRule
-    {
-        QRegExp pattern;
-        QTextCharFormat format;
-    };
-    bool x86;
-    explicit Assembler(bool x86, QObject *parent = 0);
-    virtual QString getAssemblerPath() = 0;
-    virtual quint64 getMainOffset(QFile &lst, QString entryLabel) = 0;
-    virtual void parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset) = 0;
-    virtual void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
-                                     QList<QTextCharFormat *> &formats,
-                                     bool &multiLineComments,
-                                     QRegExp &commentStartExpression,
-                                     QRegExp &commentEndExpression) = 0;
-    virtual QString getStartText() = 0;
-    virtual void putDebugString(CodeEditor *code) = 0;
-    virtual QString getAssemblerOptions() = 0;
-    virtual QString getLinkerOptions() = 0;
-    bool isx86();
+    explicit SignalLocker(QObject *parent = 0);
 
 signals:
-    
+
 public slots:
-    
+    void unlock();
+    bool tryLock();
+    void lock();
+
 };
 
-#endif // ASSEMBLER_H
+#endif // SIGNALLOCKER_H

@@ -54,10 +54,12 @@ QString NASM::getAssemblerPath()
     #endif
 }
 
-quint64 NASM::getMainOffset(QFile &lst)
+quint64 NASM::getMainOffset(QFile &lst, QString entryLabel)
 {
+    if (entryLabel == "start")
+        return 0;
     QTextStream lstStream(&lst);
-    QRegExp mainLabel("CMAIN:|main:");
+    QRegExp mainLabel(entryLabel + ":");
     bool flag = false;
     while (!lstStream.atEnd()) {
         QString line = lstStream.readLine();
@@ -67,7 +69,8 @@ quint64 NASM::getMainOffset(QFile &lst)
                 //omit this string
                 continue;
             }
-            char *s = line.toLocal8Bit().data();
+            QByteArray lineArr = line.toLocal8Bit();
+            const char *s = lineArr.constData();
             quint64 a, b, c;
             if (sscanf(s, "%llu %llx %llx", &a, &b, &c) == 3) {
                 if (!(b == 0 && c == 0)) { //exclude 0 0
@@ -84,15 +87,25 @@ quint64 NASM::getMainOffset(QFile &lst)
 
 void NASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset)
 {
+    if (!parseStringsInLstFile(lst, lines, ioIncIncluded, ioIncSize, offset, true))
+        parseStringsInLstFile(lst, lines, ioIncIncluded, ioIncSize, offset, false);
+}
+
+bool NASM::parseStringsInLstFile(QFile &lst, QVector<Assembler::LineNum> &lines,
+                                 bool ioIncIncluded, quint64 ioIncSize, quint64 offset, bool considerTextSection)
+{
     bool inTextSection = false;
     QRegExp sectionTextRegExp("[Ss][Ee][Cc][Tt][Ii][Oo][Nn]\\s+\\.text");
     QRegExp sectionRegExp("[Ss][Ee][Cc][Tt][Ii][Oo][Nn]");
     quint64 omitLinesCount = 0; //for skipping strings from section .data - for processLst()
     QTextStream lstStream(&lst);
+    bool hasTextSection = false;
+    lstStream.seek(0);
     while (!lstStream.atEnd()) {
         QString line = lstStream.readLine();
         if (line.indexOf(sectionTextRegExp) != -1) {
             inTextSection = true;
+            hasTextSection = true;
         } else if (line.indexOf(sectionRegExp) != -1) {
             inTextSection = false;
         }
@@ -102,8 +115,9 @@ void NASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioI
             omitLinesCount++;
             continue;
         }
-        if (inTextSection) {
-            char *s = line.toLocal8Bit().data();
+        if (inTextSection || !considerTextSection) {
+            QByteArray lineArr = line.toLocal8Bit();
+            const char *s = lineArr.constData();
             quint64 a, b, c;
             if (sscanf(s, "%llu %llx %llx", &a, &b, &c) == 3) {
                 if (!(b == 0 && c == 0)) { //exclude 0 0
@@ -118,6 +132,7 @@ void NASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioI
             }
         }
     }
+    return hasTextSection;
 }
 
 QString NASM::getStartText()
