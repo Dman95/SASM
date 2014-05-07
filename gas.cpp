@@ -57,9 +57,12 @@ QString GAS::getAssemblerPath()
     #endif
 }
 
-quint64 GAS::getMainOffset(QFile &lst) {
+quint64 GAS::getMainOffset(QFile &lst, QString entryLabel)
+{
+    if (entryLabel == "start")
+        return 0;
     QTextStream lstStream(&lst);
-    QRegExp mainLabel("main:");
+    QRegExp mainLabel(entryLabel + ":");
     bool flag = false;
     while (!lstStream.atEnd()) {
         QString line = lstStream.readLine();
@@ -69,7 +72,8 @@ quint64 GAS::getMainOffset(QFile &lst) {
                 //omit this string
                 continue;
             }
-            char *s = line.toLocal8Bit().data();
+            QByteArray lineArr = line.toLocal8Bit();
+            const char *s = lineArr.constData();
             quint64 a, b, c;
             if (sscanf(s, "%llu %llx %llx", &a, &b, &c) == 3) {
                 if (!(b == 0 && c == 0)) { //exclude 0 0
@@ -104,7 +108,8 @@ void GAS::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIn
             continue;
         }
         if (inTextSection) {
-            char *s = line.toLocal8Bit().data();
+            QByteArray lineArr = line.toLocal8Bit();
+            const char *s = lineArr.constData();
             quint64 a, b, c;
             if (sscanf(s, "%llu %llx %llx", &a, &b, &c) == 3){
                 if (!(b == 0 && c == 0)) { //exclude 0 0

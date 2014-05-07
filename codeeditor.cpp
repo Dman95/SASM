@@ -42,7 +42,8 @@
 
 CodeEditor::CodeEditor(QWidget *parent, bool withBeakpoints) :
     RuQPlainTextEdit(parent), debugImage(":/images/debugLine.png"),
-    breakpointImage(":/images/breakpoint.png")
+    breakpointImage(":/images/breakpoint.png"),
+    settings("SASM Project", "SASM")
 {
     hasBreakpoints = withBeakpoints;
     prevBlockCount = -1;
@@ -105,17 +106,12 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     //paint on line number area
     QPainter painter(lineNumberArea);
-    QSettings settings("SASM Project", "SASM");
     painter.fillRect(event->rect(), settings.value("linenumberpanelcolor", palette().color(QPalette::Window)).value<QColor>());
 
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();
     int top = (int) blockBoundingGeometry(block).translated(contentOffset()).top();
     int bottom = top + (int) blockBoundingRect(block).height();
-
-    //set debugAreaWidth before drawing
-    debugAreaWidth = 3 + debugImage.width() + 1; //left margin + arrow width + right margin
-    updateLineNumberAreaWidth(0);
 
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
@@ -213,7 +209,6 @@ QList<int> *CodeEditor::getBreakpoints()
 
 void CodeEditor::highlightCurrentLine()
 {
-    QSettings settings("SASM Project", "SASM");
     if (!debugMode) {
         if (settings.value("currentlinemode", true).toBool()) {
             QList<QTextEdit::ExtraSelection> extraSelections;
@@ -243,10 +238,9 @@ void CodeEditor::highlightDebugLine(int lineNumber)
     if (debugMode) {
         QList<QTextEdit::ExtraSelection> extraSelections;
 
-        if (!isReadOnly()) {
+        if (!isReadOnly() && lineNumber > 0) {
             QTextEdit::ExtraSelection selection;
 
-            QSettings settings("SASM Project", "SASM");
             QColor lineColor = settings.value("debuglinecolor", QColor(235, 200, 40)).value<QColor>();
 
             selection.format.setBackground(lineColor);
@@ -264,11 +258,16 @@ void CodeEditor::highlightDebugLine(int lineNumber)
 
 void CodeEditor::updateDebugLine(int number)
 {
+    //number > 0 => highlight line
+    //number == -1 => exit from debug mode
+    //number == -2 => does not highlight any line, but does not exit from debug mode
+    //last case for waiting program stops on next instruction or breakpoint
     if (number == -1)
         setDebugMode(false);
     else
         setDebugMode(true);
-    currentDebugLine = number;
+    if (number != -2)
+        currentDebugLine = number;
 
     //create rectangle of line number area and highlight debug line throw updateRequest()
     QRect lineNumberAreaRect(lineNumberArea->x(), lineNumberArea->y(),

@@ -54,6 +54,12 @@
 #include <QFile>
 #include "assembler.h"
 
+#ifdef Q_OS_WIN32
+    #include <Windows.h>
+    #include <stddef.h>
+    #include <stdlib.h>
+#endif
+
 enum DebugActionType {ni, si, showLine, infoRegisters, infoMemory, anyAction, none, breakpoint};
 
 class Debugger : public QObject
@@ -77,6 +83,9 @@ public:
     };
 
     typedef Assembler::LineNum LineNum;
+
+    bool isStopped();
+    void pause();
 
 private:
     void processLst();
@@ -109,6 +118,12 @@ private:
 
     Assembler *assembler;
 
+    bool stopped;
+    quint64 pid;
+    bool dbgSymbols;
+
+    quint64 entryPoint;
+
 public slots:
     void readOutputToBuffer();
     void processOutput();
@@ -116,6 +131,7 @@ public slots:
     void processAction(QString output, QString error = QString());
     void doInput(QString command, DebugActionType actionType);
     void changeBreakpoint(quint64 lineNumber, bool isAdded);
+    void emitStarted();
 
 signals:
     void highlightLine(int); //highlight current debug line
@@ -126,6 +142,7 @@ signals:
     void printLog(QString msg, QColor color = QColor(Qt::black));
     void printOutput(QString msg);
     void inMacro();
+    void wasStopped();
 };
 
 #endif // DEBUGGER_H

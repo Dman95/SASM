@@ -38,59 +38,28 @@
 **
 ****************************************************************************/
 
-#ifndef ASSEMBLER_H
-#define ASSEMBLER_H
+#include "signallocker.h"
 
-#include <QObject>
-#include <QMap>
-#include <QList>
-#include <QRegExp>
-#include <QFile>
-#include <QTextStream>
-#include <QVector>
-#include <QTextCharFormat>
-#include <QSettings>
-#include <QPalette>
-#include "common.h"
-#include "codeeditor.h"
-
-class Assembler : public QObject //Abstract class
+SignalLocker::SignalLocker(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
-public:
-    struct LineNum {
-        quint64 numInCode;
-        quint64 numInMem;
-        bool operator ==(const LineNum& ln)
-        {
-            return ln.numInCode == numInCode;
-        }
-    };
-    struct HighlightingRule
-    {
-        QRegExp pattern;
-        QTextCharFormat format;
-    };
-    bool x86;
-    explicit Assembler(bool x86, QObject *parent = 0);
-    virtual QString getAssemblerPath() = 0;
-    virtual quint64 getMainOffset(QFile &lst, QString entryLabel) = 0;
-    virtual void parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset) = 0;
-    virtual void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
-                                     QList<QTextCharFormat *> &formats,
-                                     bool &multiLineComments,
-                                     QRegExp &commentStartExpression,
-                                     QRegExp &commentEndExpression) = 0;
-    virtual QString getStartText() = 0;
-    virtual void putDebugString(CodeEditor *code) = 0;
-    virtual QString getAssemblerOptions() = 0;
-    virtual QString getLinkerOptions() = 0;
-    bool isx86();
+    locked = false;
+}
 
-signals:
-    
-public slots:
-    
-};
+bool SignalLocker::tryLock()
+{
+    if (locked)
+        return false;
+    lock();
+    return true;
+}
 
-#endif // ASSEMBLER_H
+void SignalLocker::lock()
+{
+    locked = true;
+}
+
+void SignalLocker::unlock()
+{
+    locked = false;
+}

@@ -55,6 +55,7 @@
 #include <QMap>
 #include <QSplitter>
 #include <QToolBar>
+#include <QMutex>
 #include "tab.h"
 #include "highlighter.h"
 #include "debugger.h"
@@ -70,6 +71,7 @@
 #include "gas.h"
 #include "common.h"
 #include "fasm.h"
+#include "signallocker.h"
 
 class MainWindow : public QMainWindow
 {
@@ -131,7 +133,6 @@ private:
     QAction *runExeAction;
     QAction *stopAction;
     QAction *debugAction;
-    QAction *debugContinueAction;
     QAction *debugNextAction;
     QAction *debugNextNiAction;
     QAction *debugToggleBreakpointAction;
@@ -164,6 +165,8 @@ private:
     bool programStopped;
     int outputIndex;
     Assembler *assembler;
+    bool debuggerWasStarted;
+    QString debugKey;
 
     //highlighters
     Highlighter *highlighter;
@@ -191,6 +194,7 @@ private:
     QString backupMode;
     QString backupAssemblerOptions;
     QString backupLinkerOptions;
+    QString backupAssemblerPath;
     QString backupStartText;
 
     //about close
@@ -224,7 +228,6 @@ public slots:
 
     //debug
     void debug();
-    void debugContinue();
     void enableDebugActions();
     void disableDebugActions(bool start = false);
     void debugNext();
@@ -242,6 +245,7 @@ public slots:
     void closeAnyCommandWidget();
     void printOutput(QString msg, int index = -1);
     void getOutput();
+    void changeDebugActionToStart();
 
     //search
     void find();

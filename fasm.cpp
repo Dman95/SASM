@@ -61,6 +61,7 @@ QString FASM::getListingFilePath(QFile &lstOut)
     QProcess getLst;
     QStringList getLstArguments;
     getLstArguments << lstOut.fileName() << listingPath;
+    getLst.setWorkingDirectory(Common::applicationDataPath() + "/include");
     #ifdef Q_OS_WIN32
         getLst.start(Common::applicationDataPath() + "/FASM/listing.exe", getLstArguments);
     #else
@@ -70,12 +71,16 @@ QString FASM::getListingFilePath(QFile &lstOut)
     return listingPath;
 }
 
-quint64 FASM::getMainOffset(QFile &lstOut) {
+quint64 FASM::getMainOffset(QFile &lstOut, QString entryLabel)
+{
     QFile lst(getListingFilePath(lstOut));
     lst.open(QFile::ReadOnly);
-
     QTextStream lstStream(&lst);
-    QRegExp mainLabel("main:");
+    QRegExp mainLabel;
+    if (entryLabel == "start")
+        mainLabel = QRegExp("\\.text");
+    else
+        mainLabel = QRegExp(entryLabel + ":");
     bool flag = false;
     while (!lstStream.atEnd()) {
         QString line = lstStream.readLine();
@@ -99,31 +104,48 @@ void FASM::parseLstFile(QFile &lstOut, QVector<Assembler::LineNum> &lines, bool,
     QFile lst(getListingFilePath(lstOut));
     lst.open(QFile::ReadOnly);
 
-    bool inTextSection = false;
-    QRegExp sectionTextRegExp("\\.text");
-    QRegExp sectionBssRegExp("\\.bss");
-    QRegExp sectionDataRegExp("\\.data");
     QTextStream lstStream(&lst);
     quint64 currentLine = 0;
+    QList<QPair<quint64, QString> > instrList;
     while (!lstStream.atEnd()) {
         QString line = lstStream.readLine();
         currentLine++;
-        if (line.indexOf(sectionTextRegExp) != -1) {
-            inTextSection = true;
-        } else if (line.indexOf(sectionDataRegExp) != -1 || line.indexOf(sectionBssRegExp) != -1) {
-            inTextSection = false;
-        }
-        if (inTextSection) {
-            line = line.split(QChar(':')).at(0);
-            if (line.length() > 16)
-                continue;
-            LineNum l;
-            l.numInCode = currentLine;
-            l.numInMem = line.toULongLong(0, 16) + offset;
-            lines.append(l);
-        }
+        int index = line.indexOf(QChar(':'));
+        if (index == -1 || index > 16)
+            continue;
+        QString first = line.left(index);
+        QString second = line.mid(index + 1);
+        QStringList l = line.split(QChar(':'));
+        int k = 0;
+        while (k < second.length() && second[k].isSpace())
+            k++;
+        second.remove(0, k);
+        instrList.append(QPair<quint64, QString>(first.toULongLong(0, 16) + offset, second));
     }
     lst.close();
+    QFile programFile(Common::pathInTemp("program.asm"));
+    programFile.open(QFile::ReadOnly);
+    QTextStream programStream(&programFile);
+    int i = 0; //offset in list
+    int numInCode = 0;
+    while (!programStream.atEnd()) {
+        QString line = programStream.readLine();
+        numInCode++;
+        int k = 0;
+        while (k < line.length() && line[k].isSpace())
+            k++;
+        line.remove(0, k);
+        if (line == instrList[i].second) {
+            LineNum l;
+            l.numInCode = numInCode;
+            l.numInMem = instrList[i].first;
+            lines.append(l);
+            i++;
+            if (i >= instrList.size())
+                break;
+        }
+    }
+    programFile.close();
 }
 
 QString FASM::getStartText()

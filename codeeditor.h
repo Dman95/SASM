@@ -99,6 +99,7 @@ private:
     int firstTopMargin;
     bool hasBreakpoints;
     int prevBlockCount;
+    QSettings settings;
 
 signals:
     void breakpointsChanged(quint64 lineNumber, bool isAdded);
