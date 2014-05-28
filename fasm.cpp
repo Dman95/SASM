@@ -54,6 +54,18 @@ QString FASM::getAssemblerPath()
     #endif
 }
 
+QString FASM::getLinkerPath()
+{
+    #ifdef Q_OS_WIN32
+        if (isx86())
+            return Common::applicationDataPath() + "/MinGW/bin/gcc.exe";
+        else
+            return Common::applicationDataPath() + "/MinGW64/bin/gcc.exe";
+    #else
+        return "gcc";
+    #endif
+}
+
 QString FASM::getListingFilePath(QFile &lstOut)
 {
     QString listingPath = Common::pathInTemp("fasmListing.txt");
@@ -76,11 +88,7 @@ quint64 FASM::getMainOffset(QFile &lstOut, QString entryLabel)
     QFile lst(getListingFilePath(lstOut));
     lst.open(QFile::ReadOnly);
     QTextStream lstStream(&lst);
-    QRegExp mainLabel;
-    if (entryLabel == "start")
-        mainLabel = QRegExp("\\.text");
-    else
-        mainLabel = QRegExp(entryLabel + ":");
+    QRegExp mainLabel(entryLabel + ":");
     bool flag = false;
     while (!lstStream.atEnd()) {
         QString line = lstStream.readLine();
@@ -96,7 +104,7 @@ quint64 FASM::getMainOffset(QFile &lstOut, QString entryLabel)
         }
     }
     lst.close();
-    return 0;
+    return -1;
 }
 
 void FASM::parseLstFile(QFile &lstOut, QVector<Assembler::LineNum> &lines, bool, quint64, quint64 offset)

@@ -196,6 +196,7 @@ private:
     QString backupLinkerOptions;
     QString backupAssemblerPath;
     QString backupStartText;
+    QString backupLinkerPath;
 
     //about close
     bool closeFromCloseAll;

@@ -74,6 +74,7 @@ public:
     bool x86;
     explicit Assembler(bool x86, QObject *parent = 0);
     virtual QString getAssemblerPath() = 0;
+    virtual QString getLinkerPath() = 0;
     virtual quint64 getMainOffset(QFile &lst, QString entryLabel) = 0;
     virtual void parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset) = 0;
     virtual void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,

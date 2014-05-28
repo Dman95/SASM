@@ -1779,9 +1779,11 @@ void MainWindow::recreateAssembler(bool start)
         settingsUi.assemblyOptionsEdit->setText(assembler->getAssemblerOptions());
         settingsUi.linkingOptionsEdit->setText(assembler->getLinkerOptions());
         settingsUi.assemblerPathEdit->setText(assembler->getAssemblerPath());
+        settingsUi.linkerPathEdit->setText(assembler->getLinkerPath());
         settings.setValue("assemblyoptions", assembler->getAssemblerOptions());
         settings.setValue("linkingoptions", assembler->getLinkerOptions());
         settings.setValue("assemblerpath", assembler->getAssemblerPath());
+        settings.setValue("linkerpath", assembler->getLinkerPath());
         changeStartText();
         recreateHighlighter();
     }
@@ -1801,6 +1803,7 @@ void MainWindow::backupSettings()
     backupAssemblerPath = settings.value("assemblerpath", assembler->getAssemblerPath()).toString();
     backupLinkerOptions = settings.value("linkingoptions", assembler->getLinkerOptions()).toString();
     backupStartText = settings.value("starttext", assembler->getStartText()).toString();
+    backupLinkerPath = settings.value("linkerpath", assembler->getLinkerPath()).toString();
 }
 
 void MainWindow::restoreSettingsAndExit()
@@ -1812,6 +1815,7 @@ void MainWindow::restoreSettingsAndExit()
     settings.setValue("assemblerpath", backupAssemblerPath);
     settings.setValue("linkingoptions", backupLinkerOptions);
     settings.setValue("starttext", backupStartText);
+    settings.setValue("linkerpath", backupLinkerPath);
     settingsWindow->close();
 }
 
