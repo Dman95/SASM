@@ -51,6 +51,7 @@ class FASM : public Assembler
 public:
     explicit FASM(bool x86, QObject *parent = 0);
     QString getAssemblerPath();
+    QString getLinkerPath();
     quint64 getMainOffset(QFile &lstOut, QString entryLabel);
     void parseLstFile(QFile &lstOut, QVector<Assembler::LineNum> &lines, bool, quint64, quint64 offset);
     void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,

@@ -49,6 +49,7 @@ class NASM : public Assembler
 public:
     explicit NASM(bool x86, QObject *parent = 0);
     QString getAssemblerPath();
+    QString getLinkerPath();
     quint64 getMainOffset(QFile &lst, QString entryLabel);
     void parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset);
     bool parseStringsInLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset, bool considerTextSection);

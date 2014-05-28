@@ -218,7 +218,7 @@ void Debugger::processMessage(QString output, QString error)
         }
     } else { //debug symbols does not exists (for example, non-gcc linker)
         if (c == 1) {
-            offset = 0x401000; //!!!!!!!!!!!!! - start of text or code section
+            offset = entryPoint; //changes in processLst()
             c++;
             processLst(); //count accordance
             run(); //perform Debugger::run(), that run program and open I/O files
@@ -499,11 +499,21 @@ void Debugger::processLst()
     if (lst.open(QIODevice::ReadOnly)) {
         //heuristic:
         //if debug symbols exists - offset is difference between main labels in listing and in executable
-        //otherwise - offset is difference between beginning of text sections in listing and in executable
+        //otherwise - offset is difference between entry point, labeled as "start", in listing and in executable
+        quint64 mainOffset;
         if (dbgSymbols)
-            offset -= assembler->getMainOffset(lst, "main");
+            mainOffset = assembler->getMainOffset(lst, "main");
         else
-            offset -= assembler->getMainOffset(lst, "start");
+            mainOffset = assembler->getMainOffset(lst, "start");
+        if ((qint64) mainOffset == -1) {
+            actionTypeQueue.enqueue(anyAction);
+            processAction(
+                tr("Entry point was not found! Entry point should have label \"main\" (if gcc linker is used) or \"start\" (otherwise)."));
+            QObject::disconnect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputToBuffer()));
+            emit finished();
+            return;
+        }
+        offset -= mainOffset;
         lst.close();
         lst.open(QIODevice::ReadOnly);
         assembler->parseLstFile(lst, lines, ioIncIncluded, ioIncSize, offset);

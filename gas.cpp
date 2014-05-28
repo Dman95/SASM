@@ -57,10 +57,20 @@ QString GAS::getAssemblerPath()
     #endif
 }
 
+QString GAS::getLinkerPath()
+{
+    #ifdef Q_OS_WIN32
+        if (isx86())
+            return Common::applicationDataPath() + "/MinGW/bin/gcc.exe";
+        else
+            return Common::applicationDataPath() + "/MinGW64/bin/gcc.exe";
+    #else
+        return "gcc";
+    #endif
+}
+
 quint64 GAS::getMainOffset(QFile &lst, QString entryLabel)
 {
-    if (entryLabel == "start")
-        return 0;
     QTextStream lstStream(&lst);
     QRegExp mainLabel(entryLabel + ":");
     bool flag = false;
@@ -85,7 +95,7 @@ quint64 GAS::getMainOffset(QFile &lst, QString entryLabel)
                 flag = true;
         }
     }
-    return 0;
+    return -1;
 }
 
 void GAS::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset)
