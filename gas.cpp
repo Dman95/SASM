@@ -449,7 +449,7 @@ void GAS::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlighting
     commentStartExpression = QRegExp("/\\*");
     commentEndExpression = QRegExp("\\*/");
     rule.format = commentFormat;
-    rule.pattern = QRegExp("#[^\n\"'`]*");
+    rule.pattern = QRegExp("#[^\n]*");
     highlightingRules.append(rule);
     multiLineComments = true;
 

@@ -38,174 +38,233 @@
 **
 ****************************************************************************/
 
-#include "nasm.h"
+#include "masm.h"
 
-NASM::NASM(bool x86, QObject *parent) :
+//Windows only!
+
+MASM::MASM(bool x86, QObject *parent) :
     Assembler(x86, parent)
 {
-}
-
-QString NASM::getAssemblerPath()
-{
-    #ifdef Q_OS_WIN32
-        return Common::applicationDataPath() + "/NASM/nasm.exe";
-    #else
-        return "nasm";
+    #ifndef Q_OS_WIN32
+        QMessageBox::critical(0, tr("Error!"), tr("MASM is available on Windows only."));
     #endif
 }
 
-QString NASM::getLinkerPath()
+QString MASM::getAssemblerPath()
 {
-    #ifdef Q_OS_WIN32
-        if (isx86())
-            return Common::applicationDataPath() + "/MinGW/bin/gcc.exe";
-        else
-            return Common::applicationDataPath() + "/MinGW64/bin/gcc.exe";
-    #else
-        return "gcc";
-    #endif
+    return Common::applicationDataPath() + "/MASM/ml.exe";
 }
 
-quint64 NASM::getMainOffset(QFile &lst, QString entryLabel)
+QString MASM::getLinkerPath()
+{
+    return Common::applicationDataPath() + "/MASM/link.exe";
+}
+
+quint64 MASM::getMainOffset(QFile &lst, QString entryLabel)
 {
     QTextStream lstStream(&lst);
-    QRegExp mainLabel(entryLabel + ":");
-    mainLabel.setCaseSensitivity(Qt::CaseInsensitive);
-    bool flag = false;
+    QRegExp mainLabel(" [0-9a-fA-F]{8,16}.*" + entryLabel + ":.*");
+    QRegExp empty1("\t\t\t      C.*");
+    QRegExp empty2(" *;.*");
     while (!lstStream.atEnd()) {
         QString line = lstStream.readLine();
-        if (flag) {
-            if (line.length() <= 37) { //omit strings with data only
-                //if in list : line number, address, data and it is all (without instruction) -
-                //omit this string
-                continue;
-            }
-            QByteArray lineArr = line.toLocal8Bit();
-            const char *s = lineArr.constData();
-            quint64 a, b, c;
-            if (sscanf(s, "%llu %llx %llx", &a, &b, &c) == 3) {
-                if (!(b == 0 && c == 0)) { //exclude 0 0
-                    return b;
-                }
-            }
-        } else {
-            if (line.indexOf(mainLabel) != -1)
-                flag = true;
+        if (empty1.exactMatch(line))
+            continue;
+        if (empty2.exactMatch(line))
+            continue;
+        if (!mainLabel.exactMatch(line))
+            continue;
+        QByteArray lineArr = line.toLocal8Bit();
+        const char *s = lineArr.constData();
+        quint64 a;
+        if (sscanf(s, "%llx", &a) == 1) {
+            return a;
         }
     }
     return -1;
 }
 
-void NASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset)
+void MASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool, quint64, quint64 offset)
 {
-    bool inTextSection = false;
-    QRegExp sectionTextRegExp("[Ss][Ee][Cc][Tt][Ii][Oo][Nn]\\s+\\.text");
-    QRegExp sectionRegExp("[Ss][Ee][Cc][Tt][Ii][Oo][Nn]");
-    quint64 omitLinesCount = 0; //for skipping strings from section .data - for processLst()
     QTextStream lstStream(&lst);
-    lstStream.seek(0);
+    QList<QPair<quint64, QString> > instrList;
+    bool inTextSection = false;
+    QRegExp sectionTextRegExp("\\.code");
+    sectionTextRegExp.setCaseSensitivity(Qt::CaseInsensitive);
+    QRegExp sectionDataRegExp("\\.(data|fardata|const)");
+    sectionDataRegExp.setCaseSensitivity(Qt::CaseInsensitive);
+    QRegExp empty1("\t\t\t      C.*");
+    QRegExp empty2(" *;.*");
+    QRegExp stringWithCode(" [0-9a-fA-F]{8,16} +[0-9a-fA-F]{1,16}.*");
+    QRegExp stringWithAddress(" [0-9a-fA-F]{8,16}.*");
+    QRegExp macroBegin("[\t0-9a-fA-FRE ]+1\t.*");
+    QRegExp macro("[\t0-9a-fA-FRE ]+ +[1-9]\t.*");
+    QString mayBeMacro, line, macroInstruction;
+    bool inMacro = false;
     while (!lstStream.atEnd()) {
-        QString line = lstStream.readLine();
+        line = lstStream.readLine();
+        if (empty1.exactMatch(line))
+            continue;
+        if (empty2.exactMatch(line))
+            continue;
         if (line.indexOf(sectionTextRegExp) != -1) {
             inTextSection = true;
-        } else if (line.indexOf(sectionRegExp) != -1) {
+        } else if (line.indexOf(sectionDataRegExp) != -1) {
             inTextSection = false;
-        }
-        if (line.length() <= 37) { //omit strings with data only
-            //if in list : line number, address, data and it is all (without instruction) -
-            //omit this string and subtract 1 from offset
-            omitLinesCount++;
-            continue;
         }
         if (inTextSection) {
             QByteArray lineArr = line.toLocal8Bit();
             const char *s = lineArr.constData();
-            quint64 a, b, c;
-            if (sscanf(s, "%llu %llx %llx", &a, &b, &c) == 3) {
-                if (!(b == 0 && c == 0)) { //exclude 0 0
-                    LineNum l;
-                    l.numInCode = a - omitLinesCount;
-                    if (ioIncIncluded) {
-                        l.numInCode -= ioIncSize;
-                    }
-                    l.numInMem = b + offset;
-                    lines.append(l);
+            quint64 a;
+
+            //check if invoke
+            if (line.contains("invoke", Qt::CaseInsensitive)) {
+                macroInstruction = line;
+                if (macro.exactMatch(macroInstruction))
+                    continue;
+                int k = 0;
+                while (k < macroInstruction.length() && macroInstruction[k].isSpace())
+                    k++;
+                macroInstruction.remove(0, k);
+                if (macroInstruction[0] == '=')
+                    continue;
+                macroInstruction.remove(QRegExp("^[0-9a-fA-F]{8,16}[ \t]+")); //if label
+                while (!stringWithAddress.exactMatch(line) && !lstStream.atEnd())
+                    line = lstStream.readLine();
+                lineArr = line.toLocal8Bit();
+                s = lineArr.constData();
+                if (sscanf(s, "%llx", &a) == 1) {
+                    instrList.append(QPair<quint64, QString>(a + offset, macroInstruction));
+                    macroInstruction.clear();
+                }
+                continue;
+            }
+
+            //check if ret
+            if (line.contains("ret", Qt::CaseInsensitive)) {
+                macroInstruction = line;
+                if (macro.exactMatch(macroInstruction))
+                    continue;
+                int k = 0;
+                while (k < macroInstruction.length() && macroInstruction[k].isSpace())
+                    k++;
+                macroInstruction.remove(0, k);
+                macroInstruction.remove(QRegExp("^[0-9a-fA-F]{8,16}[ \t]+")); //if label
+                while (!stringWithAddress.exactMatch(line) && !lstStream.atEnd())
+                    line = lstStream.readLine();
+                lineArr = line.toLocal8Bit();
+                s = lineArr.constData();
+                if (sscanf(s, "%llx", &a) == 1) {
+                    instrList.append(QPair<quint64, QString>(a + offset, macroInstruction));
+                    macroInstruction.clear();
+                }
+                continue;
+            }
+
+            //check if macro
+            if (line.startsWith("\t\t\t\t")) { //may be macro
+                mayBeMacro = line;
+                int k = 0;
+                while (k < mayBeMacro.length() && mayBeMacro[k].isSpace())
+                    k++;
+                mayBeMacro.remove(0, k);
+                continue;
+            }
+            if (!mayBeMacro.isEmpty() && !inMacro) { //if previous may be macro - switch to finding macro start address mode
+                if (macroBegin.exactMatch(line)) {
+                    inMacro = true;
+                } else {
+                    mayBeMacro.clear();
                 }
             }
+            if (inMacro && stringWithCode.exactMatch(line) && sscanf(s, "%llx", &a) == 1) {
+                //if we in macro, we find it start address
+                instrList.append(QPair<quint64, QString>(a + offset, mayBeMacro));
+                mayBeMacro.clear();
+                inMacro = false;
+            }
+
+            //check if instruction
+            if (!stringWithCode.exactMatch(line) || macro.exactMatch(line) || sscanf(s, "%llx", &a) != 1)
+                continue;
+            int index = line.indexOf(QRegExp("[RE\t]\t"));
+            if (index == -1)
+                continue;
+            line = line.mid(index + 2);
+            int k = 0;
+            while (k < line.length() && line[k].isSpace())
+                k++;
+            line.remove(0, k);
+            if (line[0] == '*')
+                continue;
+            instrList.append(QPair<quint64, QString>(a + offset, line));
         }
     }
-}
+    lst.close();
 
-QString NASM::getStartText()
-{
-    if (isx86()) {
-        return QString("%include \"io.inc\"\n\nsection .text\nglobal CMAIN\n") +
-               QString("CMAIN:\n    ;write your code here\n    xor eax, eax\n    ret");
-    } else {
-        return QString("%include \"io64.inc\"\n\nsection .text\nglobal CMAIN\n") +
-               QString("CMAIN:\n    ;write your code here\n    xor rax, rax\n    ret");
+    QFile programFile(Common::pathInTemp("program.asm"));
+    programFile.open(QFile::ReadOnly);
+    QTextStream programStream(&programFile);
+    QList<QPair<quint64, QString> > programList;
+    int numInCode = 0;
+    while (!programStream.atEnd()) {
+        QString line = programStream.readLine();
+        numInCode++;
+        int k = 0;
+        while (k < line.length() && line[k].isSpace())
+            k++;
+        line.remove(0, k);
+        programList.append(QPair<quint64, QString>(numInCode, line));
     }
-}
 
-void NASM::putDebugString(CodeEditor *code)
-{
-    //add : mov ebp, esp for making frame for correct debugging if this code has not been added yet
-    int index = code->toPlainText().indexOf(QRegExp("CMAIN:|main:"));
-    if (index != -1) {
-        index = code->toPlainText().indexOf(QChar(':'), index);
-        if (isx86()) {
-            if (code->toPlainText().indexOf(
-                        QRegExp("\\s+[Mm][Oo][Vv] +[Ee][Bb][Pp] *, *[Ee][Ss][Pp]"), index + 1) != index + 1) {
-                QTextCursor cursor = code->textCursor();
-                cursor.movePosition(QTextCursor::Start);
-                cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
-                cursor.insertText(QString("\n    mov ebp, esp; for correct debugging"));
-            }
-        } else {
-            if (code->toPlainText().indexOf(
-                        QRegExp("\\s+[Mm][Oo][Vv] +[Rr][Bb][Pp] *, *[Rr][Ss][Pp]"), index + 1) != index + 1) {
-                QTextCursor cursor = code->textCursor();
-                cursor.movePosition(QTextCursor::Start);
-                cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
-                cursor.insertText(QString("\n    mov rbp, rsp; for correct debugging"));
-            }
+    int i = 0; //offset in instrList
+    int j = 0; //offset in programList
+    int lastSeenInProgramList = 0;
+    while (i < instrList.size()) {
+        if (programList[j].second == instrList[i].second) {
+            LineNum l;
+            l.numInCode = programList[j].first;
+            l.numInMem = instrList[i].first;
+            lines.append(l);
+            i++;
+            lastSeenInProgramList = j;
+        }
+        j++;
+        if (j >= programList.size()) { //skip line in instrList and back to first unwatched line in programList
+            i++;
+            j = lastSeenInProgramList + 1;
         }
     }
+    programFile.close();
 }
 
-QString NASM::getAssemblerOptions()
+QString MASM::getStartText()
 {
-    QString options;
-    #ifdef Q_OS_WIN32
-        if (isx86())
-            options = "-g -f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
-        else
-            options = "-g -f win64 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
-    #else
-        if (isx86())
-            options = "-g -f elf32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
-        else
-            options = "-g -f elf64 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
-    #endif
-    return options;
+    return QString(".386\n.model flat, stdcall\noption casemap : none\n.code\nstart:\n") +
+        QString("    ;write your code here\n    xor eax, eax\n    ret\n    end start\n");
 }
 
-QString NASM::getLinkerOptions()
+void MASM::putDebugString(CodeEditor *)
 {
-    QString options;
-    if (isx86())
-        options = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m32";
-    else
-        options = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m64";
-    return options;
 }
 
-void NASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
+QString MASM::getAssemblerOptions()
+{
+    return "/nologo /Sn /Sa /c /coff /Fo$PROGRAM.OBJ$ /Fl$LSTOUTPUT$ $SOURCE$";
+}
+
+QString MASM::getLinkerOptions()
+{
+    return "/SUBSYSTEM:CONSOLE /OPT:NOREF /NOLOGO /OUT:$PROGRAM$ $PROGRAM.OBJ$";
+}
+
+void MASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
                                QList<QTextCharFormat *> &formats,
                                bool &multiLineComments,
                                QRegExp &commentStartExpression,
                                QRegExp &commentEndExpression)
 {
+    //!!!!!!!!!!!!!!!!!!!!
     typedef Assembler::HighlightingRule HighlightingRule;
     QTextCharFormat &keywordFormat = *formats[0];
     QTextCharFormat &registerFormat = *formats[1];

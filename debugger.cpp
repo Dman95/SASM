@@ -505,6 +505,7 @@ void Debugger::processLst()
             mainOffset = assembler->getMainOffset(lst, "main");
         else
             mainOffset = assembler->getMainOffset(lst, "start");
+        lst.close();
         if ((qint64) mainOffset == -1) {
             actionTypeQueue.enqueue(anyAction);
             processAction(
@@ -514,10 +515,18 @@ void Debugger::processLst()
             return;
         }
         offset -= mainOffset;
-        lst.close();
         lst.open(QIODevice::ReadOnly);
         assembler->parseLstFile(lst, lines, ioIncIncluded, ioIncSize, offset);
         lst.close();
+        if (lines.isEmpty()) {
+            actionTypeQueue.enqueue(anyAction);
+            processAction(
+                tr("Executable sections were not found! ") +
+                tr("For correct debugging executable sections should have name \".text\" or \".code\" (for MASM only)."));
+            QObject::disconnect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputToBuffer()));
+            emit finished();
+            return;
+        }
     }
 }
 

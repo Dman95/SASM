@@ -474,7 +474,7 @@ void FASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
     }
 
     //comments
-    rule.pattern = QRegExp(";[^\n\"'`]*");
+    rule.pattern = QRegExp(";[^\n]*");
     rule.format = commentFormat;
     highlightingRules.append(rule);
     multiLineComments = false;

@@ -38,34 +38,30 @@
 **
 ****************************************************************************/
 
-#ifndef NASM_H
-#define NASM_H
+#ifndef MASM_H
+#define MASM_H
 
+#include <QMessageBox>
 #include "assembler.h"
 
-class NASM : public Assembler
+class MASM : public Assembler
 {
     Q_OBJECT
 public:
-    explicit NASM(bool x86, QObject *parent = 0);
+    explicit MASM(bool x86, QObject *parent = 0);
     QString getAssemblerPath();
     QString getLinkerPath();
     quint64 getMainOffset(QFile &lst, QString entryLabel);
-    void parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset);
+    void parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool, quint64, quint64 offset);
     void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
                              QList<QTextCharFormat *> &formats,
                              bool &multiLineComments,
                              QRegExp &commentStartExpression,
                              QRegExp &commentEndExpression);
     QString getStartText();
-    void putDebugString(CodeEditor *code);
+    void putDebugString(CodeEditor *);
     QString getAssemblerOptions();
     QString getLinkerOptions();
-    
-signals:
-    
-public slots:
-    
 };
 
-#endif // NASM_H
+#endif // MASM_H

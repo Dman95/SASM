@@ -883,6 +883,12 @@ void MainWindow::buildProgram(bool debugMode)
     if (settings.value("assembler", QString("NASM")).toString() == "FASM" && logText.count(QChar('\n')) == 2
             && logText.contains(QRegExp(" bytes\\.")))
         logText.clear();
+    if (settings.value("assembler", QString("NASM")).toString() == "MASM") {
+        if (logText.count(QChar('\n')) == 1 && logText.startsWith(" Assembling:"))
+            logText.clear();
+        if (logText.count(QChar('\n')) == 6 && logText.contains("ASCII build"))
+            logText.clear();
+    }
     logFile.close();
 
     bool builded;
@@ -1667,6 +1673,11 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
         connect(settingsUi.nasmRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
         connect(settingsUi.gasRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
         connect(settingsUi.fasmRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
+        #ifdef Q_OS_WIN32
+            connect(settingsUi.masmRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
+        #else //Linux
+            settingsUi.masmRadioButton->setEnabled(false);
+        #endif
         /******************************************************************************
                                 assembler dependent options end
         ******************************************************************************/
@@ -1718,6 +1729,8 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
         settingsUi.gasRadioButton->setChecked(true);
     } else if (assemblerName == "FASM") {
         settingsUi.fasmRadioButton->setChecked(true);
+    } else if (assemblerName == "MASM") {
+        settingsUi.masmRadioButton->setChecked(true);
     }
     /******************************************************************************
                             assembler dependent options end
@@ -1735,6 +1748,8 @@ void MainWindow::changeAssembler()
         settings.setValue("assembler", QString("GAS"));
     } else if (settingsUi.fasmRadioButton->isChecked()) {
         settings.setValue("assembler", QString("FASM"));
+    } else if (settingsUi.masmRadioButton->isChecked()) {
+        settings.setValue("assembler", QString("MASM"));
     }
     recreateAssembler();
     /******************************************************************************
@@ -1770,6 +1785,8 @@ void MainWindow::recreateAssembler(bool start)
         assembler = new GAS(x86);
     } else if (assemblerName == "FASM") {
         assembler = new FASM(x86);
+    } else if (assemblerName == "MASM") {
+        assembler = new MASM(x86);
     }
     /******************************************************************************
                             assembler dependent options end
