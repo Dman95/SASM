@@ -72,6 +72,7 @@
 #include "common.h"
 #include "fasm.h"
 #include "signallocker.h"
+#include "masm.h"
 
 class MainWindow : public QMainWindow
 {
