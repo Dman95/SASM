@@ -56,12 +56,12 @@ MASM::MASM(bool x86, QObject *parent) :
 
 QString MASM::getAssemblerPath()
 {
-    return Common::applicationDataPath() + "/MASM/ml.exe";
+    return "C:/masm32/bin/ml.exe";
 }
 
 QString MASM::getLinkerPath()
 {
-    return Common::applicationDataPath() + "/MASM/link.exe";
+    return "C:/masm32/bin/link.exe";
 }
 
 quint64 MASM::getMainOffset(QFile &lst, QString entryLabel)
