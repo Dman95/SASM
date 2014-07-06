@@ -1675,6 +1675,7 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
         connect(settingsUi.fasmRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
         #ifdef Q_OS_WIN32
             connect(settingsUi.masmRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
+            connect(settingsUi.masmRadioButton, SIGNAL(clicked()), this, SLOT(printMasmInfo()));
         #else //Linux
             settingsUi.masmRadioButton->setEnabled(false);
         #endif
@@ -1725,6 +1726,7 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
     QString assemblerName = settings.value("assembler", QString("NASM")).toString();
     if (assemblerName == "MASM") {
         settingsUi.x64RadioButton->setEnabled(false);
+        printMasmInfo();
     }
     if (assemblerName == "NASM") {
         settingsUi.nasmRadioButton->setChecked(true);
@@ -1738,6 +1740,12 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
     /******************************************************************************
                             assembler dependent options end
     ******************************************************************************/
+}
+
+void MainWindow::printMasmInfo()
+{
+    settingsUi.infoLabel->setText(tr("Please set path to MASM assembler (ml.exe) and linker (link.exe) on your computer ") +
+                                  tr("in fields \"Assembler path\" and \"Linker path\" above."));
 }
 
 void MainWindow::changeAssembler()
@@ -1791,6 +1799,7 @@ void MainWindow::recreateAssembler(bool start)
             }
         } else {
             settingsUi.x64RadioButton->setEnabled(true);
+            settingsUi.infoLabel->setText("");
         }
     }
     if (assemblerName == "NASM") {

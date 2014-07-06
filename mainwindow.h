@@ -272,6 +272,7 @@ public slots:
     void initAssemblerSettings(bool firstOpening);
     void backupSettings();
     void restoreSettingsAndExit();
+    void printMasmInfo();
 
     //closing
     bool deleteTab(int index, bool saveFileName = false);

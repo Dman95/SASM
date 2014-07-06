@@ -220,6 +220,7 @@
     <name>MASM</name>
     <message>
         <location filename="masm.cpp" line="49"/>
+        <location filename="masm.cpp" line="52"/>
         <source>Error!</source>
         <translation>Ошибка!</translation>
     </message>
@@ -227,6 +228,11 @@
         <location filename="masm.cpp" line="49"/>
         <source>MASM is available on Windows only.</source>
         <translation>MASM доступен только на Windows.</translation>
+    </message>
+    <message>
+        <location filename="masm.cpp" line="52"/>
+        <source>Only 32-bit version of MASM is available.</source>
+        <translation>Доступна только 32-битная версия MASM.</translation>
     </message>
 </context>
 <context>
@@ -273,7 +279,7 @@
     <message>
         <location filename="mainwindow.cpp" line="226"/>
         <location filename="mainwindow.cpp" line="459"/>
-        <location filename="mainwindow.cpp" line="2030"/>
+        <location filename="mainwindow.cpp" line="2053"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
@@ -389,7 +395,17 @@
         <translation>Приостановить</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2038"/>
+        <location filename="mainwindow.cpp" line="1747"/>
+        <source>Please set path to MASM assembler (ml.exe) and linker (link.exe) on your computer </source>
+        <translation>Пожалуйста, укажите пути до ассемблера (ml.exe) и компоновщика (link.exe) MASM на Вашем компьютере </translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1748"/>
+        <source>in fields &quot;Assembler path&quot; and &quot;Linker path&quot; above.</source>
+        <translation>в полях &quot;Ассемблер&quot; и &quot;Компоновщик&quot; выше.</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="2061"/>
         <source>SASM (SimpleASM) 2.3 - simple Open Source IDE for NASM.</source>
         <translation>SASM (SimpleASM) 2.3 - простая Open Source среда разработки на языке ассемблера NASM.</translation>
     </message>
@@ -398,7 +414,7 @@
         <translation type="obsolete">SASM (SimpleASM) 2.2 - простая Open Source среда разработки на языке ассемблера NASM.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2050"/>
+        <location filename="mainwindow.cpp" line="2073"/>
         <source>Yandex.Money - 410012181834380</source>
         <translation>Яндекс.Деньги - 410012181834380</translation>
     </message>
@@ -522,7 +538,7 @@ All files (*.*)</source>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="751"/>
-        <location filename="mainwindow.cpp" line="1943"/>
+        <location filename="mainwindow.cpp" line="1966"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
@@ -533,7 +549,7 @@ All files (*.*)</source>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="753"/>
-        <location filename="mainwindow.cpp" line="1944"/>
+        <location filename="mainwindow.cpp" line="1967"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -552,7 +568,7 @@ All files (*.*)</source>
     </message>
     <message>
         <source>Error! Directory NASM does not exist. Please reinstall the program.</source>
-        <translation type="vanished">Ошибка! Каталога NASM не существует. Пожалуйста, переустановите программу.</translation>
+        <translation type="obsolete">Ошибка! Каталога NASM не существует. Пожалуйста, переустановите программу.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="784"/>
@@ -579,7 +595,7 @@ All files (*.*)</source>
         <translation type="obsolete">Программа завершена аварийно!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2042"/>
+        <location filename="mainwindow.cpp" line="2065"/>
         <source>Development and idea - Dmitriy Manushin</source>
         <translation>Идея и разработка - Дмитрий Манушин</translation>
     </message>
@@ -625,7 +641,7 @@ All files (*.*)</source>
         <translation>Внимание! В ходе построения обнаружены ошибки:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1945"/>
+        <location filename="mainwindow.cpp" line="1968"/>
         <source>Warning!</source>
         <translation>Внимание!</translation>
     </message>
@@ -696,12 +712,12 @@ All files (*.*)</source>
         <translation>В предыдущей сессии не было открыто ни одной сохранённой вкладки!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1946"/>
+        <location filename="mainwindow.cpp" line="1969"/>
         <source>All settings will be deleted and all unsaved data will be lost. Are you sure?</source>
         <translation>Все настройки будут удалены, а несохранённые данные потеряны! Вы уверены?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2037"/>
+        <location filename="mainwindow.cpp" line="2060"/>
         <source>About SASM</source>
         <translation>О программе</translation>
     </message>
@@ -710,17 +726,17 @@ All files (*.*)</source>
         <translation type="obsolete">SASM (SimpleASM) 2.0 Beta - простая Open Source среда разработки на языке ассемблера NASM.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2039"/>
+        <location filename="mainwindow.cpp" line="2062"/>
         <source>Licensed under the GNU GPL v3.0</source>
         <translation>Распространяется по лицензии GNU GPL v3.0</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2040"/>
+        <location filename="mainwindow.cpp" line="2063"/>
         <source>Based on the Qt.</source>
         <translation>Основана на Qt.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2041"/>
+        <location filename="mainwindow.cpp" line="2064"/>
         <source>Copyright © 2013 Dmitriy Manushin</source>
         <oldsource>Copyright Â© 2013 Dmitriy Manushin</oldsource>
         <translation>Copyright © 2013 Дмитрий Манушин</translation>
@@ -730,12 +746,12 @@ All files (*.*)</source>
         <translation type="obsolete">Разработка - Dmitriy Manushin</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2043"/>
+        <location filename="mainwindow.cpp" line="2066"/>
         <source>Icon and advices - Alick Gaybullaev</source>
         <translation>Иконка и советы - Алик Гайбуллаев</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2044"/>
+        <location filename="mainwindow.cpp" line="2067"/>
         <source>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com</source>
         <oldsource>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com
 
@@ -743,27 +759,27 @@ All files (*.*)</source>
         <translation>Пожелания и сообщения об ошибках отправляйте на адрес Dman1095@gmail.com</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2045"/>
+        <location filename="mainwindow.cpp" line="2068"/>
         <source>More information on the site: http://dman95.github.io/SASM/</source>
         <translation>Сайт программы: http://dman95.github.io/SASM/</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2046"/>
+        <location filename="mainwindow.cpp" line="2069"/>
         <source>Donate:</source>
         <translation>Поддержите проект:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2047"/>
+        <location filename="mainwindow.cpp" line="2070"/>
         <source>PayPal - Dman1095@gmail.com</source>
         <translation>PayPal - Dman1095@gmail.com</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2048"/>
+        <location filename="mainwindow.cpp" line="2071"/>
         <source>WMZ - Z282016332582</source>
         <translation>WMZ - Z282016332582</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2049"/>
+        <location filename="mainwindow.cpp" line="2072"/>
         <source>WMR - R331674303467</source>
         <translation>WMR - R331674303467</translation>
     </message>
@@ -1068,64 +1084,64 @@ WMR - R331674303467</translation>
         <translation>Построение</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1790"/>
+        <location filename="settings.ui" line="1789"/>
         <source>Mode:</source>
         <translation>Режим:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1799"/>
+        <location filename="settings.ui" line="1798"/>
         <source>x86</source>
         <translation>x86</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1812"/>
+        <location filename="settings.ui" line="1811"/>
         <source>x64</source>
         <translation>x64</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1840"/>
+        <location filename="settings.ui" line="1839"/>
         <source>Assembler:</source>
         <translation>Ассемблер:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1849"/>
+        <location filename="settings.ui" line="1848"/>
         <source>NASM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1862"/>
+        <location filename="settings.ui" line="1861"/>
         <source>GAS</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1872"/>
+        <location filename="settings.ui" line="1871"/>
         <source>FASM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1882"/>
+        <location filename="settings.ui" line="1881"/>
         <source>MASM</source>
         <translation>MASM</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1907"/>
+        <location filename="settings.ui" line="1906"/>
         <source>Assembly options:</source>
         <translation>Опции ассемблера:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1917"/>
+        <location filename="settings.ui" line="1916"/>
         <source>Linking options:</source>
         <translation>Опции компоновщика:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1927"/>
+        <location filename="settings.ui" line="1926"/>
         <source>Assembler path:</source>
-        <translation>Ассемблер</translation>
+        <translation>Ассемблер:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1934"/>
+        <location filename="settings.ui" line="1936"/>
         <source>Linker path:</source>
-        <translation>Компоновщик</translation>
+        <translation>Компоновщик:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1532"/>
