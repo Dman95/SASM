@@ -1705,11 +1705,11 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
     QString assemblerPath = assembler->getAssemblerPath();
     settingsUi.assemblerPathEdit->setText(settings.value("assemblerpath", assemblerPath).toString());
 
-#ifdef Q_OS_WIN32
-    settingsUi.linkerPathEdit->setText(settings.value("linkerpath", Common::applicationDataPath() + "/MinGW/bin/gcc.exe").toString());
-#else
-    settingsUi.linkerPathEdit->setText(settings.value("linkerpath", "gcc").toString());
-#endif
+    #ifdef Q_OS_WIN32
+        settingsUi.linkerPathEdit->setText(settings.value("linkerpath", Common::applicationDataPath() + "/MinGW/bin/gcc.exe").toString());
+    #else
+        settingsUi.linkerPathEdit->setText(settings.value("linkerpath", "gcc").toString());
+    #endif
 
     disconnect(settingsUi.x86RadioButton, SIGNAL(toggled(bool)), this, SLOT(changeMode(bool)));
     //mode
@@ -1723,9 +1723,12 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
                             assembler dependent options begin
     ******************************************************************************/
     QString assemblerName = settings.value("assembler", QString("NASM")).toString();
-    if (assemblerName == "NASM")
+    if (assemblerName == "MASM") {
+        settingsUi.x64RadioButton->setEnabled(false);
+    }
+    if (assemblerName == "NASM") {
         settingsUi.nasmRadioButton->setChecked(true);
-    else if (assemblerName == "GAS") {
+    } else if (assemblerName == "GAS") {
         settingsUi.gasRadioButton->setChecked(true);
     } else if (assemblerName == "FASM") {
         settingsUi.fasmRadioButton->setChecked(true);
@@ -1779,6 +1782,17 @@ void MainWindow::recreateAssembler(bool start)
                             assembler dependent options begin
     ******************************************************************************/
     QString assemblerName = settings.value("assembler", QString("NASM")).toString();
+    if (!start) {
+        if (assemblerName == "MASM") {
+            settingsUi.x64RadioButton->setEnabled(false);
+            if (settingsUi.x64RadioButton->isChecked()) {
+                settingsUi.x86RadioButton->setChecked(true);
+                return;
+            }
+        } else {
+            settingsUi.x64RadioButton->setEnabled(true);
+        }
+    }
     if (assemblerName == "NASM") {
         assembler = new NASM(x86);
     } else if (assemblerName == "GAS") {
