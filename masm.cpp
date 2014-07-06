@@ -47,6 +47,10 @@ MASM::MASM(bool x86, QObject *parent) :
 {
     #ifndef Q_OS_WIN32
         QMessageBox::critical(0, tr("Error!"), tr("MASM is available on Windows only."));
+    #else
+        if (!x86) {
+            QMessageBox::critical(0, tr("Error!"), tr("Only 32-bit version of MASM is available."));
+        }
     #endif
 }
 
@@ -264,7 +268,6 @@ void MASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
                                QRegExp &commentStartExpression,
                                QRegExp &commentEndExpression)
 {
-    //!!!!!!!!!!!!!!!!!!!!
     typedef Assembler::HighlightingRule HighlightingRule;
     QTextCharFormat &keywordFormat = *formats[0];
     QTextCharFormat &registerFormat = *formats[1];
@@ -273,7 +276,7 @@ void MASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
     QTextCharFormat &labelFormat = *formats[4];
     QTextCharFormat &commentFormat = *formats[5];
     QTextCharFormat &systemFormat = *formats[6];
-    QTextCharFormat &iomacrosFormat = *formats[7];
+    //QTextCharFormat &iomacrosFormat = *formats[7];
     QTextCharFormat &quotationFormat = *formats[8];
     QTextCharFormat &labelWithDotFormat = *formats[9];
 
@@ -387,21 +390,6 @@ void MASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
         highlightingRules.append(rule);
     }
 
-    //IO macroses
-    rule.format = iomacrosFormat;
-    QStringList macrosPatterns;
-    macrosPatterns << "\\bPRINT_DEC\\b" << "\\bPRINT_HEX\\b" <<
-                      "\\bPRINT_CHAR\\b" << "\\bPRINT_STRING\\b" <<
-                      "\\bNEWLINE\\b" << "\\bPRINT_UDEC\\b" <<
-                      "\\bGET_UDEC\\b" << "\\bGET_DEC\\b" <<
-                      "\\bGET_HEX\\b" << "\\bGET_CHAR\\b" <<
-                      "\\bGET_STRING\\b" << "\\bCMAIN\\b" << "\\bCEXTERN\\b";
-    foreach (const QString &pattern, macrosPatterns) {
-        rule.pattern = QRegExp(pattern);
-        rule.pattern.setCaseSensitivity(Qt::CaseSensitive);
-        highlightingRules.append(rule);
-    }
-
     //memory
     rule.format = memoryFormat;
     QStringList memoryPatterns;
@@ -409,16 +397,20 @@ void MASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
     highlightingRules.append(rule);
     rule.pattern = QRegExp("\\]");
     highlightingRules.append(rule);
-    memoryPatterns << "\\bresb\\b" << "\\bresw\\b" << "\\bresd\\b" <<
-                      "\\bresq\\b" << "\\brest\\b" << "\\breso\\b" <<
-                      "\\bresy\\b" << "\\bddq\\b" << "\\bresdq\\b" <<
+    memoryPatterns << "\\bddq\\b" <<
                       "\\bdb\\b" << "\\bdw\\b" << "\\bdd\\b" <<
                       "\\bdq\\b" << "\\bdt\\b" << "\\bdo\\b" <<
-                      "\\bdy\\b" << "\\bequ\\b" <<
-                      "\\bbyte[\\s\\[]" << "\\bword[\\s\\[]" <<
-                      "\\bdword[\\s\\[]" << "\\bqword[\\s\\[]" <<
-                      "\\btword[\\s\\[]" << "\\boword[\\s\\[]" <<
-                      "\\yword[\\s\\[]" << "\\bDEFAULT\\b" <<
+                      "\\bdy\\b" << "\\bequ\\b" << "\\bdf\\b" <<
+                      "\\bptr\\b" <<
+                      "\\bbyte\\b" << "\\bword\\b" <<
+                      "\\bdword\\b" << "\\bqword\\b" <<
+                      "\\btword\\b" << "\\boword\\b" <<
+                      "\\yword\\b" << "\\bfword\\b" <<
+                      "\\bmmword\\b" << "\\bsdword\\b" <<
+                      "\\bsqword\\b" << "\\bsword\\b" <<
+                      "\\bxmmword\\b" << "\\bymmword\\b" <<
+                      "\\bsbyte\\b" << "\\btbyte\\b" <<
+                      "\\bDEFAULT\\b" <<
                       "\\bABS\\b" << "\\bREL\\b";
     foreach (const QString &pattern, memoryPatterns) {
         rule.pattern = QRegExp(pattern);
@@ -488,39 +480,31 @@ void MASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
     //system instructions and preprocessor commands
     rule.format = systemFormat;
     QStringList systemPatterns;
-    systemPatterns << "\\btimes\\b" << "\\bsection\\b" << "\\.bss\\b" <<
-                      "\\.text\\b" << "\\.data\\b" <<
-                      "\\bglobal\\b" << "\\.rodata\\b" <<
-                      "\\bextern\\b" <<
-                      "\\%arg\\b" << "\\%assign\\b" << "\\%clear\\b" <<      //macro
-                      "\\%comment\\b" << "\\%define\\b" << "\\%defstr\\b" <<
-                      "\\%deftok\\b" << "\\%depend\\b" <<
-                      "\\%line\\b" << "\\%local\\b" << "\\%macro\\b" <<
-                      "\\%n\\b" << "\\%pathsearch\\b" << "\\%pop\\b" <<
-                      "\\%push\\b" << "\\%rep\\b" << "\\%repl\\b" <<
-                      "\\%rotate\\b" << "\\%stacksize\\b" << "\\%strcat\\b" <<
-                      "\\%strlen\\b" << "\\%substr\\b" << "\\%undef\\b" <<
-                      "\\%unmacro\\b" << "\\%use\\b" << "\\%warning\\b" <<
-                      "\\%xdefine\\b" << "\\%endcomment\\b" << "\\%endif\\b" <<
-                      "\\%endmacro\\b" << "\\%endrep\\b" << "\\%error\\b" <<
-                      "\\%exitrep\\b" << "\\%fatal\\b" << "\\%idefine\\b" <<
-                      "\\%else\\b" << "\\%imacro\\b" << "\\%include\\b" <<
-                      "\\%if\\b" << "\\%ifctx\\b" << "\\%ifdef\\b" <<           //ifs
-                      "\\%ifempty\\b" << "\\%ifenv\\b" << "\\%ifidn\\b" <<
-                      "\\%ifidni\\b" << "\\%ifmacro\\b" << "\\%ifstr\\b" <<
-                      "\\%iftoken\\b" << "\\%ifnum\\b" << "\\%ifid\\b" <<
-                      "\\%elif\\b" << "\\%elifctx\\b" << "\\%elifdef\\b" <<     //elifs
-                      "\\%elifempty\\b" << "\\%elifenv\\b" << "\\%elifidn\\b" <<
-                      "\\%elifidni\\b" << "\\%elifmacro\\b" << "\\%elifstr\\b" <<
-                      "\\%eliftoken\\b" << "\\%elifnum\\b" << "\\%elifid\\b" <<
-                      "\\%ifn\\b" << "\\%ifnctx\\b" << "\\%ifndef\\b" <<           //ifns
-                      "\\%ifnempty\\b" << "\\%ifnenv\\b" << "\\%ifnidn\\b" <<
-                      "\\%ifnidni\\b" << "\\%ifnmacro\\b" << "\\%ifnstr\\b" <<
-                      "\\%ifntoken\\b" << "\\%ifnnum\\b" << "\\%ifnid\\b" <<
-                      "\\%elifn\\b" << "\\%elifnctx\\b" << "\\%elifndef\\b" <<     //elifns
-                      "\\%elifnempty\\b" << "\\%elifnenv\\b" << "\\%elifnidn\\b" <<
-                      "\\%elifnidni\\b" << "\\%elifnmacro\\b" << "\\%elifnstr\\b" <<
-                      "\\%elifntoken\\b" << "\\%elifnnum\\b" << "\\%elifnid\\b";
+    systemPatterns << "\\s\\.\\w+\\b" << "^\\.\\w+\\b" << "\\bSEGMENT\\b" << "\\bPUBLIC\\b" <<
+                      "\\bEXTERN\\b" << "\\bEXTRN\\b" <<
+                      "\\bALIAS\\b" << "\\bALIGN\\b" << "\\bASSUME\\b" <<
+                      "\\bCATSTR\\b" << "\\bCOMM\\b" << "\\bCOMMENT\\b" <<
+                      "\\bDOSSEG\\b" << "\\bECHO\\b" << "\\bELSE\\b" <<
+                      "\\bELSEIF\\b" << "\\bELSEIF2\\b" << "\\bEND\\b" <<
+                      "\\bENDM\\b" << "\\bENDP\\b" << "\\bENDS\\b" <<
+                      "\\bEVEN\\b" << "\\bEXITM\\b" << "\\bEXTERNDEF\\b" <<
+                      "\\bFOR\\b" << "\\bFORC\\b" << "\\bGOTO\\b" <<
+                      "\\bGROUP\\b" << "\\bIF\\b" << "\\bIF2\\b" <<
+                      "\\bIFB\\b" << "\\bIFDEF\\b" << "\\bIFDIF\\b" <<
+                      "\\bIFE\\b" << "\\bIFIDN\\b" << "\\bIFNB\\b" <<
+                      "\\bIFNDEF\\b" << "\\bINCLUDE\\b" << "\\bINCLUDELIB\\b" <<
+                      "\\bINSTR\\b" << "\\bINVOKE\\b" << "\\bIRP\\b" <<
+                      "\\bIRPC\\b" << "\\bLABEL\\b" << "\\bLOCAL\\b" <<
+                      "\\bMACRO\\b" << "\\bNAME\\b" << "\\bOPTION\\b" <<
+                      "\\bORG\\b" << "\\b%OUT\\b" << "\\bPAGE\\b" <<
+                      "\\bPOPCONTEXT\\b" << "\\bPROC\\b" << "\\bPROTO\\b" <<
+                      "\\bPURGE\\b" << "\\bPUSHCONTEXT\\b" << "\\bREAL10\\b" <<
+                      "\\bREAL4\\b" << "\\bREAL8\\b" << "\\bRECORD\\b" <<
+                      "\\bREPEAT\\b" << "\\bREPT\\b" << "\\bSIZESTR\\b" <<
+                      "\\bSTRUC\\b" << "\\bSTRUCT\\b" << "\\bSUBSTR\\b" <<
+                      "\\bSUBTITLE\\b" << "\\bSUBTTL\\b" << "\\bTEXTEQU\\b" <<
+                      "\\bTITLE\\b" << "\\bTYPEDEF\\b" << "\\bUNION\\b" <<
+                      "\\bWHILE\\b";
     foreach (const QString &pattern, systemPatterns) {
         rule.pattern = QRegExp(pattern);
         rule.pattern.setCaseSensitivity(Qt::CaseInsensitive);
@@ -541,8 +525,5 @@ void MASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
     highlightingRules.append(rule);
 
     rule.pattern = QRegExp("'.*'");
-    highlightingRules.append(rule);
-
-    rule.pattern = QRegExp("`.*`");
     highlightingRules.append(rule);
 }
