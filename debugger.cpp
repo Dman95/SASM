@@ -169,14 +169,16 @@ void Debugger::processMessage(QString output, QString error)
         Reading symbols from C:\Users\Dmitri\Dropbox\Projects\SASMstatic\release\Program\SASMprog.exe...
         done.
         (gdb)*/
-        if (output.indexOf("no debugging symbols found") != -1) {
+        c++;
+        doInput(QString("disas main\n"), none);
+        return;
+    }
+
+    if (c == 1) {
+        if (!error.isEmpty()) {
             dbgSymbols = false;
-            c++;
         } else {
             dbgSymbols = true;
-            doInput(QString("disas main\n"), none);
-            c++;
-            return;
         }
     }
 
