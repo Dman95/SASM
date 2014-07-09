@@ -238,20 +238,17 @@ void Debugger::processMessage(QString output, QString error)
         }
     }
 
+    //interrupt while debugging (program was stopped)
     #ifdef Q_OS_WIN32
-        QString sigTrap("SIGTRAP"); //was stopped
-        if (output.indexOf(sigTrap) != -1) {
-            stopped = true;
-            emit wasStopped();
-            return;
-        }
+        QString interruptSig("SIGTRAP");
     #else
-        QString sigInt("SIGINT"); //was stopped
-        if (output.indexOf(sigInt) != -1) {
-            stopped = true;
-            emit wasStopped();
-        }
+        QString interruptSig("SIGINT");
     #endif
+    if (output.indexOf(interruptSig) != -1) {
+        stopped = true;
+        emit wasStopped();
+        return;
+    }
 
     if (!pid) {
         QRegExp r("Num +Description +Executable");
@@ -490,15 +487,13 @@ bool Debugger::isStopped()
 
 void Debugger::pause()
 {
-    #ifdef Q_OS_WIN32 //!!!
+    actionTypeQueue.clear();
+    #ifdef Q_OS_WIN32
         HANDLE proc;
         proc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, (DWORD) pid);
         DebugBreakProcess(proc);
         CloseHandle(proc);
-        actionTypeQueue.clear();
     #else
-        actionTypeQueue.clear();
-        actionTypeQueue.enqueue(simplePrint);
         kill(pid, SIGINT);
     #endif
 }
