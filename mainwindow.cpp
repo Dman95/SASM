@@ -1083,6 +1083,7 @@ void MainWindow::debug()
         connect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
         connect(debugger, SIGNAL(inMacro()), this, SLOT(debugNextNi()), Qt::QueuedConnection);
         connect(debugger, SIGNAL(wasStopped()), this, SLOT(changeDebugActionToStart()));
+        connect(debugger, SIGNAL(needToContinue()), this, SLOT(debug()));
         code->setDebugEnabled();
     } else { //pause or continue debugger
         debugAction->setEnabled(false);

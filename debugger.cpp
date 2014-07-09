@@ -45,6 +45,7 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tm
 {
     QSettings settings("SASM Project", "SASM");
     c = 0;
+    pid = 0;
     firstAction = true;
     textEdit = tEdit;
     ioIncIncluded = ioInc;
@@ -208,6 +209,7 @@ void Debugger::processMessage(QString output, QString error)
         if (c == 2 && output.indexOf(QString(" in ")) != -1) {
             c++;
             actionTypeQueue.enqueue(ni);
+            doInput("info inferiors\n", none);
         }
 
         //if an error with the wrong name of the section has occurred
@@ -232,24 +234,37 @@ void Debugger::processMessage(QString output, QString error)
         if (c == 2 && output.indexOf(QString(" in ")) != -1) {
             c++;
             actionTypeQueue.enqueue(ni);
+            doInput("info inferiors\n", none);
         }
     }
 
-    QString sigTrap("SIGTRAP"); //was stopped
-    if (output.indexOf(sigTrap) != -1) {
-        stopped = true;
-        emit wasStopped();
-        return;
-    }
+    #ifdef Q_OS_WIN32
+        QString sigTrap("SIGTRAP"); //was stopped
+        if (output.indexOf(sigTrap) != -1) {
+            stopped = true;
+            emit wasStopped();
+            return;
+        }
+    #else
+        QString sigInt("SIGINT"); //was stopped
+        if (output.indexOf(sigInt) != -1) {
+            stopped = true;
+            emit wasStopped();
+        }
+    #endif
 
-    QString s("New Thread");
-    int index = output.indexOf(s);
-    if (index != -1) {
-        QString temp = output;
-        temp = temp.mid(index + s.length() + 1);
-        temp = temp.split(QChar('.')).at(0);
-        pid = temp.toULongLong(0, 10);
-        output.remove(QRegExp("\\[New Thread[^\\]]*\\]\r?\n"));
+    if (!pid) {
+        QRegExp r("Num +Description +Executable");
+        int index = output.indexOf(r);
+        if (index != -1) {
+            QString processString("process ");
+            r = QRegExp(processString + "[0-9]+");
+            index = output.indexOf(r);
+            output = output.mid(index + processString.length());
+            output = output.split(QChar(' ')).at(0);
+            pid = output.toULongLong(0, 10);
+            return;
+        }
     }
 
     //process all actions after start
@@ -315,9 +330,11 @@ void Debugger::processAction(QString output, QString error)
             QRegExp continuingMsg("Continuing.\r?\n");
             QRegExp breakpointMsg("\r?\nBreakpoint \\d+, ");
             QRegExp threadMsg("\\[Switching to Thread [^\\]]*\\]\r?\n");
+            QRegExp signalMsg("\r?\nProgram received signal.*");
             msg.remove(continuingMsg);
             msg.remove(breakpointMsg);
             msg.remove(threadMsg);
+            msg.remove(signalMsg);
             emit printOutput(msg);
         }
         firstAction = false;
@@ -369,6 +386,13 @@ void Debugger::processAction(QString output, QString error)
             else
                 output = error;
         }
+    }
+
+    if (actionType == simplePrint) {
+        QRegExp signalMsg("\r?\nProgram received signal.*");
+        output.remove(signalMsg);
+        emit printOutput(output);
+        return;
     }
 
     if (actionType == infoMemory) {
@@ -466,12 +490,16 @@ bool Debugger::isStopped()
 
 void Debugger::pause()
 {
-    #ifdef Q_OS_WIN32 //!!!!!!!!!!!!!! - now Windows only
+    #ifdef Q_OS_WIN32 //!!!
         HANDLE proc;
         proc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, (DWORD) pid);
         DebugBreakProcess(proc);
         CloseHandle(proc);
         actionTypeQueue.clear();
+    #else
+        actionTypeQueue.clear();
+        actionTypeQueue.enqueue(simplePrint);
+        kill(pid, SIGINT);
     #endif
 }
 
@@ -549,7 +577,9 @@ void Debugger::run()
 
 void Debugger::changeBreakpoint(quint64 lineNumber, bool isAdded)
 {
+    bool wasStarted = false;
     if (!isStopped()) {
+        wasStarted = true;
         QEventLoop eventLoop;
         connect(this, SIGNAL(wasStopped()), &eventLoop, SLOT(quit()));
         pause();
@@ -580,6 +610,8 @@ void Debugger::changeBreakpoint(quint64 lineNumber, bool isAdded)
         if (count == 1)
             doInput(QString("clear *0x") + QString::number(numInMem, 16) + QString("\n"), breakpoint);
     }
+    if (wasStarted)
+        emit needToContinue();
 }
 
 Debugger::~Debugger() {
