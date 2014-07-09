@@ -58,9 +58,11 @@
     #include <Windows.h>
     #include <stddef.h>
     #include <stdlib.h>
+#else
+    #include <signal.h>
 #endif
 
-enum DebugActionType {ni, si, showLine, infoRegisters, infoMemory, anyAction, none, breakpoint};
+enum DebugActionType {ni, si, showLine, infoRegisters, infoMemory, anyAction, none, breakpoint, simplePrint};
 
 class Debugger : public QObject
 {
@@ -143,6 +145,7 @@ signals:
     void printOutput(QString msg);
     void inMacro();
     void wasStopped();
+    void needToContinue();
 };
 
 #endif // DEBUGGER_H
