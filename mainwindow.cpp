@@ -816,12 +816,12 @@ void MainWindow::buildProgram(bool debugMode)
     #endif
     if (settings.contains("assemblyoptions"))
         assemblerOptions = settings.value("assemblyoptions").toString();
-    assemblerOptions.replace("$SOURCE$", Common::pathInTemp("program.asm"));
-    assemblerOptions.replace("$LSTOUTPUT$", Common::pathInTemp("program.lst"));
-    assemblerOptions.replace("$PROGRAM.OBJ$", Common::pathInTemp("program.o"));
-    assemblerOptions.replace("$PROGRAM$", Common::pathInTemp("SASMprog.exe"));
-    assemblerOptions.replace("$MACRO.OBJ$", stdioMacros);
     QStringList assemblerArguments = assemblerOptions.split(QChar(' '));
+    assemblerArguments.replaceInStrings("$SOURCE$", Common::pathInTemp("program.asm"));
+    assemblerArguments.replaceInStrings("$LSTOUTPUT$", Common::pathInTemp("program.lst"));
+    assemblerArguments.replaceInStrings("$PROGRAM.OBJ$", Common::pathInTemp("program.o"));
+    assemblerArguments.replaceInStrings("$PROGRAM$", Common::pathInTemp("SASMprog.exe"));
+    assemblerArguments.replaceInStrings("$MACRO.OBJ$", stdioMacros);
     QProcess assemblerProcess;
     QString assemblerOutput = Common::pathInTemp("compilererror.txt");
     assemblerProcess.setStandardOutputFile(assemblerOutput);
@@ -862,12 +862,12 @@ void MainWindow::buildProgram(bool debugMode)
         gccMProcess.waitForFinished();
     #endif
     //final linking
-    linkerOptions.replace("$PROGRAM.OBJ$", Common::pathInTemp("program.o"));
-    linkerOptions.replace("$MACRO.OBJ$", stdioMacros);
-    linkerOptions.replace("$PROGRAM$", Common::pathInTemp("SASMprog.exe"));
-    linkerOptions.replace("$SOURCE$", Common::pathInTemp("program.asm"));
-    linkerOptions.replace("$LSTOUTPUT$", Common::pathInTemp("program.lst"));
     QStringList linkerArguments = linkerOptions.split(QChar(' '));
+    linkerArguments.replaceInStrings("$PROGRAM.OBJ$", Common::pathInTemp("program.o"));
+    linkerArguments.replaceInStrings("$MACRO.OBJ$", stdioMacros);
+    linkerArguments.replaceInStrings("$PROGRAM$", Common::pathInTemp("SASMprog.exe"));
+    linkerArguments.replaceInStrings("$SOURCE$", Common::pathInTemp("program.asm"));
+    linkerArguments.replaceInStrings("$LSTOUTPUT$", Common::pathInTemp("program.lst"));
     QProcess linkerProcess;
     QString linkerOutput = Common::pathInTemp("linkererror.txt");
     linkerProcess.setStandardOutputFile(linkerOutput);
@@ -957,7 +957,7 @@ void MainWindow::runProgram()
     programStopped = false;
     connect(runProcess, SIGNAL(started()), this, SLOT(startCountProgramTime()));
     connect(runProcess, SIGNAL(finished(int)), this, SLOT(testStopOfProgram()));
-    runProcess->start(program);
+    runProcess->start(program, QStringList());
 
     timer->start(100);
     //Previous - connect(timer, SIGNAL(timeout()), this, SLOT(testStopOfProgram()));
@@ -1006,7 +1006,7 @@ void MainWindow::runExeProgram()
     }
 
     QString program = Common::pathInTemp("SASMprog.exe");
-    runProcess->startDetached(program);
+    runProcess->startDetached(program, QStringList());
 }
 
 void MainWindow::stopProgram()
@@ -2059,7 +2059,7 @@ void MainWindow::openHelp()
 void MainWindow::openAbout()
 {
     QMessageBox::about(this, tr("About SASM"),
-                       tr("SASM (SimpleASM) 2.3 - simple Open Source IDE for NASM.") + '\n' +
+                       tr("SASM (SimpleASM) ") + SASM_VERSION + " - " + tr("simple Open Source IDE for NASM.") + '\n' +
                        tr("Licensed under the GNU GPL v3.0") + '\n' +
                        tr("Based on the Qt.") + '\n' +
                        tr("Copyright © 2013 Dmitriy Manushin") + '\n' +
