@@ -78,6 +78,11 @@ Tab::Tab(QWidget *parent) :
 
     //Setting io and code fonts
     setFonts();
+
+    //restore state
+    QSettings settings("SASM Project", "SASM");
+    restoreGeometry(settings.value("tabgeometry").toByteArray());
+    restoreState(settings.value("tabwindowstate").toByteArray());
 }
 
 void Tab::setFonts()
@@ -95,10 +100,6 @@ void Tab::setFonts()
     logFont.setPointSize(settings.value("fontsize", 12).toInt());
     input->setFont(logFont);
     output->setFont(logFont);
-
-    //restore state
-    restoreGeometry(settings.value("tabgeometry").toByteArray());
-    restoreState(settings.value("tabwindowstate").toByteArray());
 }
 
 QTextDocument * Tab::getCodeDocument()
