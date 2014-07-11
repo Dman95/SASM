@@ -1,5 +1,5 @@
 /****************************************************************************
-** SASM - simple IDE for NASM development
+** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
 **          e-mail: Dman1095@gmail.com
