@@ -2059,7 +2059,8 @@ void MainWindow::openHelp()
 void MainWindow::openAbout()
 {
     QMessageBox::about(this, tr("About SASM"),
-                       tr("SASM (SimpleASM) ") + SASM_VERSION + " - " + tr("simple Open Source IDE for NASM.") + '\n' +
+                       tr("SASM (SimpleASM) ") + SASM_VERSION + " - " +
+                       tr("simple Open Source IDE for NASM, MASM, GAS and FASM assembler languages.") + '\n' +
                        tr("Licensed under the GNU GPL v3.0") + '\n' +
                        tr("Based on the Qt.") + '\n' +
                        tr("Copyright © 2013 Dmitriy Manushin") + '\n' +
