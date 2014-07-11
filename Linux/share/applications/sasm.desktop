@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=SASM
 GenericName=SASM
-Comment=Simple crossplatform IDE for NASM assembly language
+Comment=Simple crossplatform IDE for NASM, MASM, GAS and FASM assembly languages.
 Icon=/usr/share/sasm/sasm.png
 Exec=sasm
 Terminal=false
