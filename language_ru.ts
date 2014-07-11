@@ -410,9 +410,13 @@
         <translation>SASM (SimpleASM) </translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2062"/>
+        <location filename="mainwindow.cpp" line="2063"/>
+        <source>simple Open Source IDE for NASM, MASM, GAS and FASM assembler languages.</source>
+        <translation>простая Open Source среда разработки для языков ассемблера NASM, MASM, GAS и FASM.</translation>
+    </message>
+    <message>
         <source>simple Open Source IDE for NASM.</source>
-        <translation>простая Open Source среда разработки на языке ассемблера NASM.</translation>
+        <translation type="vanished">простая Open Source среда разработки на языке ассемблера NASM.</translation>
     </message>
     <message>
         <source>SASM (SimpleASM) 2.3 - simple Open Source IDE for NASM.</source>
@@ -423,7 +427,7 @@
         <translation type="obsolete">SASM (SimpleASM) 2.2 - простая Open Source среда разработки на языке ассемблера NASM.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2074"/>
+        <location filename="mainwindow.cpp" line="2075"/>
         <source>Yandex.Money - 410012181834380</source>
         <translation>Яндекс.Деньги - 410012181834380</translation>
     </message>
@@ -604,7 +608,7 @@ All files (*.*)</source>
         <translation type="obsolete">Программа завершена аварийно!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2066"/>
+        <location filename="mainwindow.cpp" line="2067"/>
         <source>Development and idea - Dmitriy Manushin</source>
         <translation>Идея и разработка - Дмитрий Манушин</translation>
     </message>
@@ -735,17 +739,17 @@ All files (*.*)</source>
         <translation type="obsolete">SASM (SimpleASM) 2.0 Beta - простая Open Source среда разработки на языке ассемблера NASM.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2063"/>
+        <location filename="mainwindow.cpp" line="2064"/>
         <source>Licensed under the GNU GPL v3.0</source>
         <translation>Распространяется по лицензии GNU GPL v3.0</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2064"/>
+        <location filename="mainwindow.cpp" line="2065"/>
         <source>Based on the Qt.</source>
         <translation>Основана на Qt.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2065"/>
+        <location filename="mainwindow.cpp" line="2066"/>
         <source>Copyright © 2013 Dmitriy Manushin</source>
         <oldsource>Copyright Â© 2013 Dmitriy Manushin</oldsource>
         <translation>Copyright © 2013 Дмитрий Манушин</translation>
@@ -755,12 +759,12 @@ All files (*.*)</source>
         <translation type="obsolete">Разработка - Dmitriy Manushin</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2067"/>
+        <location filename="mainwindow.cpp" line="2068"/>
         <source>Icon and advices - Alick Gaybullaev</source>
         <translation>Иконка и советы - Алик Гайбуллаев</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2068"/>
+        <location filename="mainwindow.cpp" line="2069"/>
         <source>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com</source>
         <oldsource>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com
 
@@ -768,27 +772,27 @@ All files (*.*)</source>
         <translation>Пожелания и сообщения об ошибках отправляйте на адрес Dman1095@gmail.com</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2069"/>
+        <location filename="mainwindow.cpp" line="2070"/>
         <source>More information on the site: http://dman95.github.io/SASM/</source>
         <translation>Сайт программы: http://dman95.github.io/SASM/</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2070"/>
+        <location filename="mainwindow.cpp" line="2071"/>
         <source>Donate:</source>
         <translation>Поддержите проект:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2071"/>
+        <location filename="mainwindow.cpp" line="2072"/>
         <source>PayPal - Dman1095@gmail.com</source>
         <translation>PayPal - Dman1095@gmail.com</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2072"/>
+        <location filename="mainwindow.cpp" line="2073"/>
         <source>WMZ - Z282016332582</source>
         <translation>WMZ - Z282016332582</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2073"/>
+        <location filename="mainwindow.cpp" line="2074"/>
         <source>WMR - R331674303467</source>
         <translation>WMR - R331674303467</translation>
     </message>
