@@ -50,7 +50,7 @@ QString FASM::getAssemblerPath()
     #ifdef Q_OS_WIN32
         return Common::applicationDataPath() + "/FASM/fasm.exe";
     #else
-        return Common::applicationDataPath() + "/FASM/fasm";
+        return "fasm";
     #endif
 }
 
@@ -77,7 +77,7 @@ QString FASM::getListingFilePath(QFile &lstOut)
     #ifdef Q_OS_WIN32
         getLst.start(Common::applicationDataPath() + "/FASM/listing.exe", getLstArguments);
     #else
-        getLst.start(Common::applicationDataPath() + "/FASM/listing", getLstArguments);
+        getLst.start("listing", getLstArguments);
     #endif
     getLst.waitForFinished();
     return listingPath;

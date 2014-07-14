@@ -19,6 +19,7 @@ BINDIR = $$PREFIX/bin
 DATADIR = $$PREFIX/share
 
 binfile.files += sasm
+binfile.files += Linux/bin/*
 binfile.path = $$BINDIR
 data.files += Linux/share/sasm/*
 data.path = $$DATADIR/sasm/
