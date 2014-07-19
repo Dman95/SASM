@@ -54,13 +54,14 @@
 #include "common.h"
 #include "codeeditor.h"
 
-class Assembler : public QObject //Abstract class
+class Assembler : public QObject //Abstract class. Need to implement to add new assembler in SASM.
+//See examples of implementation in classes NASM, MASM, FASM and GAS.
 {
     Q_OBJECT
 public:
     struct LineNum {
-        quint64 numInCode;
-        quint64 numInMem;
+        quint64 numInCode; //string number in code in SASM code area
+        quint64 numInMem; //address of instruction in memory
         bool operator ==(const LineNum& ln)
         {
             return ln.numInCode == numInCode;
@@ -68,30 +69,46 @@ public:
     };
     struct HighlightingRule
     {
-        QRegExp pattern;
-        QTextCharFormat format;
+        QRegExp pattern; //pattern to highlight
+        QTextCharFormat format; //highlighting format
     };
     bool x86;
     explicit Assembler(bool x86, QObject *parent = 0);
-    virtual QString getAssemblerPath() = 0;
-    virtual QString getLinkerPath() = 0;
+
+    virtual QString getAssemblerPath() = 0; //should return default path to assembler
+    virtual QString getLinkerPath() = 0; //should return default path to linker
+
     virtual quint64 getMainOffset(QFile &lst, QString entryLabel) = 0;
-    virtual void parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset) = 0;
+    //get file with listing and name of entry label - main or start.
+    //Should return offset of this label - number of string, where label is placed.
+
+    virtual void parseLstFile(QFile &lst,
+                              QVector<Assembler::LineNum> &lines,
+                              bool ioIncIncluded,
+                              quint64 ioIncSize,
+                              quint64 offset) = 0;
+    //should parse listing file lst and fill QVector lines with results of parsing.
+    //ioIncIncluded and io incSize params are needed only if NASM is used. offset - difference between program code in memory and in file.
+
     virtual void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
                                      QList<QTextCharFormat *> &formats,
                                      bool &multiLineComments,
                                      QRegExp &commentStartExpression,
                                      QRegExp &commentEndExpression) = 0;
-    virtual QString getStartText() = 0;
-    virtual void putDebugString(CodeEditor *code) = 0;
-    virtual QString getAssemblerOptions() = 0;
-    virtual QString getLinkerOptions() = 0;
+    //should fill QVector with highlighting rules.
+    //Qlist with formats (see NASM, MASM, FASM, GAS as examples). commentStartExpression - /* in C++ for example,
+    //commentEndExpression - */ in C++ for example - expressions for multi line highlighting - workes if multiLineComments == true.
+
+    virtual QString getStartText() = 0; //should return default start text
+    virtual void putDebugString(CodeEditor *code) = 0; //should put debug string, that makes frame (mov ebp, esp)
+    virtual QString getAssemblerOptions() = 0; //should return default assembler options
+    virtual QString getLinkerOptions() = 0; //should return default linker options
     bool isx86();
 
 signals:
-    
+
 public slots:
-    
+
 };
 
 #endif // ASSEMBLER_H
