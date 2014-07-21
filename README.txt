@@ -21,7 +21,6 @@ You need:
 	libxcb1
 	libxcb-render0
 	libxcb-icccm4
-	libxcb-sync0
 
 Download sources and unpack their.
 Go to directory with their: "cd <path>"
