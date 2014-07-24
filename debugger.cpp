@@ -428,11 +428,30 @@ void Debugger::processAction(QString output, QString error)
         registersInfo info;
         QSettings settings("SASM Project", "SASM");
         if (settings.value("mode", QString("x86")).toString() == "x86") {
-            for (int i = 0; i < 16; i++) {
-                if (i == 8 || i == 9) {
+            int count = 16;
+            if (settings.value("allregisters", false).toBool())
+                count += 33;
+            for (int i = 0; i < count; i++) {
+                if (i == 8 || i == 9 || (i >= 16 && i <= 23) || i == 40) {
                     registersStream >> info.name >> info.hexValue;
                     registersStream.skipWhiteSpace();
                     info.decValue = registersStream.readLine();
+                } else if (i >= 32 && i <= 39) {
+                    registersStream >> info.name;
+                    QRegExp r("uint128 = 0x[0-9a-fA-F]+");
+                    QString s = registersStream.readLine();
+                    while (r.indexIn(s) == -1)
+                        s = registersStream.readLine();
+                    info.decValue = r.capturedTexts().at(0).mid(QString("uint128 = ").length());
+                    info.hexValue = "";
+                } else if (i >= 41) {
+                    registersStream >> info.name;
+                    QRegExp r("v8_int8 = \\{[^\\{\\}]+\\}{1}");
+                    QString s = registersStream.readLine();
+                    while (r.indexIn(s) == -1)
+                        s = registersStream.readLine();
+                    info.decValue = r.capturedTexts().at(0).mid(QString("v8_int8 = ").length());
+                    info.hexValue = "";
                 } else {
                     registersStream >> info.name >> info.hexValue >> info.decValue;
                 }
@@ -444,8 +463,11 @@ void Debugger::processAction(QString output, QString error)
                 }
             }
         } else { //x64
-            for (int i = 0; i < 24; i++) {
-                if (i == 17) {
+            int count = 24;
+            if (settings.value("allregisters", false).toBool())
+                count += 33;
+            for (int i = 0; i < count; i++) {
+                if (i == 17 || (i >= 24 && i <= 31) || i == 56) {
                     registersStream >> info.name >> info.hexValue;
                     registersStream.skipWhiteSpace();
                     info.decValue = registersStream.readLine();
@@ -457,6 +479,14 @@ void Debugger::processAction(QString output, QString error)
                     while (c != ' ')
                         registersStream >> c;
                     info.decValue = registersStream.readLine();
+                } else if (i >= 40 && i <= 55) {
+                    registersStream >> info.name;
+                    QRegExp r("uint128 = 0x[0-9a-fA-F]+");
+                    QString s = registersStream.readLine();
+                    while (r.indexIn(s) == -1)
+                        s = registersStream.readLine();
+                    info.decValue = r.capturedTexts().at(0).mid(QString("uint128 = ").length());
+                    info.hexValue = "";
                 } else {
                     registersStream >> info.name >> info.hexValue >> info.decValue;
                 }
