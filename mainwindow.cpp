@@ -143,6 +143,7 @@ void MainWindow::initUi()
     connect(tabs, SIGNAL(tabCloseRequested(int)), this, SLOT(deleteTab(int)));
     connect(tabs, SIGNAL(currentChanged(int)), this, SLOT(changeCurrentTab(int)));
     tabs->setTabsClosable(true);
+    tabs->setMovable(true);
 
     //Create compiler field
     compilerOut = new RuQTextEdit;
