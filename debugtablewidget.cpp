@@ -66,7 +66,7 @@ DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType w
     if (type == registersTable) {
         setSelectionMode(QAbstractItemView::NoSelection);
         QStringList header;
-        header << tr("Register") << tr("Hex") << tr("Integer");
+        header << tr("Register") << tr("Hex") << tr("Info");
         setHorizontalHeaderLabels(header);
         setWindowTitle(tr("Registers"));
         resizeColumnsToContents();
@@ -186,11 +186,18 @@ void DebugTableWidget::addRegister(const QString &name, const QString &hexValue,
         zeroes.fill('0', 10 - hexValue.length());
         if (item(rowNumber, 2)) {
             item(rowNumber, 0)->setText(name);
-            item(rowNumber, 1)->setText("0x" + zeroes + hexValue.right(hexValue.length() - 2));
+            if (hexValue.isEmpty())
+                item(rowNumber, 1)->setText("");
+            else
+                item(rowNumber, 1)->setText("0x" + zeroes + hexValue.right(hexValue.length() - 2));
             item(rowNumber, 2)->setText(decValue);
         } else {
             QTableWidgetItem *nameItem = new QTableWidgetItem(name);
-            QTableWidgetItem *hexValueItem = new QTableWidgetItem("0x" + zeroes + hexValue.right(hexValue.length() - 2));
+            QTableWidgetItem *hexValueItem;
+            if (hexValue.isEmpty())
+                hexValueItem = new QTableWidgetItem("");
+            else
+                hexValueItem = new QTableWidgetItem("0x" + zeroes + hexValue.right(hexValue.length() - 2));
             QTableWidgetItem *decValueItem = new QTableWidgetItem(decValue);
             QFont monoFont("Courier");
             monoFont.setStyleHint(QFont::Monospace);

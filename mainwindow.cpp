@@ -143,6 +143,7 @@ void MainWindow::initUi()
     connect(tabs, SIGNAL(tabCloseRequested(int)), this, SLOT(deleteTab(int)));
     connect(tabs, SIGNAL(currentChanged(int)), this, SLOT(changeCurrentTab(int)));
     tabs->setTabsClosable(true);
+    tabs->setMovable(true);
 
     //Create compiler field
     compilerOut = new RuQTextEdit;
@@ -1334,6 +1335,9 @@ void MainWindow::debugShowRegisters()
             } else {
                 regCount = 24;
             }
+            if (settings.value("allregisters", false).toBool()) {
+                regCount += 33;
+            }
             registersWindow = new DebugTableWidget(regCount, 3, registersTable, registersDock);
             connect(registersWindow, SIGNAL(closeSignal()), this, SLOT(setShowRegistersToUnchecked()));
             connect(debugger, SIGNAL(printRegisters(QList<Debugger::registersInfo>)),
@@ -1354,7 +1358,10 @@ void MainWindow::debugShowRegisters()
         if (debugger->isStopped() && locker.tryLock()) {
             connect(debugger, SIGNAL(printRegisters(QList<Debugger::registersInfo>)), &locker, SLOT(unlock()), Qt::UniqueConnection);
             connect(debugger, SIGNAL(finished()), &locker, SLOT(unlock()), Qt::UniqueConnection);
-            debugger->doInput(QString("info registers\n"), infoRegisters);
+            if (settings.value("allregisters", false).toBool())
+                debugger->doInput(QString("info all-registers\n"), infoRegisters);
+            else
+                debugger->doInput(QString("info registers\n"), infoRegisters);
         }
     } else
         if (registersWindow) {
@@ -1659,6 +1666,10 @@ void MainWindow::openSettings()
     settingsUi.fontComboBox->setCurrentFont(QFont(settings.value("fontfamily",
                                                                  QString("Courier New")).value<QString>()));
     settingsUi.fontSizeSpinBox->setValue(settings.value("fontsize", 12).toInt());
+    if (settings.value("allregisters", false).toBool())
+        settingsUi.registersYesRadioButton->setChecked(true);
+    else
+        settingsUi.registersNoRadioButton->setChecked(true);
 
     //colors
     for (int i = 0; i < colorButtons.size(); i++) {
@@ -1890,6 +1901,7 @@ void MainWindow::saveSettings()
     settings.setValue("startwindow", settingsUi.startWindow->currentIndex());
     settings.setValue("language", settingsUi.language->currentIndex());
     startText = settingsStartTextEditor->toPlainText();
+    settings.setValue("allregisters", settingsUi.registersYesRadioButton->isChecked());
 
     //change fonts
     settings.setValue("fontfamily", settingsUi.fontComboBox->currentFont().family());
