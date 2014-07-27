@@ -285,37 +285,48 @@ void CodeEditor::setDebugMode(bool mode)
 
 void CodeEditor::putTab()
 {
+    QString insertion = "    ";
+
     QTextCursor cursor = textCursor();
     if (cursor.selectionEnd() - cursor.selectionStart() <= 0) {
-        insertPlainText("    ");
+        insertPlainText(insertion);
     } else {
-        QString selected =
-                cursor.selectedText().replace(QString(QChar::ParagraphSeparator),
-                                              QString(QChar::ParagraphSeparator) + QString("    "));
-        selected.insert(0, QString("    "));
-        cursor.removeSelectedText();
-        cursor.insertText(selected);
+        QTextBlock firstBlock = document()->findBlock(cursor.selectionStart());
+        QTextBlock lastBlock = document()->findBlock(cursor.selectionEnd() - 1);
+
+        cursor.setPosition(firstBlock.position());
+        cursor.beginEditBlock();
+        do {
+            cursor.insertText(insertion);
+        } while (cursor.movePosition(QTextCursor::NextBlock) && cursor.position() <= lastBlock.position());
+        cursor.endEditBlock();
     }
 }
 
 void CodeEditor::deleteTab()
 {
+    QString deletion = "    ";
+
     QTextCursor cursor = textCursor();
     if (cursor.selectionEnd() - cursor.selectionStart() <= 0) {
         //delete 4 spaces (tab)
-        cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, 4);
+        cursor.movePosition(QTextCursor::Left, QTextCursor::KeepAnchor, deletion.length());
         QString selected = cursor.selectedText();
-        if (selected.left(4) == QString("    "))
+        if (selected.startsWith(deletion))
             cursor.deletePreviousChar();
     } else {
-        QString selected =
-                cursor.selectedText().replace(QString(QChar::ParagraphSeparator) + QString("    "),
-                                              QString(QChar::ParagraphSeparator));
-        cursor.removeSelectedText();
-        if (selected.left(4) == QString("    "))
-            cursor.insertText(selected.right(selected.length() - 4));
-        else
-            cursor.insertText(selected);
+        QTextBlock firstBlock = document()->findBlock(cursor.selectionStart());
+        QTextBlock lastBlock = document()->findBlock(cursor.selectionEnd() - 1);
+
+        cursor.setPosition(firstBlock.position());
+        cursor.beginEditBlock();
+        do {
+            if (cursor.block().text().startsWith(deletion)) {
+                cursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, deletion.length());
+                cursor.removeSelectedText();
+            }
+        } while (cursor.movePosition(QTextCursor::NextBlock) && cursor.position() <= lastBlock.position());
+        cursor.endEditBlock();
     }
 }
 
