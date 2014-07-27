@@ -776,6 +776,8 @@ void MainWindow::changeCurrentTab(int index)
 
 void MainWindow::buildProgram(bool debugMode)
 {
+    programIsBuilded = false;
+
     using Common::applicationDataPath;
     printLogWithTime(tr("Build started...") + '\n', Qt::black);
     QCoreApplication::processEvents();
@@ -831,7 +833,7 @@ void MainWindow::buildProgram(bool debugMode)
     assemblerProcess.start(assemblerPath, assemblerArguments);
     assemblerProcess.waitForFinished();
 
-    if (assemblerProcess.error() != QProcess::ProcessError::UnknownError) {
+    if (assemblerProcess.error() != QProcess::UnknownError) {
         printLogWithTime(tr("Unable to start assembler. Check your settings.") + '\n', Qt::red);
         return;
     }
@@ -881,7 +883,7 @@ void MainWindow::buildProgram(bool debugMode)
     linkerProcess.start(linker, linkerArguments);
     linkerProcess.waitForFinished();
 
-    if (linkerProcess.error() != QProcess::ProcessError::UnknownError) {
+    if (linkerProcess.error() != QProcess::UnknownError) {
         printLogWithTime(tr("Unable to start linker. Check your settings.") + '\n', Qt::red);
         return;
     }
@@ -920,7 +922,6 @@ void MainWindow::buildProgram(bool debugMode)
         printLog(logText, Qt::red);
 
         //QMessageBox::critical(0, tr("Warning!"), tr("Errors have occurred in the build!"));
-        programIsBuilded = false;
     } else {
         printLogWithTime(tr("Built successfully.") + '\n', Qt::darkGreen);
         //print warnings
