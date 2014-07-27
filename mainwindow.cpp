@@ -831,6 +831,11 @@ void MainWindow::buildProgram(bool debugMode)
     assemblerProcess.start(assemblerPath, assemblerArguments);
     assemblerProcess.waitForFinished();
 
+    if (assemblerProcess.error() != QProcess::ProcessError::UnknownError) {
+        printLogWithTime(tr("Unable to start assembler. Check your settings.") + '\n', Qt::red);
+        return;
+    }
+
     //GCC
     QString linkerOptions = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m32";
     if (settings.contains("linkingoptions"))
@@ -875,6 +880,11 @@ void MainWindow::buildProgram(bool debugMode)
     linkerProcess.setStandardErrorFile(linkerOutput, QIODevice::Append);
     linkerProcess.start(linker, linkerArguments);
     linkerProcess.waitForFinished();
+
+    if (linkerProcess.error() != QProcess::ProcessError::UnknownError) {
+        printLogWithTime(tr("Unable to start linker. Check your settings.") + '\n', Qt::red);
+        return;
+    }
 
     QFile logFile;
     logFile.setFileName(assemblerOutput);
