@@ -69,8 +69,11 @@ public:
     };
     struct HighlightingRule
     {
+        HighlightingRule() : isComment(false) {
+        }
         QRegExp pattern; //pattern to highlight
         QTextCharFormat format; //highlighting format
+        bool isComment;
     };
     bool x86;
     explicit Assembler(bool x86, QObject *parent = 0);
