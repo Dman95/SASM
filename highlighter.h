@@ -60,6 +60,8 @@ private:
      typedef Assembler::HighlightingRule HighlightingRule;
      QVector<HighlightingRule> highlightingRules;
 
+     bool isCommentInQuote(const QString &text, int index);
+
      QRegExp commentStartExpression;
      QRegExp commentEndExpression;
      bool multiLineComments;

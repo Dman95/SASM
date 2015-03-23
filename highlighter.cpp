@@ -80,23 +80,35 @@
      assembler->fillHighligherRules(highlightingRules, formats, multiLineComments, commentStartExpression, commentEndExpression);
  }
 
- void Highlighter::highlightBlock(const QString &text)
- {
-     foreach (const HighlightingRule &rule, highlightingRules) {
-         QRegExp expression(rule.pattern);
-         int index = expression.indexIn(text);
-         while (index >= 0) {
-             int length = expression.matchedLength();
-             setFormat(index, length, rule.format);
-             index = expression.indexIn(text, index + length);
+void Highlighter::highlightBlock(const QString &text)
+{
+    foreach (const HighlightingRule &rule, highlightingRules) {
+        QRegExp expression(rule.pattern);
+        int index = expression.indexIn(text);
+        while (index >= 0) {
+            int length = expression.matchedLength();
+            if (rule.isComment) {
+                if (!isCommentInQuote(text, index)) {
+                    setFormat(index, length, rule.format);
+                    index = expression.indexIn(text, index + length);
+                } else {
+                    index = expression.indexIn(text, index + 1);
+                }
+             } else {
+                setFormat(index, length, rule.format);
+                index = expression.indexIn(text, index + length);
+             }
          }
      }
-
      if (multiLineComments) {
          setCurrentBlockState(0);
          int startIndex = 0;
-         if (previousBlockState() != 1)
+         if (previousBlockState() != 1) {
              startIndex = commentStartExpression.indexIn(text);
+             if (startIndex != -1 && isCommentInQuote(text, startIndex)) {
+                 startIndex = -1;
+             }
+         }
          while (startIndex >= 0) {
              int endIndex = commentEndExpression.indexIn(text, startIndex);
              int commentLength;
@@ -112,6 +124,27 @@
          }
      }
  }
+
+bool Highlighter::isCommentInQuote(const QString &text, int index)
+{
+    bool inQuote = false;
+    char quote = 0;
+    for (int i = 0; i < index; ++i) {
+        char c = text[i].toLatin1();
+        switch (c) {
+        case '"':
+        case '\'':
+        case '`':
+            if (!inQuote) {
+                inQuote = true;
+                quote = c;
+            } else if (quote == c) {
+                inQuote = false;
+            }
+        }
+    }
+    return inQuote;
+}
 
  Highlighter::~Highlighter()
  {

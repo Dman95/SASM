@@ -445,22 +445,26 @@ void GAS::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlighting
         highlightingRules.append(rule);
     }
 
-    //comments
-    commentStartExpression = QRegExp("/\\*");
-    commentEndExpression = QRegExp("\\*/");
-    rule.format = commentFormat;
-    rule.pattern = QRegExp("#[^\n]*");
-    highlightingRules.append(rule);
-    multiLineComments = true;
-
     //quotations
     rule.pattern = QRegExp("\".*\"");
+    rule.pattern.setMinimal(true);
     rule.format = quotationFormat;
     highlightingRules.append(rule);
 
     rule.pattern = QRegExp("'.*'");
+    rule.pattern.setMinimal(true);
     highlightingRules.append(rule);
 
     rule.pattern = QRegExp("`.*`");
+    rule.pattern.setMinimal(true);
     highlightingRules.append(rule);
+
+    //comments
+    commentStartExpression = QRegExp("/\\*");
+    commentEndExpression = QRegExp("[^\\\\]\\*/");
+    rule.format = commentFormat;
+    rule.pattern = QRegExp("#[^\n]*");
+    rule.isComment = true;
+    highlightingRules.append(rule);
+    multiLineComments = true;
 }

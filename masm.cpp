@@ -511,19 +511,22 @@ void MASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
         highlightingRules.append(rule);
     }
 
+    //quotations
+    rule.pattern = QRegExp("\".*\"");
+    rule.format = quotationFormat;
+    rule.pattern.setMinimal(true);
+    highlightingRules.append(rule);
+
+    rule.pattern = QRegExp("'.*'");
+    rule.pattern.setMinimal(true);
+    highlightingRules.append(rule);
+
     //comments
     rule.pattern = QRegExp(";[^\n]*");
+    rule.isComment = true;
     rule.format = commentFormat;
     highlightingRules.append(rule);
     multiLineComments = false;
     commentStartExpression = QRegExp();
     commentEndExpression = QRegExp();
-
-    //quotations
-    rule.pattern = QRegExp("\".*\"");
-    rule.format = quotationFormat;
-    highlightingRules.append(rule);
-
-    rule.pattern = QRegExp("'.*'");
-    highlightingRules.append(rule);
 }
