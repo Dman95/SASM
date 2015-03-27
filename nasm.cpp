@@ -96,44 +96,64 @@ quint64 NASM::getMainOffset(QFile &lst, QString entryLabel)
     return -1;
 }
 
-void NASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset)
+void NASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 offset)
 {
     bool inTextSection = false;
-    QRegExp sectionTextRegExp("[Ss][Ee][Cc][Tt][Ii][Oo][Nn]\\s+\\.text");
-    QRegExp sectionRegExp("[Ss][Ee][Cc][Tt][Ii][Oo][Nn]");
-    quint64 omitLinesCount = 0; //for skipping strings from section .data - for processLst()
+    QRegExp sectionTextRegExp("SECTION\\s+\\.?(text|code)");
+    sectionTextRegExp.setCaseSensitivity(Qt::CaseInsensitive);
+    QRegExp sectionRegExp("SECTION");
+    sectionRegExp.setCaseSensitivity(Qt::CaseInsensitive);
+
+    QList<QPair<quint64, QString> > instrList;
     QTextStream lstStream(&lst);
     lstStream.seek(0);
     while (!lstStream.atEnd()) {
         QString line = lstStream.readLine();
+        if (line.indexOf(QRegExp("^ +[0-9]+ +<[0-9]+>")) != -1) { //macro
+            continue;
+        }
         if (line.indexOf(sectionTextRegExp) != -1) {
             inTextSection = true;
         } else if (line.indexOf(sectionRegExp) != -1) {
             inTextSection = false;
         }
-        if (line.length() <= 37) { //omit strings with data only
+        if (line.indexOf(QRegExp("^(\\s+[^\\s]+){4}")) == -1) { //omit strings with data only
             //if in list : line number, address, data and it is all (without instruction) -
             //omit this string and subtract 1 from offset
-            omitLinesCount++;
             continue;
         }
         if (inTextSection) {
-            QByteArray lineArr = line.toLocal8Bit();
-            const char *s = lineArr.constData();
-            quint64 a, b, c;
-            if (sscanf(s, "%llu %llx %llx", &a, &b, &c) == 3) {
-                if (!(b == 0 && c == 0)) { //exclude 0 0
-                    LineNum l;
-                    l.numInCode = a - omitLinesCount;
-                    if (ioIncIncluded) {
-                        l.numInCode -= ioIncSize;
-                    }
-                    l.numInMem = b + offset;
-                    lines.append(l);
-                }
+            QRegExp lineRegExp("^\\s+[0-9]+\\s+([0-9a-fA-F]+)\\s+\\S+\\s+(.*)");
+            lineRegExp.setMinimal(false);
+            if (lineRegExp.indexIn(line) == 0) {
+                quint64 address = lineRegExp.cap(1).toULongLong(0, 16);
+                QString instruction = lineRegExp.cap(2).trimmed();
+                instrList.append(QPair<quint64, QString>(address + offset, instruction));
             }
         }
     }
+
+    QFile programFile(Common::pathInTemp("program.asm"));
+    programFile.open(QFile::ReadOnly);
+    QTextStream programStream(&programFile);
+    int i = 0; //offset in list
+    int numInCode = 0;
+    while (!programStream.atEnd()) {
+        if (i >= instrList.size()) {
+            break;
+        }
+        QString line = programStream.readLine();
+        numInCode++;
+        line = line.trimmed();
+        if (line == instrList[i].second) {
+            LineNum l;
+            l.numInCode = numInCode;
+            l.numInMem = instrList[i].first;
+            lines.append(l);
+            i++;
+        }
+    }
+    programFile.close();
 }
 
 QString NASM::getStartText()

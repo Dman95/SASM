@@ -88,7 +88,7 @@ quint64 MASM::getMainOffset(QFile &lst, QString entryLabel)
     return -1;
 }
 
-void MASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool, quint64, quint64 offset)
+void MASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 offset)
 {
     QTextStream lstStream(&lst);
     QList<QPair<quint64, QString> > instrList;

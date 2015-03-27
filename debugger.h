@@ -69,7 +69,7 @@ class Debugger : public QObject
     Q_OBJECT
 
 public:
-    Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tmp, Assembler *assembler, QWidget *parent = 0);
+    Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler *assembler, QWidget *parent = 0);
     ~Debugger();
     void setWatchesCount(int count);
 
@@ -100,8 +100,6 @@ private:
     QVector<LineNum> lines; //accordance between program lines in memory and in file
 
     int c; //counter for sequential performing of actions
-    bool ioIncIncluded;
-    quint64 ioIncSize; //without last \n
     bool registersOk;
 
     QQueue<DebugActionType> actionTypeQueue; //queue of actions type from enum

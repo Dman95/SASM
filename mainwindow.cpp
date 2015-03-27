@@ -793,7 +793,6 @@ void MainWindow::buildProgram(bool debugMode)
     QString path = Common::pathInTemp("program.asm");
 
     Tab *currentTab = (Tab *) tabs->currentWidget();
-    ioIncIncluded = currentTab->isIoIncIncluded();
     currentTab->saveCodeToFile(path, assembler, false, debugMode);
 
     if (debugMode) {
@@ -1083,7 +1082,7 @@ void MainWindow::debug()
         printLogWithTime(tr("Debugging started...") + '\n', Qt::darkGreen);
         QString path = Common::pathInTemp("SASMprog.exe");
         CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
-        debugger = new Debugger(compilerOut, path, ioIncIncluded, Common::pathInTemp(QString()), assembler);
+        debugger = new Debugger(compilerOut, path, Common::pathInTemp(QString()), assembler);
         connect(debugger, SIGNAL(highlightLine(int)), code, SLOT(updateDebugLine(int)));
         connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
         connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));

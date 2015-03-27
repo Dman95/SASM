@@ -107,23 +107,20 @@ quint64 FASM::getMainOffset(QFile &lstOut, QString entryLabel)
     return -1;
 }
 
-void FASM::parseLstFile(QFile &lstOut, QVector<Assembler::LineNum> &lines, bool, quint64, quint64 offset)
+void FASM::parseLstFile(QFile &lstOut, QVector<Assembler::LineNum> &lines, quint64 offset)
 {
     QFile lst(getListingFilePath(lstOut));
     lst.open(QFile::ReadOnly);
 
     QTextStream lstStream(&lst);
-    quint64 currentLine = 0;
     QList<QPair<quint64, QString> > instrList;
     while (!lstStream.atEnd()) {
         QString line = lstStream.readLine();
-        currentLine++;
         int index = line.indexOf(QChar(':'));
         if (index == -1 || index > 16)
             continue;
         QString first = line.left(index);
         QString second = line.mid(index + 1);
-        QStringList l = line.split(QChar(':'));
         int k = 0;
         while (k < second.length() && second[k].isSpace())
             k++;
@@ -137,6 +134,9 @@ void FASM::parseLstFile(QFile &lstOut, QVector<Assembler::LineNum> &lines, bool,
     int i = 0; //offset in list
     int numInCode = 0;
     while (!programStream.atEnd()) {
+        if (i >= instrList.size()) {
+            break;
+        }
         QString line = programStream.readLine();
         numInCode++;
         int k = 0;
@@ -149,8 +149,6 @@ void FASM::parseLstFile(QFile &lstOut, QVector<Assembler::LineNum> &lines, bool,
             l.numInMem = instrList[i].first;
             lines.append(l);
             i++;
-            if (i >= instrList.size())
-                break;
         }
     }
     programFile.close();

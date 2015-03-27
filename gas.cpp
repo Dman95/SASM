@@ -98,7 +98,7 @@ quint64 GAS::getMainOffset(QFile &lst, QString entryLabel)
     return -1;
 }
 
-void GAS::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIncIncluded, quint64 ioIncSize, quint64 offset)
+void GAS::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 offset)
 {
     bool inTextSection = false;
     QRegExp sectionTextRegExp("\\.text");
@@ -125,9 +125,6 @@ void GAS::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, bool ioIn
                 if (!(b == 0 && c == 0)) { //exclude 0 0
                     LineNum l;
                     l.numInCode = a;
-                    if (ioIncIncluded) {
-                        l.numInCode -= ioIncSize;
-                    }
                     l.numInMem = b + offset;
                     lines.append(l);
                 }
