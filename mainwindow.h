@@ -158,7 +158,6 @@ private:
     QTime programExecutionTime;
     Debugger *debugger;
     bool programIsBuilded;
-    bool ioIncIncluded;
     QPointer<DebugTableWidget> registersWindow;
     QDockWidget *registersDock;
     QPointer<DebugTableWidget> memoryWindow;

@@ -40,7 +40,7 @@
 
 #include "debugger.h"
 
-Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tmp, Assembler *assembler, QWidget *parent)
+Debugger::Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler *assembler, QWidget *parent)
     : QObject(parent)
 {
     QSettings settings("SASM Project", "SASM");
@@ -48,24 +48,9 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, bool ioInc, QString tm
     pid = 0;
     firstAction = true;
     textEdit = tEdit;
-    ioIncIncluded = ioInc;
     tmpPath = tmp;
     registersOk = true;
     this->assembler = assembler;
-    //determine ioIncSize
-    #ifdef Q_OS_WIN32
-        if (this->assembler->isx86()) {
-            ioIncSize = 786;
-        } else {
-            ioIncSize = 940;
-        }
-    #else
-        if (this->assembler->isx86()) {
-            ioIncSize = 768;
-        } else {
-            ioIncSize = 994;
-        }
-    #endif
     #ifdef Q_OS_WIN32
         QString gdb;
         QString objdump;
@@ -571,7 +556,7 @@ void Debugger::processLst()
         }
         offset -= mainOffset;
         lst.open(QIODevice::ReadOnly);
-        assembler->parseLstFile(lst, lines, ioIncIncluded, ioIncSize, offset);
+        assembler->parseLstFile(lst, lines, offset);
         lst.close();
         if (lines.isEmpty()) {
             actionTypeQueue.enqueue(anyAction);

@@ -67,7 +67,6 @@ public:
     void loadCodeFromFile(const QString &filePath);
     void appendOutput(QString msg);
     QString getCurrentFilePath();
-    bool isIoIncIncluded();
     void clearOutput();
     void setFonts();
 

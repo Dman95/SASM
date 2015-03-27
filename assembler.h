@@ -87,11 +87,9 @@ public:
 
     virtual void parseLstFile(QFile &lst,
                               QVector<Assembler::LineNum> &lines,
-                              bool ioIncIncluded,
-                              quint64 ioIncSize,
                               quint64 offset) = 0;
     //should parse listing file lst and fill QVector lines with results of parsing.
-    //ioIncIncluded and io incSize params are needed only if NASM is used. offset - difference between program code in memory and in file.
+    //offset - difference between program code in memory and in file.
 
     virtual void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
                                      QList<QTextCharFormat *> &formats,

@@ -53,7 +53,7 @@ public:
     QString getAssemblerPath();
     QString getLinkerPath();
     quint64 getMainOffset(QFile &lstOut, QString entryLabel);
-    void parseLstFile(QFile &lstOut, QVector<Assembler::LineNum> &lines, bool, quint64, quint64 offset);
+    void parseLstFile(QFile &lstOut, QVector<Assembler::LineNum> &lines, quint64 offset);
     void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
                              QList<QTextCharFormat *> &formats,
                              bool &multiLineComments,
