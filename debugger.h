@@ -62,7 +62,7 @@
     #include <signal.h>
 #endif
 
-enum DebugActionType {ni, si, showLine, infoRegisters, infoMemory, anyAction, none, breakpoint, simplePrint};
+enum DebugActionType {ni, si, showLine, infoRegisters, infoMemory, anyAction, none, breakpoint};
 
 class Debugger : public QObject
 {
