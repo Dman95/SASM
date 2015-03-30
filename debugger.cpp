@@ -312,11 +312,12 @@ void Debugger::processAction(QString output, QString error)
             QRegExp continuingMsg("Continuing.\r?\n");
             QRegExp breakpointMsg("\r?\nBreakpoint \\d+, ");
             QRegExp threadMsg("\\[Switching to Thread [^\\]]*\\]\r?\n");
-            QRegExp signalMsg("\r?\nProgram received signal.*");
+            QRegExp signalMsg("\r?\n(Program received signal.*)");
             msg.remove(continuingMsg);
             msg.remove(breakpointMsg);
             msg.remove(threadMsg);
-            msg.remove(signalMsg);
+            if (signalMsg.indexIn(msg) != -1) {
+            }
             emit printOutput(msg);
         }
         firstAction = false;
@@ -368,13 +369,6 @@ void Debugger::processAction(QString output, QString error)
             else
                 output = error;
         }
-    }
-
-    if (actionType == simplePrint) {
-        QRegExp signalMsg("\r?\nProgram received signal.*");
-        output.remove(signalMsg);
-        emit printOutput(output);
-        return;
     }
 
     if (actionType == infoMemory) {
