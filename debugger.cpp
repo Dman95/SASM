@@ -82,8 +82,11 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler
 
     //determine entry point
     QProcess objdumpProcess;
+    QProcessEnvironment objdumpEnvironment = QProcessEnvironment::systemEnvironment();
     QStringList objdumpArguments;
     objdumpArguments << "-f" << path;
+	objdumpEnvironment.insert("LC_MESSAGES", "en_US");
+	objdumpProcess.setProcessEnvironment(objdumpEnvironment);
     objdumpProcess.start(objdump, objdumpArguments);
     objdumpProcess.waitForFinished();
     QString objdumpResult = QString(objdumpProcess.readAllStandardOutput());
@@ -91,6 +94,7 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler
     int index = objdumpResult.indexOf(startAddress);
     objdumpResult = objdumpResult.mid(index + startAddress.length());
     entryPoint = objdumpResult.toLongLong(0, 16);
+
 
     QStringList arguments;
     arguments << path;
