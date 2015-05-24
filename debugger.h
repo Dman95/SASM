@@ -42,6 +42,7 @@
 #define DEBUGGER_H
 
 #include <QProcess>
+#include <QProcessEnvironment>
 #include <QString>
 #include <QTextStream>
 #include <QTextEdit>
