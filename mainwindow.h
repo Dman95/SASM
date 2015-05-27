@@ -74,7 +74,7 @@
 #include "signallocker.h"
 #include "masm.h"
 
-#define SASM_VERSION "3.1.3"
+#define SASM_VERSION "3.1.4"
 
 class MainWindow : public QMainWindow
 {
