@@ -165,7 +165,7 @@ void Debugger::processMessage(QString output, QString error)
     }
 
     if (c == 1) {
-        if (error.isEmpty()) {
+	if (error.indexOf("error",0,Qt::CaseInsensitive)!=-1) {
             dbgSymbols = false;
         } else {
             dbgSymbols = true;
