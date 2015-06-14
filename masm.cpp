@@ -144,8 +144,8 @@ void MASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
                 continue;
             }
 
-            //check if ret
-            if (line.contains("ret", Qt::CaseInsensitive)) {
+            //check if return
+            if (line.contains("return", Qt::CaseInsensitive)) {
                 macroInstruction = line;
                 if (macro.exactMatch(macroInstruction))
                     continue;

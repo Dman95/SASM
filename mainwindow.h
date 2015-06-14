@@ -74,7 +74,7 @@
 #include "signallocker.h"
 #include "masm.h"
 
-#define SASM_VERSION "3.1.4"
+#define SASM_VERSION "3.2.0"
 
 class MainWindow : public QMainWindow
 {
@@ -196,6 +196,7 @@ private:
     QString backupMode;
     QString backupAssemblerOptions;
     QString backupLinkerOptions;
+    bool backupDisableLinking;
     QString backupAssemblerPath;
     QString backupStartText;
     QString backupLinkerPath;
@@ -274,6 +275,7 @@ public slots:
     void backupSettings();
     void restoreSettingsAndExit();
     void printMasmInfo();
+    void enableOrDisableLinkingEdit(int disableLinkingCheckboxState);
 
     //closing
     bool deleteTab(int index, bool saveFileName = false);
