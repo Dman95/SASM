@@ -57,9 +57,9 @@
 
 <p><img src="images/Screenshot3.png" alt="SASM"></p>
 
-<p><span style="font-size:25pt;"><a href="SASMSetup314.exe">Download for Windows</a></span></br><span style="font-size:25pt;"><a href="https://build.opensuse.org/package/show/home:Dman95/SASM">Download for Linux</a></span></p>
+<p><span style="font-size:25pt;"><a href="SASMSetup320.exe">Download for Windows</a></span></br><span style="font-size:25pt;"><a href="https://build.opensuse.org/package/show/home:Dman95/SASM">Download for Linux</a></span></p>
 <p>To load SASM for Linux choose your distribution in window "Build Results" on the right.</p>
-<p>Also you can build SASM from sources, placed in <a href="https://github.com/Dman95/SASM">GitHub repository</a> or download <a href="SASM314.zip">SASM in zip-archive</a> for Windows.</p>
+<p>Also you can build SASM from sources, placed in <a href="https://github.com/Dman95/SASM">GitHub repository</a> or download <a href="SASM320.zip">SASM in zip-archive</a> for Windows.</p>
 <p>If you are Mac user, <a href="http://www.brianrhall.net/rss/installingsasmonamac">this article</a> about installing SASM on Mac may help you (thanks Brian R. Hall).</p>
 
 <h2><a name="-" class="anchor" href="#-"><span class="octicon octicon-link"></span></a>Contribute to SASM</h2>
@@ -156,7 +156,7 @@
 <h2><a name="-" class="anchor" href="#-"><span class="octicon octicon-link"></span></a>Implementation</h2>
 <h3><a name="windows" class="anchor" href="#windows"><span class="octicon octicon-link"></span></a>Windows</h3>
 <p>As NASM assembler used nasm 2.11.02, as linker - gcc 4.6.2 from MinGW (gcc 4.8.1 from MinGW64 in x64 mode) or ld 2.22 from MinGW (ld 2.23.2 from MinGW64 in x64 mode).</p>
-<p>SASM 3.0 and greater contains fasm 1.71.21 and gas 2.23.1 from MinGW (gas 2.23.2 from MinGW64).</p>
+<p>SASM 3.0 and greater contains fasm 1.71.39 and gas 2.23.1 from MinGW (gas 2.23.2 from MinGW64).</p>
 <p>Also SASM contains gdb debugger from MinGW and "io.inc" macro library.</p>
 <p>All assemblers (excluding MASM) are included in SASM and you can use they right away after their choice. MASM assembler can not be included in the assembly because of its license. To use it, you should install MASM on your computer from site <a href="http://www.masm32.com/">http://www.masm32.com/</a> and specify path to MASM assembler (ml.exe, path usually "C:/masm32/bin/ml.exe") and to MASM linker (link.exe, path usually "C:/masm32/bin/link.exe") in according fields on "Build" tab in settings.</p>
 <p>On Windows SASM is ready for work immediately after installation.</p>
@@ -168,6 +168,12 @@
 <p>More information about SASM you can see on <a href="https://github.com/Dman95/SASM/wiki/">project Wiki</a> on GitHub.</p>
 
 <h2><a name="changes" class="anchor" href="#changes"><span class="octicon octicon-link"></span></a>Changelog:</h2>
+<p>14.06.2015 - version 3.2.0 (<a href="SASM320.zip">zip</a>, <a href="SASMSetup320.exe">exe</a>):</p>
+<ul>
+<li>Ability to build programs without running linker.</li>
+<li>New FASM 1.71.39.</li>
+<li>Fix of some debug problems.</li>
+</ul>
 <p>27.05.2015 - version 3.1.4 (<a href="SASM314.zip">zip</a>, <a href="SASMSetup314.exe">exe</a>): fix of localized systems debug problem.</p>
 <p>30.03.2015 - version 3.1.3 (<a href="SASM313.zip">zip</a>, <a href="SASMSetup313.exe">exe</a>): showing description of received signal has been added.</p>
 <p>27.03.2015 - version 3.1.2 (<a href="SASM312.zip">zip</a>, <a href="SASMSetup312.exe">exe</a>): debugging files with include has been improved.</p>
