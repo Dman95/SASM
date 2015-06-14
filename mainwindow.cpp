@@ -102,6 +102,13 @@ MainWindow::MainWindow(const QStringList &args, QWidget *parent)
     }
 }
 
+void MainWindow::enableOrDisableLinkingEdit(int disableLinkingCheckboxState)
+{
+    bool enabled = (disableLinkingCheckboxState == Qt::Unchecked);
+    settingsUi.linkingOptionsEdit->setEnabled(enabled);
+    settingsUi.linkerPathEdit->setEnabled(enabled);
+}
+
 void MainWindow::initUi()
 {
     //Resize
@@ -868,23 +875,28 @@ void MainWindow::buildProgram(bool debugMode)
         gccMProcess.start(gcc, gccMArguments);
         gccMProcess.waitForFinished();
     #endif
-    //final linking
-    QStringList linkerArguments = linkerOptions.split(QChar(' '));
-    linkerArguments.replaceInStrings("$PROGRAM.OBJ$", Common::pathInTemp("program.o"));
-    linkerArguments.replaceInStrings("$MACRO.OBJ$", stdioMacros);
-    linkerArguments.replaceInStrings("$PROGRAM$", Common::pathInTemp("SASMprog.exe"));
-    linkerArguments.replaceInStrings("$SOURCE$", Common::pathInTemp("program.asm"));
-    linkerArguments.replaceInStrings("$LSTOUTPUT$", Common::pathInTemp("program.lst"));
-    QProcess linkerProcess;
-    QString linkerOutput = Common::pathInTemp("linkererror.txt");
-    linkerProcess.setStandardOutputFile(linkerOutput);
-    linkerProcess.setStandardErrorFile(linkerOutput, QIODevice::Append);
-    linkerProcess.start(linker, linkerArguments);
-    linkerProcess.waitForFinished();
 
-    if (linkerProcess.error() != QProcess::UnknownError) {
-        printLogWithTime(tr("Unable to start linker. Check your settings.") + '\n', Qt::red);
-        return;
+    //final linking
+    bool disableLinking = settings.value("disablelinking", false).toBool();
+    QString linkerOutput;
+    if (!disableLinking) {
+        QStringList linkerArguments = linkerOptions.split(QChar(' '));
+        linkerArguments.replaceInStrings("$PROGRAM.OBJ$", Common::pathInTemp("program.o"));
+        linkerArguments.replaceInStrings("$MACRO.OBJ$", stdioMacros);
+        linkerArguments.replaceInStrings("$PROGRAM$", Common::pathInTemp("SASMprog.exe"));
+        linkerArguments.replaceInStrings("$SOURCE$", Common::pathInTemp("program.asm"));
+        linkerArguments.replaceInStrings("$LSTOUTPUT$", Common::pathInTemp("program.lst"));
+        QProcess linkerProcess;
+        linkerOutput = Common::pathInTemp("linkererror.txt");
+        linkerProcess.setStandardOutputFile(linkerOutput);
+        linkerProcess.setStandardErrorFile(linkerOutput, QIODevice::Append);
+        linkerProcess.start(linker, linkerArguments);
+        linkerProcess.waitForFinished();
+
+        if (linkerProcess.error() != QProcess::UnknownError) {
+            printLogWithTime(tr("Unable to start linker. Check your settings.") + '\n', Qt::red);
+            return;
+        }
     }
 
     QFile logFile;
@@ -913,24 +925,28 @@ void MainWindow::buildProgram(bool debugMode)
 
         //print errors
         printLog(logText, Qt::red);
-        logFile.setFileName(linkerOutput);
-        logFile.open(QIODevice::ReadOnly);
-        QTextStream logLinker(&logFile);
-        logText = logLinker.readAll();
-        logFile.close();
-        printLog(logText, Qt::red);
+        if (!disableLinking) {
+            logFile.setFileName(linkerOutput);
+            logFile.open(QIODevice::ReadOnly);
+            QTextStream logLinker(&logFile);
+            logText = logLinker.readAll();
+            logFile.close();
+            printLog(logText, Qt::red);
+        }
 
         //QMessageBox::critical(0, tr("Warning!"), tr("Errors have occurred in the build!"));
     } else {
         printLogWithTime(tr("Built successfully.") + '\n', Qt::darkGreen);
         //print warnings
         printLog(logText, Qt::red);
-        logFile.setFileName(linkerOutput);
-        logFile.open(QIODevice::ReadOnly);
-        QTextStream logLinker(&logFile);
-        logText = logLinker.readAll();
-        logFile.close();
-        printLog(logText, Qt::red);
+        if (!disableLinking) {
+            logFile.setFileName(linkerOutput);
+            logFile.open(QIODevice::ReadOnly);
+            QTextStream logLinker(&logFile);
+            logText = logLinker.readAll();
+            logFile.close();
+            printLog(logText, Qt::red);
+        }
         programIsBuilded = true;
     }
 }
@@ -1585,6 +1601,8 @@ void MainWindow::openSettings()
         connect(settingsUi.buttonBox->button(QDialogButtonBox::Cancel),
                 SIGNAL(clicked()), this, SLOT(restoreSettingsAndExit()));
         connect(settingsUi.resetAllButton, SIGNAL(clicked()), this, SLOT(resetAllSettings()));
+        connect(settingsUi.disableLinkingCheckbox, SIGNAL(stateChanged(int)),
+                this, SLOT(enableOrDisableLinkingEdit(int)));
 
         //colors
         colorSignalMapper = new QSignalMapper(this);
@@ -1725,6 +1743,8 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
     QString linkerOptions = assembler->getLinkerOptions();
     settingsUi.linkingOptionsEdit->setText(settings.value("linkingoptions", linkerOptions).toString());
 
+    settingsUi.disableLinkingCheckbox->setChecked(settings.value("disablelinking", false).toBool());
+
     QString assemblerPath = assembler->getAssemblerPath();
     settingsUi.assemblerPathEdit->setText(settings.value("assemblerpath", assemblerPath).toString());
 
@@ -1840,10 +1860,12 @@ void MainWindow::recreateAssembler(bool start)
     if (!start) {
         settingsUi.assemblyOptionsEdit->setText(assembler->getAssemblerOptions());
         settingsUi.linkingOptionsEdit->setText(assembler->getLinkerOptions());
+        settingsUi.disableLinkingCheckbox->setChecked(false);
         settingsUi.assemblerPathEdit->setText(assembler->getAssemblerPath());
         settingsUi.linkerPathEdit->setText(assembler->getLinkerPath());
         settings.setValue("assemblyoptions", assembler->getAssemblerOptions());
         settings.setValue("linkingoptions", assembler->getLinkerOptions());
+        settings.setValue("disablelinking", false);
         settings.setValue("assemblerpath", assembler->getAssemblerPath());
         settings.setValue("linkerpath", assembler->getLinkerPath());
         changeStartText();
@@ -1864,6 +1886,7 @@ void MainWindow::backupSettings()
     backupAssemblerOptions = settings.value("assemblyoptions", assembler->getAssemblerOptions()).toString();
     backupAssemblerPath = settings.value("assemblerpath", assembler->getAssemblerPath()).toString();
     backupLinkerOptions = settings.value("linkingoptions", assembler->getLinkerOptions()).toString();
+    backupDisableLinking = settings.value("disablelinking", false).toBool();
     backupStartText = settings.value("starttext", assembler->getStartText()).toString();
     backupLinkerPath = settings.value("linkerpath", assembler->getLinkerPath()).toString();
 }
@@ -1876,6 +1899,7 @@ void MainWindow::restoreSettingsAndExit()
     settings.setValue("assemblyoptions", backupAssemblerOptions);
     settings.setValue("assemblerpath", backupAssemblerPath);
     settings.setValue("linkingoptions", backupLinkerOptions);
+    settings.setValue("disablelinking", backupDisableLinking);
     settings.setValue("starttext", backupStartText);
     settings.setValue("linkerpath", backupLinkerPath);
     settingsWindow->close();
@@ -1916,6 +1940,7 @@ void MainWindow::saveSettings()
 
     settings.setValue("assemblyoptions", settingsUi.assemblyOptionsEdit->text());
     settings.setValue("linkingoptions", settingsUi.linkingOptionsEdit->text());
+    settings.setValue("disablelinking", settingsUi.disableLinkingCheckbox->isChecked());
     settings.setValue("assemblerpath", settingsUi.assemblerPathEdit->text());
     settings.setValue("linkerpath", settingsUi.linkerPathEdit->text());
     settings.setValue("starttext", settingsStartTextEditor->document()->toPlainText());
