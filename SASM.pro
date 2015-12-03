@@ -14,8 +14,6 @@ TEMPLATE = app
 isEmpty(PREFIX) {
  PREFIX = /usr
 }
-QMAKE_LFLAGS += -static-libgcc
-QMAKE_LFLAGS += -static
 
 BINDIR = $$PREFIX/bin
 DATADIR = $$PREFIX/share
