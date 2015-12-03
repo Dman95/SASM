@@ -102,6 +102,10 @@ void Tab::setFonts()
     output->setFont(logFont);
 }
 
+
+
+
+
 QTextDocument * Tab::getCodeDocument()
 {
     return code->document();
