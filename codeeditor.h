@@ -44,6 +44,10 @@
 #include <QPainter>
 #include <QTextBlock>
 #include <QScrollBar>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QMimeData>
+#include <QDebug>
 #include "ruqplaintextedit.h"
 
 QT_BEGIN_NAMESPACE
@@ -85,6 +89,25 @@ protected:
     void resizeEvent(QResizeEvent *event);
     void keyPressEvent(QKeyEvent *e);
 
+    void dragEnterEvent(QDragEnterEvent *event)
+    {
+        qDebug() << "Drag enter";
+        event->acceptProposedAction();
+    }
+    void dropEvent(QDropEvent *event)
+    {
+        qDebug() << "Drop";
+        foreach (const QUrl &url, event->mimeData()->urls())
+        {
+            const QString &fileName = url.toLocalFile();
+
+            if (fileName.isEmpty())
+                continue;
+
+            emit fileOpened(fileName);
+        }
+    }
+
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
     void updateLineNumberArea(const QRect &, int);
@@ -103,6 +126,7 @@ private:
 
 signals:
     void breakpointsChanged(quint64 lineNumber, bool isAdded);
+    void fileOpened(QString path);
 };
 
 
