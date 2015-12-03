@@ -363,6 +363,24 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
     }
 }
 
+void CodeEditor::dragEnterEvent(QDragEnterEvent *event)
+{
+    event->acceptProposedAction();
+}
+
+void CodeEditor::dropEvent(QDropEvent *event)
+{
+    foreach (const QUrl &url, event->mimeData()->urls())
+    {
+        const QString &fileName = url.toLocalFile();
+
+        if (fileName.isEmpty())
+            continue;
+
+        emit fileOpened(fileName);
+    }
+}
+
 void CodeEditor::shiftBreakpoints(int blockCount)
 {
     if (prevBlockCount == -1) {
