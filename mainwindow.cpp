@@ -46,6 +46,13 @@ MainWindow::MainWindow(const QStringList &args, QWidget *parent)
     setWindowTitle("SASM");
     setWindowIcon(QIcon(":images/mainIcon.png"));
 
+    QObject::connect(
+                QApplication::instance(),
+                SIGNAL(otherInstanceDataReceived(QByteArray)),
+                this,
+                SLOT(otherInstanceDataReceived(QByteArray))
+    );
+
     //set save and open directory
     saveOpenDirectory = settings.value("saveopendirectory", QString(Common::applicationDataPath() + "/Projects")).toString();
 
@@ -88,18 +95,14 @@ MainWindow::MainWindow(const QStringList &args, QWidget *parent)
     createMenus();
     createToolBars();
     refreshEditMenu();
+    setAcceptDrops(true);
 
     //restore log splitter state
     splitter->restoreState(settings.value("logsplitterstate").toByteArray());
 
     //open documents from command line
-    for (int i = 1; i < args.size(); i++) {
-        QString fileName = args[i];
-        newFile();
-        Tab *curTab = (Tab *) tabs->currentWidget();
-        curTab->loadCodeFromFile(fileName);
-        setCurrentTabName(fileName);
-    }
+    for (int i = 1; i < args.size(); i++)
+        openFile(args[i]);
 }
 
 void MainWindow::enableOrDisableLinkingEdit(int disableLinkingCheckboxState)
@@ -282,6 +285,10 @@ void MainWindow::createActions()
     connect(saveAsAction, SIGNAL(triggered()), this, SLOT(saveAsFile()));
 
     saveExeAction = new QAction(tr("Save .exe"), this);
+    key = keySettings.value("save_exe", "default").toString();
+    if (key == "default")
+        key = "Ctrl+Shift+E";
+    saveExeAction->setShortcut(QKeySequence(key));
     connect(saveExeAction, SIGNAL(triggered()), this, SLOT(saveExe()));
 
     exitAction = new QAction(tr("Exit"), this);
@@ -570,6 +577,7 @@ void MainWindow::newFile()
     tabs->setCurrentWidget(tab);
     connect(tab->code, SIGNAL(textChanged()), this, SLOT(setProgramBuildedFlagToFalse()));
     connect(tab->code, SIGNAL(modificationChanged(bool)), this, SLOT(changeCurrentSavedState(bool)));
+    connect(tab->code, SIGNAL(fileOpened(QString)), this, SLOT(openFile(QString)));
 }
 
 void MainWindow::changeCurrentSavedState(bool changed)
@@ -589,12 +597,7 @@ void MainWindow::openFile()
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open file"), saveOpenDirectory,
                                                     tr("Assembler source files (*.asm);;All files (*.*)"));
     saveOpenDirectory = fileName;
-    if (fileName.isEmpty())
-        return;
-    newFile();
-    Tab *curTab = (Tab *) tabs->currentWidget();
-    curTab->loadCodeFromFile(fileName);
-    setCurrentTabName(fileName);
+    openFile(fileName);
 }
 
 void MainWindow::setCurrentTabName(const QString &filePath, int index)
@@ -2121,6 +2124,20 @@ void MainWindow::openAbout()
                        tr("WMR - R331674303467") + '\n' +
                        tr("Yandex.Money - 410012181834380")
                        );
+}
+
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls())
+    {
+        event->acceptProposedAction();
+    }
+}
+
+void MainWindow::dropEvent(QDropEvent *event)
+{
+    foreach (const QUrl &url, event->mimeData()->urls())
+        openFile(url.toLocalFile());
 }
 
 bool MainWindow::removeDirRecuresively(const QString &dirName){
