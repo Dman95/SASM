@@ -4,6 +4,7 @@
 #include <QLocalServer>
 #include <QMutex>
 #include <cstdlib>
+#include<QRegExp>
 
 #ifdef Q_OS_UNIX
     #include <signal.h>
