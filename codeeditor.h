@@ -49,6 +49,7 @@
 #include <QMimeData>
 #include <QDebug>
 #include "ruqplaintextedit.h"
+#include <QUrl>
 
 QT_BEGIN_NAMESPACE
 class QPaintEvent;
@@ -89,25 +90,9 @@ protected:
     void resizeEvent(QResizeEvent *event);
     void keyPressEvent(QKeyEvent *e);
 
-    void dragEnterEvent(QDragEnterEvent *event)
-    {
-        qDebug() << "Drag enter";
-        event->acceptProposedAction();
-    }
-    void dropEvent(QDropEvent *event)
-    {
-        qDebug() << "Drop";
-        foreach (const QUrl &url, event->mimeData()->urls())
-        {
-            const QString &fileName = url.toLocalFile();
-
-            if (fileName.isEmpty())
-                continue;
-
-            emit fileOpened(fileName);
-        }
-    }
-
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
+    
 private slots:
     void updateLineNumberAreaWidth(int newBlockCount);
     void updateLineNumberArea(const QRect &, int);
