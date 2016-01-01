@@ -16,6 +16,8 @@ You need:
 	gcc (x86) or gcc-multilib (x64)
 	gdb
 	nasm
+	qt4-qmake
+	libqt4-dev
 	libqt4-core 	
 	libqt4-gui
 	libxcb1
