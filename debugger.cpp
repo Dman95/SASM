@@ -434,11 +434,19 @@ void Debugger::processAction(QString output, QString error)
                     info.hexValue = "";
                 } else if (i >= 41) {
                     registersStream >> info.name;
-                    QRegExp r("v8_int8 = \\{[^\\{\\}]+\\}{1}");
-                    QString s = registersStream.readLine();
-                    while (r.indexIn(s) == -1)
-                        s = registersStream.readLine();
-                    info.decValue = r.capturedTexts().at(0).mid(QString("v8_int8 = ").length());
+                    QString endLine("}}");
+                    QString s = "";
+                    do {
+                        s += registersStream.readLine();
+                    } while (!s.contains(endLine));
+                    s = s.simplified();
+                    QRegExp r("v8_int8 = (\\{.*\\})");
+                    r.setMinimal(true);
+                    if (r.indexIn(s) != -1) {
+                        info.decValue = r.cap(1);
+                    } else {
+                        info.decValue = "";
+                    }
                     info.hexValue = "";
                 } else {
                     registersStream >> info.name >> info.hexValue >> info.decValue;
