@@ -47,7 +47,6 @@
 #include <QDragEnterEvent>
 #include <QDropEvent>
 #include <QMimeData>
-#include <QDebug>
 #include "ruqplaintextedit.h"
 #include <QUrl>
 

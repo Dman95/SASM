@@ -10,8 +10,6 @@
 #define  INCLUDE_FILE(C) QUOTE(C)
 #include INCLUDE_FILE(QAPPLICATION_CLASS)
 
-#include <QDebug>
-
 class SingleApplicationPrivate;
 
 /**
