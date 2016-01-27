@@ -182,14 +182,12 @@ void DebugTableWidget::addRegister(const QString &name, const QString &hexValue,
 {
     empty = false;
     if (type == registersTable) {
-        QString zeroes;
-        zeroes.fill('0', 10 - hexValue.length());
         if (item(rowNumber, 2)) {
             item(rowNumber, 0)->setText(name);
             if (hexValue.isEmpty())
                 item(rowNumber, 1)->setText("");
             else
-                item(rowNumber, 1)->setText("0x" + zeroes + hexValue.right(hexValue.length() - 2));
+                item(rowNumber, 1)->setText(hexValue);
             item(rowNumber, 2)->setText(decValue);
         } else {
             QTableWidgetItem *nameItem = new QTableWidgetItem(name);
@@ -197,7 +195,7 @@ void DebugTableWidget::addRegister(const QString &name, const QString &hexValue,
             if (hexValue.isEmpty())
                 hexValueItem = new QTableWidgetItem("");
             else
-                hexValueItem = new QTableWidgetItem("0x" + zeroes + hexValue.right(hexValue.length() - 2));
+                hexValueItem = new QTableWidgetItem(hexValue);
             QTableWidgetItem *decValueItem = new QTableWidgetItem(decValue);
             QFont monoFont("Courier");
             monoFont.setStyleHint(QFont::Monospace);
