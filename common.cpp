@@ -77,5 +77,10 @@ QString Common::pathInTemp(QString path)
     if (! QFile::exists(temp + "/SASM")) {
         QDir().mkpath(temp + "/SASM");
     }
-    return temp + "/SASM/" + path;
+    QString tempPath = temp + "/SASM";
+    if (!path.isEmpty()) {
+        tempPath += "/" + path;
+    }
+    tempPath = QDir::toNativeSeparators(tempPath);
+    return tempPath;
 }

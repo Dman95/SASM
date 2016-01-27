@@ -538,7 +538,7 @@ void Debugger::processLst()
 {
     //set accordance with .lst file and program in memory
     QFile lst;
-    lst.setFileName(tmpPath + "program.lst");
+    lst.setFileName(Common::pathInTemp("program.lst"));
     if (lst.open(QIODevice::ReadOnly)) {
         //heuristic:
         //if debug symbols exists - offset is difference between main labels in listing and in executable
