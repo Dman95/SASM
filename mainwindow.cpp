@@ -2121,8 +2121,7 @@ void MainWindow::openAbout()
                        tr("Donate:") + '\n' +
                        tr("PayPal - Dman1095@gmail.com") + '\n' +
                        tr("WMZ - Z282016332582") + '\n' +
-                       tr("WMR - R331674303467") + '\n' +
-                       tr("Yandex.Money - 410012181834380")
+                       tr("WMR - R331674303467")
                        );
 }
 
