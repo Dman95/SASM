@@ -100,12 +100,9 @@ SingleApplication::SingleApplication(int &argc, char *argv[])
         // that a new process had been started
         d_ptr->socket = new QLocalSocket();
 
-
-        qDebug() << "Forming arguments:";
         QByteArray arguments;
         for (int i = 0; i < argc; i++)
         {
-            qDebug() << "    Argument: " << argv[i];
             arguments.append(argv[i], strlen(argv[i]));
             arguments.append((char) 0x00);
         }

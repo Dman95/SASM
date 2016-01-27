@@ -48,7 +48,6 @@
 #include <QFile>
 #include <QMainWindow>
 #include <QDockWidget>
-#include <QDebug>
 #include "codeeditor.h"
 #include "ruqtextedit.h"
 #include "assembler.h"

@@ -58,7 +58,6 @@
 #include <QMutex>
 #include <QDragEnterEvent>
 #include <QMimeData>
-#include <QDebug>
 #include "tab.h"
 #include "highlighter.h"
 #include "debugger.h"

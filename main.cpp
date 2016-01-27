@@ -45,7 +45,6 @@
 #include <QSettings>
 #include <QPushButton>
 #include <QObject>
-#include <QDebug>
 #include "singleapplication.h"
 
 int main(int argc, char *argv[])
