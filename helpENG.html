@@ -22,33 +22,7 @@ Standard "Edit" menu extended with abilities to comment/uncomment piece of sourc
 Starting with version 2.2 it is possible to reassign the hotkeys. File with them located on the path "Linux/share/sasm/keys.ini" ("/usr/share/sasm/keys.ini" if SASM was installed) on Linux and on the path "Windows/keys.ini" ("{folder where SASM was installed}/keys.ini") on Windows.
 </P>
 <P>
-Starting with version 2.3 SASM supports 2 modes - x64 and x86. You can choose mode in settings on "Build" tab. "io.inc" macro library works with both modes. Also there you can change assembler and linker options. This options uses standard names for files:
-</P>
-<table border="1" cellspacing="0" cellpadding="0">
-<tbody>
-<tr>
-<td width="242" valign="top">$SOURCE$</td>
-<td width="390" valign="top">Input file with source code</td>
-</tr>
-<tr>
-<td width="242" valign="top">$LSTOUTPUT$</td>
-<td width="390" valign="top">Output file - assembler listing</td>
-</tr>
-<tr>
-<td width="242" valign="top">$PROGRAM.OBJ$</td>
-<td width="390" valign="top">Output object file</td>
-</tr>
-<tr>
-<td width="242" valign="top">$MACRO.OBJ$</td>
-<td width="390" valign="top">File needed to NASM macro library "io.inc"</td>
-</tr>
-<tr>
-<td width="242" valign="top">$PROGRAM$</td>
-<td width="390" valign="top">Output executable file</td>
-</tr>
-</tbody>
-</table>
-<P>
+Starting with version 2.3 SASM supports 2 modes - x64 and x86. You can choose mode in settings on "Build" tab. "io.inc" macro library works with both modes. Also there you can change assembler and linker options. For more information about this, see "Building system settings".
 Starting from version 3.0 you can choose one of four assemblers - NASM, MASM, GAS, FASM in settings on "Build" tab. Also there you can choose your own assembler or linker filling path to them. Thus you can setup SASM on work with any assembler filling path to assembler and, if needed, to linker and filling options for assembling and linking. But debugging and highlighting may work little incorrectly. To realize full support of new assembler, it is needed to implement Assembler abstract class by analogy with already implemented assemblers.
 </P>
 <P>
@@ -190,7 +164,82 @@ gcc;</P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">3)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
 gdb (gdb (for debugging).</P>
 <P>&nbsp;</P>
-<H3>Warnings:</H3>
+<H3>Building system settings:</H3>
+<P>SASM has flexible program building system. In addition to standard mode settings and assemblers, you can specify the path to the assembler and the linker and their options manually.</P>
+<P>All settings are specified on "Build" tab.</P>
+<P>Paths to the assembler and the linker are specified in according fields.</P>
+<P>Check the "Disable linking" is used when building a program to run the linker is not necessary: the assembler generates an executable file. It may be useful, for example, in one mode in FASM below.<P>
+<P>In the "Assembly options" and "Linking options" fields you can specify options, passed assembler and linker respectively. In options you can specify string variables, which will be replaced with the names of the respective files.</P>
+<P>Let's consider such variables:</P>
+</P>
+<table border="1" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td width="242" valign="top">$SOURCE$</td>
+<td width="390" valign="top">Input file with source code</td>
+</tr>
+<tr>
+<td width="242" valign="top">$LSTOUTPUT$</td>
+<td width="390" valign="top">Output file - assembler listing for debugging purposes</td>
+</tr>
+<tr>
+<td width="242" valign="top">$PROGRAM.OBJ$</td>
+<td width="390" valign="top">Output object file</td>
+</tr>
+<tr>
+<td width="242" valign="top">$MACRO.OBJ$</td>
+<td width="390" valign="top">File needed to NASM macro library "io.inc"</td>
+</tr>
+<tr>
+<td width="242" valign="top">$PROGRAM$</td>
+<td width="390" valign="top">Output executable file</td>
+</tr>
+</tbody>
+</table>
+<P>
+<P>Thus, by setting options on the "Build" tab, you can change the assembler and the linker as well as set different build configurations. </P>
+<H4>Linker additional configurations:</H4>
+<P>Sometimes it is necessary to use the ld linker instead of gcc (for example, to compile the program with start entry point). In Windows, it is needed to replace the end of the path to the linker from "MinGW/bin/gcc.exe" to "MinGW/mingw32/bin/ld.exe" (or "MinGW64/bin/gcc.exe" to "MinGW64/x86_64-w64-mingw32/bin/ld.exe" for 64-bit mode). In Linux, just replace "gcc" to "ld". This linker options should be replaced by "$PROGRAM.OBJ$ -g -o $PROGRAM$".</P>
+<H4>Assembler additional configurations:</H4>
+<P>We describe the configuration in the table. The first column shows configuration's assembler. The second - assembly options. Third - linker (standard gcc with its options, the above ld, disable linking, link.exe for MASM with the appropriate options). If the text is enclosed in braces, you can choose any one of the separated by a vertical bar. </P>
+<TABLE border="1" cellspacing="0" cellpadding="0">
+<THEAD>
+<TR>
+<TD>Assembler</TD>
+<TD>Assembly options</TD>
+<TD>Linker</TD>
+</TR>
+</THEAD>
+<TBODY>
+<TR>
+<TD>NASM</TD>
+<TD>-g -f {win32|win64|elf} $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$</TD>
+<TD>{gcc|ld}</TD>
+</TR>
+<TR>
+<TD>GAS</TD>
+<TD>$SOURCE$ -o $PROGRAM.OBJ$ --{32|64} -a=$LSTOUTPUT$</TD>
+<TD>{gcc|ld}</TD>
+</TR>
+<TR>
+<TD>FASM</TD>
+<TD>$SOURCE$ $PROGRAM.OBJ$ -s $LSTOUTPUT$</TD>
+<TD>{gcc|ld}</TD>
+</TR>
+<TR>
+<TD>FASM</TD>
+<TD>$SOURCE$ $PROGRAM$ -s $LSTOUTPUT$</TD>
+<TD>Disable linking</TD>
+</TR>
+<TR>
+<TD>MASM</TD>
+<TD>/nologo /Sn /Sa /c /coff /Fo$PROGRAM.OBJ$ /Fl$LSTOUTPUT$ $SOURCE$</TD>
+<TD>link.exe</TD>
+</TR>
+</TBODY>
+</TABLE>
+<P>&nbsp;</P>
+<H3>Troubleshooting:</H3>
 <P>
 <B>
 If you have something does not work, check the following items:
@@ -200,12 +249,22 @@ If you have something does not work, check the following items:
 If gcc used as a linker, then the program entry point should be marked with global label _main (Windows) or main (Linux) or CMAIN from "io.inc" (see initial text). Otherwise entry point should be marked with start label.
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">2)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
-Before debugging make all functions formed frames (mov ebp, esp or mov rbp, rsp). This rule should be done for all functions, including main. If this condition is not met, the correct work of the debugger is not guaranteed.
+On Windows, all functions from the standard library should begin with an underscore (for example, _printf).
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">3)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
-Program code should be contained only in ".text" section (".code" for MASM). If this condition is not met, the correct work of the debugger is not guaranteed.
+Before debugging make all functions formed frames (mov ebp, esp or mov rbp, rsp). This rule should be done for all functions, including main. If this condition is not met, the correct work of the debugger is not guaranteed.
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">4)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
+Program code should be contained only in ".text" section (".code" for MASM). If this condition is not met, the correct work of the debugger is not guaranteed.
+</P>
+<P STYLE="margin-left: 0.5in; text-indent: -0.25in">5)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
+If you want to include a file in program, it should be placed in the folder for include files - "Linux/share/sasm/include/" ("/usr/share/sasm/include/" after installation) in Linux and "Windows/include" ("{program folder after installation}/include/") in Windows.
+However, if above method doesn't work (MASM or any non-standard configuration), you can specify the full path to the file.
+</P>
+<P STYLE="margin-left: 0.5in; text-indent: -0.25in">6)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
+If errors occur during building, check the options on the "Building" tab in the settings. To correct the error, you can try to install one of the alternative configurations of the assembly from "Building system settings" in this guide.
+You can also configure SASM to work with non-standard assemblers, linkers by specifying the path and the options for them. Description of the format options are also located in "Building system settings" chapter.</P>
+<P STYLE="margin-left: 0.5in; text-indent: -0.25in">7)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
 If something still does not work, but worked before, try to use the "Reset all" button in the settings on the "Common" tab.
 </P>
 <P>&nbsp;</P>
