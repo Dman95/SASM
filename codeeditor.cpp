@@ -116,7 +116,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
     while (block.isValid() && top <= event->rect().bottom()) {
         if (block.isVisible() && bottom >= event->rect().top()) {
             QString number = QString::number(blockNumber + 1);
-            painter.setPen(settings.value("fontcolor", palette().color(QPalette::Text)).value<QColor>());
+            painter.setPen(settings.value("linenumberfontcolor", palette().color(QPalette::Text)).value<QColor>());
             painter.drawText(0, top, lineNumberArea->width() - debugAreaWidth, fontMetrics().height(),
                              Qt::AlignRight, number);
 

@@ -1621,7 +1621,8 @@ void MainWindow::openSettings()
                         settingsUi.quotationColorButton_2 <<
                         settingsUi.backgroundColorButton << settingsUi.lineNumberPanelColorButton <<//common
                         settingsUi.fontColorButton <<
-                        settingsUi.currentLineColorButton << settingsUi.debugLineColorButton;
+                        settingsUi.currentLineColorButton << settingsUi.debugLineColorButton <<
+                        settingsUi.lineNumberFontColorButton;
 
         defaultColors <<  QColor(Qt::blue) << QColor(153, 0, 204) << //according to colorButtons
                           QColor(255, 122, 0) << QColor(0, 128, 255) <<
@@ -1635,7 +1636,8 @@ void MainWindow::openSettings()
                           QPalette().color(QPalette::Base) <<
                           QPalette().color(QPalette::Base) << QPalette().color(QPalette::Window) <<
                           QPalette().color(QPalette::WindowText) <<
-                          QColor(232, 232, 255) << QColor(235, 200, 40);
+                          QColor(232, 232, 255) << QColor(235, 200, 40) <<
+                          QColor(QPalette::WindowText);
         for (int i = 0; i < colorButtons.size(); i++) {
             //add color to associative array
             QString name = colorButtons[i]->objectName();
