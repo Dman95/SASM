@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -46,26 +46,28 @@
 #include <QLabel>
 #include <QSpacerItem>
 
-class GetStartedWidget : public QWidget
-{
-    Q_OBJECT
+class GetStartedWidget : public QWidget {
+	Q_OBJECT
 
 public:
-    explicit GetStartedWidget(QWidget *parent = 0);
-    ~GetStartedWidget();
+	explicit
+	GetStartedWidget(QWidget* parent = 0);
+	~GetStartedWidget();
 
-    QCommandLinkButton *newButton;
-    QCommandLinkButton *openButton;
-    QCommandLinkButton *prevSessionButton;
+	QCommandLinkButton* newButton;
+	QCommandLinkButton* openButton;
+	QCommandLinkButton* prevSessionButton;
 
 private:
-    QHBoxLayout *labelLayout;
-    QVBoxLayout *layout;
-    QLabel *welcomeLabel;
-    QLabel *imgLabel;
-    QSpacerItem *spacer;
-    QSpacerItem *bottomSpacer;
-    QSpacerItem *leftSpacer;
+	QHBoxLayout* labelLayout;
+	QVBoxLayout* layout;
+	QLabel* welcomeLabel;
+	QLabel* imgLabel;
+	QSpacerItem* spacer;
+	QSpacerItem* bottomSpacer;
+	QSpacerItem* leftSpacer;
 };
 
 #endif // GETSTARTEDWIDGET_H
+
+

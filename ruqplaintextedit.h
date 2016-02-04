@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -50,52 +50,63 @@
 #include <QPointer>
 #include <QSettings>
 
-class RuQPlainTextEdit : public QPlainTextEdit
-{
-    Q_OBJECT
+class RuQPlainTextEdit : public QPlainTextEdit {
+	Q_OBJECT
 
 public:
-    RuQPlainTextEdit(QWidget *parent = 0);
-    ~RuQPlainTextEdit();
+	RuQPlainTextEdit(QWidget* parent = 0);
+	~RuQPlainTextEdit();
 
-    QMenu *createMenu();
+	QMenu*
+	createMenu();
 
-    struct Watch {
-        QString name;
-        int type;
-        int size;
-        int arraySize;
-        bool address;
-    };
+	struct Watch {
+		QString name;
+		int type;
+		int size;
+		int arraySize;
+		bool address;
+	};
 
 protected:
-    void contextMenuEvent(QContextMenuEvent *e);
+	void
+	contextMenuEvent(QContextMenuEvent* e);
 
 private:
-    RuQPlainTextEdit::Watch variableOnCurrentLine();
-    QPointer<QMenu> contextMenu;
-    QAction *commentAction;
-    QAction *uncommentAction;
-    QAction *undoAction;
-    QAction *redoAction;
-    QAction *cutAction;
-    QAction *copyAction;
-    QAction *pasteAction;
-    QAction *deleteAction;
-    QAction *selectAllAction;
-    QAction *addWatchAction;
-    bool debugEnabled;
+	RuQPlainTextEdit::Watch
+	variableOnCurrentLine();
+	QPointer<QMenu> contextMenu;
+	QAction* commentAction;
+	QAction* uncommentAction;
+	QAction* undoAction;
+	QAction* redoAction;
+	QAction* cutAction;
+	QAction* copyAction;
+	QAction* pasteAction;
+	QAction* deleteAction;
+	QAction* selectAllAction;
+	QAction* addWatchAction;
+	bool debugEnabled;
 
 public slots:
-    void commentSelectedCode();
-    void uncommentSelectedCode();
-    void deleteSelected();
-    void addWatch();
-    void setDebugEnabled();
-    void setDebugDisabled();
+	void
+	commentSelectedCode();
+	void
+	uncommentSelectedCode();
+	void
+	deleteSelected();
+	void
+	addWatch();
+	void
+	setDebugEnabled();
+	void
+	setDebugDisabled();
 
-signals:
-    void addWatchSignal(RuQPlainTextEdit::Watch variable);
+	signals:
+	void
+	addWatchSignal(RuQPlainTextEdit::Watch variable);
 };
 
 #endif // RUQPLAINTEXTEDIT_H
+
+

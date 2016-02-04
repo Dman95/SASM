@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -50,49 +50,56 @@
 #include <QVBoxLayout>
 #include <QCloseEvent>
 
-class FindDialog : public QWidget
-{
-    Q_OBJECT
+class FindDialog : public QWidget {
+	Q_OBJECT
 
 public:
-    FindDialog(QWidget *parent = 0);
-    ~FindDialog();
+	FindDialog(QWidget* parent = 0);
+	~FindDialog();
 
-    void closeEvent(QCloseEvent *e);
+	void
+	closeEvent(QCloseEvent* e);
 
-signals:
-    void findNext(const QString &str, Qt::CaseSensitivity cs, bool all, bool replace,
-                  const QString &replaceText = 0);
+	signals:
+	void findNext(const QString& str, Qt::CaseSensitivity cs, bool all, bool replace,
+	              const QString& replaceText = 0);
 
 public slots:
-    bool close();
+	bool
+	close();
 
 private slots:
-    void findClicked();
-    void findAllClicked();
-    void replaceClicked();
-    void replaceAllClicked();
-    void enableFindButton(const QString &text);
+	void
+	findClicked();
+	void
+	findAllClicked();
+	void
+	replaceClicked();
+	void
+	replaceAllClicked();
+	void
+	enableFindButton(const QString& text);
 
 private:
-    QLabel *searchLabel;
-    QLabel *replaceLabel;
-    QLineEdit *searchEdit;
-    QLineEdit *replaceEdit;
-    QCheckBox *caseCheckBox;
-    QPushButton *findButton;
-    QPushButton *findAllButton;
-    QPushButton *replaceButton;
-    QPushButton *replaceAllButton;
-    QPushButton *closeButton;
+	QLabel* searchLabel;
+	QLabel* replaceLabel;
+	QLineEdit* searchEdit;
+	QLineEdit* replaceEdit;
+	QCheckBox* caseCheckBox;
+	QPushButton* findButton;
+	QPushButton* findAllButton;
+	QPushButton* replaceButton;
+	QPushButton* replaceAllButton;
+	QPushButton* closeButton;
 
-    QHBoxLayout *replaceLayout;
-    QHBoxLayout *searchLayout;
-    QHBoxLayout *replaceButtonLayout;
-    QVBoxLayout *leftLayout;
-    QVBoxLayout *rightLayout;
-    QHBoxLayout *mainLayout;
-    QSpacerItem *searchSpacer;
+	QHBoxLayout* replaceLayout;
+	QHBoxLayout* searchLayout;
+	QHBoxLayout* replaceButtonLayout;
+	QVBoxLayout* leftLayout;
+	QVBoxLayout* rightLayout;
+	QHBoxLayout* mainLayout;
+	QSpacerItem* searchSpacer;
 };
 
 #endif
+

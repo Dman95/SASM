@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -43,20 +43,26 @@
 
 #include <QObject>
 
-class SignalLocker : public QObject
-{
-    Q_OBJECT
-    bool locked;
-public:
-    explicit SignalLocker(QObject *parent = 0);
+class SignalLocker : public QObject {
+	Q_OBJECT
 
-signals:
+	bool locked;
+public:
+	explicit
+	SignalLocker(QObject* parent = 0);
+
+	signals:
 
 public slots:
-    void unlock();
-    bool tryLock();
-    void lock();
+	void
+	unlock();
+	bool
+	tryLock();
+	void
+	lock();
 
 };
 
 #endif // SIGNALLOCKER_H
+
+

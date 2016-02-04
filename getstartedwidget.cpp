@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -40,66 +40,65 @@
 
 #include "getstartedwidget.h"
 
-GetStartedWidget::GetStartedWidget(QWidget *parent) :
-    QWidget(parent)
-{
-    layout = new QVBoxLayout;
+GetStartedWidget::GetStartedWidget(QWidget* parent) :
+	QWidget(parent) {
+	layout = new QVBoxLayout;
 
-    //header
-    labelLayout = new QHBoxLayout;
+	//header
+	labelLayout = new QHBoxLayout;
 
-    imgLabel = new QLabel;
-    imgLabel->setPixmap(QPixmap(":images/smallIcon.png"));
-    imgLabel->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-    labelLayout->addWidget(imgLabel);
-    labelLayout->addSpacing(20);
+	imgLabel = new QLabel;
+	imgLabel->setPixmap(QPixmap(":images/smallIcon.png"));
+	imgLabel->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+	labelLayout->addWidget(imgLabel);
+	labelLayout->addSpacing(20);
 
-    welcomeLabel = new QLabel;
-    QFont font("Arial", 24);
-    welcomeLabel->setFont(font);
-    welcomeLabel->setText(tr("Welcome to the SASM!"));
-    welcomeLabel->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-    labelLayout->addWidget(welcomeLabel);
+	welcomeLabel = new QLabel;
+	QFont font("Arial", 24);
+	welcomeLabel->setFont(font);
+	welcomeLabel->setText(tr("Welcome to the SASM!"));
+	welcomeLabel->setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+	labelLayout->addWidget(welcomeLabel);
 
-    leftSpacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed);
-    labelLayout->addSpacerItem(leftSpacer);
+	leftSpacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Fixed);
+	labelLayout->addSpacerItem(leftSpacer);
 
-    layout->addLayout(labelLayout);
-
-
-    //buttons
-    spacer = new QSpacerItem(0, 50, QSizePolicy::Fixed, QSizePolicy::Fixed);
-    layout->addSpacerItem(spacer);
-
-    newButton = new QCommandLinkButton(tr("Create new project"));
-    newButton->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-    layout->addWidget(newButton);
-    layout->addSpacing(10);
-
-    openButton = new QCommandLinkButton(tr("Open project"));
-    openButton->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-    layout->addWidget(openButton);
-    layout->addSpacing(10);
-
-    prevSessionButton = new QCommandLinkButton(tr("Restore last session"));
-    prevSessionButton->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-    layout->addWidget(prevSessionButton);
-    layout->addSpacing(10);
-
-    bottomSpacer = new QSpacerItem(10, 100, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    layout->addSpacerItem(bottomSpacer);
+	layout->addLayout(labelLayout);
 
 
-    setLayout(layout);
+	//buttons
+	spacer = new QSpacerItem(0, 50, QSizePolicy::Fixed, QSizePolicy::Fixed);
+	layout->addSpacerItem(spacer);
+
+	newButton = new QCommandLinkButton(tr("Create new project"));
+	newButton->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+	layout->addWidget(newButton);
+	layout->addSpacing(10);
+
+	openButton = new QCommandLinkButton(tr("Open project"));
+	openButton->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+	layout->addWidget(openButton);
+	layout->addSpacing(10);
+
+	prevSessionButton = new QCommandLinkButton(tr("Restore last session"));
+	prevSessionButton->setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
+	layout->addWidget(prevSessionButton);
+	layout->addSpacing(10);
+
+	bottomSpacer = new QSpacerItem(10, 100, QSizePolicy::Expanding, QSizePolicy::Expanding);
+	layout->addSpacerItem(bottomSpacer);
+
+
+	setLayout(layout);
 }
 
-GetStartedWidget::~GetStartedWidget()
-{
-    delete welcomeLabel;
-    delete imgLabel;
-    delete labelLayout;
-    delete newButton;
-    delete openButton;
-    delete prevSessionButton;
-    delete layout;
+GetStartedWidget::~GetStartedWidget() {
+	delete welcomeLabel;
+	delete imgLabel;
+	delete labelLayout;
+	delete newButton;
+	delete openButton;
+	delete prevSessionButton;
+	delete layout;
 }
+

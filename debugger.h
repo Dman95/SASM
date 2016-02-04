@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -56,95 +56,118 @@
 #include "assembler.h"
 
 #ifdef Q_OS_WIN32
-    #include <Windows.h>
-    #include <stddef.h>
-    #include <stdlib.h>
+#include <Windows.h>
+#include <stddef.h>
+#include <stdlib.h>
 #else
     #include <signal.h>
 #endif
 
 enum DebugActionType {ni, si, showLine, infoRegisters, infoMemory, anyAction, none, breakpoint};
 
-class Debugger : public QObject
-{
-    Q_OBJECT
+class Debugger : public QObject {
+	Q_OBJECT
 
 public:
-    Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler *assembler, QWidget *parent = 0);
-    ~Debugger();
-    void setWatchesCount(int count);
+	Debugger(QTextEdit* tEdit, const QString& path, QString tmp, Assembler* assembler, QWidget* parent = 0);
+	~Debugger();
+	void
+	setWatchesCount(int count);
 
-    struct registersInfo {
-        QString name;
-        QString hexValue;
-        QString decValue;
-    };
+	struct registersInfo {
+		QString name;
+		QString hexValue;
+		QString decValue;
+	};
 
-    struct memoryInfo {
-        QString value;
-        bool isValid;
-    };
+	struct memoryInfo {
+		QString value;
+		bool isValid;
+	};
 
-    typedef Assembler::LineNum LineNum;
+	typedef Assembler::LineNum LineNum;
 
-    bool isStopped();
-    void pause();
+	bool
+	isStopped();
+	void
+	pause();
 
 private:
-    void processLst();
-    void run();
+	void
+	processLst();
+	void
+	run();
 
-    QProcess *process;
-    QTextEdit *textEdit;
-    quint64 offset; //offset between program code in memory and in file
+	QProcess* process;
+	QTextEdit* textEdit;
+	quint64 offset; //offset between program code in memory and in file
 
-    QVector<LineNum> lines; //accordance between program lines in memory and in file
+	QVector<LineNum> lines; //accordance between program lines in memory and in file
 
-    int c; //counter for sequential performing of actions
-    bool registersOk;
+	int c; //counter for sequential performing of actions
+	bool registersOk;
 
-    QQueue<DebugActionType> actionTypeQueue; //queue of actions type from enum
-    QString exitMessage; //message on exit in current platform
-    QRegExp cExitMessage; //message on exit which shows when "continue" command used
-    QString tmpPath;
+	QQueue<DebugActionType> actionTypeQueue; //queue of actions type from enum
+	QString exitMessage; //message on exit in current platform
+	QRegExp cExitMessage; //message on exit which shows when "continue" command used
+	QString tmpPath;
 
-    QString buffer; //global gdb output buffer
-    QString errorBuffer; //global gdb error buffer
-    QTimer *bufferTimer; //timer for checking output and sending ready output to processing with Debugger::processOutput() function
-    int watchesCount;
-    QList<Debugger::memoryInfo> watches;
-    bool firstAction;
+	QString buffer; //global gdb output buffer
+	QString errorBuffer; //global gdb error buffer
+	QTimer* bufferTimer; //timer for checking output and sending ready output to processing with Debugger::processOutput() function
+	int watchesCount;
+	QList<Debugger::memoryInfo> watches;
+	bool firstAction;
 
-    QList<LineNum> breakPairs;
+	QList<LineNum> breakPairs;
 
-    Assembler *assembler;
+	Assembler* assembler;
 
-    bool stopped;
-    quint64 pid;
-    bool dbgSymbols;
+	bool stopped;
+	quint64 pid;
+	bool dbgSymbols;
 
-    quint64 entryPoint;
+	quint64 entryPoint;
 
 public slots:
-    void readOutputToBuffer();
-    void processOutput();
-    void processMessage(QString output, QString error);
-    void processAction(QString output, QString error = QString());
-    void doInput(QString command, DebugActionType actionType);
-    void changeBreakpoint(quint64 lineNumber, bool isAdded);
-    void emitStarted();
+	void
+	readOutputToBuffer();
+	void
+	processOutput();
+	void
+	processMessage(QString output, QString error);
+	void
+	processAction(QString output, QString error = QString());
+	void
+	doInput(QString command, DebugActionType actionType);
+	void
+	changeBreakpoint(quint64 lineNumber, bool isAdded);
+	void
+	emitStarted();
 
-signals:
-    void highlightLine(int); //highlight current debug line
-    void finished();
-    void started(); //emited when debugger is ready to get commands like step into, etc.
-    void printRegisters(QList<Debugger::registersInfo>);
-    void printMemory(QList<Debugger::memoryInfo>);
-    void printLog(QString msg, QColor color = QColor(Qt::black));
-    void printOutput(QString msg);
-    void inMacro();
-    void wasStopped();
-    void needToContinue();
+	signals:
+	void
+	highlightLine(int); //highlight current debug line
+	void
+	finished();
+	void
+	started(); //emited when debugger is ready to get commands like step into, etc.
+	void
+	printRegisters(QList<Debugger::registersInfo>);
+	void
+	printMemory(QList<Debugger::memoryInfo>);
+	void
+	printLog(QString msg, QColor color = QColor(Qt::black));
+	void
+	printOutput(QString msg);
+	void
+	inMacro();
+	void
+	wasStopped();
+	void
+	needToContinue();
 };
 
 #endif // DEBUGGER_H
+
+

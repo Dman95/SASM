@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -48,30 +48,33 @@
 #include <QPointer>
 #include <QSettings>
 
-class RuQTextEdit : public QTextEdit
-{
-    Q_OBJECT
+class RuQTextEdit : public QTextEdit {
+	Q_OBJECT
 
 public:
-    RuQTextEdit(QWidget *parent = 0);
-    ~RuQTextEdit();
+	RuQTextEdit(QWidget* parent = 0);
+	~RuQTextEdit();
 
 protected:
-    void contextMenuEvent(QContextMenuEvent *e);
+	void
+	contextMenuEvent(QContextMenuEvent* e);
 
 private:
-    QPointer<QMenu> contextMenu;
-    QAction *undoAction;
-    QAction *redoAction;
-    QAction *cutAction;
-    QAction *copyAction;
-    QAction *pasteAction;
-    QAction *deleteAction;
-    QAction *selectAllAction;
-    QAction *clearAction;
+	QPointer<QMenu> contextMenu;
+	QAction* undoAction;
+	QAction* redoAction;
+	QAction* cutAction;
+	QAction* copyAction;
+	QAction* pasteAction;
+	QAction* deleteAction;
+	QAction* selectAllAction;
+	QAction* clearAction;
 
 public slots:
-    void deleteSelected();
+	void
+	deleteSelected();
 };
 
 #endif // RUQTEXTEDIT_H
+
+

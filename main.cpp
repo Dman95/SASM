@@ -47,45 +47,53 @@
 #include <QObject>
 #include "singleapplication.h"
 
-int main(int argc, char *argv[])
-{
-//    QApplication a(argc, argv);
-    QApplication::setApplicationName("SASM");
-    QApplication::setOrganizationName("YourOrganizationName");
+int
+main(int argc, char* argv[]) {
+	//    QApplication a(argc, argv);
+	/** @brief Name of the application set application. */
+	QApplication::setApplicationName("SASM");
+	/** @brief Name of the application set organization. */
+	QApplication::setOrganizationName("YourOrganizationName");
 
-    SingleApplication a(argc, argv);
+	SingleApplication a(argc, argv);
 
-    QTranslator translator, qtTranslator;
-    QSettings settings("SASM Project", "SASM");
-    #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+	QTranslator translator, qtTranslator;
+	QSettings settings("SASM Project", "SASM");
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+        /** @brief The codec. */
         QTextCodec *codec = QTextCodec::codecForName("UTF-8");
         QTextCodec::setCodecForCStrings(codec);
-    #endif
-    if (! settings.contains("language")) { //language choosing
-        QMessageBox msgBox;
-        QPushButton *rusButton = msgBox.addButton(QString("Русский"), QMessageBox::NoRole);
-        QPushButton *engButton = msgBox.addButton(QString("English"), QMessageBox::NoRole);
-        msgBox.setWindowTitle(QString("Choose language"));
-        msgBox.setText(QString("Choose language / Выберите язык"));
-        msgBox.exec();
+#endif
+	if (!settings.contains("language")) { //	language choosing
+		/** @brief The message box. */
+		QMessageBox msgBox;
+		/** @brief The rus button. */
+		QPushButton* rusButton = msgBox.addButton(QString("Русский"), QMessageBox::NoRole);
+		/** @brief The eng button. */
+		QPushButton* engButton = msgBox.addButton(QString("English"), QMessageBox::NoRole);
+		msgBox.setWindowTitle(QString("Choose language"));
+		msgBox.setText(QString("Choose language / Выберите язык"));
+		msgBox.exec();
 
-        if (msgBox.clickedButton() == rusButton) {
-            settings.setValue("language", 0);
-        } else if (msgBox.clickedButton() == engButton) {
-            settings.setValue("language", 1);
-        }
-    }
-    if (settings.value("language", 0).toInt() == 0) { //russian language
-        translator.load(":/translations/language_ru.qm");
-        a.installTranslator(&translator);
+		if (msgBox.clickedButton() == rusButton) {
+			settings.setValue("language", 0);
+		}
+		else if (msgBox.clickedButton() == engButton) {
+			settings.setValue("language", 1);
+		}
+	}
+	if (settings.value("language", 0).toInt() == 0) { //	Russian language
+		translator.load(":/translations/language_ru.qm");
+		a.installTranslator(&translator);
 
-        qtTranslator.load(":/translations/qt_ru.qm");
-        a.installTranslator(&qtTranslator);
-    }
+		qtTranslator.load(":/translations/qt_ru.qm");
+		a.installTranslator(&qtTranslator);
+	}
 
-    MainWindow w(a.arguments());
+	MainWindow w(a.arguments());
 
-    w.show();
-    w.activateWindow();
-    return a.exec();
+	w.show();
+	w.activateWindow();
+	return a.exec();
 }
+

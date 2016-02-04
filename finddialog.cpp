@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -40,168 +40,167 @@
 
 #include "finddialog.h"
 
-FindDialog::FindDialog(QWidget *parent)
-    : QWidget(parent)
-{
-    searchLabel = new QLabel(tr("Find what:"));
-    searchEdit = new QLineEdit;
-    searchLabel->setBuddy(searchEdit);
+FindDialog::FindDialog(QWidget* parent)
+	: QWidget(parent) {
+	searchLabel = new QLabel(tr("Find what:"));
+	searchEdit = new QLineEdit;
+	searchLabel->setBuddy(searchEdit);
 
-    replaceLabel = new QLabel(tr("Replace with:"));
-    replaceEdit = new QLineEdit;
-    replaceLabel->setBuddy(replaceEdit);
+	replaceLabel = new QLabel(tr("Replace with:"));
+	replaceEdit = new QLineEdit;
+	replaceLabel->setBuddy(replaceEdit);
 
-    caseCheckBox = new QCheckBox(tr("Match case"));
+	caseCheckBox = new QCheckBox(tr("Match case"));
 
-    findButton = new QPushButton(tr("Find next"));
-    findButton->setDefault(true);
-    findButton->setEnabled(false);
+	findButton = new QPushButton(tr("Find next"));
+	findButton->setDefault(true);
+	findButton->setEnabled(false);
 
-    findAllButton = new QPushButton(tr("Find all"));
-    findAllButton->setEnabled(false);
+	findAllButton = new QPushButton(tr("Find all"));
+	findAllButton->setEnabled(false);
 
-    replaceButton = new QPushButton(tr("Replace"));
-    replaceButton->setEnabled(false);
+	replaceButton = new QPushButton(tr("Replace"));
+	replaceButton->setEnabled(false);
 
-    replaceAllButton = new QPushButton(tr("Replace all"));
-    replaceAllButton->setEnabled(false);
+	replaceAllButton = new QPushButton(tr("Replace all"));
+	replaceAllButton->setEnabled(false);
 
-    closeButton = new QPushButton(tr("Close"));
+	closeButton = new QPushButton(tr("Close"));
 
-    connect(searchEdit, SIGNAL(textChanged(const QString &)),
-            this, SLOT(enableFindButton(const QString &)));
+	connect(searchEdit, SIGNAL(textChanged(const QString &)),
+	        this, SLOT(enableFindButton(const QString &)));
 
-    connect(findButton, SIGNAL(clicked()),
-            this, SLOT(findClicked()));
+	connect(findButton, SIGNAL(clicked()),
+	        this, SLOT(findClicked()));
 
-    connect(findAllButton, SIGNAL(clicked()),
-            this, SLOT(findAllClicked()));
+	connect(findAllButton, SIGNAL(clicked()),
+	        this, SLOT(findAllClicked()));
 
-    connect(replaceButton, SIGNAL(clicked()),
-            this, SLOT(replaceClicked()));
+	connect(replaceButton, SIGNAL(clicked()),
+	        this, SLOT(replaceClicked()));
 
-    connect(replaceAllButton, SIGNAL(clicked()),
-            this, SLOT(replaceAllClicked()));
+	connect(replaceAllButton, SIGNAL(clicked()),
+	        this, SLOT(replaceAllClicked()));
 
-    connect(closeButton, SIGNAL(clicked()),
-            this, SLOT(close()));
+	connect(closeButton, SIGNAL(clicked()),
+	        this, SLOT(close()));
 
-    replaceLayout = new QHBoxLayout;
-    replaceLayout->addWidget(replaceLabel);
-    replaceLayout->addWidget(replaceEdit);
+	replaceLayout = new QHBoxLayout;
+	replaceLayout->addWidget(replaceLabel);
+	replaceLayout->addWidget(replaceEdit);
 
-    searchLayout = new QHBoxLayout;
-    searchLayout->addWidget(searchLabel);
-    searchSpacer = new QSpacerItem(
-                replaceLabel->fontMetrics().width(tr("Replace with:")) -
-                searchLabel->fontMetrics().width(tr("Find what:")),
-                0, QSizePolicy::Fixed, QSizePolicy::Fixed);
-    searchLayout->addSpacerItem(searchSpacer);
-    searchLayout->addWidget(searchEdit);
+	searchLayout = new QHBoxLayout;
+	searchLayout->addWidget(searchLabel);
+	searchSpacer = new QSpacerItem(
+		replaceLabel->fontMetrics().width(tr("Replace with:")) -
+		searchLabel->fontMetrics().width(tr("Find what:")),
+		0, QSizePolicy::Fixed, QSizePolicy::Fixed);
+	searchLayout->addSpacerItem(searchSpacer);
+	searchLayout->addWidget(searchEdit);
 
-    replaceButtonLayout = new QHBoxLayout;
-    replaceButtonLayout->addWidget(replaceButton);
-    replaceButtonLayout->addWidget(replaceAllButton);
+	replaceButtonLayout = new QHBoxLayout;
+	replaceButtonLayout->addWidget(replaceButton);
+	replaceButtonLayout->addWidget(replaceAllButton);
 
-    leftLayout = new QVBoxLayout;
-    leftLayout->addLayout(searchLayout);
-    leftLayout->addWidget(caseCheckBox);
-    leftLayout->addSpacing(20);
-    leftLayout->addLayout(replaceLayout);
-    leftLayout->addLayout(replaceButtonLayout);
+	leftLayout = new QVBoxLayout;
+	leftLayout->addLayout(searchLayout);
+	leftLayout->addWidget(caseCheckBox);
+	leftLayout->addSpacing(20);
+	leftLayout->addLayout(replaceLayout);
+	leftLayout->addLayout(replaceButtonLayout);
 
-    rightLayout = new QVBoxLayout;
-    rightLayout->addWidget(findButton);
-    rightLayout->addWidget(findAllButton);
-    rightLayout->addWidget(closeButton);
-    rightLayout->addStretch();
+	rightLayout = new QVBoxLayout;
+	rightLayout->addWidget(findButton);
+	rightLayout->addWidget(findAllButton);
+	rightLayout->addWidget(closeButton);
+	rightLayout->addStretch();
 
-    mainLayout = new QHBoxLayout;
-    mainLayout->addLayout(leftLayout);
-    mainLayout->addLayout(rightLayout);
-    setLayout(mainLayout);
+	mainLayout = new QHBoxLayout;
+	mainLayout->addLayout(leftLayout);
+	mainLayout->addLayout(rightLayout);
+	setLayout(mainLayout);
 
-    setWindowFlags(Qt::Dialog);
-    setWindowTitle(tr("Find and replace"));
-    setFixedHeight(sizeHint().height());
+	setWindowFlags(Qt::Dialog);
+	setWindowTitle(tr("Find and replace"));
+	setFixedHeight(sizeHint().height());
 }
 
-void FindDialog::enableFindButton(const QString &text)
-{
-    findButton->setEnabled(!text.isEmpty());
-    findAllButton->setEnabled(!text.isEmpty());
-    replaceButton->setEnabled(!text.isEmpty());
-    replaceAllButton->setEnabled(!text.isEmpty());
+void
+FindDialog::enableFindButton(const QString& text) {
+	findButton->setEnabled(!text.isEmpty());
+	findAllButton->setEnabled(!text.isEmpty());
+	replaceButton->setEnabled(!text.isEmpty());
+	replaceAllButton->setEnabled(!text.isEmpty());
 }
 
-void FindDialog::findClicked()
-{
-    QString text = searchEdit->text();
-    Qt::CaseSensitivity cs =
-            caseCheckBox->isChecked() ? Qt::CaseSensitive
-                                      : Qt::CaseInsensitive;
+void
+FindDialog::findClicked() {
+	QString text = searchEdit->text();
+	Qt::CaseSensitivity cs =
+		caseCheckBox->isChecked() ? Qt::CaseSensitive
+			: Qt::CaseInsensitive;
 
-    emit findNext(text, cs, false, false);
+	emit findNext(text, cs, false, false);
 }
 
-void FindDialog::findAllClicked()
-{
-    QString text = searchEdit->text();
-    Qt::CaseSensitivity cs =
-            caseCheckBox->isChecked() ? Qt::CaseSensitive
-                                      : Qt::CaseInsensitive;
+void
+FindDialog::findAllClicked() {
+	QString text = searchEdit->text();
+	Qt::CaseSensitivity cs =
+		caseCheckBox->isChecked() ? Qt::CaseSensitive
+			: Qt::CaseInsensitive;
 
-    emit findNext(text, cs, true, false);
+	emit findNext(text, cs, true, false);
 }
 
-void FindDialog::replaceClicked()
-{
-    QString text = searchEdit->text();
-    Qt::CaseSensitivity cs =
-            caseCheckBox->isChecked() ? Qt::CaseSensitive
-                                      : Qt::CaseInsensitive;
+void
+FindDialog::replaceClicked() {
+	QString text = searchEdit->text();
+	Qt::CaseSensitivity cs =
+		caseCheckBox->isChecked() ? Qt::CaseSensitive
+			: Qt::CaseInsensitive;
 
-    emit findNext(text, cs, false, true, replaceEdit->text());
+	emit findNext(text, cs, false, true, replaceEdit->text());
 }
 
-void FindDialog::replaceAllClicked()
-{
-    QString text = searchEdit->text();
-    Qt::CaseSensitivity cs =
-            caseCheckBox->isChecked() ? Qt::CaseSensitive
-                                      : Qt::CaseInsensitive;
+void
+FindDialog::replaceAllClicked() {
+	QString text = searchEdit->text();
+	Qt::CaseSensitivity cs =
+		caseCheckBox->isChecked() ? Qt::CaseSensitive
+			: Qt::CaseInsensitive;
 
-    emit findNext(text, cs, true, true, replaceEdit->text());
+	emit findNext(text, cs, true, true, replaceEdit->text());
 }
 
-bool FindDialog::close()
-{
-    emit findNext(QString(), Qt::CaseSensitive, true, false);
-    return QWidget::close();
+bool
+FindDialog::close() {
+	emit findNext(QString(), Qt::CaseSensitive, true, false);
+	return QWidget::close();
 }
 
-void FindDialog::closeEvent(QCloseEvent *e)
-{
-    close();
-    e->accept();
+void
+FindDialog::closeEvent(QCloseEvent* e) {
+	close();
+	e->accept();
 }
 
-FindDialog::~FindDialog()
-{
-    delete searchLabel;
-    delete replaceLabel;
-    delete searchEdit;
-    delete replaceEdit;
-    delete caseCheckBox;
-    delete findButton;
-    delete findAllButton;
-    delete replaceButton;
-    delete replaceAllButton;
-    delete closeButton;
-    delete replaceLayout;
-    delete searchLayout;
-    delete replaceButtonLayout;
-    delete leftLayout;
-    delete rightLayout;
-    delete mainLayout;
+FindDialog::~FindDialog() {
+	delete searchLabel;
+	delete replaceLabel;
+	delete searchEdit;
+	delete replaceEdit;
+	delete caseCheckBox;
+	delete findButton;
+	delete findAllButton;
+	delete replaceButton;
+	delete replaceAllButton;
+	delete closeButton;
+	delete replaceLayout;
+	delete searchLayout;
+	delete replaceButtonLayout;
+	delete leftLayout;
+	delete rightLayout;
+	delete mainLayout;
 }
+

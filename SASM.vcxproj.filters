@@ -1,0 +1,450 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{D9D6E242-F8AF-46E4-B9FD-80ECBC20BA3E}</UniqueIdentifier>
+      <Extensions>qrc;*</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Translation Files">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts;xlf</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Translation Files">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts;xlf</Extensions>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
+    <Filter Include="Generated Files\Debug">
+      <UniqueIdentifier>{f8dff5a6-51a3-434b-8c75-a8be1257e686}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Generated Files\Release">
+      <UniqueIdentifier>{948905d0-2bb2-454c-b29f-d9405e015485}</UniqueIdentifier>
+      <Extensions>cpp;moc</Extensions>
+      <SourceControlFiles>False</SourceControlFiles>
+    </Filter>
+    <Filter Include="Source Files\modules">
+      <UniqueIdentifier>{453c8a4a-c8e8-48b7-bb33-08eb29348911}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\modules">
+      <UniqueIdentifier>{46bfb469-0e5f-4fd3-b1cd-592e3f5f7233}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\modules\debug">
+      <UniqueIdentifier>{ae46f7e7-a101-41e3-ba2c-c021fbd8338c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\modules\assembler">
+      <UniqueIdentifier>{aed2ac19-d48e-448e-a3d0-b18958357ac2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\modules\debug">
+      <UniqueIdentifier>{6ce0c517-42ef-4c42-85c4-74bfb7dd0ed9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\modules\assembler">
+      <UniqueIdentifier>{433cc08c-5119-4579-beb6-422e45025faa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\modules\editor">
+      <UniqueIdentifier>{4606aeef-f4be-48f2-b926-f9838a8adc54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\modules\editor">
+      <UniqueIdentifier>{271b5924-a77b-480d-a564-cc861180fff3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\modules\main">
+      <UniqueIdentifier>{e2b14bc4-ec29-40f1-9386-cd50fc47164b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\modules\main">
+      <UniqueIdentifier>{e11f2262-ed7e-4427-ad3d-5a7b970f206b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\modules\etc">
+      <UniqueIdentifier>{84236abe-ef50-4b8e-9b35-a8db76754b2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\modules\etc">
+      <UniqueIdentifier>{fcc734ef-8267-4c9a-8516-5f22e6fe537a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Debug\moc_assembler.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_assembler.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_codeeditor.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_codeeditor.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_debuganycommandwidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_debuganycommandwidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_debugger.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_debugger.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_debugtablewidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_debugtablewidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_fasm.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_fasm.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_finddialog.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_finddialog.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_gas.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_gas.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_getstartedwidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_getstartedwidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_mainwindow.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_mainwindow.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_masm.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_masm.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_nasm.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_nasm.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_ruqplaintextedit.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_ruqplaintextedit.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_ruqtextedit.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_ruqtextedit.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_signallocker.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_signallocker.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_singleapplication.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_singleapplication.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_tab.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_tab.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug\moc_watchsettinswidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Release\moc_watchsettinswidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_Help.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_Images.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\qrc_Languages.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="debugtablewidget.cpp">
+      <Filter>Source Files\modules\debug</Filter>
+    </ClCompile>
+    <ClCompile Include="debuganycommandwidget.cpp">
+      <Filter>Source Files\modules\debug</Filter>
+    </ClCompile>
+    <ClCompile Include="debugger.cpp">
+      <Filter>Source Files\modules\debug</Filter>
+    </ClCompile>
+    <ClCompile Include="gas.cpp">
+      <Filter>Source Files\modules\assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="fasm.cpp">
+      <Filter>Source Files\modules\assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="assembler.cpp">
+      <Filter>Source Files\modules\assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="nasm.cpp">
+      <Filter>Source Files\modules\assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="masm.cpp">
+      <Filter>Source Files\modules\assembler</Filter>
+    </ClCompile>
+    <ClCompile Include="codeeditor.cpp">
+      <Filter>Source Files\modules\editor</Filter>
+    </ClCompile>
+    <ClCompile Include="finddialog.cpp">
+      <Filter>Source Files\modules\editor</Filter>
+    </ClCompile>
+    <ClCompile Include="getstartedwidget.cpp">
+      <Filter>Source Files\modules\editor</Filter>
+    </ClCompile>
+    <ClCompile Include="ruqplaintextedit.cpp">
+      <Filter>Source Files\modules\editor</Filter>
+    </ClCompile>
+    <ClCompile Include="watchsettinswidget.cpp">
+      <Filter>Source Files\modules\editor</Filter>
+    </ClCompile>
+    <ClCompile Include="tab.cpp">
+      <Filter>Source Files\modules\editor</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files\modules\main</Filter>
+    </ClCompile>
+    <ClCompile Include="mainwindow.cpp">
+      <Filter>Source Files\modules\main</Filter>
+    </ClCompile>
+    <ClCompile Include="ruqtextedit.cpp">
+      <Filter>Source Files\modules\editor</Filter>
+    </ClCompile>
+    <ClCompile Include="singleapplication.cpp">
+      <Filter>Source Files\modules\etc</Filter>
+    </ClCompile>
+    <ClCompile Include="common.cpp">
+      <Filter>Source Files\modules\etc</Filter>
+    </ClCompile>
+    <ClCompile Include="highlighter.cpp">
+      <Filter>Source Files\modules\etc</Filter>
+    </ClCompile>
+    <ClCompile Include="signallocker.cpp">
+      <Filter>Source Files\modules\etc</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="debuganycommandwidget.h">
+      <Filter>Header Files\modules\debug</Filter>
+    </CustomBuild>
+    <CustomBuild Include="debugger.h">
+      <Filter>Header Files\modules\debug</Filter>
+    </CustomBuild>
+    <CustomBuild Include="debugtablewidget.h">
+      <Filter>Header Files\modules\debug</Filter>
+    </CustomBuild>
+    <CustomBuild Include="assembler.h">
+      <Filter>Header Files\modules\assembler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="nasm.h">
+      <Filter>Header Files\modules\assembler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="masm.h">
+      <Filter>Header Files\modules\assembler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="gas.h">
+      <Filter>Header Files\modules\assembler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="fasm.h">
+      <Filter>Header Files\modules\assembler</Filter>
+    </CustomBuild>
+    <CustomBuild Include="codeeditor.h">
+      <Filter>Header Files\modules\editor</Filter>
+    </CustomBuild>
+    <CustomBuild Include="finddialog.h">
+      <Filter>Header Files\modules\editor</Filter>
+    </CustomBuild>
+    <CustomBuild Include="getstartedwidget.h">
+      <Filter>Header Files\modules\editor</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ruqplaintextedit.h">
+      <Filter>Header Files\modules\editor</Filter>
+    </CustomBuild>
+    <CustomBuild Include="watchsettinswidget.h">
+      <Filter>Header Files\modules\editor</Filter>
+    </CustomBuild>
+    <CustomBuild Include="tab.h">
+      <Filter>Header Files\modules\editor</Filter>
+    </CustomBuild>
+    <CustomBuild Include="mainwindow.h">
+      <Filter>Header Files\modules\main</Filter>
+    </CustomBuild>
+    <CustomBuild Include="singleapplication.h">
+      <Filter>Header Files\modules\etc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ruqtextedit.h">
+      <Filter>Header Files\modules\etc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="signallocker.h">
+      <Filter>Header Files\modules\etc</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="language_ru.ts">
+      <Filter>Translation Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="settings.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="Help.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Images.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Languages.qrc">
+      <Filter>Resource Files</Filter>
+    </CustomBuild>
+    <None Include="images\breakpoint.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\build.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\continue.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\copy.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\cut.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\debug.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\debugLine.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\debugPause.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="help.html">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="helpENG.html">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="language_ru.qm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\mainIcon.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\new.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\open.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\paste.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="qt_ru.qm">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\redo.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\run.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\save.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\smallIcon.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\stepinto.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\stepover.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\stop.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="images\undo.png">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="icon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GeneratedFiles\ui_settings.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>Header Files\modules\etc</Filter>
+    </ClInclude>
+    <ClInclude Include="highlighter.h">
+      <Filter>Header Files\modules\etc</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

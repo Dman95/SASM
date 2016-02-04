@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -40,13 +40,13 @@
 
 #include "assembler.h"
 
-Assembler::Assembler(bool x86, QObject *parent) :
-    QObject(parent)
-{
-    this->x86 = x86;
+Assembler::Assembler(bool x86, QObject* parent) :
+	QObject(parent) {
+	this->x86 = x86;
 }
 
-bool Assembler::isx86()
-{
-    return x86;
+bool
+Assembler::isx86() {
+	return x86;
 }
+

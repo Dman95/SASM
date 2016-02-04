@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -45,30 +45,42 @@
 #include <QLinkedList>
 #include "assembler.h"
 
-class FASM : public Assembler
-{
-    Q_OBJECT
-public:
-    explicit FASM(bool x86, QObject *parent = 0);
-    QString getAssemblerPath();
-    QString getLinkerPath();
-    quint64 getMainOffset(QFile &lstOut, QString entryLabel);
-    void parseLstFile(QFile &lstOut, QVector<Assembler::LineNum> &lines, quint64 offset);
-    void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
-                             QList<QTextCharFormat *> &formats,
-                             bool &multiLineComments,
-                             QRegExp &commentStartExpression,
-                             QRegExp &commentEndExpression);
-    QString getStartText();
-    void putDebugString(CodeEditor *code);
-    QString getAssemblerOptions();
-    QString getLinkerOptions();
-    QString getListingFilePath(QFile &lstOut);
+class FASM : public Assembler {
+	Q_OBJECT
 
-signals:
+public:
+	explicit
+	FASM(bool x86, QObject* parent = 0);
+	QString
+	getAssemblerPath();
+	QString
+	getLinkerPath();
+	quint64
+	getMainOffset(QFile& lstOut, QString entryLabel);
+	void
+	parseLstFile(QFile& lstOut, QVector<Assembler::LineNum>& lines, quint64 offset);
+	void fillHighligherRules(QVector<Assembler::HighlightingRule>& highlightingRules,
+	                         QList<QTextCharFormat *>& formats,
+	                         bool& multiLineComments,
+	                         QRegExp& commentStartExpression,
+	                         QRegExp& commentEndExpression);
+	QString
+	getStartText();
+	void
+	putDebugString(CodeEditor* code);
+	QString
+	getAssemblerOptions();
+	QString
+	getLinkerOptions();
+	QString
+	getListingFilePath(QFile& lstOut);
+
+	signals:
 
 public slots:
 
 };
 
 #endif // FASM_H
+
+

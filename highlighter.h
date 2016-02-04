@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -47,25 +47,28 @@
 #include <QTextDocument>
 #include "assembler.h"
 
-class Highlighter : public QSyntaxHighlighter
-{
+class Highlighter : public QSyntaxHighlighter {
 public:
-     Highlighter(Assembler *assembler, QTextDocument *parent = 0);
-     ~Highlighter();
+	Highlighter(Assembler* assembler, QTextDocument* parent = 0);
+	~Highlighter();
 
 protected:
-     void highlightBlock(const QString &text);
+	void
+	highlightBlock(const QString& text);
 
 private:
-     typedef Assembler::HighlightingRule HighlightingRule;
-     QVector<HighlightingRule> highlightingRules;
+	typedef Assembler::HighlightingRule HighlightingRule;
+	QVector<HighlightingRule> highlightingRules;
 
-     bool isCommentInQuote(const QString &text, int index);
+	bool
+	isCommentInQuote(const QString& text, int index);
 
-     QRegExp commentStartExpression;
-     QRegExp commentEndExpression;
-     bool multiLineComments;
-     QTextCharFormat commentFormat;
+	QRegExp commentStartExpression;
+	QRegExp commentEndExpression;
+	bool multiLineComments;
+	QTextCharFormat commentFormat;
 };
 
 #endif // HIGHLIGHTER_H
+
+
