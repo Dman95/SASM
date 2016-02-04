@@ -76,20 +76,22 @@ public:
 		quint64 numInCode;
 		/** @brief address of instruction in memory. */
 		quint64 numInMem;
-		bool
 
 		/**
 		 * Operator: ==
 		 *
-		 * @fn operator==(const LineNum& ln)
+		 * @fn bool operator==(const LineNum& ln)
 		 *
 		 * @brief Equality operator.
 		 *
-		 * @date 08:44 04 February 2016
+		 * @date 08:48 04 February 2016
 		 *
 		 * @param ln The line.
+		 *
+		 * @return true if the parameters are considered equivalent.
 		 */
 
+		bool
 		operator ==(const LineNum& ln) {
 			return ln.numInCode == numInCode;
 		}
