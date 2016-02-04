@@ -104,26 +104,159 @@ class MainWindow : public QMainWindow {
 public:
 	explicit
 	MainWindow(const QStringList& args, QWidget* parent = nullptr);
+
+	/**
+	 * Destructor: ~MainWindow
+	 *
+	 * @fn MainWindow::~MainWindow();
+	 *
+	 * @brief Destructor.
+	 *
+	 * @date 08:21 04 February 2016
+	 */
+
 	~MainWindow();
+
+	/**
+	 * Method: initUi
+	 *
+	 * @fn void MainWindow::initUi();
+	 *
+	 * @brief Initialises the user interface.
+	 *
+	 * @date 08:21 04 February 2016
+	 */
 
 	void
 	initUi();
+
+	/**
+	 * Method: createMenus
+	 *
+	 * @fn void MainWindow::createMenus();
+	 *
+	 * @brief Creates the menus.
+	 *
+	 * @date 08:22 04 February 2016
+	 */
+
 	void
 	createMenus();
+
+	/**
+	 * Method: createActions
+	 *
+	 * @fn void MainWindow::createActions();
+	 *
+	 * @brief Creates the actions.
+	 *
+	 * @date 08:22 04 February 2016
+	 */
+
 	void
 	createActions();
+
+	/**
+	 * Method: createButtons
+	 *
+	 * @fn void MainWindow::createButtons();
+	 *
+	 * @brief Creates the buttons.
+	 *
+	 * @date 08:22 04 February 2016
+	 */
+
 	void
 	createButtons();
+
+	/**
+	 * Method: createToolBars
+	 *
+	 * @fn void MainWindow::createToolBars();
+	 *
+	 * @brief Creates tool bars.
+	 *
+	 * @date 08:22 04 February 2016
+	 */
+
 	void
 	createToolBars();
+
+	/**
+	 * Method: writeSettings
+	 *
+	 * @fn void MainWindow::writeSettings();
+	 *
+	 * @brief Writes the settings.
+	 *
+	 * @date 08:22 04 February 2016
+	 */
+
 	void
 	writeSettings();
+
+	/**
+	 * Method: setupEditor
+	 *
+	 * @fn void MainWindow::setupEditor(int i);
+	 *
+	 * @brief Sets up the editor.
+	 *
+	 * @date 08:22 04 February 2016
+	 *
+	 * @param i Zero-based index of the.
+	 */
+
 	void
 	setupEditor(int i);
+
+	/**
+	 * Method: okToContinue
+	 *
+	 * @fn bool MainWindow::okToContinue(int index = -1);
+	 *
+	 * @brief Ok to continue.
+	 *
+	 * @date 08:22 04 February 2016
+	 *
+	 * @param index Zero-based index of the.
+	 *
+	 * @return true if it succeeds, false if it fails.
+	 */
+
 	bool
 	okToContinue(int index = -1);
+
+	/**
+	 * Method: setCurrentTabName
+	 *
+	 * @fn void MainWindow::setCurrentTabName(const QString& filePath, int index = -1);
+	 *
+	 * @brief Sets current tab name.
+	 *
+	 * @date 08:22 04 February 2016
+	 *
+	 * @param filePath Full pathname of the file.
+	 * @param index    Zero-based index of the.
+	 */
+
 	void
 	setCurrentTabName(const QString& filePath, int index = -1);
+
+	/**
+	 * Method: removeDirRecuresively
+	 *
+	 * @fn bool MainWindow::removeDirRecuresively(const QString& dirName);
+	 *
+	 * @brief Removes the dir recuresively described by dirName.
+	 *
+	 * @date 08:22 04 February 2016
+	 *
+	 * @param dirName Pathname of the directory.
+	 *
+	 * @return true if it succeeds, false if it fails.
+	 */
+
 	bool
 	removeDirRecuresively(const QString& dirName);
 
