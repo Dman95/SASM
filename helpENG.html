@@ -50,8 +50,8 @@ SASM includes crossplatform input/output library "io.inc". It contains I/O macro
 </thead>
 <tbody>
 <tr>
-<td width="242" valign="top"><a name="PRINT_UDEC">PRINT_UDEC</a> <em>size, data</em></p>
-<p><a name="PRINT_DEC">PRINT_DEC</a><em> size, data</em></td>
+<td width="242" valign="top"><a name="PRINT_UDEC">PRINT_UDEC</a> <em>size, data</em>
+    <p><a name="PRINT_DEC">PRINT_DEC</a><em> size, data</em></td>
 <td width="390" valign="top">Print number <em>data</em> in decimal representation. <em>size</em> – number, giving size of <em>data</em> in bytes - 1, 2, 4 or 8 (x64).
 <em>data</em> must be number or symbol constant, name of variable, register or address expression without size qualifier (byte[], etc.). PRINT_UDEC print number as unsigned, PRINT_DEC — as signed.</td>
 </tr>
@@ -72,8 +72,8 @@ SASM includes crossplatform input/output library "io.inc". It contains I/O macro
 <td width="390" valign="top">Print newline ('\n').</td>
 </tr>
 <tr>
-<td width="242" valign="top"><a name="GET_UDEC">GET_UDEC</a> <em>size</em>, <em>data</em></p>
-<p><a name="GET_DEC">GET_DEC</a> <em>size</em>, <em>data</em></td>
+<td width="242" valign="top"><a name="GET_UDEC">GET_UDEC</a> <em>size</em>, <em>data</em>
+    <p><a name="GET_DEC">GET_DEC</a> <em>size</em>, <em>data</em></td>
 <td width="390" valign="top">Input number data in decimal representation from stdin. <em>size</em> – number, giving size of <em>data</em> in bytes - 1, 2, 4 or 8 (x64). <em>data</em> must be name of variable or register or address expression without size qualifier (byte[], etc.). GET_UDEC input number as unsigned, GET_DEC — as signed. It is not allowed to use esp register.</td>
 </tr>
 <tr>
@@ -120,10 +120,10 @@ You can toggle breakpoint, clicking on line number or pressing F8 with cursor on
 <BR>
 "Show registers" command (Ctrl+R) shows window with values of CPU registers.
 <BR>
-"Show memory" command (Ctrl+M) shows window to watch variables or memory on random address. 
-Typing name of variable, address or any expression over text "Add variable..." and size (b - byte (1), w - word (2), d - double word (4), q - quad word (8)), in "Value" field you will see value of expression. 
+"Show memory" command (Ctrl+M) shows window to watch variables or memory on random address.
+Typing name of variable, address or any expression over text "Add variable..." and size (b - byte (1), w - word (2), d - double word (4), q - quad word (8)), in "Value" field you will see value of expression.
 Also you can add variable from code, clicking right mouse button on line with variable and choose "Watch".
-In expressions you can use any operator of C language (*, &, +, -, *, /, %, !, >, &, |, &lt;&lt;, sizeof, etc.), registers should have $ prefix ($eax for example). 
+In expressions you can use any operator of C language (*, &, +, -, *, /, %, !, >, &, |, &lt;&lt;, sizeof, etc.), registers should have $ prefix ($eax for example).
 If you want to watch memory on address you should check "Address" checkbox on the right.
 Output format is determined in the first drop-down menu (format Smart trying to choose the most suitable type of display).
 To watch contents of array specify the number of elements in the array in "array size" field.
@@ -149,7 +149,7 @@ Also you can enter "help" command in "GDB command" field to show gdb commands he
 Also SASM 3.0 and greater contains fasm 1.71.39 and gas 2.23.1 from MinGW (gas 2.23.2 from MinGW64).
 </P>
 <P>
-Also SASM contains gdb debugger from MinGW and "io.inc" macro library. 
+Also SASM contains gdb debugger from MinGW and "io.inc" macro library.
 <P>
 On Windows SASM is ready for work immediately after installation.
 </P>
@@ -158,11 +158,11 @@ On Windows SASM is ready for work immediately after installation.
 For correct working on Linux you should install next packages:
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">1)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
-nasm or gas (if you will use they, fasm already included in SASM);</P>
+nasm or gas (if you will use they, fasm already included in SASM);</SPAN></P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">2)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
-gcc;</P>
+gcc;</SPAN></P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">3)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
-gdb (gdb (for debugging).</P>
+gdb (gdb (for debugging).</SPAN></P>
 <P>&nbsp;</P>
 <H3>Building system settings:</H3>
 <P>SASM has flexible program building system. In addition to standard mode settings and assemblers, you can specify the path to the assembler and the linker and their options manually.</P>
@@ -246,26 +246,26 @@ If you have something does not work, check the following items:
 </B>
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">1)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
-If gcc used as a linker, then the program entry point should be marked with global label _main (Windows) or main (Linux) or CMAIN from "io.inc" (see initial text). Otherwise entry point should be marked with start label.
+If gcc used as a linker, then the program entry point should be marked with global label _main (Windows) or main (Linux) or CMAIN from "io.inc" (see initial text). Otherwise entry point should be marked with start label.</SPAN>
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">2)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
-On Windows, all functions from the standard library should begin with an underscore (for example, _printf).
+On Windows, all functions from the standard library should begin with an underscore (for example, _printf).</SPAN>
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">3)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
-Before debugging make all functions formed frames (mov ebp, esp or mov rbp, rsp). This rule should be done for all functions, including main. If this condition is not met, the correct work of the debugger is not guaranteed.
+Before debugging make all functions formed frames (mov ebp, esp or mov rbp, rsp). This rule should be done for all functions, including main. If this condition is not met, the correct work of the debugger is not guaranteed.</SPAN>
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">4)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
-Program code should be contained only in ".text" section (".code" for MASM). If this condition is not met, the correct work of the debugger is not guaranteed.
+Program code should be contained only in ".text" section (".code" for MASM). If this condition is not met, the correct work of the debugger is not guaranteed.</SPAN>
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">5)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
 If you want to include a file in program, it should be placed in the folder for include files - "Linux/share/sasm/include/" ("/usr/share/sasm/include/" after installation) in Linux and "Windows/include" ("{program folder after installation}/include/") in Windows.
-However, if above method doesn't work (MASM or any non-standard configuration), you can specify the full path to the file.
+However, if above method doesn't work (MASM or any non-standard configuration), you can specify the full path to the file.</SPAN>
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">6)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
 If errors occur during building, check the options on the "Building" tab in the settings. To correct the error, you can try to install one of the alternative configurations of the assembly from "Building system settings" in this guide.
-You can also configure SASM to work with non-standard assemblers, linkers by specifying the path and the options for them. Description of the format options are also located in "Building system settings" chapter.</P>
+You can also configure SASM to work with non-standard assemblers, linkers by specifying the path and the options for them. Description of the format options are also located in "Building system settings" chapter.</SPAN></P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">7)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
-If something still does not work, but worked before, try to use the "Reset all" button in the settings on the "Common" tab.
+If something still does not work, but worked before, try to use the "Reset all" button in the settings on the "Common" tab.</SPAN>
 </P>
 <P>&nbsp;</P>
 <P>
