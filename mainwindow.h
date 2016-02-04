@@ -122,7 +122,7 @@ public:
 	 *
 	 * @fn void MainWindow::initUi();
 	 *
-	 * @brief Initialises the user interface.
+	 * @brief Initializes the user interface.
 	 *
 	 * @date 08:21 04 February 2016
 	 */
@@ -248,7 +248,7 @@ public:
 	 *
 	 * @fn bool MainWindow::removeDirRecuresively(const QString& dirName);
 	 *
-	 * @brief Removes the dir recuresively described by dirName.
+	 * @brief Removes the dir recursively described by dirName.
 	 *
 	 * @date 08:22 04 February 2016
 	 *
@@ -1200,7 +1200,7 @@ public slots:
 	 * @date 08:12 04 February 2016
 	 *
 	 * @param [in,out] colorButton If non-null, the color button.
-	 * @param init				   true to initialise.
+	 * @param init				   true to initialize.
 	 */
 
 	void
@@ -1216,7 +1216,7 @@ public slots:
 	 * @date 08:12 04 February 2016
 	 *
 	 * @param [in,out] box If non-null, the box.
-	 * @param init		   true to initialise.
+	 * @param init		   true to initialize.
 	 */
 
 	void
@@ -1270,7 +1270,7 @@ public slots:
 	 *
 	 * @fn void MainWindow::initAssemblerSettings(bool firstOpening);
 	 *
-	 * @brief Initialises the assembler settings.
+	 * @brief Initializes the assembler settings.
 	 *
 	 * @date 08:12 04 February 2016
 	 *
