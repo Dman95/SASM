@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -47,8 +47,12 @@
 #include <QDir>
 
 namespace Common {
-    QString applicationDataPath();
-    QString pathInTemp(QString path);
+	QString
+	applicationDataPath();
+	QString
+	pathInTemp(QString path);
 }
 
 #endif // COMMON_H
+
+

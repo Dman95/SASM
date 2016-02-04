@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -52,37 +52,49 @@
 #include "ruqtextedit.h"
 #include "assembler.h"
 
-class Tab : public QMainWindow
-{
-    Q_OBJECT
+class Tab : public QMainWindow {
+	Q_OBJECT
 
 public:
-    explicit Tab(QWidget *parent = 0);
-    virtual ~Tab();
+	explicit
+	Tab(QWidget* parent = 0);
+	virtual
+	~Tab();
 
-    QTextDocument *getCodeDocument();
-    void saveCodeToFile(const QString &filePath, Assembler *assembler, bool changeCodeModifiedFlag = true, bool debugMode = false);
-    void saveInputToFile(const QString &filePath);
-    void loadOutputFromFile(const QString &filePath);
-    void loadCodeFromFile(const QString &filePath);
-    void appendOutput(QString msg);
-    QString getCurrentFilePath();
-    void clearOutput();
-    void setFonts();
+	QTextDocument*
+	getCodeDocument();
+	void
+	saveCodeToFile(const QString& filePath, Assembler* assembler, bool changeCodeModifiedFlag = true, bool debugMode = false);
+	void
+	saveInputToFile(const QString& filePath);
+	void
+	loadOutputFromFile(const QString& filePath);
+	void
+	loadCodeFromFile(const QString& filePath);
+	void
+	appendOutput(QString msg);
+	QString
+	getCurrentFilePath();
+	void
+	clearOutput();
+	void
+	setFonts();
 
-    CodeEditor *code;
+	CodeEditor* code;
 
 
-private: 
-    //text fields
-    QVBoxLayout *inputLayout;
-    QVBoxLayout *outputLayout;
-    RuQTextEdit *input;
-    RuQTextEdit *output;
-    QWidget *inputWidget;
-    QWidget *outputWidget;
+private:
+	//text fields
+	QVBoxLayout* inputLayout;
+	QVBoxLayout* outputLayout;
+	RuQTextEdit* input;
+	RuQTextEdit* output;
+	QWidget* inputWidget;
+	QWidget* outputWidget;
 
-    QString currentFilePath;
+	QString currentFilePath;
 };
 
 #endif // TAB_H
+
+

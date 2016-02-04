@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -47,24 +47,30 @@
 #include <QCheckBox>
 #include <QHBoxLayout>
 
-class WatchSettinsWidget : public QWidget
-{
-    Q_OBJECT
+class WatchSettinsWidget : public QWidget {
+	Q_OBJECT
+
 public:
-    explicit WatchSettinsWidget(QWidget *parent = 0);
-    ~WatchSettinsWidget();
-    int sumSize();
-    QComboBox *typeComboBox;
-    QComboBox *sizeComboBox;
-    QLineEdit *arraySizeEdit;
-    QCheckBox *addressCheckbox;
-    QSize sizeHint() const;
+	explicit
+	WatchSettinsWidget(QWidget* parent = 0);
+	~WatchSettinsWidget();
+	int
+	sumSize();
+	QComboBox* typeComboBox;
+	QComboBox* sizeComboBox;
+	QLineEdit* arraySizeEdit;
+	QCheckBox* addressCheckbox;
+	QSize
+	sizeHint() const;
 
 private:
-    QHBoxLayout *layout;
+	QHBoxLayout* layout;
 
-signals:
-    void settingsChanged(void);
+	signals:
+	void
+	settingsChanged(void);
 };
 
 #endif // WATCHSETTINSWIDGET_H
+
+

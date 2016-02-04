@@ -1,136 +1,156 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
-	<meta content="text/html; charset=utf-8" http-equiv="content-type">
-	<TITLE>SASM help</TITLE>
+    <meta content="text/html; charset=utf-8" http-equiv="content-type">
+    <TITLE>SASM help</TITLE>
 </HEAD>
 <BODY>
 <H1>Brief help.</H1>
 <P>
-SASM (SimpleASM) - simple Open Source crossplatform IDE for NASM, MASM, GAS, FASM assembly languages.
+    SASM (SimpleASM) - simple Open Source crossplatform IDE for NASM, MASM, GAS, FASM assembly languages.
 </P>
 <P>
-In SASM you can easily develop and execute programs, written in NASM assembly language. Enter code in form and simply run your program. Enter your input data in "Input" docking field. In "Output" field you can see the result of the execution of the program. Wherein all messages and compilation errors will be shown in the form on the bottom. You can save source or already compiled (exe) code of your program to file and load your programs from file.
+    In SASM you can easily develop and execute programs, written in NASM assembly language. Enter code in form and simply run your program. Enter your input data in "Input" docking field. In "Output" field you can see the result of the execution of the program. Wherein all messages and compilation errors will be shown in the form on the bottom. You can save source or already compiled (exe) code of your program to file and load your programs from file.
 </P>
 <P>
-SASM supports working with many opened projects – new files are opened and created in new tabs. At the exit from SASM current set of opened files saved. At the next start you can restore previous session. In settings you can set font, color scheme and initial text. SASM is translated into Russian and English. All dialog windows in SASM is docking - you can choose one of many variants of their position.
+    SASM supports working with many opened projects – new files are opened and created in new tabs. At the exit from SASM current set of opened files saved. At the next start you can restore previous session. In settings you can set font, color scheme and initial text. SASM is translated into Russian and English. All dialog windows in SASM is docking - you can choose one of many variants of their position.
 </P>
 <P>
-Standard "Edit" menu extended with abilities to comment/uncomment piece of source code and to create/delete indent with 4 spaces (Tab/Shift+Tab).
+    Standard "Edit" menu extended with abilities to comment/uncomment piece of source code and to create/delete indent with 4 spaces (Tab/Shift+Tab).
 </P>
 <P>
-Starting with version 2.2 it is possible to reassign the hotkeys. File with them located on the path "Linux/share/sasm/keys.ini" ("/usr/share/sasm/keys.ini" if SASM was installed) on Linux and on the path "Windows/keys.ini" ("{folder where SASM was installed}/keys.ini") on Windows.
+    Starting with version 2.2 it is possible to reassign the hotkeys. File with them located on the path "Linux/share/sasm/keys.ini" ("/usr/share/sasm/keys.ini" if SASM was installed) on Linux and on the path "Windows/keys.ini" ("{folder where SASM was installed}/keys.ini") on Windows.
 </P>
 <P>
-Starting with version 2.3 SASM supports 2 modes - x64 and x86. You can choose mode in settings on "Build" tab. "io.inc" macro library works with both modes. Also there you can change assembler and linker options. For more information about this, see "Building system settings".
-Starting from version 3.0 you can choose one of four assemblers - NASM, MASM, GAS, FASM in settings on "Build" tab. Also there you can choose your own assembler or linker filling path to them. Thus you can setup SASM on work with any assembler filling path to assembler and, if needed, to linker and filling options for assembling and linking. But debugging and highlighting may work little incorrectly. To realize full support of new assembler, it is needed to implement Assembler abstract class by analogy with already implemented assemblers.
+    Starting with version 2.3 SASM supports 2 modes - x64 and x86. You can choose mode in settings on "Build" tab. "io.inc" macro library works with both modes. Also there you can change assembler and linker options. For more information about this, see "Building system settings".
+    Starting from version 3.0 you can choose one of four assemblers - NASM, MASM, GAS, FASM in settings on "Build" tab. Also there you can choose your own assembler or linker filling path to them. Thus you can setup SASM on work with any assembler filling path to assembler and, if needed, to linker and filling options for assembling and linking. But debugging and highlighting may work little incorrectly. To realize full support of new assembler, it is needed to implement Assembler abstract class by analogy with already implemented assemblers.
 </P>
 <P>
-All assemblers (excluding MASM) are included in SASM (on Linux they should be installed) and you can use they right away after their choice. MASM assembler can not be included in the assembly because of its license. To use it, you should install MASM on your computer from site <A HREF="http://www.masm32.com/">http://www.masm32.com/</A> and specify path to MASM assembler (ml.exe, path usually "C:/masm32/bin/ml.exe") and to MASM linker (link.exe, path usually "C:/masm32/bin/link.exe") in according fields on "Build" tab in settings.
+    All assemblers (excluding MASM) are included in SASM (on Linux they should be installed) and you can use they right away after their choice. MASM assembler can not be included in the assembly because of its license. To use it, you should install MASM on your computer from site <A HREF="http://www.masm32.com/">http://www.masm32.com/</A> and specify path to MASM assembler (ml.exe, path usually "C:/masm32/bin/ml.exe") and to MASM linker (link.exe, path usually "C:/masm32/bin/link.exe") in according fields on "Build" tab in settings.
 </P>
 <P>
-SASM contains folder for include files - "Linux/share/sasm/include/" ("/usr/share/sasm/include/" if SASM was installed) on Linux and on the path "Windows/include/" ("{folder where SASM was installed}/include/") in Windows. But for MASM this folder does not work - in this case you should use absolute path to include files.
+    SASM contains folder for include files - "Linux/share/sasm/include/" ("/usr/share/sasm/include/" if SASM was installed) on Linux and on the path "Windows/include/" ("{folder where SASM was installed}/include/") in Windows. But for MASM this folder does not work - in this case you should use absolute path to include files.
 </P>
 <P>
-&nbsp;
+    &nbsp;
 </P>
 <H3>"io.inc" macro library for NASM</H3>
 <P>
-SASM includes crossplatform input/output library "io.inc". It contains I/O macro and 2 additional macro for NASM: CMAIN - entry point and CEXTERN for invoking functions, located in C language libraries ("CEXTERN printf" for example).
-<P>
-&nbsp;
-</P>
+    SASM includes crossplatform input/output library "io.inc". It contains I/O macro and 2 additional macro for NASM: CMAIN - entry point and CEXTERN for invoking functions, located in C language libraries ("CEXTERN printf" for example).
+    <P>
+        &nbsp;
+    </P>
 </P>
 <table border="1" cellspacing="0" cellpadding="0">
-<thead>
-<tr>
-<td width="242">Macro name</td>
-<td width="390">Description</td>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td width="242" valign="top"><a name="PRINT_UDEC">PRINT_UDEC</a> <em>size, data</em>
-    <p><a name="PRINT_DEC">PRINT_DEC</a><em> size, data</em></td>
-<td width="390" valign="top">Print number <em>data</em> in decimal representation. <em>size</em> – number, giving size of <em>data</em> in bytes - 1, 2, 4 or 8 (x64).
-<em>data</em> must be number or symbol constant, name of variable, register or address expression without size qualifier (byte[], etc.). PRINT_UDEC print number as unsigned, PRINT_DEC — as signed.</td>
-</tr>
-<tr>
-<td width="242" valign="top"><a name="PRINT_HEX">PRINT_HEX</a> <em>size, data</em></td>
-<td width="390" valign="top">Similarly previous, but data is printed in hexadecimal representation.</td>
-</tr>
-<tr>
-<td width="242" valign="top"><a name="PRINT_CHAR">PRINT_CHAR</a> <em>ch</em></td>
-<td width="390" valign="top">Print symbol <em>ch</em>. <em>ch</em> - number or symbol constant, name of variable, register or address expression without size qualifier (byte[], etc.).</td>
-</tr>
-<tr>
-<td width="242" valign="top"><a name="PRINT_STRING">PRINT_STRING</a> <em>data</em></td>
-<td width="390" valign="top">Print null-terminated text string. <em>data</em> - string constant, name of variable or address expression without size qualifier (byte[], etc.).</td>
-</tr>
-<tr>
-<td width="242" valign="top"><a name="NEWLINE">NEWLINE</a></td>
-<td width="390" valign="top">Print newline ('\n').</td>
-</tr>
-<tr>
-<td width="242" valign="top"><a name="GET_UDEC">GET_UDEC</a> <em>size</em>, <em>data</em>
-    <p><a name="GET_DEC">GET_DEC</a> <em>size</em>, <em>data</em></td>
-<td width="390" valign="top">Input number data in decimal representation from stdin. <em>size</em> – number, giving size of <em>data</em> in bytes - 1, 2, 4 or 8 (x64). <em>data</em> must be name of variable or register or address expression without size qualifier (byte[], etc.). GET_UDEC input number as unsigned, GET_DEC — as signed. It is not allowed to use esp register.</td>
-</tr>
-<tr>
-<td width="242" valign="top"><a name="GET_HEX">GET_HEX</a> <em>size, data</em></td>
-<td width="390" valign="top">Similarly previous, but data is entered in hexadecimal representation with 0x prefix.</td>
-</tr>
-<tr>
-<td width="242" valign="top"><a name="GET_CHAR">GET_CHAR</a> <em>data</em></td>
-<td width="390" valign="top">Similarly previous, but macro reads one symbol only.</td>
-</tr>
-<tr>
-<td width="242" valign="top"><a name="GET_STRING">GET_STRING</a> <em>data, maxsz</em></td>
-<td width="390" valign="top">Input string with length less than <em>maxsz</em>. Reading stop on EOF or newline and "\n" writes in buffer. In the end of string  0 character is added to the end. <em>data</em> - name of variable or address expression without size qualifier (byte[], etc.). <em>maxsz</em> - register or number constant.</td>
-</tr>
-</tbody>
+    <thead>
+    <tr>
+        <td width="242">Macro name</td>
+        <td width="390">Description</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td width="242" valign="top">
+            <a name="PRINT_UDEC">PRINT_UDEC</a> <em>size, data</em>
+            <p><a name="PRINT_DEC">PRINT_DEC</a><em> size, data</em>
+        </td>
+        <td width="390" valign="top">
+            Print number <em>data</em> in decimal representation. <em>size</em> – number, giving size of <em>data</em> in bytes - 1, 2, 4 or 8 (x64).
+            <em>data</em> must be number or symbol constant, name of variable, register or address expression without size qualifier (byte[], etc.). PRINT_UDEC print number as unsigned, PRINT_DEC — as signed.
+        </td>
+    </tr>
+    <tr>
+        <td width="242" valign="top">
+            <a name="PRINT_HEX">PRINT_HEX</a> <em>size, data</em>
+        </td>
+        <td width="390" valign="top">Similarly previous, but data is printed in hexadecimal representation.</td>
+    </tr>
+    <tr>
+        <td width="242" valign="top">
+            <a name="PRINT_CHAR">PRINT_CHAR</a> <em>ch</em>
+        </td>
+        <td width="390" valign="top">Print symbol <em>ch</em>. <em>ch</em> - number or symbol constant, name of variable, register or address expression without size qualifier (byte[], etc.).</td>
+    </tr>
+    <tr>
+        <td width="242" valign="top">
+            <a name="PRINT_STRING">PRINT_STRING</a> <em>data</em>
+        </td>
+        <td width="390" valign="top">Print null-terminated text string. <em>data</em> - string constant, name of variable or address expression without size qualifier (byte[], etc.).</td>
+    </tr>
+    <tr>
+        <td width="242" valign="top">
+            <a name="NEWLINE">NEWLINE</a>
+        </td>
+        <td width="390" valign="top">Print newline ('\n').</td>
+    </tr>
+    <tr>
+        <td width="242" valign="top">
+            <a name="GET_UDEC">GET_UDEC</a> <em>size</em>, <em>data</em>
+            <p><a name="GET_DEC">GET_DEC</a> <em>size</em>, <em>data</em>
+        </td>
+        <td width="390" valign="top">Input number data in decimal representation from stdin. <em>size</em> – number, giving size of <em>data</em> in bytes - 1, 2, 4 or 8 (x64). <em>data</em> must be name of variable or register or address expression without size qualifier (byte[], etc.). GET_UDEC input number as unsigned, GET_DEC — as signed. It is not allowed to use esp register.</td>
+    </tr>
+    <tr>
+        <td width="242" valign="top">
+            <a name="GET_HEX">GET_HEX</a> <em>size, data</em>
+        </td>
+        <td width="390" valign="top">Similarly previous, but data is entered in hexadecimal representation with 0x prefix.</td>
+    </tr>
+    <tr>
+        <td width="242" valign="top">
+            <a name="GET_CHAR">GET_CHAR</a> <em>data</em>
+        </td>
+        <td width="390" valign="top">Similarly previous, but macro reads one symbol only.</td>
+    </tr>
+    <tr>
+        <td width="242" valign="top">
+            <a name="GET_STRING">GET_STRING</a> <em>data, maxsz</em>
+        </td>
+        <td width="390" valign="top">Input string with length less than <em>maxsz</em>. Reading stop on EOF or newline and "\n" writes in buffer. In the end of string 0 character is added to the end. <em>data</em> - name of variable or address expression without size qualifier (byte[], etc.). <em>maxsz</em> - register or number constant.</td>
+    </tr>
+    </tbody>
 </table>
 <P>
-&nbsp;
+    &nbsp;
 </P>
 <H3>A little bit about the debugger:</H3>
 <P>
-As the debugger SASM used gdb. In the distribution under Windows it included in the package. In Linux, you must install this package.
+    As the debugger SASM used gdb. In the distribution under Windows it included in the package. In Linux, you must install this package.
 </P>
 <P>
-Attention! Before debugging make all functions formed frames (mov ebp, esp). This rule should be done for all functions, including main.
-<BR>
-Also, if gcc used as a linker, then the program entry point should be marked with global label _main (Windows) or main (Linux) or CMAIN from "io.inc". Otherwise entry point should be marked with start label. Other labels for the entry point can not be used.
-<BR>
-Program code should be contained only in ".text" section (".code" for MASM). If you use other names for the code section, then the debugger correct work is not guaranteed.
+    Attention! Before debugging make all functions formed frames (mov ebp, esp). This rule should be done for all functions, including main.
+    <BR>
+    Also, if gcc used as a linker, then the program entry point should be marked with global label _main (Windows) or main (Linux) or CMAIN from "io.inc". Otherwise entry point should be marked with start label. Other labels for the entry point can not be used.
+    <BR>
+    Program code should be contained only in ".text" section (".code" for MASM). If you use other names for the code section, then the debugger correct work is not guaranteed.
 </P>
 <P>
-To run the debugger click "Debug" item in "Debug" menu or press F5. Now you can debug your program.
+    To run the debugger click "Debug" item in "Debug" menu or press F5. Now you can debug your program.
 </P>
 <P>
-You can toggle breakpoint, clicking on line number or pressing F8 with cursor on line number, on which you want to suspend your program execution.
-<BR>
-"Continue" command (F5) continues execution to breakpoint or to the end of your program.
-<BR>
-"Pause" command (F5) pauses program execution (useful, for example, if program fixated).
-<BR>
-"Step into" command (F11) goes to next instruction possible entering functions.
-<BR>
-"Step over" command (F10) goes to next instruction skipping functions.
-<BR>
-"Show registers" command (Ctrl+R) shows window with values of CPU registers.
-<BR>
-"Show memory" command (Ctrl+M) shows window to watch variables or memory on random address.
-Typing name of variable, address or any expression over text "Add variable..." and size (b - byte (1), w - word (2), d - double word (4), q - quad word (8)), in "Value" field you will see value of expression.
-Also you can add variable from code, clicking right mouse button on line with variable and choose "Watch".
-In expressions you can use any operator of C language (*, &, +, -, *, /, %, !, >, &, |, &lt;&lt;, sizeof, etc.), registers should have $ prefix ($eax for example).
-If you want to watch memory on address you should check "Address" checkbox on the right.
-Output format is determined in the first drop-down menu (format Smart trying to choose the most suitable type of display).
-To watch contents of array specify the number of elements in the array in "array size" field.
-To remove watches click right mouse button on it and choose "Delete watch" or press Del button.
-In Windows watching variables from .rodata section you should display them as address.
-<BR>
-Values of registers and expressions refreshes by jumping on next instruction.
+    You can toggle breakpoint, clicking on line number or pressing F8 with cursor on line number, on which you want to suspend your program execution.
+    <BR>
+    "Continue" command (F5) continues execution to breakpoint or to the end of your program.
+    <BR>
+    "Pause" command (F5) pauses program execution (useful, for example, if program fixated).
+    <BR>
+    "Step into" command (F11) goes to next instruction possible entering functions.
+    <BR>
+    "Step over" command (F10) goes to next instruction skipping functions.
+    <BR>
+    "Show registers" command (Ctrl+R) shows window with values of CPU registers.
+    <BR>
+    "Show memory" command (Ctrl+M) shows window to watch variables or memory on random address.
+    Typing name of variable, address or any expression over text "Add variable..." and size (b - byte (1), w - word (2), d - double word (4), q - quad word (8)), in "Value" field you will see value of expression.
+    Also you can add variable from code, clicking right mouse button on line with variable and choose "Watch".
+    In expressions you can use any operator of C language (*, &, +, -, *, /, %, !, >, &, |, &lt;&lt;, sizeof, etc.), registers should have $ prefix ($eax for example).
+    If you want to watch memory on address you should check "Address" checkbox on the right.
+    Output format is determined in the first drop-down menu (format Smart trying to choose the most suitable type of display).
+    To watch contents of array specify the number of elements in the array in "array size" field.
+    To remove watches click right mouse button on it and choose "Delete watch" or press Del button.
+    In Windows watching variables from .rodata section you should display them as address.
+    <BR>
+    Values of registers and expressions refreshes by jumping on next instruction.
 </P>
 Also when you run the debugger you see "GDB command" widget on the bottom of SASM. With its help you can perform any gdb command pressing Enter key. Commands and their results will be showed in log widget. Previous commands available by pressing up and down keys.
 If you press Enter with empty command, last command will be performed. Results of performing commands synchronize with current debugging line highlighting and with state of windows, which shows memory and registers. You can use "Print" option - if it is checked, result of command performing printing immediately ("p" command adds to input) (handy for a quick evaluation of the expression (for example, as a calculator)).
@@ -143,19 +163,20 @@ Also you can enter "help" command in "GDB command" field to show gdb commands he
 <P>&nbsp;</P>
 <H3>Implementation:</H3>
 <H4>Windows</H4>
-<P>As NASM compiler used nasm 2.11.02, as linker - gcc 4.6.2 from MinGW (gcc 4.8.1 from MinGW64 in x64 mode) or ld 2.22 from MinGW (ld 2.23.2 from MinGW64 in x64 mode).
+<P>
+    As NASM compiler used nasm 2.11.02, as linker - gcc 4.6.2 from MinGW (gcc 4.8.1 from MinGW64 in x64 mode) or ld 2.22 from MinGW (ld 2.23.2 from MinGW64 in x64 mode).
 </P>
 <P>
-Also SASM 3.0 and greater contains fasm 1.71.39 and gas 2.23.1 from MinGW (gas 2.23.2 from MinGW64).
+    Also SASM 3.0 and greater contains fasm 1.71.39 and gas 2.23.1 from MinGW (gas 2.23.2 from MinGW64).
 </P>
 <P>
 Also SASM contains gdb debugger from MinGW and "io.inc" macro library.
 <P>
-On Windows SASM is ready for work immediately after installation.
+    On Windows SASM is ready for work immediately after installation.
 </P>
 <H4>Linux</H4>
 <P>
-For correct working on Linux you should install next packages:
+    For correct working on Linux you should install next packages:
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">1)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
 nasm or gas (if you will use they, fasm already included in SASM);</SPAN></P>
@@ -168,33 +189,34 @@ gdb (gdb (for debugging).</SPAN></P>
 <P>SASM has flexible program building system. In addition to standard mode settings and assemblers, you can specify the path to the assembler and the linker and their options manually.</P>
 <P>All settings are specified on "Build" tab.</P>
 <P>Paths to the assembler and the linker are specified in according fields.</P>
-<P>Check the "Disable linking" is used when building a program to run the linker is not necessary: the assembler generates an executable file. It may be useful, for example, in one mode in FASM below.<P>
-<P>In the "Assembly options" and "Linking options" fields you can specify options, passed assembler and linker respectively. In options you can specify string variables, which will be replaced with the names of the respective files.</P>
-<P>Let's consider such variables:</P>
+<P>Check the "Disable linking" is used when building a program to run the linker is not necessary: the assembler generates an executable file. It may be useful, for example, in one mode in FASM below.
+<P>
+    <P>In the "Assembly options" and "Linking options" fields you can specify options, passed assembler and linker respectively. In options you can specify string variables, which will be replaced with the names of the respective files.</P>
+    <P>Let's consider such variables:</P>
 </P>
 <table border="1" cellspacing="0" cellpadding="0">
-<tbody>
-<tr>
-<td width="242" valign="top">$SOURCE$</td>
-<td width="390" valign="top">Input file with source code</td>
-</tr>
-<tr>
-<td width="242" valign="top">$LSTOUTPUT$</td>
-<td width="390" valign="top">Output file - assembler listing for debugging purposes</td>
-</tr>
-<tr>
-<td width="242" valign="top">$PROGRAM.OBJ$</td>
-<td width="390" valign="top">Output object file</td>
-</tr>
-<tr>
-<td width="242" valign="top">$MACRO.OBJ$</td>
-<td width="390" valign="top">File needed to NASM macro library "io.inc"</td>
-</tr>
-<tr>
-<td width="242" valign="top">$PROGRAM$</td>
-<td width="390" valign="top">Output executable file</td>
-</tr>
-</tbody>
+    <tbody>
+    <tr>
+        <td width="242" valign="top">$SOURCE$</td>
+        <td width="390" valign="top">Input file with source code</td>
+    </tr>
+    <tr>
+        <td width="242" valign="top">$LSTOUTPUT$</td>
+        <td width="390" valign="top">Output file - assembler listing for debugging purposes</td>
+    </tr>
+    <tr>
+        <td width="242" valign="top">$PROGRAM.OBJ$</td>
+        <td width="390" valign="top">Output object file</td>
+    </tr>
+    <tr>
+        <td width="242" valign="top">$MACRO.OBJ$</td>
+        <td width="390" valign="top">File needed to NASM macro library "io.inc"</td>
+    </tr>
+    <tr>
+        <td width="242" valign="top">$PROGRAM$</td>
+        <td width="390" valign="top">Output executable file</td>
+    </tr>
+    </tbody>
 </table>
 <P>
 <P>Thus, by setting options on the "Build" tab, you can change the assembler and the linker as well as set different build configurations. </P>
@@ -203,76 +225,82 @@ gdb (gdb (for debugging).</SPAN></P>
 <H4>Assembler additional configurations:</H4>
 <P>We describe the configuration in the table. The first column shows configuration's assembler. The second - assembly options. Third - linker (standard gcc with its options, the above ld, disable linking, link.exe for MASM with the appropriate options). If the text is enclosed in braces, you can choose any one of the separated by a vertical bar. </P>
 <TABLE border="1" cellspacing="0" cellpadding="0">
-<THEAD>
-<TR>
-<TD>Assembler</TD>
-<TD>Assembly options</TD>
-<TD>Linker</TD>
-</TR>
-</THEAD>
-<TBODY>
-<TR>
-<TD>NASM</TD>
-<TD>-g -f {win32|win64|elf} $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$</TD>
-<TD>{gcc|ld}</TD>
-</TR>
-<TR>
-<TD>GAS</TD>
-<TD>$SOURCE$ -o $PROGRAM.OBJ$ --{32|64} -a=$LSTOUTPUT$</TD>
-<TD>{gcc|ld}</TD>
-</TR>
-<TR>
-<TD>FASM</TD>
-<TD>$SOURCE$ $PROGRAM.OBJ$ -s $LSTOUTPUT$</TD>
-<TD>{gcc|ld}</TD>
-</TR>
-<TR>
-<TD>FASM</TD>
-<TD>$SOURCE$ $PROGRAM$ -s $LSTOUTPUT$</TD>
-<TD>Disable linking</TD>
-</TR>
-<TR>
-<TD>MASM</TD>
-<TD>/nologo /Sn /Sa /c /coff /Fo$PROGRAM.OBJ$ /Fl$LSTOUTPUT$ $SOURCE$</TD>
-<TD>link.exe</TD>
-</TR>
-</TBODY>
+    <THEAD>
+    <TR>
+        <TD>Assembler</TD>
+        <TD>Assembly options</TD>
+        <TD>Linker</TD>
+    </TR>
+    </THEAD>
+    <TBODY>
+    <TR>
+        <TD>NASM</TD>
+        <TD>-g -f {win32|win64|elf} $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$</TD>
+        <TD>{gcc|ld}</TD>
+    </TR>
+    <TR>
+        <TD>GAS</TD>
+        <TD>$SOURCE$ -o $PROGRAM.OBJ$ --{32|64} -a=$LSTOUTPUT$</TD>
+        <TD>{gcc|ld}</TD>
+    </TR>
+    <TR>
+        <TD>FASM</TD>
+        <TD>$SOURCE$ $PROGRAM.OBJ$ -s $LSTOUTPUT$</TD>
+        <TD>{gcc|ld}</TD>
+    </TR>
+    <TR>
+        <TD>FASM</TD>
+        <TD>$SOURCE$ $PROGRAM$ -s $LSTOUTPUT$</TD>
+        <TD>Disable linking</TD>
+    </TR>
+    <TR>
+        <TD>MASM</TD>
+        <TD>/nologo /Sn /Sa /c /coff /Fo$PROGRAM.OBJ$ /Fl$LSTOUTPUT$ $SOURCE$</TD>
+        <TD>link.exe</TD>
+    </TR>
+    </TBODY>
 </TABLE>
 <P>&nbsp;</P>
 <H3>Troubleshooting:</H3>
 <P>
-<B>
-If you have something does not work, check the following items:
-</B>
+    <B>
+        If you have something does not work, check the following items:
+    </B>
 </P>
-<P STYLE="margin-left: 0.5in; text-indent: -0.25in">1)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
+<P STYLE="margin-left: 0.5in; text-indent: -0.25in">
+    1)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
 If gcc used as a linker, then the program entry point should be marked with global label _main (Windows) or main (Linux) or CMAIN from "io.inc" (see initial text). Otherwise entry point should be marked with start label.</SPAN>
 </P>
-<P STYLE="margin-left: 0.5in; text-indent: -0.25in">2)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
+<P STYLE="margin-left: 0.5in; text-indent: -0.25in">
+    2)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
 On Windows, all functions from the standard library should begin with an underscore (for example, _printf).</SPAN>
 </P>
-<P STYLE="margin-left: 0.5in; text-indent: -0.25in">3)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
+<P STYLE="margin-left: 0.5in; text-indent: -0.25in">
+    3)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
 Before debugging make all functions formed frames (mov ebp, esp or mov rbp, rsp). This rule should be done for all functions, including main. If this condition is not met, the correct work of the debugger is not guaranteed.</SPAN>
 </P>
-<P STYLE="margin-left: 0.5in; text-indent: -0.25in">4)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
+<P STYLE="margin-left: 0.5in; text-indent: -0.25in">
+    4)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
 Program code should be contained only in ".text" section (".code" for MASM). If this condition is not met, the correct work of the debugger is not guaranteed.</SPAN>
 </P>
-<P STYLE="margin-left: 0.5in; text-indent: -0.25in">5)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
+<P STYLE="margin-left: 0.5in; text-indent: -0.25in">
+    5)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
 If you want to include a file in program, it should be placed in the folder for include files - "Linux/share/sasm/include/" ("/usr/share/sasm/include/" after installation) in Linux and "Windows/include" ("{program folder after installation}/include/") in Windows.
 However, if above method doesn't work (MASM or any non-standard configuration), you can specify the full path to the file.</SPAN>
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">6)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
 If errors occur during building, check the options on the "Building" tab in the settings. To correct the error, you can try to install one of the alternative configurations of the assembly from "Building system settings" in this guide.
 You can also configure SASM to work with non-standard assemblers, linkers by specifying the path and the options for them. Description of the format options are also located in "Building system settings" chapter.</SPAN></P>
-<P STYLE="margin-left: 0.5in; text-indent: -0.25in">7)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
+<P STYLE="margin-left: 0.5in; text-indent: -0.25in">
+    7)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
 If something still does not work, but worked before, try to use the "Reset all" button in the settings on the "Common" tab.</SPAN>
 </P>
 <P>&nbsp;</P>
 <P>
-Wishes and reports send to e-mail: <a href="mailto:Dman1095@gmail.com">Dman1095@gmail.com</a> or left on <a href="https://github.com/Dman95/SASM/issues">GitHub issues</a>.
+    Wishes and reports send to e-mail: <a href="mailto:Dman1095@gmail.com">Dman1095@gmail.com</a> or left on <a href="https://github.com/Dman95/SASM/issues">GitHub issues</a>.
 </P>
 <P>
-More information and new versions of SASM see on the site: <a href="http://dman95.github.io/SASM/">http://dman95.github.io/SASM/</a>
+    More information and new versions of SASM see on the site: <a href="http://dman95.github.io/SASM/">http://dman95.github.io/SASM/</a>
 </P>
 </BODY>
 </HTML>

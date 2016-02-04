@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -40,26 +40,26 @@
 
 #include "signallocker.h"
 
-SignalLocker::SignalLocker(QObject *parent) :
-    QObject(parent)
-{
-    locked = false;
+SignalLocker::SignalLocker(QObject* parent) :
+	QObject(parent) {
+	locked = false;
 }
 
-bool SignalLocker::tryLock()
-{
-    if (locked)
-        return false;
-    lock();
-    return true;
+bool
+SignalLocker::tryLock() {
+	if (locked)
+		return false;
+	lock();
+	return true;
 }
 
-void SignalLocker::lock()
-{
-    locked = true;
+void
+SignalLocker::lock() {
+	locked = true;
 }
 
-void SignalLocker::unlock()
-{
-    locked = false;
+void
+SignalLocker::unlock() {
+	locked = false;
 }
+

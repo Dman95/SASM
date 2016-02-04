@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -59,82 +59,107 @@ QT_END_NAMESPACE
 
 class LineNumberArea;
 
-class CodeEditor : public RuQPlainTextEdit
-{
-    Q_OBJECT
+class CodeEditor : public RuQPlainTextEdit {
+	Q_OBJECT
 
 public:
-    CodeEditor(QWidget *parent = 0, bool withBeakpoints = true);
-    ~CodeEditor();
+	CodeEditor(QWidget* parent = 0, bool withBeakpoints = true);
+	~CodeEditor();
 
-    void lineNumberAreaPaintEvent(QPaintEvent *event);
-    void lineNumberAreaMousePressEvent(QMouseEvent *event);
-    int lineNumberAreaWidth();
-    void repaintLineNumberArea();
-    bool isMacroOnCurrentDebugLine();
-    int currentDebugLine;
-    bool debugMode;
+	void
+	lineNumberAreaPaintEvent(QPaintEvent* event);
+	void
+	lineNumberAreaMousePressEvent(QMouseEvent* event);
+	int
+	lineNumberAreaWidth();
+	void
+	repaintLineNumberArea();
+	bool
+	isMacroOnCurrentDebugLine();
+	int currentDebugLine;
+	bool debugMode;
 
 public slots:
-    void updateDebugLine(int number);
-    void putTab();
-    void deleteTab();
-    void highlightCurrentLine();
-    void highlightDebugLine(int lineNumber);
-    void setDebugMode(bool mode);
-    QList<int> *getBreakpoints();
-    void setBreakpointOnCurrentLine();
+	void
+	updateDebugLine(int number);
+	void
+	putTab();
+	void
+	deleteTab();
+	void
+	highlightCurrentLine();
+	void
+	highlightDebugLine(int lineNumber);
+	void
+	setDebugMode(bool mode);
+	QList<int>*
+	getBreakpoints();
+	void
+	setBreakpointOnCurrentLine();
 
 protected:
-    void resizeEvent(QResizeEvent *event);
-    void keyPressEvent(QKeyEvent *e);
+	void
+	resizeEvent(QResizeEvent* event);
+	void
+	keyPressEvent(QKeyEvent* e);
 
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dropEvent(QDropEvent *event);
-    
+	void
+	dragEnterEvent(QDragEnterEvent* event);
+	void
+	dropEvent(QDropEvent* event);
+
 private slots:
-    void updateLineNumberAreaWidth(int newBlockCount);
-    void updateLineNumberArea(const QRect &, int);
-    void shiftBreakpoints(int blockCount);
+	void
+	updateLineNumberAreaWidth(int newBlockCount);
+	void
+	updateLineNumberArea(const QRect&, int);
+	void
+	shiftBreakpoints(int blockCount);
 
 private:
-    QWidget *lineNumberArea;
-    int debugAreaWidth;
-    QPixmap debugImage;
-    QPixmap breakpointImage;
-    QList<int> breakpoints; //numbers of lines with breakpoints
-    int firstTopMargin;
-    bool hasBreakpoints;
-    int prevBlockCount;
-    QSettings settings;
+	QWidget* lineNumberArea;
+	int debugAreaWidth;
+	QPixmap debugImage;
+	QPixmap breakpointImage;
+	QList<int> breakpoints; //numbers of lines with breakpoints
+	int firstTopMargin;
+	bool hasBreakpoints;
+	int prevBlockCount;
+	QSettings settings;
 
-signals:
-    void breakpointsChanged(quint64 lineNumber, bool isAdded);
-    void fileOpened(QString path);
+	signals:
+	void
+	breakpointsChanged(quint64 lineNumber, bool isAdded);
+	void
+	fileOpened(QString path);
 };
 
 
-class LineNumberArea : public QWidget
-{
+class LineNumberArea : public QWidget {
 public:
-    LineNumberArea(CodeEditor *editor) : QWidget(editor) {
-        codeEditor = editor;
-    }
+	LineNumberArea(CodeEditor* editor) : QWidget(editor) {
+		codeEditor = editor;
+	}
 
-    QSize sizeHint() const {
-        return QSize(codeEditor->lineNumberAreaWidth(), 0);
-    }
+	QSize
+	sizeHint() const {
+		return QSize(codeEditor->lineNumberAreaWidth(), 0);
+	}
 
 protected:
-    void paintEvent(QPaintEvent *event) {
-        codeEditor->lineNumberAreaPaintEvent(event);
-    }
-    void mousePressEvent(QMouseEvent *event) {
-        codeEditor->lineNumberAreaMousePressEvent(event);
-    }
+	void
+	paintEvent(QPaintEvent* event) {
+		codeEditor->lineNumberAreaPaintEvent(event);
+	}
+
+	void
+	mousePressEvent(QMouseEvent* event) {
+		codeEditor->lineNumberAreaMousePressEvent(event);
+	}
 
 private:
-    CodeEditor *codeEditor;
+	CodeEditor* codeEditor;
 };
 
 #endif
+

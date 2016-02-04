@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -43,29 +43,40 @@
 
 #include "assembler.h"
 
-class GAS : public Assembler
-{
-    Q_OBJECT
+class GAS : public Assembler {
+	Q_OBJECT
+
 public:
-    explicit GAS(bool x86, QObject *parent = 0);
-    QString getAssemblerPath();
-    QString getLinkerPath();
-    quint64 getMainOffset(QFile &lst, QString entryLabel);
-    void parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 offset);
-    void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
-                             QList<QTextCharFormat *> &formats,
-                             bool &multiLineComments,
-                             QRegExp &commentStartExpression,
-                             QRegExp &commentEndExpression);
-    QString getStartText();
-    void putDebugString(CodeEditor *code);
-    QString getAssemblerOptions();
-    QString getLinkerOptions();
-    
-signals:
-    
+	explicit
+	GAS(bool x86, QObject* parent = 0);
+	QString
+	getAssemblerPath();
+	QString
+	getLinkerPath();
+	quint64
+	getMainOffset(QFile& lst, QString entryLabel);
+	void
+	parseLstFile(QFile& lst, QVector<Assembler::LineNum>& lines, quint64 offset);
+	void fillHighligherRules(QVector<Assembler::HighlightingRule>& highlightingRules,
+	                         QList<QTextCharFormat *>& formats,
+	                         bool& multiLineComments,
+	                         QRegExp& commentStartExpression,
+	                         QRegExp& commentEndExpression);
+	QString
+	getStartText();
+	void
+	putDebugString(CodeEditor* code);
+	QString
+	getAssemblerOptions();
+	QString
+	getLinkerOptions();
+
+	signals:
+
 public slots:
-    
+
 };
 
 #endif // GAS_H
+
+

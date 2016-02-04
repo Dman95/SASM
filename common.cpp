@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -40,18 +40,18 @@
 
 #include "common.h"
 
-QString Common::applicationDataPath()
-{
-    #ifdef Q_OS_WIN32
-        QString appDir = QCoreApplication::applicationDirPath();
-        if (! QFile::exists(appDir + "/NASM")) {
-            appDir = QCoreApplication::applicationDirPath() + "/Windows";
-        }
-        if (! QFile::exists(appDir + "/NASM")) {
-            appDir = QCoreApplication::applicationDirPath();
-        }
-        return appDir;
-    #else
+QString
+Common::applicationDataPath() {
+#ifdef Q_OS_WIN32
+	QString appDir = QCoreApplication::applicationDirPath();
+	if (! QFile::exists(appDir + "/NASM")) {
+		appDir = QCoreApplication::applicationDirPath() + "/Windows";
+	}
+	if (! QFile::exists(appDir + "/NASM")) {
+		appDir = QCoreApplication::applicationDirPath();
+	}
+	return appDir;
+#else
         QString path = QCoreApplication::applicationDirPath();
         QString appDir = path.left(path.length() - 4) + QString("/share/sasm"); //replace /bin with /share/sasm
         if (! QFile::exists(appDir)) {
@@ -64,23 +64,24 @@ QString Common::applicationDataPath()
             appDir = QCoreApplication::applicationDirPath();
         }
         return appDir;
-    #endif
+#endif
 }
 
-QString Common::pathInTemp(QString path)
-{
-    QString temp = QDir::tempPath();
-    QChar lastSymbol = temp[temp.length() - 1];
-    if (lastSymbol == QChar('/') || lastSymbol == QChar('\\')) {
-        temp.chop(1);
-    }
-    if (! QFile::exists(temp + "/SASM")) {
-        QDir().mkpath(temp + "/SASM");
-    }
-    QString tempPath = temp + "/SASM";
-    if (!path.isEmpty()) {
-        tempPath += "/" + path;
-    }
-    tempPath = QDir::toNativeSeparators(tempPath);
-    return tempPath;
+QString
+Common::pathInTemp(QString path) {
+	QString temp = QDir::tempPath();
+	QChar lastSymbol = temp[temp.length() - 1];
+	if (lastSymbol == QChar('/') || lastSymbol == QChar('\\')) {
+		temp.chop(1);
+	}
+	if (! QFile::exists(temp + "/SASM")) {
+		QDir().mkpath(temp + "/SASM");
+	}
+	QString tempPath = temp + "/SASM";
+	if (!path.isEmpty()) {
+		tempPath += "/" + path;
+	}
+	tempPath = QDir::toNativeSeparators(tempPath);
+	return tempPath;
 }
+

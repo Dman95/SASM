@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -40,159 +40,155 @@
 
 #include "tab.h"
 
-Tab::Tab(QWidget *parent) :
-    QMainWindow(parent)
-{
-    //Setting code field
-    code = new CodeEditor;
-    setCentralWidget(code);
+Tab::Tab(QWidget* parent) :
+	QMainWindow(parent) {
+	//Setting code field
+	code = new CodeEditor;
+	setCentralWidget(code);
 
-    //Setting input and output fields
-    input = new RuQTextEdit;
-    output = new RuQTextEdit;
-    output->setReadOnly(true);
-    inputLayout = new QVBoxLayout;
-    outputLayout = new QVBoxLayout;
-    inputLayout->addWidget(input);
-    outputLayout->addWidget(output);
+	//Setting input and output fields
+	input = new RuQTextEdit;
+	output = new RuQTextEdit;
+	output->setReadOnly(true);
+	inputLayout = new QVBoxLayout;
+	outputLayout = new QVBoxLayout;
+	inputLayout->addWidget(input);
+	outputLayout->addWidget(output);
 
-    setDockOptions(QMainWindow::AllowNestedDocks | QMainWindow::AnimatedDocks);
+	setDockOptions(QMainWindow::AllowNestedDocks | QMainWindow::AnimatedDocks);
 
-    QDockWidget *inputDock = new QDockWidget(tr("Input"), this);
-    inputDock->setAllowedAreas(Qt::AllDockWidgetAreas);
-    inputWidget = new QWidget(inputDock);
-    inputWidget->setLayout(inputLayout);
-    inputDock->setWidget(inputWidget);
-    inputDock->setFeatures(QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable);
-    addDockWidget(Qt::RightDockWidgetArea, inputDock);
-    inputDock->setObjectName("inputDock");
+	QDockWidget* inputDock = new QDockWidget(tr("Input"), this);
+	inputDock->setAllowedAreas(Qt::AllDockWidgetAreas);
+	inputWidget = new QWidget(inputDock);
+	inputWidget->setLayout(inputLayout);
+	inputDock->setWidget(inputWidget);
+	inputDock->setFeatures(QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable);
+	addDockWidget(Qt::RightDockWidgetArea, inputDock);
+	inputDock->setObjectName("inputDock");
 
-    QDockWidget *outputDock = new QDockWidget(tr("Output"), this);
-    outputDock->setAllowedAreas(Qt::AllDockWidgetAreas);
-    outputWidget = new QWidget(outputDock);
-    outputWidget->setLayout(outputLayout);
-    outputDock->setWidget(outputWidget);
-    outputDock->setFeatures(QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable);
-    addDockWidget(Qt::RightDockWidgetArea, outputDock);
-    outputDock->setObjectName("outputDock");
+	QDockWidget* outputDock = new QDockWidget(tr("Output"), this);
+	outputDock->setAllowedAreas(Qt::AllDockWidgetAreas);
+	outputWidget = new QWidget(outputDock);
+	outputWidget->setLayout(outputLayout);
+	outputDock->setWidget(outputWidget);
+	outputDock->setFeatures(QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable);
+	addDockWidget(Qt::RightDockWidgetArea, outputDock);
+	outputDock->setObjectName("outputDock");
 
-    //Setting io and code fonts
-    setFonts();
+	//Setting io and code fonts
+	setFonts();
 
-    //restore state
-    QSettings settings("SASM Project", "SASM");
-    restoreGeometry(settings.value("tabgeometry").toByteArray());
-    restoreState(settings.value("tabwindowstate").toByteArray());
+	//restore state
+	QSettings settings("SASM Project", "SASM");
+	restoreGeometry(settings.value("tabgeometry").toByteArray());
+	restoreState(settings.value("tabwindowstate").toByteArray());
 }
 
-void Tab::setFonts()
-{
-    QSettings settings("SASM Project", "SASM");
+void
+Tab::setFonts() {
+	QSettings settings("SASM Project", "SASM");
 
-    QFont codeFont;
-    codeFont.setPointSize(settings.value("fontsize", 12).toInt());
-    codeFont.setFamily(settings.value("fontfamily", QString("Courier")).value<QString>());
-    codeFont.setStyleHint(QFont::Monospace);
-    code->setFont(codeFont);
-    code->repaintLineNumberArea();
+	QFont codeFont;
+	codeFont.setPointSize(settings.value("fontsize", 12).toInt());
+	codeFont.setFamily(settings.value("fontfamily", QString("Courier")).value<QString>());
+	codeFont.setStyleHint(QFont::Monospace);
+	code->setFont(codeFont);
+	code->repaintLineNumberArea();
 
-    QFont logFont;
-    logFont.setPointSize(settings.value("fontsize", 12).toInt());
-    input->setFont(logFont);
-    output->setFont(logFont);
+	QFont logFont;
+	logFont.setPointSize(settings.value("fontsize", 12).toInt());
+	input->setFont(logFont);
+	output->setFont(logFont);
 }
 
 
-
-
-
-QTextDocument * Tab::getCodeDocument()
-{
-    return code->document();
+QTextDocument*
+Tab::getCodeDocument() {
+	return code->document();
 }
 
-QString Tab::getCurrentFilePath()
-{
-    return currentFilePath;
+QString
+Tab::getCurrentFilePath() {
+	return currentFilePath;
 }
 
-void Tab::saveCodeToFile(const QString &filePath, Assembler *assembler, bool changeCodeModifiedFlag, bool debugMode)
-{
-    QFile outfile;
-    outfile.setFileName(filePath);
-    outfile.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream out(&outfile);
-    if (debugMode) {
-        assembler->putDebugString(code);
-    }
-    out << code->toPlainText();
-    if (changeCodeModifiedFlag) {
-        currentFilePath = filePath;
-        code->document()->setModified(false);
-    }
-    outfile.close();
+void
+Tab::saveCodeToFile(const QString& filePath, Assembler* assembler, bool changeCodeModifiedFlag, bool debugMode) {
+	QFile outfile;
+	outfile.setFileName(filePath);
+	outfile.open(QIODevice::WriteOnly | QIODevice::Text);
+	QTextStream out(&outfile);
+	if (debugMode) {
+		assembler->putDebugString(code);
+	}
+	out << code->toPlainText();
+	if (changeCodeModifiedFlag) {
+		currentFilePath = filePath;
+		code->document()->setModified(false);
+	}
+	outfile.close();
 }
 
-void Tab::loadCodeFromFile(const QString &filePath)
-{
-    QFile file;
-    file.setFileName(filePath);
-    file.open(QIODevice::ReadOnly);
-    QTextStream text(&file);
-    QString source = text.readAll();
-    code->setPlainText(source);
-    currentFilePath = filePath;
-    code->document()->setModified(false);
-    file.close();
+void
+Tab::loadCodeFromFile(const QString& filePath) {
+	QFile file;
+	file.setFileName(filePath);
+	file.open(QIODevice::ReadOnly);
+	QTextStream text(&file);
+	QString source = text.readAll();
+	code->setPlainText(source);
+	currentFilePath = filePath;
+	code->document()->setModified(false);
+	file.close();
 }
 
-void Tab::saveInputToFile(const QString &filePath)
-{
-    QFile outfile;
-    outfile.setFileName(filePath);
-    outfile.open(QIODevice::WriteOnly | QIODevice::Text);
-    QTextStream out(&outfile);
-    out << input->toPlainText();
-    outfile.close();
+void
+Tab::saveInputToFile(const QString& filePath) {
+	QFile outfile;
+	outfile.setFileName(filePath);
+	outfile.open(QIODevice::WriteOnly | QIODevice::Text);
+	QTextStream out(&outfile);
+	out << input->toPlainText();
+	outfile.close();
 }
 
-void Tab::loadOutputFromFile(const QString &filePath)
-{
-    QFile outputFile;
-    outputFile.setFileName(filePath);
-    outputFile.open(QIODevice::ReadOnly);
-    QTextStream programOut(&outputFile);
-    QString out = programOut.readAll();
-    output->setPlainText(out);
-    outputFile.close();
+void
+Tab::loadOutputFromFile(const QString& filePath) {
+	QFile outputFile;
+	outputFile.setFileName(filePath);
+	outputFile.open(QIODevice::ReadOnly);
+	QTextStream programOut(&outputFile);
+	QString out = programOut.readAll();
+	output->setPlainText(out);
+	outputFile.close();
 }
 
-void Tab::appendOutput(QString msg)
-{
-    msg = output->toPlainText().right(2000) + msg.right(2000);
-    msg = msg.right(2000);
-    output->setText(msg);
-    //scroll
-    QTextCursor cursor = output->textCursor();
-    cursor.movePosition(QTextCursor::End);
-    output->setTextCursor(cursor);
+void
+Tab::appendOutput(QString msg) {
+	msg = output->toPlainText().right(2000) + msg.right(2000);
+	msg = msg.right(2000);
+	output->setText(msg);
+	//scroll
+	QTextCursor cursor = output->textCursor();
+	cursor.movePosition(QTextCursor::End);
+	output->setTextCursor(cursor);
 }
 
-void Tab::clearOutput()
-{
-    output->clear();
+void
+Tab::clearOutput() {
+	output->clear();
 }
 
-Tab::~Tab()
-{
-    delete input;
-    delete output;
+Tab::~Tab() {
+	delete input;
+	delete output;
 
-    delete inputLayout;
-    delete outputLayout;
+	delete inputLayout;
+	delete outputLayout;
 
-    delete code;
+	delete code;
 
-    delete inputWidget;
-    delete outputWidget;
+	delete inputWidget;
+	delete outputWidget;
 }
+

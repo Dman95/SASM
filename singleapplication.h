@@ -3,7 +3,7 @@
 
 // Change this to inherit from QGuiApplication or QCoreApplication
 #ifndef QAPPLICATION_CLASS
-  #define QAPPLICATION_CLASS QApplication
+#define QAPPLICATION_CLASS QApplication
 #endif
 
 #define  QUOTE(C) #C
@@ -16,21 +16,26 @@ class SingleApplicationPrivate;
  * @brief The SingleApplication class handles multipe instances of the same Application
  * @see QApplication
  */
-class SingleApplication : public QAPPLICATION_CLASS
-{
-  Q_OBJECT
-public:
-  explicit SingleApplication(int&, char *[]);
-  ~SingleApplication();
+class SingleApplication : public QAPPLICATION_CLASS {
+	Q_OBJECT
 
-signals:
-  void otherInstanceDataReceived(QByteArray ba);
+public:
+	explicit
+	SingleApplication(int&, char*[]);
+	~SingleApplication();
+
+	signals:
+	void
+	otherInstanceDataReceived(QByteArray ba);
 
 private slots:
-  void slotConnectionEstablished();
+	void
+	slotConnectionEstablished();
 
 private:
-  SingleApplicationPrivate *d_ptr;
+	SingleApplicationPrivate* d_ptr;
 };
 
 #endif // SINGLE_APPLICATION_H
+
+

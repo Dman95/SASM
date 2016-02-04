@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
 ** SASM - simple IDE for assembler development
 ** Copyright (C) 2013 Dmitriy Manushin
 ** Contact: site: http://dman95.github.io/SASM/
@@ -40,114 +40,115 @@
 
 #include "ruqtextedit.h"
 
-RuQTextEdit::RuQTextEdit(QWidget *parent) :
-    QTextEdit(parent)
-{
-    QSettings settings("SASM Project", "SASM");
-    QPalette palette = this->palette();
-    palette.setColor(QPalette::Base, settings.value("backgroundcolor", palette.color(QPalette::Base)).value<QColor>());
-    palette.setColor(QPalette::Text, settings.value("fontcolor", palette.color(QPalette::Text)).value<QColor>());
-    setPalette(palette);
+RuQTextEdit::RuQTextEdit(QWidget* parent) :
+	QTextEdit(parent) {
+	QSettings settings("SASM Project", "SASM");
+	QPalette palette = this->palette();
+	palette.setColor(QPalette::Base, settings.value("backgroundcolor", palette.color(QPalette::Base)).value<QColor>());
+	palette.setColor(QPalette::Text, settings.value("fontcolor", palette.color(QPalette::Text)).value<QColor>());
+	setPalette(palette);
 
-    undoAction = new QAction(tr("Undo"), this);
-    undoAction->setShortcut(QKeySequence::Undo);
-    connect(undoAction, SIGNAL(triggered()), this, SLOT(undo()));
+	undoAction = new QAction(tr("Undo"), this);
+	undoAction->setShortcut(QKeySequence::Undo);
+	connect(undoAction, SIGNAL(triggered()), this, SLOT(undo()));
 
-    redoAction = new QAction(tr("Redo"), this);
-    redoAction->setShortcut(QKeySequence::Redo);
-    connect(redoAction, SIGNAL(triggered()), this, SLOT(redo()));
+	redoAction = new QAction(tr("Redo"), this);
+	redoAction->setShortcut(QKeySequence::Redo);
+	connect(redoAction, SIGNAL(triggered()), this, SLOT(redo()));
 
-    cutAction = new QAction(tr("Cut"), this);
-    cutAction->setShortcut(QKeySequence::Cut);
-    connect(cutAction, SIGNAL(triggered()), this, SLOT(cut()));
+	cutAction = new QAction(tr("Cut"), this);
+	cutAction->setShortcut(QKeySequence::Cut);
+	connect(cutAction, SIGNAL(triggered()), this, SLOT(cut()));
 
-    copyAction = new QAction(tr("Copy"), this);
-    copyAction->setShortcut(QKeySequence::Copy);
-    connect(copyAction, SIGNAL(triggered()), this, SLOT(copy()));
+	copyAction = new QAction(tr("Copy"), this);
+	copyAction->setShortcut(QKeySequence::Copy);
+	connect(copyAction, SIGNAL(triggered()), this, SLOT(copy()));
 
-    pasteAction = new QAction(tr("Paste"), this);
-    pasteAction->setShortcut(QKeySequence::Paste);
-    connect(pasteAction, SIGNAL(triggered()), this, SLOT(paste()));
+	pasteAction = new QAction(tr("Paste"), this);
+	pasteAction->setShortcut(QKeySequence::Paste);
+	connect(pasteAction, SIGNAL(triggered()), this, SLOT(paste()));
 
-    deleteAction = new QAction(tr("Delete"), this);
-    deleteAction->setShortcut(QKeySequence::Delete);
-    connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteSelected()));
+	deleteAction = new QAction(tr("Delete"), this);
+	deleteAction->setShortcut(QKeySequence::Delete);
+	connect(deleteAction, SIGNAL(triggered()), this, SLOT(deleteSelected()));
 
-    selectAllAction = new QAction(tr("Select all"), this);
-    selectAllAction->setShortcut(QKeySequence::SelectAll);
-    connect(selectAllAction, SIGNAL(triggered()), this, SLOT(selectAll()));
+	selectAllAction = new QAction(tr("Select all"), this);
+	selectAllAction->setShortcut(QKeySequence::SelectAll);
+	connect(selectAllAction, SIGNAL(triggered()), this, SLOT(selectAll()));
 
-    clearAction = new QAction(tr("Clear"), this);
-    connect(clearAction, SIGNAL(triggered()), this, SLOT(clear()));
+	clearAction = new QAction(tr("Clear"), this);
+	connect(clearAction, SIGNAL(triggered()), this, SLOT(clear()));
 
-    undoAction->setEnabled(false);
-    redoAction->setEnabled(false);
-    connect(this, SIGNAL(undoAvailable(bool)), undoAction, SLOT(setEnabled(bool)));
-    connect(this, SIGNAL(redoAvailable(bool)), redoAction, SLOT(setEnabled(bool)));
+	undoAction->setEnabled(false);
+	redoAction->setEnabled(false);
+	connect(this, SIGNAL(undoAvailable(bool)), undoAction, SLOT(setEnabled(bool)));
+	connect(this, SIGNAL(redoAvailable(bool)), redoAction, SLOT(setEnabled(bool)));
 }
 
-void RuQTextEdit::contextMenuEvent(QContextMenuEvent *e)
-{
-    contextMenu = new QMenu;
-    QTextCursor textCursor = this->textCursor();
+void
+RuQTextEdit::contextMenuEvent(QContextMenuEvent* e) {
+	contextMenu = new QMenu;
+	QTextCursor textCursor = this->textCursor();
 
-    //if nothing selected
-    if (textCursor.selectionEnd() - textCursor.selectionStart() <= 0) {
-        cutAction->setEnabled(false);
-        copyAction->setEnabled(false);
-        deleteAction->setEnabled(false);
-    } else {
-        cutAction->setEnabled(true);
-        copyAction->setEnabled(true);
-        deleteAction->setEnabled(true);
-    }
+	//if nothing selected
+	if (textCursor.selectionEnd() - textCursor.selectionStart() <= 0) {
+		cutAction->setEnabled(false);
+		copyAction->setEnabled(false);
+		deleteAction->setEnabled(false);
+	}
+	else {
+		cutAction->setEnabled(true);
+		copyAction->setEnabled(true);
+		deleteAction->setEnabled(true);
+	}
 
-    if (isReadOnly()) {
-        undoAction->setVisible(false);
-        redoAction->setVisible(false);
-        cutAction->setVisible(false);
-        pasteAction->setVisible(false);
-        deleteAction->setVisible(false);
-        clearAction->setVisible(true);
-    } else {
-        undoAction->setVisible(true);
-        redoAction->setVisible(true);
-        cutAction->setVisible(true);
-        pasteAction->setVisible(true);
-        deleteAction->setVisible(true);
-        clearAction->setVisible(false);
-    }
+	if (isReadOnly()) {
+		undoAction->setVisible(false);
+		redoAction->setVisible(false);
+		cutAction->setVisible(false);
+		pasteAction->setVisible(false);
+		deleteAction->setVisible(false);
+		clearAction->setVisible(true);
+	}
+	else {
+		undoAction->setVisible(true);
+		redoAction->setVisible(true);
+		cutAction->setVisible(true);
+		pasteAction->setVisible(true);
+		deleteAction->setVisible(true);
+		clearAction->setVisible(false);
+	}
 
-    contextMenu->addAction(undoAction);
-    contextMenu->addAction(redoAction);
-    contextMenu->addSeparator();
-    contextMenu->addAction(cutAction);
-    contextMenu->addAction(copyAction);
-    contextMenu->addAction(pasteAction);
-    contextMenu->addAction(deleteAction);
-    contextMenu->addSeparator();
-    contextMenu->addAction(selectAllAction);
-    contextMenu->addAction(clearAction);
+	contextMenu->addAction(undoAction);
+	contextMenu->addAction(redoAction);
+	contextMenu->addSeparator();
+	contextMenu->addAction(cutAction);
+	contextMenu->addAction(copyAction);
+	contextMenu->addAction(pasteAction);
+	contextMenu->addAction(deleteAction);
+	contextMenu->addSeparator();
+	contextMenu->addAction(selectAllAction);
+	contextMenu->addAction(clearAction);
 
-    contextMenu->exec(e->globalPos());
-    if (!contextMenu.isNull())
-        delete contextMenu;
+	contextMenu->exec(e->globalPos());
+	if (!contextMenu.isNull())
+		delete contextMenu;
 }
 
-void RuQTextEdit::deleteSelected()
-{
-    QTextCursor textCursor = this->textCursor();
-    textCursor.removeSelectedText();
+void
+RuQTextEdit::deleteSelected() {
+	QTextCursor textCursor = this->textCursor();
+	textCursor.removeSelectedText();
 }
 
-RuQTextEdit::~RuQTextEdit()
-{
-    delete undoAction;
-    delete redoAction;
-    delete cutAction;
-    delete copyAction;
-    delete pasteAction;
-    delete deleteAction;
-    delete selectAllAction;
-    delete clearAction;
+RuQTextEdit::~RuQTextEdit() {
+	delete undoAction;
+	delete redoAction;
+	delete cutAction;
+	delete copyAction;
+	delete pasteAction;
+	delete deleteAction;
+	delete selectAllAction;
+	delete clearAction;
 }
+
