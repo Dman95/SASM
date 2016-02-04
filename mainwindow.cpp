@@ -42,6 +42,7 @@
 
 MainWindow::MainWindow(const QStringList& args, QWidget* parent)
 	: QMainWindow(parent), settings("SASM Project", "SASM") {
+	/** @brief The set window title. */
 	setWindowTitle("SASM");
 	setWindowIcon(QIcon(":images/mainIcon.png"));
 
@@ -52,10 +53,10 @@ MainWindow::MainWindow(const QStringList& args, QWidget* parent)
 		SLOT(otherInstanceDataReceived(QByteArray))
 	);
 
-	//set save and open directory
+	/** @brief set save and open directory. */
 	saveOpenDirectory = settings.value("saveopendirectory", QString(Common::applicationDataPath() + "/Projects")).toString();
 
-	//initial variables
+	/** @brief initial variables. */
 	programIsBuilded = false;
 	prevCodeEditor = 0;
 	findDialog = 0;
@@ -72,11 +73,11 @@ MainWindow::MainWindow(const QStringList& args, QWidget* parent)
 	memoryDock = 0;
 	registersDock = 0;
 
-	//initialize assembler
+	/** @brief initialize assembler. */
 	assembler = 0;
 	recreateAssembler(true);
 
-	//set code field start text
+	/** @brief set code field start text. */
 	startText = settings.value("starttext", QString()).toString();
 	if (startText.isEmpty()) {
 		settings.setValue("starttext", assembler->getStartText());
@@ -96,16 +97,17 @@ MainWindow::MainWindow(const QStringList& args, QWidget* parent)
 	refreshEditMenu();
 	setAcceptDrops(true);
 
-	//restore log splitter state
+	// restore log splitter state.
 	splitter->restoreState(settings.value("logsplitterstate").toByteArray());
 
-	//open documents from command line
+	// open documents from command line.
 	for (int i = 1; i < args.size(); i++)
 		openFile(args[i]);
 }
 
 void
 MainWindow::enableOrDisableLinkingEdit(int disableLinkingCheckboxState) {
+	/** @brief true to enable, false to disable. */
 	bool enabled = (disableLinkingCheckboxState == Qt::Unchecked);
 	settingsUi.linkingOptionsEdit->setEnabled(enabled);
 	settingsUi.linkerPathEdit->setEnabled(enabled);
@@ -113,21 +115,21 @@ MainWindow::enableOrDisableLinkingEdit(int disableLinkingCheckboxState) {
 
 void
 MainWindow::initUi() {
-	//Resize
+	/** @brief Resize. */
 	settings.beginGroup("MainWindow");
 	resize(settings.value("size", QSize(1024, 650)).toSize()); //default 1024x650
 	move(settings.value("pos", QPoint(200, 200)).toPoint());
-	//set maximized
+	// set maximized.
 	setWindowState(windowState() | (Qt::WindowState) settings.value("maximized", (int) Qt::WindowNoState).toInt());
 	settings.endGroup();
 
-	//Get Started window
+	/** @brief Get Started window. */
 	getStartedWidget = new GetStartedWidget;
 	connect(getStartedWidget->newButton, SIGNAL(clicked()), this, SLOT(newFile()));
 	connect(getStartedWidget->openButton, SIGNAL(clicked()), this, SLOT(openFile()));
 	connect(getStartedWidget->prevSessionButton, SIGNAL(clicked()), this, SLOT(restorePrevSession()));
 
-	//Create form
+	/** @brief Create form. */
 	splitter = new QSplitter;
 	splitter->setOrientation(Qt::Vertical);
 	workLayout = new QVBoxLayout;
@@ -137,24 +139,24 @@ MainWindow::initUi() {
 	workWidget = new QWidget;
 	workWidget->setLayout(workLayout);
 
-	//Stacked widget
+	/** @brief Stacked widget. */
 	mainWidget = new QStackedWidget;
 	mainWidget->addWidget(getStartedWidget);
 	mainWidget->addWidget(workWidget);
 	mainWidget->setCurrentIndex(0); //get started
 	setCentralWidget(mainWidget);
 
-	//Create highlighter
+	/** @brief Create highlighter. */
 	highlighter = new Highlighter(assembler);
 
-	//Create tabs
+	/** @brief Create tabs. */
 	tabs = new QTabWidget;
 	connect(tabs, SIGNAL(tabCloseRequested(int)), this, SLOT(deleteTab(int)));
 	connect(tabs, SIGNAL(currentChanged(int)), this, SLOT(changeCurrentTab(int)));
 	tabs->setTabsClosable(true);
 	tabs->setMovable(true);
 
-	//Create compiler field
+	/** @brief Create compiler field. */
 	compilerOut = new RuQTextEdit;
 	compilerOut->setReadOnly(true);
 	QFont compilerOutFont;
@@ -162,10 +164,10 @@ MainWindow::initUi() {
 	compilerOut->setFont(compilerOutFont);
 	compilerOut->setText(tr("Build log:") + '\n');
 
-	//Create gdb command widget
+	/** @brief Create gdb command widget. */
 	debugAnyCommandWidget = new DebugAnyCommandWidget;
 
-	//Add widgets on splitter
+	// Add widgets on splitter.
 	splitter->addWidget(tabs);
 	splitter->addWidget(compilerOut);
 	workLayout->addWidget(debugAnyCommandWidget);
@@ -173,7 +175,7 @@ MainWindow::initUi() {
 	debugAnyCommandWidget->close();
 	debugAnyCommandWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
 	splitter->setSizes(QList<int>() << splitter->size().height() - compilerOutSize << compilerOutSize);
-	//Restore previous session if it in settings
+	// Restore previous session if it in settings.
 	if (settings.value("startwindow", 0).toInt() == 1)
 		restorePrevSession(true);
 }
@@ -481,6 +483,21 @@ MainWindow::createActions() {
 	aboutAction = new QAction(tr("About"), this);
 	connect(aboutAction, SIGNAL(triggered()), this, SLOT(openAbout()));
 }
+
+
+void
+
+/**
+ * Constructor: MainWindow::createButtons
+ *
+ * @fn MainWindow::createButtons()
+ *
+ * @brief  Not implemented.
+ *
+ * @date 08:00 04 February 2016
+ */
+
+MainWindow::createButtons() {}
 
 void
 MainWindow::createToolBars() {
@@ -1601,6 +1618,22 @@ MainWindow::writeSettings() {
 	//splitters state
 	settings.setValue("logsplitterstate", splitter->saveState());
 }
+
+void
+
+/**
+ * Constructor: MainWindow::setupEditor
+ *
+ * @fn MainWindow::setupEditor(int i)
+ *
+ * @brief Not implemented.
+ *
+ * @date 08:01 04 February 2016
+ *
+ * @param i Zero-based index of the.
+ */
+
+MainWindow::setupEditor(int i) {}
 
 void
 MainWindow::openSettings() {
