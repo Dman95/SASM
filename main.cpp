@@ -50,7 +50,9 @@
 int
 main(int argc, char* argv[]) {
 	//    QApplication a(argc, argv);
+	/** @brief Name of the application set application. */
 	QApplication::setApplicationName("SASM");
+	/** @brief Name of the application set organization. */
 	QApplication::setOrganizationName("YourOrganizationName");
 
 	SingleApplication a(argc, argv);
@@ -58,12 +60,16 @@ main(int argc, char* argv[]) {
 	QTranslator translator, qtTranslator;
 	QSettings settings("SASM Project", "SASM");
 #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+        /** @brief The codec. */
         QTextCodec *codec = QTextCodec::codecForName("UTF-8");
         QTextCodec::setCodecForCStrings(codec);
 #endif
-	if (!settings.contains("language")) { //language choosing
+	if (!settings.contains("language")) { //	language choosing
+		/** @brief The message box. */
 		QMessageBox msgBox;
+		/** @brief The rus button. */
 		QPushButton* rusButton = msgBox.addButton(QString("Русский"), QMessageBox::NoRole);
+		/** @brief The eng button. */
 		QPushButton* engButton = msgBox.addButton(QString("English"), QMessageBox::NoRole);
 		msgBox.setWindowTitle(QString("Choose language"));
 		msgBox.setText(QString("Choose language / Выберите язык"));
@@ -76,7 +82,7 @@ main(int argc, char* argv[]) {
 			settings.setValue("language", 1);
 		}
 	}
-	if (settings.value("language", 0).toInt() == 0) { //russian language
+	if (settings.value("language", 0).toInt() == 0) { //	Russian language
 		translator.load(":/translations/language_ru.qm");
 		a.installTranslator(&translator);
 
