@@ -1526,14 +1526,14 @@
          <layout class="QVBoxLayout" name="verticalLayout_5">
           <item>
            <layout class="QGridLayout" name="gridLayout_4">
-            <item row="3" column="0">
+            <item row="4" column="0">
              <widget class="QLabel" name="fontLabel_2">
               <property name="text">
                <string>Font:</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
+            <item row="4" column="1">
              <widget class="QPushButton" name="fontColorButton">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1576,14 +1576,14 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="2">
+            <item row="5" column="2">
              <widget class="QCheckBox" name="currentLineCheckBox">
               <property name="text">
                <string>Enable highlighting</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="1">
+            <item row="6" column="1">
              <widget class="QPushButton" name="debugLineColorButton">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1626,21 +1626,21 @@
               </property>
              </widget>
             </item>
-            <item row="4" column="0">
+            <item row="5" column="0">
              <widget class="QLabel" name="currentLineLabel">
               <property name="text">
                <string>Current line:</string>
               </property>
              </widget>
             </item>
-            <item row="5" column="0">
+            <item row="6" column="0">
              <widget class="QLabel" name="debugLineLabel">
               <property name="text">
                <string>Debugging line:</string>
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
+            <item row="5" column="1">
              <widget class="QPushButton" name="currentLineColorButton">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -1742,6 +1742,56 @@
             </item>
             <item row="2" column="1">
              <widget class="QPushButton" name="lineNumberPanelColorButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>23</width>
+                <height>23</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>23</width>
+                <height>23</height>
+               </size>
+              </property>
+              <property name="baseSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="autoDefault">
+               <bool>false</bool>
+              </property>
+              <property name="default">
+               <bool>false</bool>
+              </property>
+              <property name="flat">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="lineNumberFontLabel">
+              <property name="text">
+               <string>Line number font:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QPushButton" name="lineNumberFontColorButton">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
