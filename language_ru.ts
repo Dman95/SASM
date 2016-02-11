@@ -279,7 +279,7 @@
     <message>
         <location filename="mainwindow.cpp" line="237"/>
         <location filename="mainwindow.cpp" line="474"/>
-        <location filename="mainwindow.cpp" line="2106"/>
+        <location filename="mainwindow.cpp" line="2108"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
@@ -405,22 +405,22 @@
         <translation>Приостановить</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1794"/>
+        <location filename="mainwindow.cpp" line="1795"/>
         <source>Please set path to MASM assembler (ml.exe) and linker (link.exe) on your computer </source>
         <translation>Пожалуйста, укажите пути до ассемблера (ml.exe) и компоновщика (link.exe) MASM на Вашем компьютере </translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1795"/>
+        <location filename="mainwindow.cpp" line="1796"/>
         <source>in fields &quot;Assembler path&quot; and &quot;Linker path&quot; above.</source>
         <translation>в полях &quot;Ассемблер&quot; и &quot;Компоновщик&quot; выше.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2114"/>
+        <location filename="mainwindow.cpp" line="2116"/>
         <source>SASM (SimpleASM) </source>
         <translation>SASM (SimpleASM) </translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2115"/>
+        <location filename="mainwindow.cpp" line="2117"/>
         <source>simple Open Source IDE for NASM, MASM, GAS and FASM assembler languages.</source>
         <translation>простая Open Source среда разработки для языков ассемблера NASM, MASM, GAS и FASM.</translation>
     </message>
@@ -560,7 +560,7 @@ All files (*.*)</source>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="762"/>
-        <location filename="mainwindow.cpp" line="2019"/>
+        <location filename="mainwindow.cpp" line="2021"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
@@ -571,7 +571,7 @@ All files (*.*)</source>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="764"/>
-        <location filename="mainwindow.cpp" line="2020"/>
+        <location filename="mainwindow.cpp" line="2022"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -617,7 +617,7 @@ All files (*.*)</source>
         <translation type="obsolete">Программа завершена аварийно!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2119"/>
+        <location filename="mainwindow.cpp" line="2121"/>
         <source>Development and idea - Dmitriy Manushin</source>
         <translation>Идея и разработка - Дмитрий Манушин</translation>
     </message>
@@ -663,7 +663,7 @@ All files (*.*)</source>
         <translation>Внимание! В ходе построения обнаружены ошибки:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2021"/>
+        <location filename="mainwindow.cpp" line="2023"/>
         <source>Warning!</source>
         <translation>Внимание!</translation>
     </message>
@@ -734,12 +734,12 @@ All files (*.*)</source>
         <translation>В предыдущей сессии не было открыто ни одной сохранённой вкладки!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2022"/>
+        <location filename="mainwindow.cpp" line="2024"/>
         <source>All settings will be deleted and all unsaved data will be lost. Are you sure?</source>
         <translation>Все настройки будут удалены, а несохранённые данные потеряны! Вы уверены?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2113"/>
+        <location filename="mainwindow.cpp" line="2115"/>
         <source>About SASM</source>
         <translation>О программе</translation>
     </message>
@@ -748,17 +748,17 @@ All files (*.*)</source>
         <translation type="obsolete">SASM (SimpleASM) 2.0 Beta - простая Open Source среда разработки на языке ассемблера NASM.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2116"/>
+        <location filename="mainwindow.cpp" line="2118"/>
         <source>Licensed under the GNU GPL v3.0</source>
         <translation>Распространяется по лицензии GNU GPL v3.0</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2117"/>
+        <location filename="mainwindow.cpp" line="2119"/>
         <source>Based on the Qt.</source>
         <translation>Основана на Qt.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2118"/>
+        <location filename="mainwindow.cpp" line="2120"/>
         <source>Copyright © 2013 Dmitriy Manushin</source>
         <oldsource>Copyright Â© 2013 Dmitriy Manushin</oldsource>
         <translation>Copyright © 2013 Дмитрий Манушин</translation>
@@ -768,12 +768,12 @@ All files (*.*)</source>
         <translation type="obsolete">Разработка - Dmitriy Manushin</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2120"/>
+        <location filename="mainwindow.cpp" line="2122"/>
         <source>Icon and advices - Alick Gaybullaev</source>
         <translation>Иконка и советы - Алик Гайбуллаев</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2121"/>
+        <location filename="mainwindow.cpp" line="2123"/>
         <source>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com</source>
         <oldsource>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com
 
@@ -781,27 +781,27 @@ All files (*.*)</source>
         <translation>Пожелания и сообщения об ошибках отправляйте на адрес Dman1095@gmail.com</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2122"/>
+        <location filename="mainwindow.cpp" line="2124"/>
         <source>More information on the site: http://dman95.github.io/SASM/</source>
         <translation>Сайт программы: http://dman95.github.io/SASM/</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2123"/>
+        <location filename="mainwindow.cpp" line="2125"/>
         <source>Donate:</source>
         <translation>Поддержите проект:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2124"/>
+        <location filename="mainwindow.cpp" line="2126"/>
         <source>PayPal - Dman1095@gmail.com</source>
         <translation>PayPal - Dman1095@gmail.com</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2125"/>
+        <location filename="mainwindow.cpp" line="2127"/>
         <source>WMZ - Z282016332582</source>
         <translation>WMZ - Z282016332582</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2126"/>
+        <location filename="mainwindow.cpp" line="2128"/>
         <source>WMR - R331674303467</source>
         <translation>WMR - R331674303467</translation>
     </message>
@@ -954,7 +954,7 @@ WMR - R331674303467</translation>
     <message>
         <location filename="settings.ui" line="51"/>
         <location filename="settings.ui" line="66"/>
-        <location filename="settings.ui" line="1524"/>
+        <location filename="settings.ui" line="1558"/>
         <source>Common</source>
         <translation>Общие</translation>
     </message>
@@ -1004,7 +1004,12 @@ WMR - R331674303467</translation>
         <translation>Нет, показывать только основные</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="235"/>
+        <location filename="settings.ui" line="225"/>
+        <source>Insert debug string:</source>
+        <translation>Добавлять отладочную строку:</translation>
+    </message>
+    <message>
+        <location filename="settings.ui" line="269"/>
         <source>Code editor</source>
         <translation>Редактор кода</translation>
     </message>
@@ -1025,201 +1030,201 @@ WMR - R331674303467</translation>
         <translation type="obsolete">Справа</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="384"/>
+        <location filename="settings.ui" line="418"/>
         <source>Colors</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="390"/>
+        <location filename="settings.ui" line="424"/>
         <source>Syntax highlighting</source>
         <translation>Подсветка синтаксиса</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="409"/>
+        <location filename="settings.ui" line="443"/>
         <source>System:</source>
         <translation>Препроцессор:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="515"/>
+        <location filename="settings.ui" line="549"/>
         <source>Bold:</source>
         <translation>Жирный:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="535"/>
+        <location filename="settings.ui" line="569"/>
         <source>Italic:</source>
         <translation>Курсив:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="542"/>
+        <location filename="settings.ui" line="576"/>
         <source>Foreground:</source>
         <translation>Текст:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="760"/>
+        <location filename="settings.ui" line="794"/>
         <source>Keywords:</source>
         <translation>Ключевые слова:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="767"/>
-        <location filename="settings.ui" line="1689"/>
+        <location filename="settings.ui" line="801"/>
+        <location filename="settings.ui" line="1723"/>
         <source>Background:</source>
         <translation>Фон:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="817"/>
+        <location filename="settings.ui" line="851"/>
         <source>Numbers:</source>
         <translation>Числа:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="867"/>
+        <location filename="settings.ui" line="901"/>
         <source>Labels:</source>
         <translation>Метки:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="874"/>
+        <location filename="settings.ui" line="908"/>
         <source>Comments:</source>
         <translation>Комментарии:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="967"/>
+        <location filename="settings.ui" line="1001"/>
         <source>Quotation:</source>
         <translation>Строки:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1280"/>
+        <location filename="settings.ui" line="1314"/>
         <source>Memory:</source>
         <translation>Память:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1287"/>
+        <location filename="settings.ui" line="1321"/>
         <source>I/O macro:</source>
         <translation>I/O макросы:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1320"/>
+        <location filename="settings.ui" line="1354"/>
         <source>Registers:</source>
         <translation>Регистры:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1632"/>
+        <location filename="settings.ui" line="1666"/>
         <source>Current line:</source>
         <translation>Текущая строка:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1639"/>
+        <location filename="settings.ui" line="1673"/>
         <source>Debugging line:</source>
         <translation>Строка отладки:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1739"/>
+        <location filename="settings.ui" line="1773"/>
         <source>Line number panel:</source>
         <translation>Панель с номерами строк:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1789"/>
+        <location filename="settings.ui" line="1823"/>
         <source>Line number font:</source>
         <translation>Номера строк:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1881"/>
+        <location filename="settings.ui" line="1915"/>
         <source>Build</source>
         <translation>Построение</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1892"/>
+        <location filename="settings.ui" line="1926"/>
         <source>Mode:</source>
         <translation>Режим:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1901"/>
+        <location filename="settings.ui" line="1935"/>
         <source>x86</source>
         <translation>x86</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1914"/>
+        <location filename="settings.ui" line="1948"/>
         <source>x64</source>
         <translation>x64</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1942"/>
+        <location filename="settings.ui" line="1976"/>
         <source>Assembler:</source>
         <translation>Ассемблер:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1951"/>
+        <location filename="settings.ui" line="1985"/>
         <source>NASM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1964"/>
+        <location filename="settings.ui" line="1998"/>
         <source>GAS</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1974"/>
+        <location filename="settings.ui" line="2008"/>
         <source>FASM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1984"/>
+        <location filename="settings.ui" line="2018"/>
         <source>MASM</source>
         <translation>MASM</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2009"/>
+        <location filename="settings.ui" line="2043"/>
         <source>Assembly options:</source>
         <translation>Опции ассемблера:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2019"/>
+        <location filename="settings.ui" line="2053"/>
         <source>Linking options:</source>
         <translation>Опции компоновщика:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2029"/>
+        <location filename="settings.ui" line="2063"/>
         <source>Assembler path:</source>
         <translation>Ассемблер:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2039"/>
+        <location filename="settings.ui" line="2073"/>
         <source>Linker path:</source>
         <translation>Компоновщик:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2049"/>
+        <location filename="settings.ui" line="2083"/>
         <source>Disable linking:</source>
         <translation>Не запускать компоновщик:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1582"/>
+        <location filename="settings.ui" line="1616"/>
         <source>Enable highlighting</source>
         <translation>Включить подсветку</translation>
     </message>
     <message>
         <location filename="settings.ui" line="166"/>
-        <location filename="settings.ui" line="304"/>
-        <location filename="settings.ui" line="1844"/>
+        <location filename="settings.ui" line="338"/>
+        <location filename="settings.ui" line="1878"/>
         <source>To apply the changes require a restart!</source>
         <translation>Для применения изменений необходим перезапуск!</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="243"/>
-        <location filename="settings.ui" line="1532"/>
+        <location filename="settings.ui" line="277"/>
+        <location filename="settings.ui" line="1566"/>
         <source>Font:</source>
         <translation>Шрифт:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="266"/>
+        <location filename="settings.ui" line="300"/>
         <source>Size:</source>
         <translation>Размер:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="330"/>
+        <location filename="settings.ui" line="364"/>
         <source>Default code editor text:</source>
         <translation>Начальный текст в поле кода:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="348"/>
+        <location filename="settings.ui" line="382"/>
         <source>Reset all (need a restart)...</source>
         <translation>Сбросить все настройки на начальные (требуется перезапуск) ...</translation>
     </message>
