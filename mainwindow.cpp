@@ -803,7 +803,7 @@ void MainWindow::buildProgram(bool debugMode)
     QString path = Common::pathInTemp("program.asm");
 
     Tab *currentTab = (Tab *) tabs->currentWidget();
-    currentTab->saveCodeToFile(path, assembler, false, debugMode);
+    currentTab->saveCodeToFile(path, assembler, false, debugMode && settings.value("insertdebugstring", true).toBool());
 
     if (debugMode) {
         //save input to file
@@ -1693,6 +1693,7 @@ void MainWindow::openSettings()
         settingsUi.registersYesRadioButton->setChecked(true);
     else
         settingsUi.registersNoRadioButton->setChecked(true);
+    settingsUi.insertDebugStringCheckBox->setChecked(settings.value("insertdebugstring", true).toBool());
 
     //colors
     for (int i = 0; i < colorButtons.size(); i++) {
@@ -1931,6 +1932,7 @@ void MainWindow::saveSettings()
     settings.setValue("language", settingsUi.language->currentIndex());
     startText = settingsStartTextEditor->toPlainText();
     settings.setValue("allregisters", settingsUi.registersYesRadioButton->isChecked());
+    settings.setValue("insertdebugstring", settingsUi.insertDebugStringCheckBox->isChecked());
 
     //change fonts
     settings.setValue("fontfamily", settingsUi.fontComboBox->currentFont().family());
