@@ -43,6 +43,15 @@
 
 #include "assembler.h"
 
+/**
+ * @file gas.h
+ * Defines the NASM assembler
+ */
+
+/*! \brief This class defines the behavior for the NASM assembler.
+ *
+ *  All of its methods are derived from Assembler.
+ */
 class NASM : public Assembler
 {
     Q_OBJECT

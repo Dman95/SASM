@@ -50,6 +50,12 @@
 #include "ruqplaintextedit.h"
 #include <QUrl>
 
+/**
+ * @file codeeditor.h
+ * Contains definitions for objects pertaining to the code editing section
+ */
+
+
 QT_BEGIN_NAMESPACE
 class QPaintEvent;
 class QResizeEvent;

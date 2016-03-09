@@ -45,6 +45,15 @@
 #include <QLinkedList>
 #include "assembler.h"
 
+/**
+ * @file fasm.h
+ * Defines the FASM assembler
+ */
+
+/*! \brief This class defines the behavior for the FASM assembler.
+ *
+ *  All of its methods are derived from Assembler.
+ */
 class FASM : public Assembler
 {
     Q_OBJECT
