@@ -54,14 +54,32 @@
 #include "common.h"
 #include "codeeditor.h"
 
-class Assembler : public QObject //Abstract class. Need to implement to add new assembler in SASM.
-//See examples of implementation in classes NASM, MASM, FASM and GAS.
+/**
+ * @file assembler.h
+ * Base class for creating assembler instances
+ */
+
+
+
+/*! \brief This is the base class that all assemblers inherit
+ *
+ *  The Assembler class contains functions which can be used to retrieve assember specific
+ * parameters such as the linker & assembler location, the default program text, and
+ * user specified options.
+ *
+ * If the developer wishes to add support for a new assember, please refer to the implimentations
+ * of the NASM, MASM, FASM, and GAS assemblers, found in their respective header files.
+ */
+
+class Assembler : public QObject
 {
     Q_OBJECT
 public:
     struct LineNum {
-        quint64 numInCode; //string number in code in SASM code area
-        quint64 numInMem; //address of instruction in memory
+         //! String number in code in SASM code area
+        quint64 numInCode;
+         //! Address of instruction in memory
+        quint64 numInMem;
         bool operator ==(const LineNum& ln)
         {
             return ln.numInCode == numInCode;
@@ -71,15 +89,19 @@ public:
     {
         HighlightingRule() : isComment(false) {
         }
-        QRegExp pattern; //pattern to highlight
-        QTextCharFormat format; //highlighting format
+        //! Pattern to highlight - WHICH PATTERN UNKNOWN
+        QRegExp pattern;
+        //! Whighlighting format UNKNOWN FILL THIS IN
+        QTextCharFormat format;
         bool isComment;
     };
     bool x86;
+    //! Assembler constructor. Note that this is the stage where x86 is determined.
     explicit Assembler(bool x86, QObject *parent = 0);
-
-    virtual QString getAssemblerPath() = 0; //should return default path to assembler
-    virtual QString getLinkerPath() = 0; //should return default path to linker
+     //! Return the default path to the assembler.
+    virtual QString getAssemblerPath() = 0;
+    //! Returns the default path to the linker.
+    virtual QString getLinkerPath() = 0;
 
     virtual quint64 getMainOffset(QFile &lst, QString entryLabel) = 0;
     //get file with listing and name of entry label - main or start.
@@ -99,11 +121,14 @@ public:
     //should fill QVector with highlighting rules.
     //Qlist with formats (see NASM, MASM, FASM, GAS as examples). commentStartExpression - /* in C++ for example,
     //commentEndExpression - */ in C++ for example - expressions for multi line highlighting - workes if multiLineComments == true.
-
-    virtual QString getStartText() = 0; //should return default start text
-    virtual void putDebugString(CodeEditor *code) = 0; //should put debug string, that makes frame (mov ebp, esp)
-    virtual QString getAssemblerOptions() = 0; //should return default assembler options
-    virtual QString getLinkerOptions() = 0; //should return default linker options
+     //! Return the default start text (default project code)
+    virtual QString getStartText() = 0;
+    //! Puts the debug string that makes frame (mov ebp, esp)
+    virtual void putDebugString(CodeEditor *code) = 0;
+     //! Returns the default assembler options
+    virtual QString getAssemblerOptions() = 0;
+     //! Returns the default linker options
+    virtual QString getLinkerOptions() = 0;
     bool isx86();
 
 signals:

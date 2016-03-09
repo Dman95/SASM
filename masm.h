@@ -44,6 +44,15 @@
 #include <QMessageBox>
 #include "assembler.h"
 
+/**
+ * @file gas.h
+ * Defines the MASM assembler
+ */
+
+/*! \brief This class defines the behavior for the MASM assembler.
+ *
+ *  All of its methods are derived from Assembler.
+ */
 class MASM : public Assembler
 {
     Q_OBJECT

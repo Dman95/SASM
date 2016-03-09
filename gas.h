@@ -43,6 +43,16 @@
 
 #include "assembler.h"
 
+/**
+ * @file gas.h
+ * Defines the FASM assembler.
+ */
+
+/*! \brief This class defines the behavior for the GAS assembler.
+ *
+ *  All of its methods are derived from Assembler.
+ */
+
 class GAS : public Assembler
 {
     Q_OBJECT
