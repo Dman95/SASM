@@ -40,6 +40,11 @@
 
 #include "finddialog.h"
 
+/**
+ * @file finddialog.cpp
+ * Impliments the find text widget.
+ */
+
 FindDialog::FindDialog(QWidget *parent)
     : QWidget(parent)
 {

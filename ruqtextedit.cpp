@@ -40,6 +40,11 @@
 
 #include "ruqtextedit.h"
 
+/**
+ * @file ruqtextedit.cpp
+ * UNKNOWN
+ */
+
 RuQTextEdit::RuQTextEdit(QWidget *parent) :
     QTextEdit(parent)
 {
@@ -91,7 +96,7 @@ void RuQTextEdit::contextMenuEvent(QContextMenuEvent *e)
     contextMenu = new QMenu;
     QTextCursor textCursor = this->textCursor();
 
-    //if nothing selected
+    //!if nothing selected
     if (textCursor.selectionEnd() - textCursor.selectionStart() <= 0) {
         cutAction->setEnabled(false);
         copyAction->setEnabled(false);

@@ -1,0 +1,161 @@
+\hypertarget{class_code_editor}{}\section{Code\+Editor Class Reference}
+\label{class_code_editor}\index{Code\+Editor@{Code\+Editor}}
+Inheritance diagram for Code\+Editor\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_code_editor}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_code_editor_ab460ede1cca49e5ba6e0d040efa2c00c}{}void {\bfseries update\+Debug\+Line} (int number)\label{class_code_editor_ab460ede1cca49e5ba6e0d040efa2c00c}
+
+\item 
+\hypertarget{class_code_editor_a93458bc38ed83c7501c1387a43252b1d}{}void {\bfseries put\+Tab} ()\label{class_code_editor_a93458bc38ed83c7501c1387a43252b1d}
+
+\item 
+\hypertarget{class_code_editor_a3bbced4ed50a16bb1ff830373a380464}{}void {\bfseries delete\+Tab} ()\label{class_code_editor_a3bbced4ed50a16bb1ff830373a380464}
+
+\item 
+\hypertarget{class_code_editor_a8d0bbb48f1f7ad273dba6e31f0b5f28b}{}void {\bfseries highlight\+Current\+Line} ()\label{class_code_editor_a8d0bbb48f1f7ad273dba6e31f0b5f28b}
+
+\item 
+\hypertarget{class_code_editor_aa38000763f508e8072ae87da7c56c8c7}{}void {\bfseries highlight\+Debug\+Line} (int line\+Number)\label{class_code_editor_aa38000763f508e8072ae87da7c56c8c7}
+
+\item 
+\hypertarget{class_code_editor_a020ee3dd5ffe336542199c4673846158}{}void {\bfseries set\+Debug\+Mode} (bool mode)\label{class_code_editor_a020ee3dd5ffe336542199c4673846158}
+
+\item 
+\hypertarget{class_code_editor_acf16c6a80c8403a2b51c1ac216d8dfef}{}Q\+List$<$ int $>$ $\ast$ {\bfseries get\+Breakpoints} ()\label{class_code_editor_acf16c6a80c8403a2b51c1ac216d8dfef}
+
+\item 
+\hypertarget{class_code_editor_ab9bd75edacef39851e1b6a2e149c2225}{}void {\bfseries set\+Breakpoint\+On\+Current\+Line} ()\label{class_code_editor_ab9bd75edacef39851e1b6a2e149c2225}
+
+\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_code_editor_a462de76e30612853a2633b5175eaf778}{}void {\bfseries breakpoints\+Changed} (quint64 line\+Number, bool is\+Added)\label{class_code_editor_a462de76e30612853a2633b5175eaf778}
+
+\item 
+\hypertarget{class_code_editor_afb38d4c605648718eef7a15d8a1a4afd}{}void {\bfseries file\+Opened} (Q\+String path)\label{class_code_editor_afb38d4c605648718eef7a15d8a1a4afd}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_code_editor_a0f8a24cceec008bb6bd94c0dfc74aff5}{}{\bfseries Code\+Editor} (Q\+Widget $\ast$parent=0, bool with\+Beakpoints=true)\label{class_code_editor_a0f8a24cceec008bb6bd94c0dfc74aff5}
+
+\item 
+void \hyperlink{class_code_editor_a96e24088faa784a4ec419a647fcab5dd}{line\+Number\+Area\+Paint\+Event} (Q\+Paint\+Event $\ast$event)
+\item 
+void \hyperlink{class_code_editor_ae72a954985e8f12d755d22f33d6465ec}{line\+Number\+Area\+Mouse\+Press\+Event} (Q\+Mouse\+Event $\ast$event)
+\item 
+\hypertarget{class_code_editor_af7c3fbf0af03c4ff136e0298a336dd88}{}int {\bfseries line\+Number\+Area\+Width} ()\label{class_code_editor_af7c3fbf0af03c4ff136e0298a336dd88}
+
+\item 
+\hypertarget{class_code_editor_ab8e52f7d226ffbc0d7677e57ae138833}{}void {\bfseries repaint\+Line\+Number\+Area} ()\label{class_code_editor_ab8e52f7d226ffbc0d7677e57ae138833}
+
+\item 
+\hypertarget{class_code_editor_ad223a49b099ba8111fcd77a38b865166}{}bool {\bfseries is\+Macro\+On\+Current\+Debug\+Line} ()\label{class_code_editor_ad223a49b099ba8111fcd77a38b865166}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_code_editor_a80d221047fe8770e4f44020d3dfdc211}{}int {\bfseries current\+Debug\+Line}\label{class_code_editor_a80d221047fe8770e4f44020d3dfdc211}
+
+\item 
+\hypertarget{class_code_editor_abfc08b4cdf3988f5325cb2bad954cc6a}{}bool {\bfseries debug\+Mode}\label{class_code_editor_abfc08b4cdf3988f5325cb2bad954cc6a}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_code_editor_a3cf6c205d0cbcb3079811a406aab19be}{}void {\bfseries resize\+Event} (Q\+Resize\+Event $\ast$event)\label{class_code_editor_a3cf6c205d0cbcb3079811a406aab19be}
+
+\item 
+\hypertarget{class_code_editor_aa7addc3f760c1503bf8a2e57bb4b8678}{}void {\bfseries key\+Press\+Event} (Q\+Key\+Event $\ast$e)\label{class_code_editor_aa7addc3f760c1503bf8a2e57bb4b8678}
+
+\item 
+\hypertarget{class_code_editor_ae9ab9f58306591278621324da65bde40}{}void {\bfseries drag\+Enter\+Event} (Q\+Drag\+Enter\+Event $\ast$event)\label{class_code_editor_ae9ab9f58306591278621324da65bde40}
+
+\item 
+\hypertarget{class_code_editor_a4da88fc233cc1ff9cc96d08b7efd1033}{}void {\bfseries drop\+Event} (Q\+Drop\+Event $\ast$event)\label{class_code_editor_a4da88fc233cc1ff9cc96d08b7efd1033}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_code_editor_a28c8e8d686d9bacfb1bff04783b39924}{}void {\bfseries update\+Line\+Number\+Area\+Width} (int new\+Block\+Count)\label{class_code_editor_a28c8e8d686d9bacfb1bff04783b39924}
+
+\item 
+void \hyperlink{class_code_editor_a74597a5740a235410b56dfdd6f67314f}{update\+Line\+Number\+Area} (const Q\+Rect \&, int)
+\item 
+\hypertarget{class_code_editor_a0b95ac3b7c9fc3539f93b15fd3f3820e}{}void {\bfseries shift\+Breakpoints} (int block\+Count)\label{class_code_editor_a0b95ac3b7c9fc3539f93b15fd3f3820e}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_code_editor_a9132cd18e435117ad928b18d9903162d}{}Q\+Widget $\ast$ {\bfseries line\+Number\+Area}\label{class_code_editor_a9132cd18e435117ad928b18d9903162d}
+
+\item 
+\hypertarget{class_code_editor_ab5e700e96549e80e5cc9023630ad2eff}{}int {\bfseries debug\+Area\+Width}\label{class_code_editor_ab5e700e96549e80e5cc9023630ad2eff}
+
+\item 
+\hypertarget{class_code_editor_aed60eae53d3dcaa0de4385c9204bd46e}{}Q\+Pixmap {\bfseries debug\+Image}\label{class_code_editor_aed60eae53d3dcaa0de4385c9204bd46e}
+
+\item 
+\hypertarget{class_code_editor_aadbfe61d58139da1b1a2d2f0afbcb078}{}Q\+Pixmap {\bfseries breakpoint\+Image}\label{class_code_editor_aadbfe61d58139da1b1a2d2f0afbcb078}
+
+\item 
+\hypertarget{class_code_editor_ae0315f118718e91bcc83188fd717e45d}{}Q\+List$<$ int $>$ \hyperlink{class_code_editor_ae0315f118718e91bcc83188fd717e45d}{breakpoints}\label{class_code_editor_ae0315f118718e91bcc83188fd717e45d}
+
+\begin{DoxyCompactList}\small\item\em Number of lines with breakpoints. \end{DoxyCompactList}\item 
+\hypertarget{class_code_editor_a77bda577cb6b2e1d83571ebbd22b86b1}{}int {\bfseries first\+Top\+Margin}\label{class_code_editor_a77bda577cb6b2e1d83571ebbd22b86b1}
+
+\item 
+\hypertarget{class_code_editor_a8465cd89547474011c78622dbfa76493}{}bool {\bfseries has\+Breakpoints}\label{class_code_editor_a8465cd89547474011c78622dbfa76493}
+
+\item 
+\hypertarget{class_code_editor_a9276c3f0db1928079d0a3cf990bb58cd}{}int {\bfseries prev\+Block\+Count}\label{class_code_editor_a9276c3f0db1928079d0a3cf990bb58cd}
+
+\item 
+\hypertarget{class_code_editor_af3744e9cba5fe24489514734fe0d37a1}{}Q\+Settings {\bfseries settings}\label{class_code_editor_af3744e9cba5fe24489514734fe0d37a1}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_code_editor_ae72a954985e8f12d755d22f33d6465ec}{}\index{Code\+Editor@{Code\+Editor}!line\+Number\+Area\+Mouse\+Press\+Event@{line\+Number\+Area\+Mouse\+Press\+Event}}
+\index{line\+Number\+Area\+Mouse\+Press\+Event@{line\+Number\+Area\+Mouse\+Press\+Event}!Code\+Editor@{Code\+Editor}}
+\subsubsection[{line\+Number\+Area\+Mouse\+Press\+Event}]{\setlength{\rightskip}{0pt plus 5cm}void Code\+Editor\+::line\+Number\+Area\+Mouse\+Press\+Event (
+\begin{DoxyParamCaption}
+\item[{Q\+Mouse\+Event $\ast$}]{event}
+\end{DoxyParamCaption}
+)}\label{class_code_editor_ae72a954985e8f12d755d22f33d6465ec}
+If mouse click has been made -\/ add breakpoint Counting line number \hypertarget{class_code_editor_a96e24088faa784a4ec419a647fcab5dd}{}\index{Code\+Editor@{Code\+Editor}!line\+Number\+Area\+Paint\+Event@{line\+Number\+Area\+Paint\+Event}}
+\index{line\+Number\+Area\+Paint\+Event@{line\+Number\+Area\+Paint\+Event}!Code\+Editor@{Code\+Editor}}
+\subsubsection[{line\+Number\+Area\+Paint\+Event}]{\setlength{\rightskip}{0pt plus 5cm}void Code\+Editor\+::line\+Number\+Area\+Paint\+Event (
+\begin{DoxyParamCaption}
+\item[{Q\+Paint\+Event $\ast$}]{event}
+\end{DoxyParamCaption}
+)}\label{class_code_editor_a96e24088faa784a4ec419a647fcab5dd}
+Blocks counting starts with 0, line number is equivalent (block number + 1) \hypertarget{class_code_editor_a74597a5740a235410b56dfdd6f67314f}{}\index{Code\+Editor@{Code\+Editor}!update\+Line\+Number\+Area@{update\+Line\+Number\+Area}}
+\index{update\+Line\+Number\+Area@{update\+Line\+Number\+Area}!Code\+Editor@{Code\+Editor}}
+\subsubsection[{update\+Line\+Number\+Area}]{\setlength{\rightskip}{0pt plus 5cm}void Code\+Editor\+::update\+Line\+Number\+Area (
+\begin{DoxyParamCaption}
+\item[{const Q\+Rect \&}]{rect, }
+\item[{int}]{dy}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}, {\ttfamily [slot]}}\label{class_code_editor_a74597a5740a235410b56dfdd6f67314f}
+Indirectly invokes \hyperlink{class_code_editor_a96e24088faa784a4ec419a647fcab5dd}{Code\+Editor\+::line\+Number\+Area\+Paint\+Event()} throw virtual Line\+Number\+Area\+::paint\+Event()
+
+Viewport -\/ visible part of widget 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{codeeditor_8h}{codeeditor.\+h}\item 
+\hyperlink{codeeditor_8cpp}{codeeditor.\+cpp}\end{DoxyCompactItemize}

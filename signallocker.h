@@ -43,6 +43,16 @@
 
 #include <QObject>
 
+/**
+ * @file signallock.h
+ * UNKNOWN
+ */
+
+/*! \brief UNKNOWN
+ *
+ * UNKNOWN
+*/
+
 class SignalLocker : public QObject
 {
     Q_OBJECT

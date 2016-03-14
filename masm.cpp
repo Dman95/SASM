@@ -40,7 +40,13 @@
 
 #include "masm.h"
 
-//Windows only!
+/**
+ * @file masm.cpp
+ * Impliments the MASM Assembler
+ */
+
+
+//! Windows only!
 
 MASM::MASM(bool x86, QObject *parent) :
     Assembler(x86, parent)
@@ -121,7 +127,7 @@ void MASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
             const char *s = lineArr.constData();
             quint64 a;
 
-            //check if invoke
+            //! Check if invoke
             if (line.contains("invoke", Qt::CaseInsensitive)) {
                 macroInstruction = line;
                 if (macro.exactMatch(macroInstruction))
@@ -144,7 +150,7 @@ void MASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
                 continue;
             }
 
-            //check if return
+            //! Check if return
             if (line.contains("return", Qt::CaseInsensitive)) {
                 macroInstruction = line;
                 if (macro.exactMatch(macroInstruction))
@@ -165,8 +171,8 @@ void MASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
                 continue;
             }
 
-            //check if macro
-            if (line.startsWith("\t\t\t\t")) { //may be macro
+            //! Check if macro
+            if (line.startsWith("\t\t\t\t")) {
                 mayBeMacro = line;
                 int k = 0;
                 while (k < mayBeMacro.length() && mayBeMacro[k].isSpace())
@@ -174,21 +180,23 @@ void MASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
                 mayBeMacro.remove(0, k);
                 continue;
             }
-            if (!mayBeMacro.isEmpty() && !inMacro) { //if previous may be macro - switch to finding macro start address mode
+            //! If previous may be macro - switch to finding macro start address mode
+            if (!mayBeMacro.isEmpty() && !inMacro) {
                 if (macroBegin.exactMatch(line)) {
                     inMacro = true;
                 } else {
                     mayBeMacro.clear();
                 }
             }
+             //! If in macro, find its start address
             if (inMacro && stringWithCode.exactMatch(line) && sscanf(s, "%llx", &a) == 1) {
-                //if we in macro, we find it start address
+
                 instrList.append(QPair<quint64, QString>(a + offset, mayBeMacro));
                 mayBeMacro.clear();
                 inMacro = false;
             }
 
-            //check if instruction
+            //! Check if instruction
             if (!stringWithCode.exactMatch(line) || macro.exactMatch(line) || sscanf(s, "%llx", &a) != 1)
                 continue;
             int index = line.indexOf(QRegExp("[RE\t]\t"));
@@ -220,9 +228,10 @@ void MASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
         line.remove(0, k);
         programList.append(QPair<quint64, QString>(numInCode, line));
     }
-
-    int i = 0; //offset in instrList
-    int j = 0; //offset in programList
+     //! Offset in instrList
+    int i = 0;
+     //! Offset in programList
+    int j = 0;
     int lastSeenInProgramList = 0;
     while (i < instrList.size()) {
         if (programList[j].second == instrList[i].second) {
@@ -234,7 +243,8 @@ void MASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
             lastSeenInProgramList = j;
         }
         j++;
-        if (j >= programList.size()) { //skip line in instrList and back to first unwatched line in programList
+        //! If true, skip line in instrList and back to first unwatched line in programList
+        if (j >= programList.size()) {
             i++;
             j = lastSeenInProgramList + 1;
         }
@@ -280,10 +290,10 @@ void MASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
     QTextCharFormat &quotationFormat = *formats[8];
     QTextCharFormat &labelWithDotFormat = *formats[9];
 
-    //setting up regular expressions
+    //! Setting up regular expressions
     HighlightingRule rule;
 
-    //keywords
+    //! Keywords
     QStringList keywordPatterns;
     keywordPatterns << "\\bAAA\\b" << "\\bAAD\\b" << "\\bAAM\\b" << "\\bAAS\\b" <<
                        "\\bADC\\b" << "\\bADD\\b" << "\\bAND\\b" << "\\bCALL\\b" <<
@@ -390,7 +400,7 @@ void MASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
         highlightingRules.append(rule);
     }
 
-    //memory
+    //! Memory
     rule.format = memoryFormat;
     QStringList memoryPatterns;
     rule.pattern = QRegExp("\\[");
@@ -418,20 +428,22 @@ void MASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
         highlightingRules.append(rule);
     }
 
-    //labels
+    //! Labels
     rule.pattern = QRegExp("\\S+:");
     rule.format = labelFormat;
     highlightingRules.append(rule);
 
-    //numbers
+    //! Numbers
     rule.format = numberFormat;
     rule.pattern = QRegExp("\\b[\\-\\+]?\\d+[bod]?\\b");
     highlightingRules.append(rule);
     rule.pattern = QRegExp("\\b0[bo]\\d+\\b");
     highlightingRules.append(rule);
-    rule.pattern = QRegExp("\\b[0-9A-Fa-f]+h\\b"); //hexadecimal notation
+    //! Hexadecimal notation
+    rule.pattern = QRegExp("\\b[0-9A-Fa-f]+h\\b");
     highlightingRules.append(rule);
-    rule.pattern = QRegExp("\\b0[xh][0-9A-Fa-f]+\\b"); //hexadecimal notation
+    //! Hexadecimal notation
+    rule.pattern = QRegExp("\\b0[xh][0-9A-Fa-f]+\\b");
     highlightingRules.append(rule);
 
     //registers
@@ -466,7 +478,7 @@ void MASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
         highlightingRules.append(rule);
     }
 
-    //.labels and numbers with point
+    //! .labels and numbers with point
     rule.pattern = QRegExp("\\.[^\\s:]+[^:]");
     rule.format = labelWithDotFormat;
     highlightingRules.append(rule);
@@ -477,7 +489,7 @@ void MASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
     rule.format = numberFormat;
     highlightingRules.append(rule);
 
-    //system instructions and preprocessor commands
+    //! System instructions and preprocessor commands
     rule.format = systemFormat;
     QStringList systemPatterns;
     systemPatterns << "\\s\\.\\w+\\b" << "^\\.\\w+\\b" << "\\bSEGMENT\\b" << "\\bPUBLIC\\b" <<

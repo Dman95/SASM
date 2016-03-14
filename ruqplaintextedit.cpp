@@ -40,6 +40,11 @@
 
 #include "ruqplaintextedit.h"
 
+/**
+ * @file ruplaintextedit.cpp
+ * UNKNOWN
+ */
+
 RuQPlainTextEdit::RuQPlainTextEdit(QWidget *parent) :
     QPlainTextEdit(parent)
 {
@@ -101,7 +106,7 @@ QMenu * RuQPlainTextEdit::createMenu()
     QMenu *menu = new QMenu;
     QTextCursor textCursor = this->textCursor();
 
-    //if nothing selected
+    //! if nothing selected
     if (textCursor.selectionEnd() - textCursor.selectionStart() <= 0) {
         commentAction->setEnabled(false);
         uncommentAction->setEnabled(false);

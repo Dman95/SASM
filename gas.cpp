@@ -40,6 +40,11 @@
 
 #include "gas.h"
 
+/**
+ * @file gas.cpp
+ * Impliments the GAS assembler.
+ */
+
 GAS::GAS(bool x86, QObject *parent) :
     Assembler(x86, parent)
 {

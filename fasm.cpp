@@ -40,6 +40,11 @@
 
 #include "fasm.h"
 
+/**
+ * @file fasm.cpp
+ * Impliments the FASM assembler
+ */
+
 FASM::FASM(bool x86, QObject *parent) :
     Assembler(x86, parent)
 {

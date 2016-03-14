@@ -40,6 +40,11 @@
 
 #include "debugtablewidget.h"
 
+/**
+ * @file debugtablewidget.cpp
+ * Impliments the debuging memory window
+ */
+
 QByteArray DebugTableWidget::memoryHeaderState;
 bool DebugTableWidget::geometryRegistersSaved;
 bool DebugTableWidget::geometryMemorySaved;

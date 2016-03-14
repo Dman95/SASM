@@ -46,6 +46,11 @@
 #include <QLabel>
 #include <QSpacerItem>
 
+/**
+ * @file getstartedwidget.h
+ * Defines the enry window.
+ */
+
 class GetStartedWidget : public QWidget
 {
     Q_OBJECT

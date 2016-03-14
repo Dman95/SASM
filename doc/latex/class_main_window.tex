@@ -1,0 +1,896 @@
+\hypertarget{class_main_window}{}\section{Main\+Window Class Reference}
+\label{class_main_window}\index{Main\+Window@{Main\+Window}}
+
+
+The \hyperlink{class_main_window}{Main\+Window} class defines the actions and behavior of the main user interface.  
+
+
+
+
+{\ttfamily \#include $<$mainwindow.\+h$>$}
+
+Inheritance diagram for Main\+Window\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_main_window}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_main_window_a69f73b93cc05c89a9ae1be0161105982}{new\+File} ()
+\begin{DoxyCompactList}\small\item\em Actions and Menus. \end{DoxyCompactList}\item 
+\hypertarget{class_main_window_a288b768c3c21a9171bdc56fe845ece8b}{}void {\bfseries open\+File} ()\label{class_main_window_a288b768c3c21a9171bdc56fe845ece8b}
+
+\item 
+\hypertarget{class_main_window_ad11e32151909b28e94538b146958d5a1}{}void {\bfseries close\+File} ()\label{class_main_window_ad11e32151909b28e94538b146958d5a1}
+
+\item 
+\hypertarget{class_main_window_aa90a352577dfc8ad0f7e6974f689b596}{}bool {\bfseries save\+File} (int index=-\/1)\label{class_main_window_aa90a352577dfc8ad0f7e6974f689b596}
+
+\item 
+\hypertarget{class_main_window_ace2d3f9e772a478c9e10467fc0707128}{}bool {\bfseries save\+As\+File} (int index=-\/1)\label{class_main_window_ace2d3f9e772a478c9e10467fc0707128}
+
+\item 
+\hypertarget{class_main_window_abbb16fb2d79a6a8c91695a1aad622383}{}void {\bfseries save\+Exe} ()\label{class_main_window_abbb16fb2d79a6a8c91695a1aad622383}
+
+\item 
+bool \hyperlink{class_main_window_a79cd135085ff501e05419fc7153c4e73}{close\+App} ()
+\item 
+void \hyperlink{class_main_window_a14b2be29dd502629c21f9ec1b0de5de4}{refresh\+Edit\+Menu} ()
+\item 
+\hypertarget{class_main_window_a117d0f9e30fade99d142818049a5a2b3}{}void {\bfseries change\+Current\+Saved\+State} (bool changed)\label{class_main_window_a117d0f9e30fade99d142818049a5a2b3}
+
+\item 
+\hypertarget{class_main_window_ab67a8002596d073eb1460fb06eeaff66}{}void \hyperlink{class_main_window_ab67a8002596d073eb1460fb06eeaff66}{open\+File} (Q\+String path)\label{class_main_window_ab67a8002596d073eb1460fb06eeaff66}
+
+\begin{DoxyCompactList}\small\item\em Custom U\+N\+K\+N\+O\+W\+N. \end{DoxyCompactList}\item 
+\hypertarget{class_main_window_a1308c0af5f2cb446322065b02fcbeaad}{}void {\bfseries other\+Instance\+Data\+Received} (Q\+Byte\+Array data)\label{class_main_window_a1308c0af5f2cb446322065b02fcbeaad}
+
+\item 
+void \hyperlink{class_main_window_a8584b048711a7a4fd68c042aeaf6d8e7}{build\+Program} (bool debug\+Mode=false)
+\begin{DoxyCompactList}\small\item\em Build. \end{DoxyCompactList}\item 
+\hypertarget{class_main_window_a82e7f9602ec1cf314ccd79dd4ef55c20}{}void {\bfseries run\+Program} ()\label{class_main_window_a82e7f9602ec1cf314ccd79dd4ef55c20}
+
+\item 
+\hypertarget{class_main_window_a6e289e447311bfd223d971e20abd9117}{}void {\bfseries run\+Exe\+Program} ()\label{class_main_window_a6e289e447311bfd223d971e20abd9117}
+
+\item 
+\hypertarget{class_main_window_a0e2d100b79aa592b649f0f9a9e35076f}{}void {\bfseries stop\+Program} ()\label{class_main_window_a0e2d100b79aa592b649f0f9a9e35076f}
+
+\item 
+\hypertarget{class_main_window_af0402980c9360426d2c996ecdc7374de}{}void {\bfseries test\+Stop\+Of\+Program} ()\label{class_main_window_af0402980c9360426d2c996ecdc7374de}
+
+\item 
+\hypertarget{class_main_window_a45faac26bdff89812539c065ef018a18}{}void {\bfseries set\+Program\+Builded\+Flag\+To\+False} ()\label{class_main_window_a45faac26bdff89812539c065ef018a18}
+
+\item 
+void \hyperlink{class_main_window_aeac9a226959ae44a5f8eedb73fbfaa94}{change\+Current\+Tab} (int index)
+\item 
+\hypertarget{class_main_window_a44a8bbdd1b143683bea71cfbad3a11b4}{}void {\bfseries print\+Log} (const Q\+String \&message, const Q\+Color \&color)\label{class_main_window_a44a8bbdd1b143683bea71cfbad3a11b4}
+
+\item 
+\hypertarget{class_main_window_a7b6f8754dcab273fe524bcaa30e67604}{}void {\bfseries print\+Log\+With\+Time} (const Q\+String \&message, const Q\+Color \&color)\label{class_main_window_a7b6f8754dcab273fe524bcaa30e67604}
+
+\item 
+\hypertarget{class_main_window_a52de98a5b987796cae5c2a1d5660037c}{}void {\bfseries start\+Count\+Program\+Time} ()\label{class_main_window_a52de98a5b987796cae5c2a1d5660037c}
+
+\item 
+void \hyperlink{class_main_window_ac1ebf6edc016999e6e55b58c2efc322e}{debug} ()
+\begin{DoxyCompactList}\small\item\em Debug. \end{DoxyCompactList}\item 
+void \hyperlink{class_main_window_a1ecd0f10a8b0acfaf63c1bb4f1b77cfb}{enable\+Debug\+Actions} ()
+\item 
+void \hyperlink{class_main_window_ad11440fb016244cd6f3fa947022ad713}{disable\+Debug\+Actions} (bool start=false)
+\item 
+\hypertarget{class_main_window_a3e9fb363847ac215097e42c5d2b12083}{}void {\bfseries debug\+Next} ()\label{class_main_window_a3e9fb363847ac215097e42c5d2b12083}
+
+\item 
+\hypertarget{class_main_window_a44cc0c28c3f5038f955a7e463497a9da}{}void {\bfseries debug\+Next\+Ni} ()\label{class_main_window_a44cc0c28c3f5038f955a7e463497a9da}
+
+\item 
+void \hyperlink{class_main_window_a0d8f20a9b47c566a76a96633188372fa}{debug\+Exit} ()
+\item 
+\hypertarget{class_main_window_aee811445332a4f7db279652ec332fe66}{}void {\bfseries debug\+Toggle\+Breakpoint} ()\label{class_main_window_aee811445332a4f7db279652ec332fe66}
+
+\item 
+\hypertarget{class_main_window_ac50abb82874b91085ceea8f565fd5f5a}{}void {\bfseries debug\+Show\+Registers} ()\label{class_main_window_ac50abb82874b91085ceea8f565fd5f5a}
+
+\item 
+void \hyperlink{class_main_window_af0e3a62c03cbe1723ba91d7cb21ec3c1}{debug\+Show\+Memory} ()
+\item 
+\hypertarget{class_main_window_a15b7242ca96db2dfaec976b3b6570aa6}{}void {\bfseries debug\+Run\+Command} (Q\+String command, bool print)\label{class_main_window_a15b7242ca96db2dfaec976b3b6570aa6}
+
+\item 
+\hypertarget{class_main_window_abcac2850930ae7f17bb5e01421630577}{}void {\bfseries save\+Watches} (\hyperlink{class_debug_table_widget}{Debug\+Table\+Widget} $\ast$table)\label{class_main_window_abcac2850930ae7f17bb5e01421630577}
+
+\item 
+\hypertarget{class_main_window_aa8e175e826ca88ed0edc86c4f58b2b3c}{}void {\bfseries set\+Show\+Registers\+To\+Unchecked} ()\label{class_main_window_aa8e175e826ca88ed0edc86c4f58b2b3c}
+
+\item 
+\hypertarget{class_main_window_aab119cfa893d26727179f37f4d93b9c3}{}void {\bfseries set\+Show\+Memory\+To\+Unchecked} ()\label{class_main_window_aab119cfa893d26727179f37f4d93b9c3}
+
+\item 
+\hypertarget{class_main_window_a94de085952cb2e1c2cabdf0589589bf7}{}void {\bfseries set\+Show\+Memory\+To\+Checked} (const \hyperlink{struct_ru_q_plain_text_edit_1_1_watch}{Ru\+Q\+Plain\+Text\+Edit\+::\+Watch} \&variable)\label{class_main_window_a94de085952cb2e1c2cabdf0589589bf7}
+
+\item 
+\hypertarget{class_main_window_a8208aa1ac575ce525eeb67962de39649}{}void {\bfseries show\+Any\+Command\+Widget} ()\label{class_main_window_a8208aa1ac575ce525eeb67962de39649}
+
+\item 
+\hypertarget{class_main_window_a4b549dce3792ad8e98c579b114dbf2d6}{}void {\bfseries close\+Any\+Command\+Widget} ()\label{class_main_window_a4b549dce3792ad8e98c579b114dbf2d6}
+
+\item 
+\hypertarget{class_main_window_a69a5788187930b71d8847316ea1ff400}{}void {\bfseries print\+Output} (Q\+String msg, int index=-\/1)\label{class_main_window_a69a5788187930b71d8847316ea1ff400}
+
+\item 
+\hypertarget{class_main_window_a7132389264d1fc06daf0f592ec390b63}{}void {\bfseries get\+Output} ()\label{class_main_window_a7132389264d1fc06daf0f592ec390b63}
+
+\item 
+\hypertarget{class_main_window_ac19a5fb34a804da9e7f970917843a680}{}void {\bfseries change\+Debug\+Action\+To\+Start} ()\label{class_main_window_ac19a5fb34a804da9e7f970917843a680}
+
+\item 
+\hypertarget{class_main_window_a069e1f54d0a804ca17cb8d4d78f093b0}{}void \hyperlink{class_main_window_a069e1f54d0a804ca17cb8d4d78f093b0}{find} ()\label{class_main_window_a069e1f54d0a804ca17cb8d4d78f093b0}
+
+\begin{DoxyCompactList}\small\item\em Search. \end{DoxyCompactList}\item 
+void \hyperlink{class_main_window_a56e46fe3769163f479d2a2b5eeb00b24}{find\+Next} (const Q\+String \&pattern, Qt\+::\+Case\+Sensitivity cs, bool all, bool replace, const Q\+String \&replace\+Text=0)
+\item 
+\hypertarget{class_main_window_a31b9332bdc8d48261497648c3faf2f91}{}void \hyperlink{class_main_window_a31b9332bdc8d48261497648c3faf2f91}{restore\+Prev\+Session} (bool not\+Notify=false)\label{class_main_window_a31b9332bdc8d48261497648c3faf2f91}
+
+\begin{DoxyCompactList}\small\item\em Settings. \end{DoxyCompactList}\item 
+void \hyperlink{class_main_window_a8e1c1ad87a68b27f19492549b9c4e773}{open\+Settings} ()
+\item 
+void \hyperlink{class_main_window_a31a22d06907f6f37fe53b3c1a78a27c4}{change\+Mode} (bool x86)
+\item 
+void \hyperlink{class_main_window_a117cad33e07cf5743d10390224ce9b20}{change\+Assembler} ()
+\item 
+\hypertarget{class_main_window_adc2c6917bad92be5f29b3f03bdcf3e2f}{}void {\bfseries change\+Start\+Text} ()\label{class_main_window_adc2c6917bad92be5f29b3f03bdcf3e2f}
+
+\item 
+void \hyperlink{class_main_window_abb30531afee763d0586ee6323fd332e2}{save\+Settings} ()
+\item 
+\hypertarget{class_main_window_a8d8a4882d5f3bfd14c1a9ad099cfed34}{}void {\bfseries exit\+Settings} ()\label{class_main_window_a8d8a4882d5f3bfd14c1a9ad099cfed34}
+
+\item 
+void \hyperlink{class_main_window_aee3cd5b22f4b0ec8e98b0a56d21e2ce4}{change\+Actions\+State} (int widget\+Index)
+\item 
+void \hyperlink{class_main_window_a03a1eafa1b4d6b1214767f408cbcf8c7}{reset\+All\+Settings} ()
+\item 
+\hypertarget{class_main_window_ad750f8cf1395c0383b01c97fe65cd515}{}void {\bfseries pick\+Color} (Q\+Widget $\ast$color\+Button, bool init=false)\label{class_main_window_ad750f8cf1395c0383b01c97fe65cd515}
+
+\item 
+\hypertarget{class_main_window_aec4ed4286d88e04c131cb882050c3fec}{}void {\bfseries change\+Highlighting\+Font} (Q\+Widget $\ast$box, bool init=false)\label{class_main_window_aec4ed4286d88e04c131cb882050c3fec}
+
+\item 
+\hypertarget{class_main_window_a588a4be0d3b05980878a5fa660996fc2}{}void {\bfseries change\+Highlighting\+Line\+Mode} (bool mode)\label{class_main_window_a588a4be0d3b05980878a5fa660996fc2}
+
+\item 
+\hypertarget{class_main_window_a6f43cd45a2b2ef207cabe97a8d8941e3}{}void {\bfseries recreate\+Highlighter} ()\label{class_main_window_a6f43cd45a2b2ef207cabe97a8d8941e3}
+
+\item 
+void \hyperlink{class_main_window_a4f00b18cd52e8ba0ef80cca56559cead}{recreate\+Assembler} (bool start=false)
+\item 
+void \hyperlink{class_main_window_ac778aed78fb6c50fecbdb174bad1b293}{init\+Assembler\+Settings} (bool first\+Opening)
+\item 
+\hypertarget{class_main_window_aeae98b66b64ca9c75095b6cbac38f4a2}{}void {\bfseries backup\+Settings} ()\label{class_main_window_aeae98b66b64ca9c75095b6cbac38f4a2}
+
+\item 
+\hypertarget{class_main_window_a555711d04fe9b975d620fbe79dbfdd87}{}void {\bfseries restore\+Settings\+And\+Exit} ()\label{class_main_window_a555711d04fe9b975d620fbe79dbfdd87}
+
+\item 
+void \hyperlink{class_main_window_a1f08865148ab71e63a82bff98cbd17c8}{print\+Masm\+Info} ()
+\item 
+\hypertarget{class_main_window_aa6eb8abce0304d5e6f84097dd433122b}{}void {\bfseries enable\+Or\+Disable\+Linking\+Edit} (int disable\+Linking\+Checkbox\+State)\label{class_main_window_aa6eb8abce0304d5e6f84097dd433122b}
+
+\item 
+bool \hyperlink{class_main_window_a2b789b53a039e5c900fccba3881cc16b}{delete\+Tab} (int index, bool save\+File\+Name=false)
+\begin{DoxyCompactList}\small\item\em Closing. \end{DoxyCompactList}\item 
+\hypertarget{class_main_window_a4f95292d59c2795f60e74b15b7b82af9}{}void {\bfseries close\+All\+Child\+Windows} ()\label{class_main_window_a4f95292d59c2795f60e74b15b7b82af9}
+
+\item 
+void \hyperlink{class_main_window_a4037900bbe42daa151e96ba5c96c8f62}{open\+Help} ()
+\begin{DoxyCompactList}\small\item\em Help and About. \end{DoxyCompactList}\item 
+\hypertarget{class_main_window_a06bcc3ac679ebab877652fc0d69744ea}{}void {\bfseries open\+About} ()\label{class_main_window_a06bcc3ac679ebab877652fc0d69744ea}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_main_window_affc2bb4c6ca84428e7121d8aac999164}{Main\+Window} (const Q\+String\+List \&args, Q\+Widget $\ast$parent=0)
+\item 
+\hyperlink{class_main_window_ae98d00a93bc118200eeef9f9bba1dba7}{$\sim$\+Main\+Window} ()
+\item 
+void \hyperlink{class_main_window_ad233094d8a8d6f41d81d845d1c4eb1ee}{init\+Ui} ()
+\item 
+\hypertarget{class_main_window_aa4907b0251d305659e403c62921ef331}{}void {\bfseries create\+Menus} ()\label{class_main_window_aa4907b0251d305659e403c62921ef331}
+
+\item 
+void \hyperlink{class_main_window_a62cd8712fb41a754298f6f60eead2cb0}{create\+Actions} ()
+\item 
+\hypertarget{class_main_window_a3a5152074fdfc6e75c6f86e55fcba28d}{}void {\bfseries create\+Buttons} ()\label{class_main_window_a3a5152074fdfc6e75c6f86e55fcba28d}
+
+\item 
+\hypertarget{class_main_window_acce4e32b95d3d5cb48470c053a1740c2}{}void {\bfseries create\+Tool\+Bars} ()\label{class_main_window_acce4e32b95d3d5cb48470c053a1740c2}
+
+\item 
+void \hyperlink{class_main_window_a49be45fc9b993fdc3afe55d4b6fa0650}{write\+Settings} ()
+\item 
+\hypertarget{class_main_window_a22a92325046401ede7a21e64728dd10b}{}void {\bfseries setup\+Editor} (int i)\label{class_main_window_a22a92325046401ede7a21e64728dd10b}
+
+\item 
+\hypertarget{class_main_window_a2ac2a11c4c75f5ee65f61e5c373581f6}{}bool {\bfseries ok\+To\+Continue} (int index=-\/1)\label{class_main_window_a2ac2a11c4c75f5ee65f61e5c373581f6}
+
+\item 
+void \hyperlink{class_main_window_a8f3241a37f8995ca0c20aeebdd2bfc24}{set\+Current\+Tab\+Name} (const Q\+String \&file\+Path, int index=-\/1)
+\item 
+\hypertarget{class_main_window_ad0252b4ac212cce0738ac8678309b2a0}{}bool {\bfseries remove\+Dir\+Recuresively} (const Q\+String \&dir\+Name)\label{class_main_window_ad0252b4ac212cce0738ac8678309b2a0}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_main_window_a671bf73078069470c19965a3d948b6fa}{}void {\bfseries drag\+Enter\+Event} (Q\+Drag\+Enter\+Event $\ast$event)\label{class_main_window_a671bf73078069470c19965a3d948b6fa}
+
+\item 
+\hypertarget{class_main_window_ae7b97e68c51358f6f36be3c40b89c01c}{}void {\bfseries drop\+Event} (Q\+Drop\+Event $\ast$event)\label{class_main_window_ae7b97e68c51358f6f36be3c40b89c01c}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_main_window_a8a5bf36f9544ed3ec3a9eea9b7154564}{}void {\bfseries close\+Event} (Q\+Close\+Event $\ast$e)\label{class_main_window_a8a5bf36f9544ed3ec3a9eea9b7154564}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_main_window_ab0d27cd951f836d48197c91349e02398}{}\hyperlink{class_get_started_widget}{Get\+Started\+Widget} $\ast$ {\bfseries get\+Started\+Widget}\label{class_main_window_ab0d27cd951f836d48197c91349e02398}
+
+\item 
+\hypertarget{class_main_window_ac789c1633000cdbf742f45f254ace59d}{}Q\+Stacked\+Widget $\ast$ {\bfseries main\+Widget}\label{class_main_window_ac789c1633000cdbf742f45f254ace59d}
+
+\item 
+\hypertarget{class_main_window_a392fb761a37795ee8081438c8c3493dd}{}Q\+Splitter $\ast$ {\bfseries splitter}\label{class_main_window_a392fb761a37795ee8081438c8c3493dd}
+
+\item 
+\hypertarget{class_main_window_abd2dd045cd4f4a425682e634515cee4a}{}Q\+V\+Box\+Layout $\ast$ {\bfseries work\+Layout}\label{class_main_window_abd2dd045cd4f4a425682e634515cee4a}
+
+\item 
+\hypertarget{class_main_window_aedb288ba31a9b42071fda2724afa8eb2}{}Q\+Widget $\ast$ {\bfseries work\+Widget}\label{class_main_window_aedb288ba31a9b42071fda2724afa8eb2}
+
+\item 
+\hypertarget{class_main_window_abbd98dca69e8cdc0aedf6330bc5a0960}{}\hyperlink{class_ru_q_text_edit}{Ru\+Q\+Text\+Edit} $\ast$ {\bfseries compiler\+Out}\label{class_main_window_abbd98dca69e8cdc0aedf6330bc5a0960}
+
+\item 
+\hypertarget{class_main_window_a7d5ec7879af0d224a6173a5565ea1ffd}{}Q\+Tab\+Widget $\ast$ {\bfseries tabs}\label{class_main_window_a7d5ec7879af0d224a6173a5565ea1ffd}
+
+\item 
+\hypertarget{class_main_window_a426da48f6e2f865b07a28533c07c4f7a}{}Q\+Menu $\ast$ \hyperlink{class_main_window_a426da48f6e2f865b07a28533c07c4f7a}{file\+Menu}\label{class_main_window_a426da48f6e2f865b07a28533c07c4f7a}
+
+\begin{DoxyCompactList}\small\item\em Menus and Actions. \end{DoxyCompactList}\item 
+\hypertarget{class_main_window_a5b05548b0849cd96a73ad5b38cc73bef}{}Q\+Menu $\ast$ {\bfseries edit\+Menu}\label{class_main_window_a5b05548b0849cd96a73ad5b38cc73bef}
+
+\item 
+\hypertarget{class_main_window_a2bfd2a3d19e9e750d25041306aa2923b}{}Q\+Menu $\ast$ {\bfseries debug\+Menu}\label{class_main_window_a2bfd2a3d19e9e750d25041306aa2923b}
+
+\item 
+\hypertarget{class_main_window_ab50ce8e7185bd0b16711a7a699dd907b}{}Q\+Menu $\ast$ {\bfseries build\+Menu}\label{class_main_window_ab50ce8e7185bd0b16711a7a699dd907b}
+
+\item 
+\hypertarget{class_main_window_a7e503c332056eb43ffa07fc664d34489}{}Q\+Menu $\ast$ {\bfseries settings\+Menu}\label{class_main_window_a7e503c332056eb43ffa07fc664d34489}
+
+\item 
+\hypertarget{class_main_window_a947c15e520bfea60338b2577f67146b8}{}Q\+Menu $\ast$ {\bfseries help\+Menu}\label{class_main_window_a947c15e520bfea60338b2577f67146b8}
+
+\item 
+\hypertarget{class_main_window_a5bcdb8d44feeff7d1bcb21f66a164255}{}Q\+Action $\ast$ {\bfseries new\+Action}\label{class_main_window_a5bcdb8d44feeff7d1bcb21f66a164255}
+
+\item 
+\hypertarget{class_main_window_ae988ea38c66b588f8f7e3f198aea46b0}{}Q\+Action $\ast$ {\bfseries open\+Action}\label{class_main_window_ae988ea38c66b588f8f7e3f198aea46b0}
+
+\item 
+\hypertarget{class_main_window_aa548b025a7f0179f05c928038c656fd7}{}Q\+Action $\ast$ {\bfseries close\+Action}\label{class_main_window_aa548b025a7f0179f05c928038c656fd7}
+
+\item 
+\hypertarget{class_main_window_a0ca0fd7bf38a67d5a0a985357566f396}{}Q\+Action $\ast$ {\bfseries save\+Action}\label{class_main_window_a0ca0fd7bf38a67d5a0a985357566f396}
+
+\item 
+\hypertarget{class_main_window_a6c23b775bc9e5820e87f9039ffdccf89}{}Q\+Action $\ast$ {\bfseries save\+As\+Action}\label{class_main_window_a6c23b775bc9e5820e87f9039ffdccf89}
+
+\item 
+\hypertarget{class_main_window_a0f48448ba8d20f4eb18430b5d9d8f54b}{}Q\+Action $\ast$ {\bfseries save\+Exe\+Action}\label{class_main_window_a0f48448ba8d20f4eb18430b5d9d8f54b}
+
+\item 
+\hypertarget{class_main_window_a480862e5bff02a85e6de35513eceff2c}{}Q\+Action $\ast$ {\bfseries exit\+Action}\label{class_main_window_a480862e5bff02a85e6de35513eceff2c}
+
+\item 
+\hypertarget{class_main_window_abd1e6457fc9a3441cc4e7046eb119a0f}{}Q\+Action $\ast$ {\bfseries find\+Action}\label{class_main_window_abd1e6457fc9a3441cc4e7046eb119a0f}
+
+\item 
+\hypertarget{class_main_window_a9c2a73fe97788e4d531747413e090e53}{}Q\+Action $\ast$ {\bfseries comment\+Action}\label{class_main_window_a9c2a73fe97788e4d531747413e090e53}
+
+\item 
+\hypertarget{class_main_window_a5dbf4af115805b62eb3e2aa072f737f8}{}Q\+Action $\ast$ {\bfseries uncomment\+Action}\label{class_main_window_a5dbf4af115805b62eb3e2aa072f737f8}
+
+\item 
+\hypertarget{class_main_window_a5781877445b8e6152ade56a71a4d8741}{}Q\+Action $\ast$ {\bfseries undo\+Action}\label{class_main_window_a5781877445b8e6152ade56a71a4d8741}
+
+\item 
+\hypertarget{class_main_window_a068e205ecfed3a2859e025e04f2f5f50}{}Q\+Action $\ast$ {\bfseries redo\+Action}\label{class_main_window_a068e205ecfed3a2859e025e04f2f5f50}
+
+\item 
+\hypertarget{class_main_window_a62adda2fa755a485b73d36ed37d9cbf6}{}Q\+Action $\ast$ {\bfseries cut\+Action}\label{class_main_window_a62adda2fa755a485b73d36ed37d9cbf6}
+
+\item 
+\hypertarget{class_main_window_a97c114ec68355261f327b83d5e19a5dc}{}Q\+Action $\ast$ {\bfseries copy\+Action}\label{class_main_window_a97c114ec68355261f327b83d5e19a5dc}
+
+\item 
+\hypertarget{class_main_window_a79595fa29fd4a746d701d6422cea5c86}{}Q\+Action $\ast$ {\bfseries paste\+Action}\label{class_main_window_a79595fa29fd4a746d701d6422cea5c86}
+
+\item 
+\hypertarget{class_main_window_acda4f1b59ac5e55f37e98e35bf5dc9b6}{}Q\+Action $\ast$ {\bfseries delete\+Action}\label{class_main_window_acda4f1b59ac5e55f37e98e35bf5dc9b6}
+
+\item 
+\hypertarget{class_main_window_a27a851d907e5cf54c2df75cdbb8a9003}{}Q\+Action $\ast$ {\bfseries select\+All\+Action}\label{class_main_window_a27a851d907e5cf54c2df75cdbb8a9003}
+
+\item 
+\hypertarget{class_main_window_acd9224aa5d181e9c6754cb71fc103e2f}{}Q\+Action $\ast$ {\bfseries put\+Tab\+Action}\label{class_main_window_acd9224aa5d181e9c6754cb71fc103e2f}
+
+\item 
+\hypertarget{class_main_window_a8f5db4cdc4dc7f610ace1b97f64f42fb}{}Q\+Action $\ast$ {\bfseries delete\+Tab\+Action}\label{class_main_window_a8f5db4cdc4dc7f610ace1b97f64f42fb}
+
+\item 
+\hypertarget{class_main_window_a29f530ec086e65c4a35eb28e68fd2236}{}Q\+Action $\ast$ {\bfseries build\+Action}\label{class_main_window_a29f530ec086e65c4a35eb28e68fd2236}
+
+\item 
+\hypertarget{class_main_window_a84ae1463c68554b9d2e3ff3fa2c30c25}{}Q\+Action $\ast$ {\bfseries run\+Action}\label{class_main_window_a84ae1463c68554b9d2e3ff3fa2c30c25}
+
+\item 
+\hypertarget{class_main_window_a9b4544dc6986833c366d47c5b83632bf}{}Q\+Action $\ast$ {\bfseries run\+Exe\+Action}\label{class_main_window_a9b4544dc6986833c366d47c5b83632bf}
+
+\item 
+\hypertarget{class_main_window_a9b1cc672dc054704f2dfbe47386793b5}{}Q\+Action $\ast$ {\bfseries stop\+Action}\label{class_main_window_a9b1cc672dc054704f2dfbe47386793b5}
+
+\item 
+\hypertarget{class_main_window_a4a8e530692fbabf29c34083616628bf9}{}Q\+Action $\ast$ {\bfseries debug\+Action}\label{class_main_window_a4a8e530692fbabf29c34083616628bf9}
+
+\item 
+\hypertarget{class_main_window_af618c0de06267e6b249bf5681dde4d45}{}Q\+Action $\ast$ {\bfseries debug\+Next\+Action}\label{class_main_window_af618c0de06267e6b249bf5681dde4d45}
+
+\item 
+\hypertarget{class_main_window_af10d588a7952b147e345945ef345cd1c}{}Q\+Action $\ast$ {\bfseries debug\+Next\+Ni\+Action}\label{class_main_window_af10d588a7952b147e345945ef345cd1c}
+
+\item 
+\hypertarget{class_main_window_a1526ae1c06e5cdace7bba5e3d17a0780}{}Q\+Action $\ast$ {\bfseries debug\+Toggle\+Breakpoint\+Action}\label{class_main_window_a1526ae1c06e5cdace7bba5e3d17a0780}
+
+\item 
+\hypertarget{class_main_window_abdf5fb2ab70cac959f1252548bb5df01}{}Q\+Action $\ast$ {\bfseries debug\+Show\+Registers\+Action}\label{class_main_window_abdf5fb2ab70cac959f1252548bb5df01}
+
+\item 
+\hypertarget{class_main_window_a2243efbdb97a03e431d2be5d6e6f870d}{}Q\+Action $\ast$ {\bfseries debug\+Show\+Memory\+Action}\label{class_main_window_a2243efbdb97a03e431d2be5d6e6f870d}
+
+\item 
+\hypertarget{class_main_window_a54cb5d217f90135a7c366d0b37331493}{}Q\+Action $\ast$ {\bfseries settings\+Action}\label{class_main_window_a54cb5d217f90135a7c366d0b37331493}
+
+\item 
+\hypertarget{class_main_window_add8f4264db92b536da73c849e14bd3c7}{}Q\+Action $\ast$ {\bfseries help\+Action}\label{class_main_window_add8f4264db92b536da73c849e14bd3c7}
+
+\item 
+\hypertarget{class_main_window_a4bc4ae131d91d1eece03c36fd0c2d3fa}{}Q\+Action $\ast$ {\bfseries about\+Action}\label{class_main_window_a4bc4ae131d91d1eece03c36fd0c2d3fa}
+
+\item 
+\hypertarget{class_main_window_a0a352c6d66b7a080fcf558874a7e51d4}{}Q\+Tool\+Bar $\ast$ \hyperlink{class_main_window_a0a352c6d66b7a080fcf558874a7e51d4}{file\+Tool\+Bar}\label{class_main_window_a0a352c6d66b7a080fcf558874a7e51d4}
+
+\begin{DoxyCompactList}\small\item\em Toolbars. \end{DoxyCompactList}\item 
+\hypertarget{class_main_window_a58acbb5fd760cdd016969a446abb83ca}{}Q\+Tool\+Bar $\ast$ {\bfseries edit\+Tool\+Bar}\label{class_main_window_a58acbb5fd760cdd016969a446abb83ca}
+
+\item 
+\hypertarget{class_main_window_aa6e68a631578e55575254dd029ae8145}{}Q\+Tool\+Bar $\ast$ {\bfseries build\+Tool\+Bar}\label{class_main_window_aa6e68a631578e55575254dd029ae8145}
+
+\item 
+\hypertarget{class_main_window_aa3194e1aeded7359e3b63db79ad73a71}{}Q\+Tool\+Bar $\ast$ {\bfseries debug\+Tool\+Bar}\label{class_main_window_aa3194e1aeded7359e3b63db79ad73a71}
+
+\item 
+\hypertarget{class_main_window_a087957e06d8d297f08221e508dfb326e}{}Q\+Process $\ast$ \hyperlink{class_main_window_a087957e06d8d297f08221e508dfb326e}{run\+Process}\label{class_main_window_a087957e06d8d297f08221e508dfb326e}
+
+\begin{DoxyCompactList}\small\item\em Builder and debugger and all that concern to them. \end{DoxyCompactList}\item 
+\hypertarget{class_main_window_a0781f612c0eee901117a42f3fa457683}{}\hyperlink{class_code_editor}{Code\+Editor} $\ast$ {\bfseries prev\+Code\+Editor}\label{class_main_window_a0781f612c0eee901117a42f3fa457683}
+
+\item 
+\hypertarget{class_main_window_a356578805ed1248a7f2807434cb0e5ee}{}Q\+Timer $\ast$ {\bfseries timer}\label{class_main_window_a356578805ed1248a7f2807434cb0e5ee}
+
+\item 
+\hypertarget{class_main_window_a532375be374a745d71c38659afc235ea}{}Q\+Time {\bfseries program\+Execution\+Time}\label{class_main_window_a532375be374a745d71c38659afc235ea}
+
+\item 
+\hypertarget{class_main_window_ade3454d10164efa50487db71a9e2fbd9}{}\hyperlink{class_debugger}{Debugger} $\ast$ {\bfseries debugger}\label{class_main_window_ade3454d10164efa50487db71a9e2fbd9}
+
+\item 
+\hypertarget{class_main_window_a393e70c554043c77c719373122d8fb31}{}bool {\bfseries program\+Is\+Builded}\label{class_main_window_a393e70c554043c77c719373122d8fb31}
+
+\item 
+\hypertarget{class_main_window_a765bcdb2472bb408de635274ba564f0b}{}Q\+Pointer$<$ \hyperlink{class_debug_table_widget}{Debug\+Table\+Widget} $>$ {\bfseries registers\+Window}\label{class_main_window_a765bcdb2472bb408de635274ba564f0b}
+
+\item 
+\hypertarget{class_main_window_ae29651235c4b3e55b1475e53c949d396}{}Q\+Dock\+Widget $\ast$ {\bfseries registers\+Dock}\label{class_main_window_ae29651235c4b3e55b1475e53c949d396}
+
+\item 
+\hypertarget{class_main_window_acfa36ea58edc35ba9c1ccf85d5eb4d4c}{}Q\+Pointer$<$ \hyperlink{class_debug_table_widget}{Debug\+Table\+Widget} $>$ {\bfseries memory\+Window}\label{class_main_window_acfa36ea58edc35ba9c1ccf85d5eb4d4c}
+
+\item 
+\hypertarget{class_main_window_a23eeda6f502e86e8186877f7c2b583eb}{}Q\+Dock\+Widget $\ast$ {\bfseries memory\+Dock}\label{class_main_window_a23eeda6f502e86e8186877f7c2b583eb}
+
+\item 
+\hypertarget{class_main_window_ad9e9b1792aeba47a7bb27f954dd5f95b}{}Q\+List$<$ \hyperlink{struct_ru_q_plain_text_edit_1_1_watch}{Ru\+Q\+Plain\+Text\+Edit\+::\+Watch} $>$ {\bfseries watches}\label{class_main_window_ad9e9b1792aeba47a7bb27f954dd5f95b}
+
+\item 
+\hypertarget{class_main_window_ab5c1ce4f3d677eaa17ada4ec162aec06}{}\hyperlink{class_debug_any_command_widget}{Debug\+Any\+Command\+Widget} $\ast$ {\bfseries debug\+Any\+Command\+Widget}\label{class_main_window_ab5c1ce4f3d677eaa17ada4ec162aec06}
+
+\item 
+\hypertarget{class_main_window_a5f3369b552ea5be75a14592ec73d2018}{}bool {\bfseries program\+Stopped}\label{class_main_window_a5f3369b552ea5be75a14592ec73d2018}
+
+\item 
+\hypertarget{class_main_window_ae71b480c580e95196e0541d091b29440}{}int {\bfseries output\+Index}\label{class_main_window_ae71b480c580e95196e0541d091b29440}
+
+\item 
+\hypertarget{class_main_window_adadee554364d68c67e145995bb0d6d88}{}\hyperlink{class_assembler}{Assembler} $\ast$ {\bfseries assembler}\label{class_main_window_adadee554364d68c67e145995bb0d6d88}
+
+\item 
+\hypertarget{class_main_window_a946e1a48859b30089dd5bfcfb2032ef9}{}bool {\bfseries debugger\+Was\+Started}\label{class_main_window_a946e1a48859b30089dd5bfcfb2032ef9}
+
+\item 
+\hypertarget{class_main_window_a101e50e1127fe118c8072fb654d2a6f4}{}Q\+String {\bfseries debug\+Key}\label{class_main_window_a101e50e1127fe118c8072fb654d2a6f4}
+
+\item 
+\hypertarget{class_main_window_ae653e799d7c4b702ad23f9a5f5b134e7}{}\hyperlink{class_highlighter}{Highlighter} $\ast$ \hyperlink{class_main_window_ae653e799d7c4b702ad23f9a5f5b134e7}{highlighter}\label{class_main_window_ae653e799d7c4b702ad23f9a5f5b134e7}
+
+\begin{DoxyCompactList}\small\item\em Highlighters. \end{DoxyCompactList}\item 
+\hypertarget{class_main_window_ac3ed715255e638544c915d3f5dcd0eed}{}\hyperlink{class_highlighter}{Highlighter} $\ast$ {\bfseries settings\+Highlighter}\label{class_main_window_ac3ed715255e638544c915d3f5dcd0eed}
+
+\item 
+\hypertarget{class_main_window_a940ef509338a6eb9a8fd88b744444528}{}Q\+Pointer$<$ \hyperlink{class_find_dialog}{Find\+Dialog} $>$ \hyperlink{class_main_window_a940ef509338a6eb9a8fd88b744444528}{find\+Dialog}\label{class_main_window_a940ef509338a6eb9a8fd88b744444528}
+
+\begin{DoxyCompactList}\small\item\em Search. \end{DoxyCompactList}\item 
+\hypertarget{class_main_window_a4675f0ccc7830548cdb633bd7d203311}{}Qt\+::\+Case\+Sensitivity {\bfseries prev\+Cs}\label{class_main_window_a4675f0ccc7830548cdb633bd7d203311}
+
+\item 
+\hypertarget{class_main_window_aa26c478fd01dfb62f25cea707f46828f}{}Q\+Pointer$<$ Q\+Widget $>$ \hyperlink{class_main_window_aa26c478fd01dfb62f25cea707f46828f}{settings\+Window}\label{class_main_window_aa26c478fd01dfb62f25cea707f46828f}
+
+\begin{DoxyCompactList}\small\item\em Settings and Help. \end{DoxyCompactList}\item 
+\hypertarget{class_main_window_addb2c09eaa063aafb1a199f0ccdfe58a}{}Ui\+::\+Settings\+Window {\bfseries settings\+Ui}\label{class_main_window_addb2c09eaa063aafb1a199f0ccdfe58a}
+
+\item 
+\hypertarget{class_main_window_a4c0f162aea1aef936ce3cd6568d744d9}{}Q\+String {\bfseries start\+Text}\label{class_main_window_a4c0f162aea1aef936ce3cd6568d744d9}
+
+\item 
+\hypertarget{class_main_window_a017ec0eacfb8f3a4bc7656e75adb3610}{}\hyperlink{class_code_editor}{Code\+Editor} $\ast$ {\bfseries settings\+Start\+Text\+Editor}\label{class_main_window_a017ec0eacfb8f3a4bc7656e75adb3610}
+
+\item 
+\hypertarget{class_main_window_a314ff864f3e545e033898d3d4f136d52}{}Q\+String \hyperlink{class_main_window_a314ff864f3e545e033898d3d4f136d52}{save\+Open\+Directory}\label{class_main_window_a314ff864f3e545e033898d3d4f136d52}
+
+\begin{DoxyCompactList}\small\item\em save and open \end{DoxyCompactList}\item 
+\hypertarget{class_main_window_a0198da4de1adda89a1418a87168f66c6}{}Q\+Pointer$<$ Q\+Text\+Browser $>$ {\bfseries help}\label{class_main_window_a0198da4de1adda89a1418a87168f66c6}
+
+\item 
+\hypertarget{class_main_window_a4fd9ec8df088f03433cb7937adadcc34}{}Q\+Signal\+Mapper $\ast$ {\bfseries color\+Signal\+Mapper}\label{class_main_window_a4fd9ec8df088f03433cb7937adadcc34}
+
+\item 
+\hypertarget{class_main_window_a0ede638df0e7f1ed317c83ebdf790c7e}{}Q\+Signal\+Mapper $\ast$ {\bfseries fonts\+Signal\+Mapper}\label{class_main_window_a0ede638df0e7f1ed317c83ebdf790c7e}
+
+\item 
+\hypertarget{class_main_window_afdd7b3115692de072db9504d38449ae9}{}Q\+List$<$ Q\+Push\+Button $\ast$ $>$ {\bfseries color\+Buttons}\label{class_main_window_afdd7b3115692de072db9504d38449ae9}
+
+\item 
+\hypertarget{class_main_window_aabb23f3b2db87626123838f7705f3f15}{}Q\+List$<$ Q\+Color $>$ \hyperlink{class_main_window_aabb23f3b2db87626123838f7705f3f15}{default\+Colors}\label{class_main_window_aabb23f3b2db87626123838f7705f3f15}
+
+\begin{DoxyCompactList}\small\item\em According to color\+Buttons. \end{DoxyCompactList}\item 
+\hypertarget{class_main_window_a3b3d9502ca6548f19f81b3e9921e8e1f}{}Q\+Map$<$ Q\+String, Q\+Color $>$ {\bfseries colors\+Map}\label{class_main_window_a3b3d9502ca6548f19f81b3e9921e8e1f}
+
+\item 
+\hypertarget{class_main_window_a41a492577e8a6dd51b9b9a78a236c6c0}{}Q\+List$<$ Q\+Check\+Box $\ast$ $>$ {\bfseries font\+Check\+Boxes}\label{class_main_window_a41a492577e8a6dd51b9b9a78a236c6c0}
+
+\item 
+\hypertarget{class_main_window_a87b5b9562fe91ee19249f5a0d7617ce0}{}Q\+Settings {\bfseries settings}\label{class_main_window_a87b5b9562fe91ee19249f5a0d7617ce0}
+
+\item 
+\hypertarget{class_main_window_aa9410fd13b6463955726d700de837323}{}Q\+String {\bfseries backup\+Assembler}\label{class_main_window_aa9410fd13b6463955726d700de837323}
+
+\item 
+\hypertarget{class_main_window_a6ebfecf17b4a7b7931daa5198fbc0b44}{}Q\+String {\bfseries backup\+Mode}\label{class_main_window_a6ebfecf17b4a7b7931daa5198fbc0b44}
+
+\item 
+\hypertarget{class_main_window_a1af0453c231c87ff14067103b3121803}{}Q\+String {\bfseries backup\+Assembler\+Options}\label{class_main_window_a1af0453c231c87ff14067103b3121803}
+
+\item 
+\hypertarget{class_main_window_a1fe62872a358a8f6f20e96c02a9be62f}{}Q\+String {\bfseries backup\+Linker\+Options}\label{class_main_window_a1fe62872a358a8f6f20e96c02a9be62f}
+
+\item 
+\hypertarget{class_main_window_a11c38f51d33a2369f1bd444be72975af}{}bool {\bfseries backup\+Disable\+Linking}\label{class_main_window_a11c38f51d33a2369f1bd444be72975af}
+
+\item 
+\hypertarget{class_main_window_a44be17fe698b7a47c0d118379075c8e9}{}Q\+String {\bfseries backup\+Assembler\+Path}\label{class_main_window_a44be17fe698b7a47c0d118379075c8e9}
+
+\item 
+\hypertarget{class_main_window_a36891330292ae023d8de31113a555b63}{}Q\+String {\bfseries backup\+Start\+Text}\label{class_main_window_a36891330292ae023d8de31113a555b63}
+
+\item 
+\hypertarget{class_main_window_ad28f0fe6e6dc8caf75173b19db1972c4}{}Q\+String {\bfseries backup\+Linker\+Path}\label{class_main_window_ad28f0fe6e6dc8caf75173b19db1972c4}
+
+\item 
+\hypertarget{class_main_window_a4b71407a32d640de521b24eed1c8d672}{}bool \hyperlink{class_main_window_a4b71407a32d640de521b24eed1c8d672}{close\+From\+Close\+All}\label{class_main_window_a4b71407a32d640de521b24eed1c8d672}
+
+\begin{DoxyCompactList}\small\item\em About close. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The \hyperlink{class_main_window}{Main\+Window} class defines the actions and behavior of the main user interface. 
+
+Longer explanation here 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_main_window_affc2bb4c6ca84428e7121d8aac999164}{}\index{Main\+Window@{Main\+Window}!Main\+Window@{Main\+Window}}
+\index{Main\+Window@{Main\+Window}!Main\+Window@{Main\+Window}}
+\subsubsection[{Main\+Window}]{\setlength{\rightskip}{0pt plus 5cm}Main\+Window\+::\+Main\+Window (
+\begin{DoxyParamCaption}
+\item[{const Q\+String\+List \&}]{args, }
+\item[{Q\+Widget $\ast$}]{parent = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}\label{class_main_window_affc2bb4c6ca84428e7121d8aac999164}
+Set save and open directory
+
+Initial variables
+
+Initialize assembler
+
+Set code field start text
+
+Restore log splitter state
+
+Open documents from command line \hypertarget{class_main_window_ae98d00a93bc118200eeef9f9bba1dba7}{}\index{Main\+Window@{Main\+Window}!````~Main\+Window@{$\sim$\+Main\+Window}}
+\index{````~Main\+Window@{$\sim$\+Main\+Window}!Main\+Window@{Main\+Window}}
+\subsubsection[{$\sim$\+Main\+Window}]{\setlength{\rightskip}{0pt plus 5cm}Main\+Window\+::$\sim$\+Main\+Window (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_main_window_ae98d00a93bc118200eeef9f9bba1dba7}
+Delete all temporary files 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_main_window_a8584b048711a7a4fd68c042aeaf6d8e7}{}\index{Main\+Window@{Main\+Window}!build\+Program@{build\+Program}}
+\index{build\+Program@{build\+Program}!Main\+Window@{Main\+Window}}
+\subsubsection[{build\+Program}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::build\+Program (
+\begin{DoxyParamCaption}
+\item[{bool}]{debug\+Mode = {\ttfamily false}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_a8584b048711a7a4fd68c042aeaf6d8e7}
+
+
+Build. 
+
+Save input to file
+
+\hyperlink{class_assembler}{Assembler}
+
+G\+C\+C
+
+macro.\+c compilation/copying
+
+macro.\+c compilation
+
+Final linking
+
+Print errors
+
+Q\+Message\+Box\+::critical(0, tr(\char`\"{}\+Warning!\char`\"{}), tr(\char`\"{}\+Errors have occurred in the build!\char`\"{}));
+
+print warnings \hypertarget{class_main_window_aee3cd5b22f4b0ec8e98b0a56d21e2ce4}{}\index{Main\+Window@{Main\+Window}!change\+Actions\+State@{change\+Actions\+State}}
+\index{change\+Actions\+State@{change\+Actions\+State}!Main\+Window@{Main\+Window}}
+\subsubsection[{change\+Actions\+State}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::change\+Actions\+State (
+\begin{DoxyParamCaption}
+\item[{int}]{widget\+Index}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_aee3cd5b22f4b0ec8e98b0a56d21e2ce4}
+Get started window \hypertarget{class_main_window_a117cad33e07cf5743d10390224ce9b20}{}\index{Main\+Window@{Main\+Window}!change\+Assembler@{change\+Assembler}}
+\index{change\+Assembler@{change\+Assembler}!Main\+Window@{Main\+Window}}
+\subsubsection[{change\+Assembler}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::change\+Assembler (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_a117cad33e07cf5743d10390224ce9b20}
+\hyperlink{class_assembler}{Assembler} Dependent Options Begin \hypertarget{class_main_window_aeac9a226959ae44a5f8eedb73fbfaa94}{}\index{Main\+Window@{Main\+Window}!change\+Current\+Tab@{change\+Current\+Tab}}
+\index{change\+Current\+Tab@{change\+Current\+Tab}!Main\+Window@{Main\+Window}}
+\subsubsection[{change\+Current\+Tab}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::change\+Current\+Tab (
+\begin{DoxyParamCaption}
+\item[{int}]{index}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_aeac9a226959ae44a5f8eedb73fbfaa94}
+Set highlighter \hypertarget{class_main_window_a31a22d06907f6f37fe53b3c1a78a27c4}{}\index{Main\+Window@{Main\+Window}!change\+Mode@{change\+Mode}}
+\index{change\+Mode@{change\+Mode}!Main\+Window@{Main\+Window}}
+\subsubsection[{change\+Mode}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::change\+Mode (
+\begin{DoxyParamCaption}
+\item[{bool}]{x86}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_a31a22d06907f6f37fe53b3c1a78a27c4}
+\hyperlink{class_assembler}{Assembler} Dependent Options End \hypertarget{class_main_window_a79cd135085ff501e05419fc7153c4e73}{}\index{Main\+Window@{Main\+Window}!close\+App@{close\+App}}
+\index{close\+App@{close\+App}!Main\+Window@{Main\+Window}}
+\subsubsection[{close\+App}]{\setlength{\rightskip}{0pt plus 5cm}bool Main\+Window\+::close\+App (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_a79cd135085ff501e05419fc7153c4e73}
+Consider all tabs
+
+Left only saved tabs \hypertarget{class_main_window_a62cd8712fb41a754298f6f60eead2cb0}{}\index{Main\+Window@{Main\+Window}!create\+Actions@{create\+Actions}}
+\index{create\+Actions@{create\+Actions}!Main\+Window@{Main\+Window}}
+\subsubsection[{create\+Actions}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::create\+Actions (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_main_window_a62cd8712fb41a754298f6f60eead2cb0}
+Action in edit menu connects in refresh\+Edit\+Menu function!
+
+Enable in run\+Program(), disable in stop
+
+Disable some actions if get started widget opened \hypertarget{class_main_window_ac1ebf6edc016999e6e55b58c2efc322e}{}\index{Main\+Window@{Main\+Window}!debug@{debug}}
+\index{debug@{debug}!Main\+Window@{Main\+Window}}
+\subsubsection[{debug}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::debug (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_ac1ebf6edc016999e6e55b58c2efc322e}
+
+
+Debug. 
+
+Start debugger if true \hypertarget{class_main_window_a0d8f20a9b47c566a76a96633188372fa}{}\index{Main\+Window@{Main\+Window}!debug\+Exit@{debug\+Exit}}
+\index{debug\+Exit@{debug\+Exit}!Main\+Window@{Main\+Window}}
+\subsubsection[{debug\+Exit}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::debug\+Exit (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_a0d8f20a9b47c566a76a96633188372fa}
+Many actions performed here -\/ deleting of highlighting too \hypertarget{class_main_window_af0e3a62c03cbe1723ba91d7cb21ec3c1}{}\index{Main\+Window@{Main\+Window}!debug\+Show\+Memory@{debug\+Show\+Memory}}
+\index{debug\+Show\+Memory@{debug\+Show\+Memory}!Main\+Window@{Main\+Window}}
+\subsubsection[{debug\+Show\+Memory}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::debug\+Show\+Memory (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_af0e3a62c03cbe1723ba91d7cb21ec3c1}
+Create table
+
+Fill table
+
+If true, watch as variable
+
+Watch as random address \hypertarget{class_main_window_a2b789b53a039e5c900fccba3881cc16b}{}\index{Main\+Window@{Main\+Window}!delete\+Tab@{delete\+Tab}}
+\index{delete\+Tab@{delete\+Tab}!Main\+Window@{Main\+Window}}
+\subsubsection[{delete\+Tab}]{\setlength{\rightskip}{0pt plus 5cm}bool Main\+Window\+::delete\+Tab (
+\begin{DoxyParamCaption}
+\item[{int}]{index, }
+\item[{bool}]{save\+File\+Name = {\ttfamily false}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_a2b789b53a039e5c900fccba3881cc16b}
+
+
+Closing. 
+
+Get started
+
+If tab did not delete \hypertarget{class_main_window_ad11440fb016244cd6f3fa947022ad713}{}\index{Main\+Window@{Main\+Window}!disable\+Debug\+Actions@{disable\+Debug\+Actions}}
+\index{disable\+Debug\+Actions@{disable\+Debug\+Actions}!Main\+Window@{Main\+Window}}
+\subsubsection[{disable\+Debug\+Actions}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::disable\+Debug\+Actions (
+\begin{DoxyParamCaption}
+\item[{bool}]{start = {\ttfamily false}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_ad11440fb016244cd6f3fa947022ad713}
+Change stop\+Action
+
+Enable run and build \hypertarget{class_main_window_a1ecd0f10a8b0acfaf63c1bb4f1b77cfb}{}\index{Main\+Window@{Main\+Window}!enable\+Debug\+Actions@{enable\+Debug\+Actions}}
+\index{enable\+Debug\+Actions@{enable\+Debug\+Actions}!Main\+Window@{Main\+Window}}
+\subsubsection[{enable\+Debug\+Actions}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::enable\+Debug\+Actions (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_a1ecd0f10a8b0acfaf63c1bb4f1b77cfb}
+Set all user's breakpoints
+
+Enable all actions
+
+Change stop\+Action
+
+Block run and build
+
+Restore windows \hypertarget{class_main_window_a56e46fe3769163f479d2a2b5eeb00b24}{}\index{Main\+Window@{Main\+Window}!find\+Next@{find\+Next}}
+\index{find\+Next@{find\+Next}!Main\+Window@{Main\+Window}}
+\subsubsection[{find\+Next}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::find\+Next (
+\begin{DoxyParamCaption}
+\item[{const Q\+String \&}]{pattern, }
+\item[{Qt\+::\+Case\+Sensitivity}]{cs, }
+\item[{bool}]{all, }
+\item[{bool}]{replace, }
+\item[{const Q\+String \&}]{replace\+Text = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_a56e46fe3769163f479d2a2b5eeb00b24}
+Clear all highlights and disable highlighting of current line
+
+Restore highlight
+
+Replace mode
+
+Highlight all
+
+Find next only
+
+if documents differ, cursor is ignored in Q\+Text\+Document\+::find()
+
+Continue from start \hypertarget{class_main_window_ac778aed78fb6c50fecbdb174bad1b293}{}\index{Main\+Window@{Main\+Window}!init\+Assembler\+Settings@{init\+Assembler\+Settings}}
+\index{init\+Assembler\+Settings@{init\+Assembler\+Settings}!Main\+Window@{Main\+Window}}
+\subsubsection[{init\+Assembler\+Settings}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::init\+Assembler\+Settings (
+\begin{DoxyParamCaption}
+\item[{bool}]{first\+Opening}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_ac778aed78fb6c50fecbdb174bad1b293}
+\hyperlink{class_assembler}{Assembler} Dependent Options Begin
+
+\hyperlink{class_assembler}{Assembler} Dependent Options End
+
+Start text editor
+
+Build options
+
+Mode
+
+\hyperlink{class_assembler}{Assembler} Dependent Options Begin\hypertarget{class_main_window_ad233094d8a8d6f41d81d845d1c4eb1ee}{}\index{Main\+Window@{Main\+Window}!init\+Ui@{init\+Ui}}
+\index{init\+Ui@{init\+Ui}!Main\+Window@{Main\+Window}}
+\subsubsection[{init\+Ui}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::init\+Ui (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_main_window_ad233094d8a8d6f41d81d845d1c4eb1ee}
+Resize
+
+Set maximized
+
+Get Started window
+
+Create form
+
+Stacked widget
+
+Create highlighter
+
+Create tabs
+
+Create compiler field
+
+Create gdb command widget
+
+Add widgets on splitter
+
+Restore previous session if it in settings \hypertarget{class_main_window_a69f73b93cc05c89a9ae1be0161105982}{}\index{Main\+Window@{Main\+Window}!new\+File@{new\+File}}
+\index{new\+File@{new\+File}!Main\+Window@{Main\+Window}}
+\subsubsection[{new\+File}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::new\+File (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_a69f73b93cc05c89a9ae1be0161105982}
+
+
+Actions and Menus. 
+
+Tabs \hypertarget{class_main_window_a4037900bbe42daa151e96ba5c96c8f62}{}\index{Main\+Window@{Main\+Window}!open\+Help@{open\+Help}}
+\index{open\+Help@{open\+Help}!Main\+Window@{Main\+Window}}
+\subsubsection[{open\+Help}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::open\+Help (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_a4037900bbe42daa151e96ba5c96c8f62}
+
+
+Help and About. 
+
+language 0=Russian
+
+English language \hypertarget{class_main_window_a8e1c1ad87a68b27f19492549b9c4e773}{}\index{Main\+Window@{Main\+Window}!open\+Settings@{open\+Settings}}
+\index{open\+Settings@{open\+Settings}!Main\+Window@{Main\+Window}}
+\subsubsection[{open\+Settings}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::open\+Settings (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_a8e1c1ad87a68b27f19492549b9c4e773}
+Initialize
+
+Colors
+
+Foreground
+
+Background
+
+Common
+
+According to color\+Buttons
+
+Add color to associative array
+
+Fonts
+
+Bold
+
+Italic
+
+Add font to associative array
+
+Set settings Common
+
+Colors
+
+Fonts \hypertarget{class_main_window_a1f08865148ab71e63a82bff98cbd17c8}{}\index{Main\+Window@{Main\+Window}!print\+Masm\+Info@{print\+Masm\+Info}}
+\index{print\+Masm\+Info@{print\+Masm\+Info}!Main\+Window@{Main\+Window}}
+\subsubsection[{print\+Masm\+Info}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::print\+Masm\+Info (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_a1f08865148ab71e63a82bff98cbd17c8}
+\hyperlink{class_assembler}{Assembler} Dependent Options End \hypertarget{class_main_window_a4f00b18cd52e8ba0ef80cca56559cead}{}\index{Main\+Window@{Main\+Window}!recreate\+Assembler@{recreate\+Assembler}}
+\index{recreate\+Assembler@{recreate\+Assembler}!Main\+Window@{Main\+Window}}
+\subsubsection[{recreate\+Assembler}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::recreate\+Assembler (
+\begin{DoxyParamCaption}
+\item[{bool}]{start = {\ttfamily false}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_a4f00b18cd52e8ba0ef80cca56559cead}
+\hyperlink{class_assembler}{Assembler} Dependent Options Begin
+
+\hyperlink{class_assembler}{Assembler} Dependent Options End\hypertarget{class_main_window_a14b2be29dd502629c21f9ec1b0de5de4}{}\index{Main\+Window@{Main\+Window}!refresh\+Edit\+Menu@{refresh\+Edit\+Menu}}
+\index{refresh\+Edit\+Menu@{refresh\+Edit\+Menu}!Main\+Window@{Main\+Window}}
+\subsubsection[{refresh\+Edit\+Menu}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::refresh\+Edit\+Menu (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_a14b2be29dd502629c21f9ec1b0de5de4}
+Disconnect from previous
+
+Connect to current \hypertarget{class_main_window_a03a1eafa1b4d6b1214767f408cbcf8c7}{}\index{Main\+Window@{Main\+Window}!reset\+All\+Settings@{reset\+All\+Settings}}
+\index{reset\+All\+Settings@{reset\+All\+Settings}!Main\+Window@{Main\+Window}}
+\subsubsection[{reset\+All\+Settings}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::reset\+All\+Settings (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_a03a1eafa1b4d6b1214767f408cbcf8c7}
+Ask before execution
+
+Remove previous \hypertarget{class_main_window_abb30531afee763d0586ee6323fd332e2}{}\index{Main\+Window@{Main\+Window}!save\+Settings@{save\+Settings}}
+\index{save\+Settings@{save\+Settings}!Main\+Window@{Main\+Window}}
+\subsubsection[{save\+Settings}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::save\+Settings (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}\label{class_main_window_abb30531afee763d0586ee6323fd332e2}
+Change fonts \hypertarget{class_main_window_a8f3241a37f8995ca0c20aeebdd2bfc24}{}\index{Main\+Window@{Main\+Window}!set\+Current\+Tab\+Name@{set\+Current\+Tab\+Name}}
+\index{set\+Current\+Tab\+Name@{set\+Current\+Tab\+Name}!Main\+Window@{Main\+Window}}
+\subsubsection[{set\+Current\+Tab\+Name}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::set\+Current\+Tab\+Name (
+\begin{DoxyParamCaption}
+\item[{const Q\+String \&}]{file\+Path, }
+\item[{int}]{index = {\ttfamily -\/1}}
+\end{DoxyParamCaption}
+)}\label{class_main_window_a8f3241a37f8995ca0c20aeebdd2bfc24}
+Taking name of file (without path) \hypertarget{class_main_window_a49be45fc9b993fdc3afe55d4b6fa0650}{}\index{Main\+Window@{Main\+Window}!write\+Settings@{write\+Settings}}
+\index{write\+Settings@{write\+Settings}!Main\+Window@{Main\+Window}}
+\subsubsection[{write\+Settings}]{\setlength{\rightskip}{0pt plus 5cm}void Main\+Window\+::write\+Settings (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_main_window_a49be45fc9b993fdc3afe55d4b6fa0650}
+G\+U\+I
+
+Opened tabs
+
+Remove previous
+
+Create current
+
+Save and open directory
+
+Splitters state 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mainwindow_8h}{mainwindow.\+h}\item 
+\hyperlink{mainwindow_8cpp}{mainwindow.\+cpp}\end{DoxyCompactItemize}

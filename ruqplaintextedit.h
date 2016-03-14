@@ -49,18 +49,19 @@
 #include <QTextStream>
 #include <QPointer>
 #include <QSettings>
+
 /**
  * @file ruqplaintextedit.h
  * Text editor base class definition file.
  */
 
 
-
-/*! \brief This defines the abse class which the text editor is derived from.
+/*! \brief This defines the base class which the text editor is derived from.
  *
  * The class contains methods that are used in the editor. These range from simple
  * copying and pasting to enabling/disabling the debugger.
  */
+
 class RuQPlainTextEdit : public QPlainTextEdit
 {
     Q_OBJECT

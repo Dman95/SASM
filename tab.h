@@ -52,6 +52,16 @@
 #include "ruqtextedit.h"
 #include "assembler.h"
 
+/**
+ * @file tab.h
+ * UNKNOWN
+ */
+
+/*! \brief UNKNOWN
+ *
+ * UNKNOWN
+*/
+
 class Tab : public QMainWindow
 {
     Q_OBJECT
@@ -74,7 +84,7 @@ public:
 
 
 private: 
-    //text fields
+    //! Text fields
     QVBoxLayout *inputLayout;
     QVBoxLayout *outputLayout;
     RuQTextEdit *input;
