@@ -40,6 +40,11 @@
 
 #include "debugger.h"
 
+/**
+ * @file debugger.cpp
+ * Sets debugger information and runs the debugger.
+ */
+
 Debugger::Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler *assembler, QWidget *parent)
     : QObject(parent)
 {

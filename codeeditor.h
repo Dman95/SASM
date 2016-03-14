@@ -55,7 +55,6 @@
  * Contains definitions for objects pertaining to the code editing section
  */
 
-
 QT_BEGIN_NAMESPACE
 class QPaintEvent;
 class QResizeEvent;
@@ -64,6 +63,7 @@ class QWidget;
 QT_END_NAMESPACE
 
 class LineNumberArea;
+
 
 class CodeEditor : public RuQPlainTextEdit
 {
@@ -108,7 +108,8 @@ private:
     int debugAreaWidth;
     QPixmap debugImage;
     QPixmap breakpointImage;
-    QList<int> breakpoints; //numbers of lines with breakpoints
+    //! Number of lines with breakpoints
+    QList<int> breakpoints;
     int firstTopMargin;
     bool hasBreakpoints;
     int prevBlockCount;

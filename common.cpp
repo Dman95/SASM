@@ -40,6 +40,11 @@
 
 #include "common.h"
 
+/**
+ * @file common.cpp
+ * UNKNOWN
+ */
+
 QString Common::applicationDataPath()
 {
     #ifdef Q_OS_WIN32

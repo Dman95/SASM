@@ -1,0 +1,118 @@
+\hypertarget{class_debug_table_widget}{}\section{Debug\+Table\+Widget Class Reference}
+\label{class_debug_table_widget}\index{Debug\+Table\+Widget@{Debug\+Table\+Widget}}
+
+
+This class represents the Memory table.  
+
+
+
+
+{\ttfamily \#include $<$debugtablewidget.\+h$>$}
+
+Inheritance diagram for Debug\+Table\+Widget\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_debug_table_widget}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_debug_table_widget_a4d8800af67dcf41b00c9c99f7cf136dc}{}void {\bfseries delete\+Variable} ()\label{class_debug_table_widget_a4d8800af67dcf41b00c9c99f7cf136dc}
+
+\item 
+\hypertarget{class_debug_table_widget_a643c2921c5092af91a16bfea6246e96d}{}void {\bfseries add\+Variable} (const Q\+String \&variable\+Name, int row\+Number=-\/1)\label{class_debug_table_widget_a643c2921c5092af91a16bfea6246e96d}
+
+\item 
+\hypertarget{class_debug_table_widget_a09c0ea8ad8301fb33343855b8a1ceaea}{}void {\bfseries add\+Variable} (const \hyperlink{struct_ru_q_plain_text_edit_1_1_watch}{Ru\+Q\+Plain\+Text\+Edit\+::\+Watch} \&variable, int row\+Number=-\/1)\label{class_debug_table_widget_a09c0ea8ad8301fb33343855b8a1ceaea}
+
+\item 
+\hypertarget{class_debug_table_widget_a655c0e61ba8232d0ae3a06c5b83c8ab9}{}void {\bfseries change\+Variable\+Value} (const Q\+String \&value, int row\+Number, bool is\+Valid)\label{class_debug_table_widget_a655c0e61ba8232d0ae3a06c5b83c8ab9}
+
+\item 
+\hypertarget{class_debug_table_widget_a26bcee1edac0ec77e94a158bf460fdc0}{}void {\bfseries add\+Register} (const Q\+String \&name, const Q\+String \&hex\+Value, const Q\+String \&dec\+Value, int row\+Number)\label{class_debug_table_widget_a26bcee1edac0ec77e94a158bf460fdc0}
+
+\item 
+\hypertarget{class_debug_table_widget_a5ef2ed2a7b735973df658db91ca37fd2}{}void {\bfseries change\+Memory\+Window} (int row, int column)\label{class_debug_table_widget_a5ef2ed2a7b735973df658db91ca37fd2}
+
+\item 
+\hypertarget{class_debug_table_widget_acb9c92b66e566a16bb71fb68fb39cf5c}{}void {\bfseries set\+Values\+From\+Debugger} (Q\+List$<$ \hyperlink{struct_debugger_1_1memory_info}{Debugger\+::memory\+Info} $>$ watches)\label{class_debug_table_widget_acb9c92b66e566a16bb71fb68fb39cf5c}
+
+\item 
+\hypertarget{class_debug_table_widget_ab2631afd9b17c3f5246fad297b02c0b7}{}void {\bfseries set\+Values\+From\+Debugger} (Q\+List$<$ \hyperlink{struct_debugger_1_1registers_info}{Debugger\+::registers\+Info} $>$ registers)\label{class_debug_table_widget_ab2631afd9b17c3f5246fad297b02c0b7}
+
+\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_debug_table_widget_a63febd4042d44b0148fb3e3692d4423b}{}void {\bfseries close\+Signal} ()\label{class_debug_table_widget_a63febd4042d44b0148fb3e3692d4423b}
+
+\item 
+\hypertarget{class_debug_table_widget_a4ba5bb4bf0bc8ffac4fa7740cc566dc4}{}void {\bfseries debug\+Show\+Memory} ()\label{class_debug_table_widget_a4ba5bb4bf0bc8ffac4fa7740cc566dc4}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_debug_table_widget_a72e7b44f66614eb549fe23486c885c57}{}{\bfseries Debug\+Table\+Widget} (int rows, int columns, Debug\+Table\+Widget\+Type widget\+Type, Q\+Widget $\ast$parent=0)\label{class_debug_table_widget_a72e7b44f66614eb549fe23486c885c57}
+
+\item 
+\hypertarget{class_debug_table_widget_a9242e8c7c39e7cc52f1689dfabd69285}{}bool {\bfseries is\+Empty} ()\label{class_debug_table_widget_a9242e8c7c39e7cc52f1689dfabd69285}
+
+\item 
+\hypertarget{class_debug_table_widget_a4b3a88d8c20725d4515af9222805f7af}{}void {\bfseries initialize\+Memory\+Window} (const Q\+List$<$ \hyperlink{struct_ru_q_plain_text_edit_1_1_watch}{Ru\+Q\+Plain\+Text\+Edit\+::\+Watch} $>$ \&watches)\label{class_debug_table_widget_a4b3a88d8c20725d4515af9222805f7af}
+
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_debug_table_widget_a0ed3f2adc6845b3577c4395e64839252}{}static Q\+Byte\+Array {\bfseries memory\+Header\+State}\label{class_debug_table_widget_a0ed3f2adc6845b3577c4395e64839252}
+
+\item 
+\hypertarget{class_debug_table_widget_a91db0ae3cf15652b8df4284c2714b4da}{}static Q\+Byte\+Array {\bfseries register\+Window\+State}\label{class_debug_table_widget_a91db0ae3cf15652b8df4284c2714b4da}
+
+\item 
+\hypertarget{class_debug_table_widget_ad78dd6c6a348da08ad18dfdbf6272c77}{}static bool {\bfseries geometry\+Memory\+Saved}\label{class_debug_table_widget_ad78dd6c6a348da08ad18dfdbf6272c77}
+
+\item 
+\hypertarget{class_debug_table_widget_a0b98bcbe0af39cad3262901a24e72f1b}{}static bool {\bfseries geometry\+Registers\+Saved}\label{class_debug_table_widget_a0b98bcbe0af39cad3262901a24e72f1b}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_debug_table_widget_a1f54a1476d5e6b593a7122f125302791}{}void {\bfseries close\+Event} (Q\+Close\+Event $\ast$)\label{class_debug_table_widget_a1f54a1476d5e6b593a7122f125302791}
+
+\item 
+\hypertarget{class_debug_table_widget_a9916b91e7858973c3611ddeba648c69a}{}void {\bfseries mouse\+Press\+Event} (Q\+Mouse\+Event $\ast$event)\label{class_debug_table_widget_a9916b91e7858973c3611ddeba648c69a}
+
+\item 
+\hypertarget{class_debug_table_widget_ae2d309bb3c50be05fbc715d67522de66}{}void {\bfseries key\+Press\+Event} (Q\+Key\+Event $\ast$event)\label{class_debug_table_widget_ae2d309bb3c50be05fbc715d67522de66}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_debug_table_widget_aeed4234d2e5094f6af154e0a65916f71}{}int {\bfseries context\+Menu\+Line\+Number}\label{class_debug_table_widget_aeed4234d2e5094f6af154e0a65916f71}
+
+\item 
+\hypertarget{class_debug_table_widget_acb026ff25f4f9cd6023701b0364abeac}{}Debug\+Table\+Widget\+Type {\bfseries type}\label{class_debug_table_widget_acb026ff25f4f9cd6023701b0364abeac}
+
+\item 
+\hypertarget{class_debug_table_widget_a0257a292e3dd8583b6e9294a7df1b7c0}{}bool {\bfseries empty}\label{class_debug_table_widget_a0257a292e3dd8583b6e9294a7df1b7c0}
+
+\item 
+\hypertarget{class_debug_table_widget_a1221dfd2571c4ae8c344a3d71a4953e4}{}bool {\bfseries first\+Time}\label{class_debug_table_widget_a1221dfd2571c4ae8c344a3d71a4953e4}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class represents the Memory table. 
+
+!\+This class contains the methods and variables relevant to the memory window under the debugger. Methods include adding variable watches, modifying variable contents, and adding registers. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{debugtablewidget_8h}{debugtablewidget.\+h}\item 
+\hyperlink{debugtablewidget_8cpp}{debugtablewidget.\+cpp}\end{DoxyCompactItemize}

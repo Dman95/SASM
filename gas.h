@@ -45,12 +45,11 @@
 
 /**
  * @file gas.h
- * Defines the FASM assembler.
+ * Defines the GAS assembler.
  */
 
 /*! \brief This class defines the behavior for the GAS assembler.
  *
- *  All of its methods are derived from Assembler.
  */
 
 class GAS : public Assembler

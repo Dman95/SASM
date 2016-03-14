@@ -10,12 +10,15 @@
 #define  INCLUDE_FILE(C) QUOTE(C)
 #include INCLUDE_FILE(QAPPLICATION_CLASS)
 
-class SingleApplicationPrivate;
 
 /**
- * @brief The SingleApplication class handles multipe instances of the same Application
- * @see QApplication
+ * @file singleapplication.h
+ * Defines the methods provided by QT's QAPPLICATION_CLASS
  */
+
+
+class SingleApplicationPrivate;
+
 class SingleApplication : public QAPPLICATION_CLASS
 {
   Q_OBJECT

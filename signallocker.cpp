@@ -40,6 +40,11 @@
 
 #include "signallocker.h"
 
+/**
+ * @file singleapplication.cpp
+ * What is this?
+ */
+
 SignalLocker::SignalLocker(QObject *parent) :
     QObject(parent)
 {

@@ -40,6 +40,11 @@
 
 #include "nasm.h"
 
+/**
+ * @file nasm.cpp
+ * Impliments the NASM Assembler
+ */
+
 NASM::NASM(bool x86, QObject *parent) :
     Assembler(x86, parent)
 {
@@ -75,16 +80,18 @@ quint64 NASM::getMainOffset(QFile &lst, QString entryLabel)
     while (!lstStream.atEnd()) {
         QString line = lstStream.readLine();
         if (flag) {
-            if (line.length() <= 37) { //omit strings with data only
-                //if in list : line number, address, data and it is all (without instruction) -
-                //omit this string
+            //! Omit strings with data only
+            //! if in list : line number, address, data and it is all (without instruction) -
+            //! omit this string
+            if (line.length() <= 37) {
                 continue;
             }
             QByteArray lineArr = line.toLocal8Bit();
             const char *s = lineArr.constData();
             quint64 a, b, c;
             if (sscanf(s, "%llu %llx %llx", &a, &b, &c) == 3) {
-                if (!(b == 0 && c == 0)) { //exclude 0 0
+                 //! Exclude 0 0
+                if (!(b == 0 && c == 0)) {
                     return b;
                 }
             }
@@ -117,9 +124,10 @@ void NASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
         } else if (line.indexOf(sectionRegExp) != -1) {
             inTextSection = false;
         }
-        if (line.indexOf(QRegExp("^(\\s+[^\\s]+){4}")) == -1) { //omit strings with data only
-            //if in list : line number, address, data and it is all (without instruction) -
-            //omit this string and subtract 1 from offset
+        //! omit strings with data only
+        //! if in list : line number, address, data and it is all (without instruction) -
+        //! omit this string and subtract 1 from offset
+        if (line.indexOf(QRegExp("^(\\s+[^\\s]+){4}")) == -1) {
             continue;
         }
         if (inTextSection) {
@@ -136,7 +144,8 @@ void NASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
     QFile programFile(Common::pathInTemp("program.asm"));
     programFile.open(QFile::ReadOnly);
     QTextStream programStream(&programFile);
-    int i = 0; //offset in list
+    //! Offset in list
+    int i = 0;
     int numInCode = 0;
     while (!programStream.atEnd()) {
         if (i >= instrList.size()) {
@@ -169,7 +178,7 @@ QString NASM::getStartText()
 
 void NASM::putDebugString(CodeEditor *code)
 {
-    //add : mov ebp, esp for making frame for correct debugging if this code has not been added yet
+    //! add : mov ebp, esp for making frame for correct debugging if this code has not been added yet
     int index = code->toPlainText().indexOf(QRegExp("CMAIN:|main:"));
     if (index != -1) {
         index = code->toPlainText().indexOf(QChar(':'), index);
@@ -238,10 +247,10 @@ void NASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
     QTextCharFormat &quotationFormat = *formats[8];
     QTextCharFormat &labelWithDotFormat = *formats[9];
 
-    //setting up regular expressions
+    //! Setting up regular expressions
     HighlightingRule rule;
 
-    //keywords
+    //! Keywords
     QStringList keywordPatterns;
     keywordPatterns << "\\bAAA\\b" << "\\bAAD\\b" << "\\bAAM\\b" << "\\bAAS\\b" <<
                        "\\bADC\\b" << "\\bADD\\b" << "\\bAND\\b" << "\\bCALL\\b" <<
@@ -348,7 +357,7 @@ void NASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
         highlightingRules.append(rule);
     }
 
-    //IO macroses
+    //! IO macros
     rule.format = iomacrosFormat;
     QStringList macrosPatterns;
     macrosPatterns << "\\bPRINT_DEC\\b" << "\\bPRINT_HEX\\b" <<
@@ -363,7 +372,7 @@ void NASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
         highlightingRules.append(rule);
     }
 
-    //memory
+    //! Memory
     rule.format = memoryFormat;
     QStringList memoryPatterns;
     rule.pattern = QRegExp("\\[");
@@ -387,12 +396,12 @@ void NASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
         highlightingRules.append(rule);
     }
 
-    //labels
+    //! Labels
     rule.pattern = QRegExp("\\S+:");
     rule.format = labelFormat;
     highlightingRules.append(rule);
 
-    //numbers
+    //! Numbers
     rule.format = numberFormat;
     rule.pattern = QRegExp("\\b[\\-\\+]?\\d+[bod]?\\b");
     highlightingRules.append(rule);
@@ -403,7 +412,7 @@ void NASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
     rule.pattern = QRegExp("\\b0[xh][0-9A-Fa-f]+\\b"); //hexadecimal notation
     highlightingRules.append(rule);
 
-    //registers
+    //! Registers
     QStringList registerPatterns;
     registerPatterns << "\\beax\\b" << "\\bebx\\b" << "\\becx\\b" <<
                         "\\bedx\\b" << "\\bebp\\b" << "\\besp\\b" <<
@@ -435,7 +444,7 @@ void NASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
         highlightingRules.append(rule);
     }
 
-    //.labels and numbers with point
+    //! Labels and numbers with point
     rule.pattern = QRegExp("\\.[^\\s:]+[^:]");
     rule.format = labelWithDotFormat;
     highlightingRules.append(rule);
@@ -446,7 +455,7 @@ void NASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
     rule.format = numberFormat;
     highlightingRules.append(rule);
 
-    //system instructions and preprocessor commands
+    //! System instructions and preprocessor commands
     rule.format = systemFormat;
     QStringList systemPatterns;
     systemPatterns << "\\btimes\\b" << "\\bsection\\b" << "\\.bss\\b" <<
@@ -488,7 +497,7 @@ void NASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
         highlightingRules.append(rule);
     }
 
-    //quotations
+    //! Quotations
     rule.pattern = QRegExp("\".*\"");
     rule.format = quotationFormat;
     rule.pattern.setMinimal(true);
@@ -502,7 +511,7 @@ void NASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
     rule.pattern.setMinimal(true);
     highlightingRules.append(rule);
 
-    //comments
+    //! Comments
     rule.pattern = QRegExp(";[^\n]*");
     rule.format = commentFormat;
     rule.isComment = true;

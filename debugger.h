@@ -63,8 +63,19 @@
     #include <signal.h>
 #endif
 
+/**
+ * @file debugger.h
+ * Defines the debugger.
+ */
+
 enum DebugActionType {ni, si, showLine, infoRegisters, infoMemory, anyAction, none, breakpoint};
 
+
+/**
+ * ! \brief This class represents the debugger.
+ *
+ *
+ * */
 class Debugger : public QObject
 {
     Q_OBJECT
@@ -96,25 +107,45 @@ private:
 
     QProcess *process;
     QTextEdit *textEdit;
-    quint64 offset; //offset between program code in memory and in file
 
-    QVector<LineNum> lines; //accordance between program lines in memory and in file
+    //! Offset between program code in memory and in file
+    quint64 offset;
 
-    int c; //counter for sequential performing of actions
+    //! Accordance between program lines in memory and in file
+    QVector<LineNum> lines;
+    //! Counter for sequential performing of actions
+    int c;
     bool registersOk;
+    //! Queue of actions type from enum
+    QQueue<DebugActionType> actionTypeQueue;
 
-    QQueue<DebugActionType> actionTypeQueue; //queue of actions type from enum
-    QString exitMessage; //message on exit in current platform
-    QRegExp cExitMessage; //message on exit which shows when "continue" command used
+    //! Message on exit in current platform
+    QString exitMessage;
+
+    //! Message on exit which shows when "continue" command used
+    QRegExp cExitMessage;
+
     QString tmpPath;
 
-    QString buffer; //global gdb output buffer
-    QString errorBuffer; //global gdb error buffer
-    QTimer *bufferTimer; //timer for checking output and sending ready output to processing with Debugger::processOutput() function
+    //! Global gdb output buffer
+    QString buffer;
+
+    //! Global gdb error buffer
+    QString errorBuffer;
+
+    //! Timer for checking output and sending ready output to processing with Debugger::processOutput() function
+    QTimer *bufferTimer;
+
+    //! The number of variable watches
     int watchesCount;
+
+    //! List of the variable watches
     QList<Debugger::memoryInfo> watches;
+
+    //! UNKNOWN
     bool firstAction;
 
+    //! UNKNOWN
     QList<LineNum> breakPairs;
 
     Assembler *assembler;
@@ -135,9 +166,11 @@ public slots:
     void emitStarted();
 
 signals:
-    void highlightLine(int); //highlight current debug line
+    //! Highlight the current debug line.
+    void highlightLine(int);
     void finished();
-    void started(); //emited when debugger is ready to get commands like step into, etc.
+    //! Emited when debugger is ready to get commands like step into, etc. -> Omitted or Emited?
+    void started();
     void printRegisters(QList<Debugger::registersInfo>);
     void printMemory(QList<Debugger::memoryInfo>);
     void printLog(QString msg, QColor color = QColor(Qt::black));

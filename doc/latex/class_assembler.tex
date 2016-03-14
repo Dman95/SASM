@@ -1,0 +1,141 @@
+\hypertarget{class_assembler}{}\section{Assembler Class Reference}
+\label{class_assembler}\index{Assembler@{Assembler}}
+
+
+This is the base class that all assemblers inherit.  
+
+
+
+
+{\ttfamily \#include $<$assembler.\+h$>$}
+
+Inheritance diagram for Assembler\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_assembler}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_assembler_1_1_highlighting_rule}{Highlighting\+Rule}
+\item 
+struct \hyperlink{struct_assembler_1_1_line_num}{Line\+Num}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_assembler_aae6b7e0ee43e80cfbb0a0a130c1c476a}{Assembler} (bool x86, Q\+Object $\ast$parent=0)
+\begin{DoxyCompactList}\small\item\em \hyperlink{class_assembler}{Assembler} constructor. Note that this is the stage where x86 is determined. \end{DoxyCompactList}\item 
+\hypertarget{class_assembler_a0e5d1d3170d03c044a5d759267f31aa6}{}virtual Q\+String \hyperlink{class_assembler_a0e5d1d3170d03c044a5d759267f31aa6}{get\+Assembler\+Path} ()=0\label{class_assembler_a0e5d1d3170d03c044a5d759267f31aa6}
+
+\begin{DoxyCompactList}\small\item\em Return the default path to the assembler. \end{DoxyCompactList}\item 
+\hypertarget{class_assembler_a22e4678516dd765bc716915616b76ab9}{}virtual Q\+String \hyperlink{class_assembler_a22e4678516dd765bc716915616b76ab9}{get\+Linker\+Path} ()=0\label{class_assembler_a22e4678516dd765bc716915616b76ab9}
+
+\begin{DoxyCompactList}\small\item\em Returns the default path to the linker. \end{DoxyCompactList}\item 
+virtual quint64 \hyperlink{class_assembler_aa41f46e0cd774718d84bf4e5bd9c65b7}{get\+Main\+Offset} (Q\+File \&lst, Q\+String entry\+Label)=0
+\item 
+virtual void \hyperlink{class_assembler_aa724d277157a407d4d7fd3d0a23e84a7}{parse\+Lst\+File} (Q\+File \&lst, Q\+Vector$<$ \hyperlink{struct_assembler_1_1_line_num}{Assembler\+::\+Line\+Num} $>$ \&lines, quint64 offset)=0
+\item 
+\hypertarget{class_assembler_ace2439eeb3d887d279c3946df67f2525}{}virtual Q\+String \hyperlink{class_assembler_ace2439eeb3d887d279c3946df67f2525}{get\+Start\+Text} ()=0\label{class_assembler_ace2439eeb3d887d279c3946df67f2525}
+
+\begin{DoxyCompactList}\small\item\em Return the default start text (default project code) \end{DoxyCompactList}\item 
+\hypertarget{class_assembler_a3d699b729df36103f37a8ac45d54a0a6}{}virtual void \hyperlink{class_assembler_a3d699b729df36103f37a8ac45d54a0a6}{put\+Debug\+String} (\hyperlink{class_code_editor}{Code\+Editor} $\ast$code)=0\label{class_assembler_a3d699b729df36103f37a8ac45d54a0a6}
+
+\begin{DoxyCompactList}\small\item\em Puts the debug string that makes frame (mov ebp, esp) \end{DoxyCompactList}\item 
+\hypertarget{class_assembler_a7f4e8432d28694c2d89db13858ad1329}{}virtual Q\+String \hyperlink{class_assembler_a7f4e8432d28694c2d89db13858ad1329}{get\+Assembler\+Options} ()=0\label{class_assembler_a7f4e8432d28694c2d89db13858ad1329}
+
+\begin{DoxyCompactList}\small\item\em Returns the default assembler options. \end{DoxyCompactList}\item 
+\hypertarget{class_assembler_a644bcd38cf0b157d38c608043b63a6b8}{}virtual Q\+String \hyperlink{class_assembler_a644bcd38cf0b157d38c608043b63a6b8}{get\+Linker\+Options} ()=0\label{class_assembler_a644bcd38cf0b157d38c608043b63a6b8}
+
+\begin{DoxyCompactList}\small\item\em Returns the default linker options. \end{DoxyCompactList}\item 
+bool \hyperlink{class_assembler_aec6f08e8dd6ff49dfa9118be43ffc8e2}{isx86} ()
+\begin{DoxyCompactList}\small\item\em Determines if the system is x86. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_assembler_a0a5d86a7ad035ed7113c4424c43d11fc}{}bool {\bfseries x86}\label{class_assembler_a0a5d86a7ad035ed7113c4424c43d11fc}
+
+\item 
+in C for example expressions for multi line highlighting workes if \hyperlink{class_assembler_a8e2ae531c6d59dfea8c7bb90febda262}{multi\+Line\+Comments}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This is the base class that all assemblers inherit. 
+
+The \hyperlink{class_assembler}{Assembler} class contains functions which can be used to retrieve assember specific parameters such as the linker \& assembler location, the default program text, and user specified options. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_assembler_aae6b7e0ee43e80cfbb0a0a130c1c476a}{}\index{Assembler@{Assembler}!Assembler@{Assembler}}
+\index{Assembler@{Assembler}!Assembler@{Assembler}}
+\subsubsection[{Assembler}]{\setlength{\rightskip}{0pt plus 5cm}Assembler\+::\+Assembler (
+\begin{DoxyParamCaption}
+\item[{bool}]{x86, }
+\item[{Q\+Object $\ast$}]{parent = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [explicit]}}\label{class_assembler_aae6b7e0ee43e80cfbb0a0a130c1c476a}
+
+
+\hyperlink{class_assembler}{Assembler} constructor. Note that this is the stage where x86 is determined. 
+
+Determines whether the target processor is x86 or x64. 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_assembler_aa41f46e0cd774718d84bf4e5bd9c65b7}{}\index{Assembler@{Assembler}!get\+Main\+Offset@{get\+Main\+Offset}}
+\index{get\+Main\+Offset@{get\+Main\+Offset}!Assembler@{Assembler}}
+\subsubsection[{get\+Main\+Offset}]{\setlength{\rightskip}{0pt plus 5cm}virtual quint64 Assembler\+::get\+Main\+Offset (
+\begin{DoxyParamCaption}
+\item[{Q\+File \&}]{lst, }
+\item[{Q\+String}]{entry\+Label}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\label{class_assembler_aa41f46e0cd774718d84bf4e5bd9c65b7}
+get file with listing and name of entry label -\/ main or start. Returns the offset of this label -\/ number of strings and where the label is placed. 
+
+Implemented in \hyperlink{class_f_a_s_m_ad63b8774910442ec8369db49a57cb7ee}{F\+A\+S\+M}, \hyperlink{class_m_a_s_m_aef0f1a5915184bfb9aca890a3493b3ad}{M\+A\+S\+M}, \hyperlink{class_g_a_s_ab1d4e22ffd3a438afa4dad4025ab2735}{G\+A\+S}, and \hyperlink{class_n_a_s_m_a432753e32490e7eaa36d9be41d8f1ed4}{N\+A\+S\+M}.
+
+\hypertarget{class_assembler_aec6f08e8dd6ff49dfa9118be43ffc8e2}{}\index{Assembler@{Assembler}!isx86@{isx86}}
+\index{isx86@{isx86}!Assembler@{Assembler}}
+\subsubsection[{isx86}]{\setlength{\rightskip}{0pt plus 5cm}bool Assembler\+::isx86 (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_assembler_aec6f08e8dd6ff49dfa9118be43ffc8e2}
+
+
+Determines if the system is x86. 
+
+Returns a bool whether the processor is x86. \hypertarget{class_assembler_aa724d277157a407d4d7fd3d0a23e84a7}{}\index{Assembler@{Assembler}!parse\+Lst\+File@{parse\+Lst\+File}}
+\index{parse\+Lst\+File@{parse\+Lst\+File}!Assembler@{Assembler}}
+\subsubsection[{parse\+Lst\+File}]{\setlength{\rightskip}{0pt plus 5cm}virtual void Assembler\+::parse\+Lst\+File (
+\begin{DoxyParamCaption}
+\item[{Q\+File \&}]{lst, }
+\item[{Q\+Vector$<$ {\bf Assembler\+::\+Line\+Num} $>$ \&}]{lines, }
+\item[{quint64}]{offset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\label{class_assembler_aa724d277157a407d4d7fd3d0a23e84a7}
+Parses the listing file lst and fills Q\+Vector lines with results of parsing. offset -\/ difference between program code in memory and in file. 
+
+Implemented in \hyperlink{class_f_a_s_m_aec5ded3222ad063755f28e113bf95e32}{F\+A\+S\+M}, \hyperlink{class_m_a_s_m_ad52eca298e722cee1e547f62ae24ee11}{M\+A\+S\+M}, \hyperlink{class_g_a_s_a572e0d7058f6f5d65a90c77a8b727460}{G\+A\+S}, and \hyperlink{class_n_a_s_m_a4de842373fdd8be68c23eb3313ad555e}{N\+A\+S\+M}.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_assembler_a8e2ae531c6d59dfea8c7bb90febda262}{}\index{Assembler@{Assembler}!multi\+Line\+Comments@{multi\+Line\+Comments}}
+\index{multi\+Line\+Comments@{multi\+Line\+Comments}!Assembler@{Assembler}}
+\subsubsection[{multi\+Line\+Comments}]{\setlength{\rightskip}{0pt plus 5cm}in C for example expressions for multi line highlighting workes if Assembler\+::multi\+Line\+Comments}\label{class_assembler_a8e2ae531c6d59dfea8c7bb90febda262}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+== \textcolor{keyword}{true}. */
+    \textcolor{keyword}{virtual} \textcolor{keywordtype}{void} fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
+                                     QList<QTextCharFormat *> &formats,
+                                     \textcolor{keywordtype}{bool} &\hyperlink{class_assembler_a8e2ae531c6d59dfea8c7bb90febda262}{multiLineComments},
+                                     QRegExp &commentStartExpression,
+                                     QRegExp &commentEndExpression) = 0
+\end{DoxyCode}
+Fills Q\+Vector with the highlighting rules. Qlist with formats (see \hyperlink{class_n_a_s_m}{N\+A\+S\+M}, \hyperlink{class_m_a_s_m}{M\+A\+S\+M}, \hyperlink{class_f_a_s_m}{F\+A\+S\+M}, \hyperlink{class_g_a_s}{G\+A\+S} as examples). comment\+Start\+Expression -\/ /$\ast$ in C++ for example, comment\+End\+Expression -\/ 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{assembler_8h}{assembler.\+h}\item 
+\hyperlink{assembler_8cpp}{assembler.\+cpp}\end{DoxyCompactItemize}

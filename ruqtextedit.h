@@ -48,6 +48,17 @@
 #include <QPointer>
 #include <QSettings>
 
+/**
+ * @file ruQtextedit.h
+ * Defines text editor
+ */
+
+/*! \brief The RuQTextEdit defines the methods specified by QT's QTextEdit class. These are things like
+ * copying/pasting, edit, undo, etc...
+ *
+ *
+*/
+
 class RuQTextEdit : public QTextEdit
 {
     Q_OBJECT

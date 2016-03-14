@@ -49,6 +49,21 @@
 #include <QKeyEvent>
 #include <QCheckBox>
 
+/**
+ * @file debuganycommandwidget.h
+ *
+ * UNKNOWN
+ */
+
+
+
+
+/*! \brief This class does......
+ *
+ *
+ *
+ * */
+
 class DebugAnyCommandWidget : public QWidget
 {
     Q_OBJECT

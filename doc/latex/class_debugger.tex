@@ -1,0 +1,191 @@
+\hypertarget{class_debugger}{}\section{Debugger Class Reference}
+\label{class_debugger}\index{Debugger@{Debugger}}
+
+
+This class represents the debugger.  
+
+
+
+
+{\ttfamily \#include $<$debugger.\+h$>$}
+
+Inheritance diagram for Debugger\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_debugger}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_debugger_1_1memory_info}{memory\+Info}
+\item 
+struct \hyperlink{struct_debugger_1_1registers_info}{registers\+Info}
+\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_debugger_a80544446d8b2aebeb64fc2dd21ce189f}{}typedef \hyperlink{struct_assembler_1_1_line_num}{Assembler\+::\+Line\+Num} {\bfseries Line\+Num}\label{class_debugger_a80544446d8b2aebeb64fc2dd21ce189f}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_debugger_ac89ff4b6cda77d27cf45eaec8d06eb84}{}void {\bfseries read\+Output\+To\+Buffer} ()\label{class_debugger_ac89ff4b6cda77d27cf45eaec8d06eb84}
+
+\item 
+\hypertarget{class_debugger_ae0be5fc23e7513a9b943b02b8464655c}{}void {\bfseries process\+Output} ()\label{class_debugger_ae0be5fc23e7513a9b943b02b8464655c}
+
+\item 
+\hypertarget{class_debugger_af4417fa18d936f6f9275c85e9ded4705}{}void {\bfseries process\+Message} (Q\+String output, Q\+String error)\label{class_debugger_af4417fa18d936f6f9275c85e9ded4705}
+
+\item 
+\hypertarget{class_debugger_ae53701dbcf8dbc4378b0fc3769a988f0}{}void {\bfseries process\+Action} (Q\+String output, Q\+String error=Q\+String())\label{class_debugger_ae53701dbcf8dbc4378b0fc3769a988f0}
+
+\item 
+\hypertarget{class_debugger_a6f3eae0ace3af6bf40be6cd69ca98f22}{}void {\bfseries do\+Input} (Q\+String command, Debug\+Action\+Type action\+Type)\label{class_debugger_a6f3eae0ace3af6bf40be6cd69ca98f22}
+
+\item 
+\hypertarget{class_debugger_ac18e41fff794085b939abb643d5547ae}{}void {\bfseries change\+Breakpoint} (quint64 line\+Number, bool is\+Added)\label{class_debugger_ac18e41fff794085b939abb643d5547ae}
+
+\item 
+\hypertarget{class_debugger_a83af2b195bc1dd89cb05121585ba97bf}{}void {\bfseries emit\+Started} ()\label{class_debugger_a83af2b195bc1dd89cb05121585ba97bf}
+
+\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_debugger_adbe43a9b006c1ff0df00f959022a180c}{}void \hyperlink{class_debugger_adbe43a9b006c1ff0df00f959022a180c}{highlight\+Line} (int)\label{class_debugger_adbe43a9b006c1ff0df00f959022a180c}
+
+\begin{DoxyCompactList}\small\item\em Highlight the current debug line. \end{DoxyCompactList}\item 
+\hypertarget{class_debugger_acf0d732e2bd6411e03c3e3f7ab072db4}{}void {\bfseries finished} ()\label{class_debugger_acf0d732e2bd6411e03c3e3f7ab072db4}
+
+\item 
+\hypertarget{class_debugger_ae3c0d16ffb07fca28532471dac4a3d04}{}void \hyperlink{class_debugger_ae3c0d16ffb07fca28532471dac4a3d04}{started} ()\label{class_debugger_ae3c0d16ffb07fca28532471dac4a3d04}
+
+\begin{DoxyCompactList}\small\item\em Emited when debugger is ready to get commands like step into, etc. -\/$>$ Omitted or Emited? \end{DoxyCompactList}\item 
+\hypertarget{class_debugger_a97bb6cfc618c4f76d09c245def0cc6fe}{}void {\bfseries print\+Registers} (Q\+List$<$ \hyperlink{struct_debugger_1_1registers_info}{Debugger\+::registers\+Info} $>$)\label{class_debugger_a97bb6cfc618c4f76d09c245def0cc6fe}
+
+\item 
+\hypertarget{class_debugger_ac17eb18b4f55846b2ee26d20081165d6}{}void {\bfseries print\+Memory} (Q\+List$<$ \hyperlink{struct_debugger_1_1memory_info}{Debugger\+::memory\+Info} $>$)\label{class_debugger_ac17eb18b4f55846b2ee26d20081165d6}
+
+\item 
+\hypertarget{class_debugger_aaa170ace8d83be4d6d50eb77452b9970}{}void {\bfseries print\+Log} (Q\+String msg, Q\+Color color=Q\+Color(Qt\+::black))\label{class_debugger_aaa170ace8d83be4d6d50eb77452b9970}
+
+\item 
+\hypertarget{class_debugger_a33c5be2b419f3917f460eac35d5472b0}{}void {\bfseries print\+Output} (Q\+String msg)\label{class_debugger_a33c5be2b419f3917f460eac35d5472b0}
+
+\item 
+\hypertarget{class_debugger_a7652cfcdc33f9c8d5ea82bcf1d2f497d}{}void {\bfseries in\+Macro} ()\label{class_debugger_a7652cfcdc33f9c8d5ea82bcf1d2f497d}
+
+\item 
+\hypertarget{class_debugger_ac31d9a6bd5f7096346fc1e0d693556dd}{}void {\bfseries was\+Stopped} ()\label{class_debugger_ac31d9a6bd5f7096346fc1e0d693556dd}
+
+\item 
+\hypertarget{class_debugger_a2d80e136e4642751be887681efcc0ad5}{}void {\bfseries need\+To\+Continue} ()\label{class_debugger_a2d80e136e4642751be887681efcc0ad5}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_debugger_afbf5c91cfe0f4bf6953bd241af0b6b0a}{}{\bfseries Debugger} (Q\+Text\+Edit $\ast$t\+Edit, const Q\+String \&path, Q\+String tmp, \hyperlink{class_assembler}{Assembler} $\ast$assembler, Q\+Widget $\ast$parent=0)\label{class_debugger_afbf5c91cfe0f4bf6953bd241af0b6b0a}
+
+\item 
+\hypertarget{class_debugger_afcddd18a500da8763d72a0714486956a}{}void {\bfseries set\+Watches\+Count} (int count)\label{class_debugger_afcddd18a500da8763d72a0714486956a}
+
+\item 
+\hypertarget{class_debugger_a0d42b6de1ebec7605bcf3b6cab2eb65d}{}bool {\bfseries is\+Stopped} ()\label{class_debugger_a0d42b6de1ebec7605bcf3b6cab2eb65d}
+
+\item 
+\hypertarget{class_debugger_a6f041e29ae97defbde7ed711fb175e62}{}void {\bfseries pause} ()\label{class_debugger_a6f041e29ae97defbde7ed711fb175e62}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_debugger_a5e5bd24a61e98d7854ff9f1b5a79cd1e}{}void {\bfseries process\+Lst} ()\label{class_debugger_a5e5bd24a61e98d7854ff9f1b5a79cd1e}
+
+\item 
+\hypertarget{class_debugger_a1df28a43e7686d9aa06714fc8b534072}{}void {\bfseries run} ()\label{class_debugger_a1df28a43e7686d9aa06714fc8b534072}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_debugger_a3d2a0063b413ae6b22a1c970d6fa255c}{}Q\+Process $\ast$ {\bfseries process}\label{class_debugger_a3d2a0063b413ae6b22a1c970d6fa255c}
+
+\item 
+\hypertarget{class_debugger_a99e176dedc29ecb4a7995df3c853c43c}{}Q\+Text\+Edit $\ast$ {\bfseries text\+Edit}\label{class_debugger_a99e176dedc29ecb4a7995df3c853c43c}
+
+\item 
+\hypertarget{class_debugger_a9520cdbe94f115c987328c526116323b}{}quint64 \hyperlink{class_debugger_a9520cdbe94f115c987328c526116323b}{offset}\label{class_debugger_a9520cdbe94f115c987328c526116323b}
+
+\begin{DoxyCompactList}\small\item\em Offset between program code in memory and in file. \end{DoxyCompactList}\item 
+\hypertarget{class_debugger_acf8d80ba5fb7408aef12c82b687ae416}{}Q\+Vector$<$ \hyperlink{struct_assembler_1_1_line_num}{Line\+Num} $>$ \hyperlink{class_debugger_acf8d80ba5fb7408aef12c82b687ae416}{lines}\label{class_debugger_acf8d80ba5fb7408aef12c82b687ae416}
+
+\begin{DoxyCompactList}\small\item\em Accordance between program lines in memory and in file. \end{DoxyCompactList}\item 
+\hypertarget{class_debugger_a685a71e032e775b881e76fb62b9bf702}{}int \hyperlink{class_debugger_a685a71e032e775b881e76fb62b9bf702}{c}\label{class_debugger_a685a71e032e775b881e76fb62b9bf702}
+
+\begin{DoxyCompactList}\small\item\em Counter for sequential performing of actions. \end{DoxyCompactList}\item 
+\hypertarget{class_debugger_a2868873b7e2c82002aca656a4c88d1d1}{}bool {\bfseries registers\+Ok}\label{class_debugger_a2868873b7e2c82002aca656a4c88d1d1}
+
+\item 
+\hypertarget{class_debugger_a3d7e051e61a7d69df940301617860640}{}Q\+Queue$<$ Debug\+Action\+Type $>$ \hyperlink{class_debugger_a3d7e051e61a7d69df940301617860640}{action\+Type\+Queue}\label{class_debugger_a3d7e051e61a7d69df940301617860640}
+
+\begin{DoxyCompactList}\small\item\em Queue of actions type from enum. \end{DoxyCompactList}\item 
+\hypertarget{class_debugger_a20e69b676082292edf0fdbee0a13aeb0}{}Q\+String \hyperlink{class_debugger_a20e69b676082292edf0fdbee0a13aeb0}{exit\+Message}\label{class_debugger_a20e69b676082292edf0fdbee0a13aeb0}
+
+\begin{DoxyCompactList}\small\item\em Message on exit in current platform. \end{DoxyCompactList}\item 
+\hypertarget{class_debugger_af5894be0b78a8cc36b1d1b99dd71ef97}{}Q\+Reg\+Exp \hyperlink{class_debugger_af5894be0b78a8cc36b1d1b99dd71ef97}{c\+Exit\+Message}\label{class_debugger_af5894be0b78a8cc36b1d1b99dd71ef97}
+
+\begin{DoxyCompactList}\small\item\em Message on exit which shows when \char`\"{}continue\char`\"{} command used. \end{DoxyCompactList}\item 
+\hypertarget{class_debugger_a9182a784eaf8f0e5fd6fd56c4d78000a}{}Q\+String {\bfseries tmp\+Path}\label{class_debugger_a9182a784eaf8f0e5fd6fd56c4d78000a}
+
+\item 
+\hypertarget{class_debugger_a55d82d638b0be2683dcf654696e994c0}{}Q\+String \hyperlink{class_debugger_a55d82d638b0be2683dcf654696e994c0}{buffer}\label{class_debugger_a55d82d638b0be2683dcf654696e994c0}
+
+\begin{DoxyCompactList}\small\item\em Global gdb output buffer. \end{DoxyCompactList}\item 
+\hypertarget{class_debugger_aa81988662cf102a4b9db3f5e05b4da1c}{}Q\+String \hyperlink{class_debugger_aa81988662cf102a4b9db3f5e05b4da1c}{error\+Buffer}\label{class_debugger_aa81988662cf102a4b9db3f5e05b4da1c}
+
+\begin{DoxyCompactList}\small\item\em Global gdb error buffer. \end{DoxyCompactList}\item 
+\hypertarget{class_debugger_a991fd6cbd4a6b6983f1c4913600df67f}{}Q\+Timer $\ast$ \hyperlink{class_debugger_a991fd6cbd4a6b6983f1c4913600df67f}{buffer\+Timer}\label{class_debugger_a991fd6cbd4a6b6983f1c4913600df67f}
+
+\begin{DoxyCompactList}\small\item\em Timer for checking output and sending ready output to processing with Debugger\+::process\+Output() function. \end{DoxyCompactList}\item 
+\hypertarget{class_debugger_a3a9f51bd7e9885d57408177656ef9903}{}int \hyperlink{class_debugger_a3a9f51bd7e9885d57408177656ef9903}{watches\+Count}\label{class_debugger_a3a9f51bd7e9885d57408177656ef9903}
+
+\begin{DoxyCompactList}\small\item\em The number of variable watches. \end{DoxyCompactList}\item 
+\hypertarget{class_debugger_ae8d68c1ebbcd62fbadb3d4f494eac132}{}Q\+List$<$ \hyperlink{struct_debugger_1_1memory_info}{Debugger\+::memory\+Info} $>$ \hyperlink{class_debugger_ae8d68c1ebbcd62fbadb3d4f494eac132}{watches}\label{class_debugger_ae8d68c1ebbcd62fbadb3d4f494eac132}
+
+\begin{DoxyCompactList}\small\item\em List of the variable watches. \end{DoxyCompactList}\item 
+\hypertarget{class_debugger_a034fcdc2cfeac7d404eaf22f3cec72b9}{}bool \hyperlink{class_debugger_a034fcdc2cfeac7d404eaf22f3cec72b9}{first\+Action}\label{class_debugger_a034fcdc2cfeac7d404eaf22f3cec72b9}
+
+\begin{DoxyCompactList}\small\item\em U\+N\+K\+N\+O\+W\+N. \end{DoxyCompactList}\item 
+\hypertarget{class_debugger_a653485bb08b57e6505c2f98fee8df379}{}Q\+List$<$ \hyperlink{struct_assembler_1_1_line_num}{Line\+Num} $>$ \hyperlink{class_debugger_a653485bb08b57e6505c2f98fee8df379}{break\+Pairs}\label{class_debugger_a653485bb08b57e6505c2f98fee8df379}
+
+\begin{DoxyCompactList}\small\item\em U\+N\+K\+N\+O\+W\+N. \end{DoxyCompactList}\item 
+\hypertarget{class_debugger_a820589c5102d67769128d41a17754d07}{}\hyperlink{class_assembler}{Assembler} $\ast$ {\bfseries assembler}\label{class_debugger_a820589c5102d67769128d41a17754d07}
+
+\item 
+\hypertarget{class_debugger_a97f6c18d3d76887b7cb4dbb15aa8d44d}{}bool {\bfseries stopped}\label{class_debugger_a97f6c18d3d76887b7cb4dbb15aa8d44d}
+
+\item 
+\hypertarget{class_debugger_af48358ff43c602ca6cf1766c0ebff92a}{}quint64 {\bfseries pid}\label{class_debugger_af48358ff43c602ca6cf1766c0ebff92a}
+
+\item 
+\hypertarget{class_debugger_a407fb1b514f65eae94dede657442a327}{}bool {\bfseries dbg\+Symbols}\label{class_debugger_a407fb1b514f65eae94dede657442a327}
+
+\item 
+\hypertarget{class_debugger_a8f11bcbf15b0d90b62f0d44bdfe2e404}{}quint64 {\bfseries entry\+Point}\label{class_debugger_a8f11bcbf15b0d90b62f0d44bdfe2e404}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class represents the debugger. 
+
+! 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{debugger_8h}{debugger.\+h}\item 
+\hyperlink{debugger_8cpp}{debugger.\+cpp}\end{DoxyCompactItemize}

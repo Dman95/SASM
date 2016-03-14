@@ -1,0 +1,130 @@
+\hypertarget{class_m_a_s_m}{}\section{M\+A\+S\+M Class Reference}
+\label{class_m_a_s_m}\index{M\+A\+S\+M@{M\+A\+S\+M}}
+
+
+This class defines the behavior for the \hyperlink{class_m_a_s_m}{M\+A\+S\+M} assembler.  
+
+
+
+
+{\ttfamily \#include $<$masm.\+h$>$}
+
+Inheritance diagram for M\+A\+S\+M\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_m_a_s_m}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_m_a_s_m_a3dfd4e74baa50b2f7f71c0b1f4f0679f}{}\hyperlink{class_m_a_s_m_a3dfd4e74baa50b2f7f71c0b1f4f0679f}{M\+A\+S\+M} (bool x86, Q\+Object $\ast$parent=0)\label{class_m_a_s_m_a3dfd4e74baa50b2f7f71c0b1f4f0679f}
+
+\begin{DoxyCompactList}\small\item\em Windows only! \end{DoxyCompactList}\item 
+\hypertarget{class_m_a_s_m_a22a46b8c03783623be35dc7bb01d3d19}{}Q\+String \hyperlink{class_m_a_s_m_a22a46b8c03783623be35dc7bb01d3d19}{get\+Assembler\+Path} ()\label{class_m_a_s_m_a22a46b8c03783623be35dc7bb01d3d19}
+
+\begin{DoxyCompactList}\small\item\em Return the default path to the assembler. \end{DoxyCompactList}\item 
+\hypertarget{class_m_a_s_m_aefccdd4c6d400917163cdd6008e036ff}{}Q\+String \hyperlink{class_m_a_s_m_aefccdd4c6d400917163cdd6008e036ff}{get\+Linker\+Path} ()\label{class_m_a_s_m_aefccdd4c6d400917163cdd6008e036ff}
+
+\begin{DoxyCompactList}\small\item\em Returns the default path to the linker. \end{DoxyCompactList}\item 
+quint64 \hyperlink{class_m_a_s_m_aef0f1a5915184bfb9aca890a3493b3ad}{get\+Main\+Offset} (Q\+File \&lst, Q\+String entry\+Label)
+\item 
+void \hyperlink{class_m_a_s_m_ad52eca298e722cee1e547f62ae24ee11}{parse\+Lst\+File} (Q\+File \&lst, Q\+Vector$<$ \hyperlink{struct_assembler_1_1_line_num}{Assembler\+::\+Line\+Num} $>$ \&lines, quint64 offset)
+\item 
+void \hyperlink{class_m_a_s_m_a946690c33e0a66a0a91acd857870ffdb}{fill\+Highligher\+Rules} (Q\+Vector$<$ \hyperlink{struct_assembler_1_1_highlighting_rule}{Assembler\+::\+Highlighting\+Rule} $>$ \&highlighting\+Rules, Q\+List$<$ Q\+Text\+Char\+Format $\ast$ $>$ \&formats, bool \&\hyperlink{class_assembler_a8e2ae531c6d59dfea8c7bb90febda262}{multi\+Line\+Comments}, Q\+Reg\+Exp \&comment\+Start\+Expression, Q\+Reg\+Exp \&comment\+End\+Expression)
+\item 
+\hypertarget{class_m_a_s_m_a9d4eb3151e7082a98db1717203d0835c}{}Q\+String \hyperlink{class_m_a_s_m_a9d4eb3151e7082a98db1717203d0835c}{get\+Start\+Text} ()\label{class_m_a_s_m_a9d4eb3151e7082a98db1717203d0835c}
+
+\begin{DoxyCompactList}\small\item\em Return the default start text (default project code) \end{DoxyCompactList}\item 
+\hypertarget{class_m_a_s_m_a915477aac930ce89f5c723557e7edfa4}{}void \hyperlink{class_m_a_s_m_a915477aac930ce89f5c723557e7edfa4}{put\+Debug\+String} (\hyperlink{class_code_editor}{Code\+Editor} $\ast$)\label{class_m_a_s_m_a915477aac930ce89f5c723557e7edfa4}
+
+\begin{DoxyCompactList}\small\item\em Puts the debug string that makes frame (mov ebp, esp) \end{DoxyCompactList}\item 
+\hypertarget{class_m_a_s_m_a6b2a173588895bb951992296d80658fc}{}Q\+String \hyperlink{class_m_a_s_m_a6b2a173588895bb951992296d80658fc}{get\+Assembler\+Options} ()\label{class_m_a_s_m_a6b2a173588895bb951992296d80658fc}
+
+\begin{DoxyCompactList}\small\item\em Returns the default assembler options. \end{DoxyCompactList}\item 
+\hypertarget{class_m_a_s_m_ae0d538ab3fcaa65e85bab4eb12e6895e}{}Q\+String \hyperlink{class_m_a_s_m_ae0d538ab3fcaa65e85bab4eb12e6895e}{get\+Linker\+Options} ()\label{class_m_a_s_m_ae0d538ab3fcaa65e85bab4eb12e6895e}
+
+\begin{DoxyCompactList}\small\item\em Returns the default linker options. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+This class defines the behavior for the \hyperlink{class_m_a_s_m}{M\+A\+S\+M} assembler. 
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_m_a_s_m_a946690c33e0a66a0a91acd857870ffdb}{}\index{M\+A\+S\+M@{M\+A\+S\+M}!fill\+Highligher\+Rules@{fill\+Highligher\+Rules}}
+\index{fill\+Highligher\+Rules@{fill\+Highligher\+Rules}!M\+A\+S\+M@{M\+A\+S\+M}}
+\subsubsection[{fill\+Highligher\+Rules}]{\setlength{\rightskip}{0pt plus 5cm}void M\+A\+S\+M\+::fill\+Highligher\+Rules (
+\begin{DoxyParamCaption}
+\item[{Q\+Vector$<$ {\bf Assembler\+::\+Highlighting\+Rule} $>$ \&}]{highlighting\+Rules, }
+\item[{Q\+List$<$ Q\+Text\+Char\+Format $\ast$ $>$ \&}]{formats, }
+\item[{bool \&}]{multi\+Line\+Comments, }
+\item[{Q\+Reg\+Exp \&}]{comment\+Start\+Expression, }
+\item[{Q\+Reg\+Exp \&}]{comment\+End\+Expression}
+\end{DoxyParamCaption}
+)}\label{class_m_a_s_m_a946690c33e0a66a0a91acd857870ffdb}
+Setting up regular expressions
+
+Keywords
+
+Memory
+
+Labels
+
+Numbers
+
+Hexadecimal notation
+
+Hexadecimal notation
+
+.labels and numbers with point
+
+System instructions and preprocessor commands \hypertarget{class_m_a_s_m_aef0f1a5915184bfb9aca890a3493b3ad}{}\index{M\+A\+S\+M@{M\+A\+S\+M}!get\+Main\+Offset@{get\+Main\+Offset}}
+\index{get\+Main\+Offset@{get\+Main\+Offset}!M\+A\+S\+M@{M\+A\+S\+M}}
+\subsubsection[{get\+Main\+Offset}]{\setlength{\rightskip}{0pt plus 5cm}quint64 M\+A\+S\+M\+::get\+Main\+Offset (
+\begin{DoxyParamCaption}
+\item[{Q\+File \&}]{lst, }
+\item[{Q\+String}]{entry\+Label}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{class_m_a_s_m_aef0f1a5915184bfb9aca890a3493b3ad}
+get file with listing and name of entry label -\/ main or start. Returns the offset of this label -\/ number of strings and where the label is placed. 
+
+Implements \hyperlink{class_assembler_aa41f46e0cd774718d84bf4e5bd9c65b7}{Assembler}.
+
+\hypertarget{class_m_a_s_m_ad52eca298e722cee1e547f62ae24ee11}{}\index{M\+A\+S\+M@{M\+A\+S\+M}!parse\+Lst\+File@{parse\+Lst\+File}}
+\index{parse\+Lst\+File@{parse\+Lst\+File}!M\+A\+S\+M@{M\+A\+S\+M}}
+\subsubsection[{parse\+Lst\+File}]{\setlength{\rightskip}{0pt plus 5cm}void M\+A\+S\+M\+::parse\+Lst\+File (
+\begin{DoxyParamCaption}
+\item[{Q\+File \&}]{lst, }
+\item[{Q\+Vector$<$ {\bf Assembler\+::\+Line\+Num} $>$ \&}]{lines, }
+\item[{quint64}]{offset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{class_m_a_s_m_ad52eca298e722cee1e547f62ae24ee11}
+Parses the listing file lst and fills Q\+Vector lines with results of parsing. offset -\/ difference between program code in memory and in file. Check if invoke
+
+Check if return
+
+Check if macro
+
+If previous may be macro -\/ switch to finding macro start address mode
+
+If in macro, find its start address
+
+Check if instruction
+
+Offset in instr\+List
+
+Offset in program\+List
+
+If true, skip line in instr\+List and back to first unwatched line in program\+List 
+
+Implements \hyperlink{class_assembler_aa724d277157a407d4d7fd3d0a23e84a7}{Assembler}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{masm_8h}{masm.\+h}\item 
+\hyperlink{masm_8cpp}{masm.\+cpp}\end{DoxyCompactItemize}

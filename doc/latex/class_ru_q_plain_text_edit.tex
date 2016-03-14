@@ -1,0 +1,133 @@
+\hypertarget{class_ru_q_plain_text_edit}{}\section{Ru\+Q\+Plain\+Text\+Edit Class Reference}
+\label{class_ru_q_plain_text_edit}\index{Ru\+Q\+Plain\+Text\+Edit@{Ru\+Q\+Plain\+Text\+Edit}}
+
+
+This defines the base class which the text editor is derived from.  
+
+
+
+
+{\ttfamily \#include $<$ruqplaintextedit.\+h$>$}
+
+Inheritance diagram for Ru\+Q\+Plain\+Text\+Edit\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_ru_q_plain_text_edit}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_ru_q_plain_text_edit_1_1_watch}{Watch}
+\begin{DoxyCompactList}\small\item\em Defines a structure to keep track of a watched variable. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_ru_q_plain_text_edit_aa4304c1935d62a21ca47caefcb4fe73a}{}void \hyperlink{class_ru_q_plain_text_edit_aa4304c1935d62a21ca47caefcb4fe73a}{comment\+Selected\+Code} ()\label{class_ru_q_plain_text_edit_aa4304c1935d62a21ca47caefcb4fe73a}
+
+\begin{DoxyCompactList}\small\item\em Method that comments the user selected code. \end{DoxyCompactList}\item 
+\hypertarget{class_ru_q_plain_text_edit_ae4261c2f4317d73e210fb4307291c336}{}void \hyperlink{class_ru_q_plain_text_edit_ae4261c2f4317d73e210fb4307291c336}{uncomment\+Selected\+Code} ()\label{class_ru_q_plain_text_edit_ae4261c2f4317d73e210fb4307291c336}
+
+\begin{DoxyCompactList}\small\item\em Method for uncommenting a previously commented code block. \end{DoxyCompactList}\item 
+\hypertarget{class_ru_q_plain_text_edit_a2b37f59c4986e846036b5626fc635e84}{}void {\bfseries delete\+Selected} ()\label{class_ru_q_plain_text_edit_a2b37f59c4986e846036b5626fc635e84}
+
+\item 
+\hypertarget{class_ru_q_plain_text_edit_abe44143e74b70e76b7c098378cdce21f}{}void \hyperlink{class_ru_q_plain_text_edit_abe44143e74b70e76b7c098378cdce21f}{add\+Watch} ()\label{class_ru_q_plain_text_edit_abe44143e74b70e76b7c098378cdce21f}
+
+\begin{DoxyCompactList}\small\item\em Method for adding a variable watch. \end{DoxyCompactList}\item 
+\hypertarget{class_ru_q_plain_text_edit_a4c8f22184407d5d9cd402e9e19a77dfa}{}void \hyperlink{class_ru_q_plain_text_edit_a4c8f22184407d5d9cd402e9e19a77dfa}{set\+Debug\+Enabled} ()\label{class_ru_q_plain_text_edit_a4c8f22184407d5d9cd402e9e19a77dfa}
+
+\begin{DoxyCompactList}\small\item\em Used to enable the debugger. \end{DoxyCompactList}\item 
+\hypertarget{class_ru_q_plain_text_edit_a941b8becef86d6c5a9378843d084e67a}{}void \hyperlink{class_ru_q_plain_text_edit_a941b8becef86d6c5a9378843d084e67a}{set\+Debug\+Disabled} ()\label{class_ru_q_plain_text_edit_a941b8becef86d6c5a9378843d084e67a}
+
+\begin{DoxyCompactList}\small\item\em Used to disable the debugger. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_ru_q_plain_text_edit_a91e38e4be24851ce670ecf4d22965f1b}{}void \hyperlink{class_ru_q_plain_text_edit_a91e38e4be24851ce670ecf4d22965f1b}{add\+Watch\+Signal} (\hyperlink{struct_ru_q_plain_text_edit_1_1_watch}{Ru\+Q\+Plain\+Text\+Edit\+::\+Watch} variable)\label{class_ru_q_plain_text_edit_a91e38e4be24851ce670ecf4d22965f1b}
+
+\begin{DoxyCompactList}\small\item\em U\+N\+K\+N\+O\+W\+N. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_ru_q_plain_text_edit_a793cf95c0462ad8ae738c975d5f548ef}{}\hyperlink{class_ru_q_plain_text_edit_a793cf95c0462ad8ae738c975d5f548ef}{Ru\+Q\+Plain\+Text\+Edit} (Q\+Widget $\ast$parent=0)\label{class_ru_q_plain_text_edit_a793cf95c0462ad8ae738c975d5f548ef}
+
+\begin{DoxyCompactList}\small\item\em The class constructor creates the editor, given a specified parent Q\+Widget object. \end{DoxyCompactList}\item 
+Q\+Menu $\ast$ \hyperlink{class_ru_q_plain_text_edit_aad91c0ff3e7c3dede14ee0f6eb05afee}{create\+Menu} ()
+\begin{DoxyCompactList}\small\item\em Creates a menu. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_ru_q_plain_text_edit_a3ebf1e882b641ceebd106c7fa44d0a2f}{}void {\bfseries context\+Menu\+Event} (Q\+Context\+Menu\+Event $\ast$e)\label{class_ru_q_plain_text_edit_a3ebf1e882b641ceebd106c7fa44d0a2f}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_ru_q_plain_text_edit_abbbaf9221ce9a2da5dc0465099080f01}{}\hyperlink{struct_ru_q_plain_text_edit_1_1_watch}{Ru\+Q\+Plain\+Text\+Edit\+::\+Watch} {\bfseries variable\+On\+Current\+Line} ()\label{class_ru_q_plain_text_edit_abbbaf9221ce9a2da5dc0465099080f01}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_ru_q_plain_text_edit_aa8b913265b0dc3aa6da202073896ab14}{}Q\+Pointer$<$ Q\+Menu $>$ {\bfseries context\+Menu}\label{class_ru_q_plain_text_edit_aa8b913265b0dc3aa6da202073896ab14}
+
+\item 
+\hypertarget{class_ru_q_plain_text_edit_a2b8d4092c92e175127d1352da14a3f78}{}Q\+Action $\ast$ \hyperlink{class_ru_q_plain_text_edit_a2b8d4092c92e175127d1352da14a3f78}{comment\+Action}\label{class_ru_q_plain_text_edit_a2b8d4092c92e175127d1352da14a3f78}
+
+\begin{DoxyCompactList}\small\item\em Creates a comment. \end{DoxyCompactList}\item 
+\hypertarget{class_ru_q_plain_text_edit_a38538d75910f8e62955cba9bafbc6862}{}Q\+Action $\ast$ \hyperlink{class_ru_q_plain_text_edit_a38538d75910f8e62955cba9bafbc6862}{uncomment\+Action}\label{class_ru_q_plain_text_edit_a38538d75910f8e62955cba9bafbc6862}
+
+\begin{DoxyCompactList}\small\item\em Removes a comment. \end{DoxyCompactList}\item 
+\hypertarget{class_ru_q_plain_text_edit_a05683430c4f10aae97088275bab17b87}{}Q\+Action $\ast$ \hyperlink{class_ru_q_plain_text_edit_a05683430c4f10aae97088275bab17b87}{undo\+Action}\label{class_ru_q_plain_text_edit_a05683430c4f10aae97088275bab17b87}
+
+\begin{DoxyCompactList}\small\item\em Undo the last action. \end{DoxyCompactList}\item 
+\hypertarget{class_ru_q_plain_text_edit_af29953e5a06920e1ba6eb1da9be7ca1e}{}Q\+Action $\ast$ \hyperlink{class_ru_q_plain_text_edit_af29953e5a06920e1ba6eb1da9be7ca1e}{redo\+Action}\label{class_ru_q_plain_text_edit_af29953e5a06920e1ba6eb1da9be7ca1e}
+
+\begin{DoxyCompactList}\small\item\em Do the previous action again. \end{DoxyCompactList}\item 
+\hypertarget{class_ru_q_plain_text_edit_a3c6a96c2287b9a2b58b739468c40d367}{}Q\+Action $\ast$ \hyperlink{class_ru_q_plain_text_edit_a3c6a96c2287b9a2b58b739468c40d367}{cut\+Action}\label{class_ru_q_plain_text_edit_a3c6a96c2287b9a2b58b739468c40d367}
+
+\begin{DoxyCompactList}\small\item\em Cut a selected text string. \end{DoxyCompactList}\item 
+\hypertarget{class_ru_q_plain_text_edit_a19d8b06c4d6b3a2fe7f5b3a675403d03}{}Q\+Action $\ast$ \hyperlink{class_ru_q_plain_text_edit_a19d8b06c4d6b3a2fe7f5b3a675403d03}{copy\+Action}\label{class_ru_q_plain_text_edit_a19d8b06c4d6b3a2fe7f5b3a675403d03}
+
+\begin{DoxyCompactList}\small\item\em Copy a selected text string. \end{DoxyCompactList}\item 
+\hypertarget{class_ru_q_plain_text_edit_ab5ab9d30f4a05b5371444ab7fde9927b}{}Q\+Action $\ast$ \hyperlink{class_ru_q_plain_text_edit_ab5ab9d30f4a05b5371444ab7fde9927b}{paste\+Action}\label{class_ru_q_plain_text_edit_ab5ab9d30f4a05b5371444ab7fde9927b}
+
+\begin{DoxyCompactList}\small\item\em Pase the clipboard contents. \end{DoxyCompactList}\item 
+\hypertarget{class_ru_q_plain_text_edit_ad040e7e27a980e1bb67505fc3dbe9f8a}{}Q\+Action $\ast$ \hyperlink{class_ru_q_plain_text_edit_ad040e7e27a980e1bb67505fc3dbe9f8a}{delete\+Action}\label{class_ru_q_plain_text_edit_ad040e7e27a980e1bb67505fc3dbe9f8a}
+
+\begin{DoxyCompactList}\small\item\em U\+N\+K\+N\+O\+W\+N. \end{DoxyCompactList}\item 
+\hypertarget{class_ru_q_plain_text_edit_ae0aadce86a565814f15660816d7eaced}{}Q\+Action $\ast$ \hyperlink{class_ru_q_plain_text_edit_ae0aadce86a565814f15660816d7eaced}{select\+All\+Action}\label{class_ru_q_plain_text_edit_ae0aadce86a565814f15660816d7eaced}
+
+\begin{DoxyCompactList}\small\item\em Select all of the text. \end{DoxyCompactList}\item 
+\hypertarget{class_ru_q_plain_text_edit_a58f97203281130df24c917791730bbaa}{}Q\+Action $\ast$ \hyperlink{class_ru_q_plain_text_edit_a58f97203281130df24c917791730bbaa}{add\+Watch\+Action}\label{class_ru_q_plain_text_edit_a58f97203281130df24c917791730bbaa}
+
+\begin{DoxyCompactList}\small\item\em Add a watch on a variable. \end{DoxyCompactList}\item 
+\hypertarget{class_ru_q_plain_text_edit_a741b5b182b316358df02611a21933ec1}{}bool \hyperlink{class_ru_q_plain_text_edit_a741b5b182b316358df02611a21933ec1}{debug\+Enabled}\label{class_ru_q_plain_text_edit_a741b5b182b316358df02611a21933ec1}
+
+\begin{DoxyCompactList}\small\item\em Used to keep track if the debugger is enabled. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This defines the base class which the text editor is derived from. 
+
+The class contains methods that are used in the editor. These range from simple copying and pasting to enabling/disabling the debugger. 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_ru_q_plain_text_edit_aad91c0ff3e7c3dede14ee0f6eb05afee}{}\index{Ru\+Q\+Plain\+Text\+Edit@{Ru\+Q\+Plain\+Text\+Edit}!create\+Menu@{create\+Menu}}
+\index{create\+Menu@{create\+Menu}!Ru\+Q\+Plain\+Text\+Edit@{Ru\+Q\+Plain\+Text\+Edit}}
+\subsubsection[{create\+Menu}]{\setlength{\rightskip}{0pt plus 5cm}Q\+Menu $\ast$ Ru\+Q\+Plain\+Text\+Edit\+::create\+Menu (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_ru_q_plain_text_edit_aad91c0ff3e7c3dede14ee0f6eb05afee}
+
+
+Creates a menu. 
+
+if nothing selected 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{ruqplaintextedit_8h}{ruqplaintextedit.\+h}\item 
+ruqplaintextedit.\+cpp\end{DoxyCompactItemize}

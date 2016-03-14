@@ -1,0 +1,121 @@
+\hypertarget{class_find_dialog}{}\section{Find\+Dialog Class Reference}
+\label{class_find_dialog}\index{Find\+Dialog@{Find\+Dialog}}
+
+
+This class represents the \char`\"{}find text\char`\"{} functionality.  
+
+
+
+
+{\ttfamily \#include $<$finddialog.\+h$>$}
+
+Inheritance diagram for Find\+Dialog\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_find_dialog}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_find_dialog_a4c4a3771fb980ba9c69ca6a67f0e0064}{}bool {\bfseries close} ()\label{class_find_dialog_a4c4a3771fb980ba9c69ca6a67f0e0064}
+
+\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_find_dialog_a3046657833c8120339f3a03444f8e5ff}{}void {\bfseries find\+Next} (const Q\+String \&str, Qt\+::\+Case\+Sensitivity cs, bool all, bool replace, const Q\+String \&replace\+Text=0)\label{class_find_dialog_a3046657833c8120339f3a03444f8e5ff}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_find_dialog_af9dc0e86bec39e9b3a0b954a603a8e76}{}{\bfseries Find\+Dialog} (Q\+Widget $\ast$parent=0)\label{class_find_dialog_af9dc0e86bec39e9b3a0b954a603a8e76}
+
+\item 
+\hypertarget{class_find_dialog_a966e7ab89d607dbff17d17a95f102587}{}void {\bfseries close\+Event} (Q\+Close\+Event $\ast$e)\label{class_find_dialog_a966e7ab89d607dbff17d17a95f102587}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_find_dialog_a655e40bfdcc2c7712a1541bbf8cf2744}{}void {\bfseries find\+Clicked} ()\label{class_find_dialog_a655e40bfdcc2c7712a1541bbf8cf2744}
+
+\item 
+\hypertarget{class_find_dialog_aa42a9c9abe4a4ede6d87b2da08b3b928}{}void {\bfseries find\+All\+Clicked} ()\label{class_find_dialog_aa42a9c9abe4a4ede6d87b2da08b3b928}
+
+\item 
+\hypertarget{class_find_dialog_ae70c0cd7fbfa8b635e2bf43c34ee6586}{}void {\bfseries replace\+Clicked} ()\label{class_find_dialog_ae70c0cd7fbfa8b635e2bf43c34ee6586}
+
+\item 
+\hypertarget{class_find_dialog_abe5173da17631afacde0742e4cd9e471}{}void {\bfseries replace\+All\+Clicked} ()\label{class_find_dialog_abe5173da17631afacde0742e4cd9e471}
+
+\item 
+\hypertarget{class_find_dialog_a2f659549e817833ee65d14f81d59cced}{}void {\bfseries enable\+Find\+Button} (const Q\+String \&text)\label{class_find_dialog_a2f659549e817833ee65d14f81d59cced}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_find_dialog_a162cc453e71d917ac08d1aabbdbf4fbd}{}Q\+Label $\ast$ {\bfseries search\+Label}\label{class_find_dialog_a162cc453e71d917ac08d1aabbdbf4fbd}
+
+\item 
+\hypertarget{class_find_dialog_aa29766ac87487026ac7a76951e4b8d0b}{}Q\+Label $\ast$ {\bfseries replace\+Label}\label{class_find_dialog_aa29766ac87487026ac7a76951e4b8d0b}
+
+\item 
+\hypertarget{class_find_dialog_ac516bb12976237f707d7b9c51738d73e}{}Q\+Line\+Edit $\ast$ {\bfseries search\+Edit}\label{class_find_dialog_ac516bb12976237f707d7b9c51738d73e}
+
+\item 
+\hypertarget{class_find_dialog_a343258a37f12d131051ad3cbdf353a28}{}Q\+Line\+Edit $\ast$ {\bfseries replace\+Edit}\label{class_find_dialog_a343258a37f12d131051ad3cbdf353a28}
+
+\item 
+\hypertarget{class_find_dialog_a35f7083798170a5d572fc9d869ca6d1a}{}Q\+Check\+Box $\ast$ {\bfseries case\+Check\+Box}\label{class_find_dialog_a35f7083798170a5d572fc9d869ca6d1a}
+
+\item 
+\hypertarget{class_find_dialog_a2a4e97929c23e98e150924d7420a481f}{}Q\+Push\+Button $\ast$ {\bfseries find\+Button}\label{class_find_dialog_a2a4e97929c23e98e150924d7420a481f}
+
+\item 
+\hypertarget{class_find_dialog_aa0bd8a47a2074da69056fbf812ea7811}{}Q\+Push\+Button $\ast$ {\bfseries find\+All\+Button}\label{class_find_dialog_aa0bd8a47a2074da69056fbf812ea7811}
+
+\item 
+\hypertarget{class_find_dialog_a671d60112b89dea510c149372d2992ef}{}Q\+Push\+Button $\ast$ {\bfseries replace\+Button}\label{class_find_dialog_a671d60112b89dea510c149372d2992ef}
+
+\item 
+\hypertarget{class_find_dialog_a558408ab812aebae4a63f805a3951023}{}Q\+Push\+Button $\ast$ {\bfseries replace\+All\+Button}\label{class_find_dialog_a558408ab812aebae4a63f805a3951023}
+
+\item 
+\hypertarget{class_find_dialog_a4cd1160790eb513e0a103ad286fc2510}{}Q\+Push\+Button $\ast$ {\bfseries close\+Button}\label{class_find_dialog_a4cd1160790eb513e0a103ad286fc2510}
+
+\item 
+\hypertarget{class_find_dialog_a891b70d2a9b9adeae41b20298e7d23cc}{}Q\+H\+Box\+Layout $\ast$ {\bfseries replace\+Layout}\label{class_find_dialog_a891b70d2a9b9adeae41b20298e7d23cc}
+
+\item 
+\hypertarget{class_find_dialog_acebe70639dab551c763cfe19cab7f9ce}{}Q\+H\+Box\+Layout $\ast$ {\bfseries search\+Layout}\label{class_find_dialog_acebe70639dab551c763cfe19cab7f9ce}
+
+\item 
+\hypertarget{class_find_dialog_a130675f44fd1bd0fda090793fdf5bff6}{}Q\+H\+Box\+Layout $\ast$ {\bfseries replace\+Button\+Layout}\label{class_find_dialog_a130675f44fd1bd0fda090793fdf5bff6}
+
+\item 
+\hypertarget{class_find_dialog_a735dfeee149248594b8311c234866df7}{}Q\+V\+Box\+Layout $\ast$ {\bfseries left\+Layout}\label{class_find_dialog_a735dfeee149248594b8311c234866df7}
+
+\item 
+\hypertarget{class_find_dialog_ab93f0e33031fb7dbe6f55f2de1f364aa}{}Q\+V\+Box\+Layout $\ast$ {\bfseries right\+Layout}\label{class_find_dialog_ab93f0e33031fb7dbe6f55f2de1f364aa}
+
+\item 
+\hypertarget{class_find_dialog_aae801e97a136a56b3e936b312837ce07}{}Q\+H\+Box\+Layout $\ast$ {\bfseries main\+Layout}\label{class_find_dialog_aae801e97a136a56b3e936b312837ce07}
+
+\item 
+\hypertarget{class_find_dialog_a0d031ef966bb68201131d8360ed502ba}{}Q\+Spacer\+Item $\ast$ {\bfseries search\+Spacer}\label{class_find_dialog_a0d031ef966bb68201131d8360ed502ba}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class represents the \char`\"{}find text\char`\"{} functionality. 
+
+All of the methods including Find Find All Find\&Replace Are defined here. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{finddialog_8h}{finddialog.\+h}\item 
+\hyperlink{finddialog_8cpp}{finddialog.\+cpp}\end{DoxyCompactItemize}

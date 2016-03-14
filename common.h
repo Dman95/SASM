@@ -46,6 +46,12 @@
 #include <QFile>
 #include <QDir>
 
+/**
+ * @file common.h
+ * Base UNKNOWN
+ */
+
+
 namespace Common {
     QString applicationDataPath();
     QString pathInTemp(QString path);

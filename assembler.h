@@ -59,16 +59,12 @@
  * Base class for creating assembler instances
  */
 
-
-
 /*! \brief This is the base class that all assemblers inherit
  *
  *  The Assembler class contains functions which can be used to retrieve assember specific
  * parameters such as the linker & assembler location, the default program text, and
  * user specified options.
  *
- * If the developer wishes to add support for a new assember, please refer to the implimentations
- * of the NASM, MASM, FASM, and GAS assemblers, found in their respective header files.
  */
 
 class Assembler : public QObject
@@ -76,9 +72,9 @@ class Assembler : public QObject
     Q_OBJECT
 public:
     struct LineNum {
-         //! String number in code in SASM code area
+         //! String number in code in SASM code area ->What does string number in code mean?
         quint64 numInCode;
-         //! Address of instruction in memory
+         //! Address of instruction in memory -> which instruction? Of the user's?
         quint64 numInMem;
         bool operator ==(const LineNum& ln)
         {
@@ -89,46 +85,55 @@ public:
     {
         HighlightingRule() : isComment(false) {
         }
-        //! Pattern to highlight - WHICH PATTERN UNKNOWN
+        //! Pattern to highlight
         QRegExp pattern;
         //! Whighlighting format UNKNOWN FILL THIS IN
         QTextCharFormat format;
         bool isComment;
     };
     bool x86;
+
     //! Assembler constructor. Note that this is the stage where x86 is determined.
     explicit Assembler(bool x86, QObject *parent = 0);
+
      //! Return the default path to the assembler.
     virtual QString getAssemblerPath() = 0;
+
     //! Returns the default path to the linker.
     virtual QString getLinkerPath() = 0;
 
+    //! get file with listing and name of entry label - main or start.
+    //! Returns the offset of this label - number of strings and where the label is placed.
     virtual quint64 getMainOffset(QFile &lst, QString entryLabel) = 0;
-    //get file with listing and name of entry label - main or start.
-    //Should return offset of this label - number of string, where label is placed.
 
+    //! Parses the listing file lst and fills QVector lines with results of parsing.
+    //! offset - difference between program code in memory and in file.
     virtual void parseLstFile(QFile &lst,
                               QVector<Assembler::LineNum> &lines,
                               quint64 offset) = 0;
-    //should parse listing file lst and fill QVector lines with results of parsing.
-    //offset - difference between program code in memory and in file.
 
+    //! Fills QVector with the highlighting rules.
+    //! Qlist with formats (see NASM, MASM, FASM, GAS as examples). commentStartExpression - /* in C++ for example,
+    //! commentEndExpression - */ in C++ for example - expressions for multi line highlighting - workes if multiLineComments == true.
     virtual void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
                                      QList<QTextCharFormat *> &formats,
                                      bool &multiLineComments,
                                      QRegExp &commentStartExpression,
                                      QRegExp &commentEndExpression) = 0;
-    //should fill QVector with highlighting rules.
-    //Qlist with formats (see NASM, MASM, FASM, GAS as examples). commentStartExpression - /* in C++ for example,
-    //commentEndExpression - */ in C++ for example - expressions for multi line highlighting - workes if multiLineComments == true.
+
      //! Return the default start text (default project code)
     virtual QString getStartText() = 0;
+
     //! Puts the debug string that makes frame (mov ebp, esp)
     virtual void putDebugString(CodeEditor *code) = 0;
+
      //! Returns the default assembler options
     virtual QString getAssemblerOptions() = 0;
+
      //! Returns the default linker options
     virtual QString getLinkerOptions() = 0;
+
+    //! Determines if the system is x86
     bool isx86();
 
 signals:
@@ -138,3 +143,75 @@ public slots:
 };
 
 #endif // ASSEMBLER_H
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*! \mainpage SASM Dev Guide
+ *
+ * \section intro_sec Introduction
+ *
+ * Below you will find what and where to modify appropriate header and source files when you want to add a feature.
+ *
+ * \section section1 Commenting
+ *
+ * When commenting use doxygen's syntax. Place the comment above the intended line. After adding the feature, run
+ * doxygen.exe configfile to update the documentation. Be sure to double check the documentation to ensure the
+ * added comments were parsed  correctly.
+ *
+ * \section section2 Adding Assembler Support
+ *
+ * Adding support is a relatively straight forward process. Each supported assembler is a derived Assembler and
+ * has its own header and cpp file.
+ *
+ * \subsection step1 Step 1: Creating the header and cpp
+ *
+ * The first step is to create the new header and cpp file for the assembler. These should be named all lowercase without gaps
+ *
+ * \subsection step2 Step 2: Creating the assembler class
+ *
+ * The decleration of the class may best be discussed in light of already supported assemblers. Take for example, NASM. The NASM
+ * class is defined as:
+ * class NASM : public Assembler
+ *
+ * The generic definition is
+ * class YOURASSEMBLER : public Assembler
+ *
+ * The variables and methods of YOURASSEMBLER should be the virtual methods of Assembler. If you are unsure what to add, refer to
+ * the already supported assemler classes. You may copy and paste them.
+ *
+ * \subsection step3 Step 3: Adding it to the Build Options
+ *
+ * You should hopefully know enough QT to be able to add form controls. The code for modifying the build menu can be found in
+ * mainwindow.cpp. Refer to its documentation for more reference on where to add/modify code.
+ *
+ * \section section3 Adding Language Support
+ *
+ *
+ * \subsection Help File
+ *
+ * The help file, __.xxx, needs to be translated and saved into a new xx.xxx file. The
+ * void MainWindow::openHelp()
+ * must be modified to support the added language. This is done by adding another if statement.
+ *
+ * \subsection startText
+ *
+ * The default assembler skeleton needs to have its comments translated.
+ */
+
+
+
+
+
+
+

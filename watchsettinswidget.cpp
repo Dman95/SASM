@@ -39,7 +39,23 @@
 ****************************************************************************/
 
 #include "watchsettinswidget.h"
+/**
+ * @file watchsettingswidget.cpp
+ *
+ */
 
+/**
+ * @file watchsettinswidget.cpp
+ * Implimentation of the WatchSettingsWidget
+ */
+
+/*! \brief  This defines the layout such as spacing and items of the variable watch
+ * area.
+ *
+ *
+ *First, the parent widget is passed to the class. Next, the form items are added
+ * and spaced appropriately. The form items are then further defined and then connected.
+*/
 WatchSettinsWidget::WatchSettinsWidget(QWidget *parent) :
     QWidget(parent)
 {
