@@ -16,3 +16,6 @@ Makefile
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+*.html
+*.png

@@ -78,6 +78,16 @@
 
 #define SASM_VERSION "3.4.0"
 
+/**
+ * @file mainwindow.h
+ * Defines the main user interface.
+ */
+
+/*! \brief The MainWindow class defines the actions and behavior of the main user interface.
+ *
+ * Longer explanation here
+*/
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -107,7 +117,7 @@ private:
     RuQTextEdit *compilerOut;
     QTabWidget *tabs;
 
-    //menus and actions
+    //! Menus and Actions
     QMenu *fileMenu;
     QMenu *editMenu;
     QMenu *debugMenu;
@@ -147,13 +157,13 @@ private:
     QAction *helpAction;
     QAction *aboutAction;
 
-    //toolbars
+    //! Toolbars
     QToolBar *fileToolBar;
     QToolBar *editToolBar;
     QToolBar *buildToolBar;
     QToolBar *debugToolBar;
 
-    //builder and debugger and all that concern to them
+    //! Builder and debugger and all that concern to them
     QProcess *runProcess;
     CodeEditor *prevCodeEditor;
     QTimer *timer;
@@ -172,25 +182,27 @@ private:
     bool debuggerWasStarted;
     QString debugKey;
 
-    //highlighters
+    //! Highlighters
     Highlighter *highlighter;
     Highlighter *settingsHighlighter;
 
-    //search
+    //! Search
     QPointer<FindDialog> findDialog;
     Qt::CaseSensitivity prevCs;
 
-    //settings and help
+    //! Settings and Help
     QPointer<QWidget> settingsWindow;
     Ui::SettingsWindow settingsUi;
     QString startText;
     CodeEditor *settingsStartTextEditor;
-    QString saveOpenDirectory; //save and open
+    //!save and open
+    QString saveOpenDirectory;
     QPointer<QTextBrowser> help;
     QSignalMapper *colorSignalMapper;
     QSignalMapper *fontsSignalMapper;
     QList<QPushButton *> colorButtons;
-    QList<QColor> defaultColors; //according to colorButtons
+    //! According to colorButtons
+    QList<QColor> defaultColors;
     QMap<QString, QColor> colorsMap;
     QList<QCheckBox *> fontCheckBoxes;
     QSettings settings;
@@ -204,12 +216,12 @@ private:
     QString backupStartText;
     QString backupLinkerPath;
 
-    //about close
+    //! About close
     bool closeFromCloseAll;
     void closeEvent(QCloseEvent *e);
 
 public slots:
-    //actions and menus
+    //! Actions and Menus
     void newFile();
     void openFile();
     void closeFile();
@@ -220,7 +232,7 @@ public slots:
     void refreshEditMenu();
     void changeCurrentSavedState(bool changed);
 
-    //custom
+    //! Custom UNKNOWN
     void openFile(QString path)
     {
         if (path.isEmpty())
@@ -244,7 +256,7 @@ public slots:
             openFile(QString(arguments[i]));
     }
 
-    //build
+    //! Build
     void buildProgram(bool debugMode = false);
     void runProgram();
     void runExeProgram();
@@ -256,7 +268,7 @@ public slots:
     void printLogWithTime(const QString & message, const QColor &color);
     void startCountProgramTime();
 
-    //debug
+    //! Debug
     void debug();
     void enableDebugActions();
     void disableDebugActions(bool start = false);
@@ -277,12 +289,12 @@ public slots:
     void getOutput();
     void changeDebugActionToStart();
 
-    //search
+    //! Search
     void find();
     void findNext(const QString &pattern, Qt::CaseSensitivity cs, bool all, bool replace,
                   const QString &replaceText = 0);
 
-    //settings
+    //! Settings
     void restorePrevSession(bool notNotify = false);
     void openSettings();
     void changeMode(bool x86);
@@ -303,11 +315,11 @@ public slots:
     void printMasmInfo();
     void enableOrDisableLinkingEdit(int disableLinkingCheckboxState);
 
-    //closing
+    //! Closing
     bool deleteTab(int index, bool saveFileName = false);
     void closeAllChildWindows();
 
-    //other windows
+    //! Help and About
     void openHelp();
     void openAbout();
 

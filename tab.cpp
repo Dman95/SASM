@@ -40,14 +40,25 @@
 
 #include "tab.h"
 
+/**
+ * @file tab.cpp
+ * Implimentation of the WatchSettingsWidget
+ */
+
+
+/*! \brief UNKNOWN
+ *
+ *
+*/
+
 Tab::Tab(QWidget *parent) :
     QMainWindow(parent)
 {
-    //Setting code field
+    //! Setting code field
     code = new CodeEditor;
     setCentralWidget(code);
 
-    //Setting input and output fields
+    //! Setting input and output fields
     input = new RuQTextEdit;
     output = new RuQTextEdit;
     output->setReadOnly(true);
@@ -76,15 +87,19 @@ Tab::Tab(QWidget *parent) :
     addDockWidget(Qt::RightDockWidgetArea, outputDock);
     outputDock->setObjectName("outputDock");
 
-    //Setting io and code fonts
+    //! Setting io and code fonts
     setFonts();
 
-    //restore state
+    //! Restore state
     QSettings settings("SASM Project", "SASM");
     restoreGeometry(settings.value("tabgeometry").toByteArray());
     restoreState(settings.value("tabwindowstate").toByteArray());
 }
 
+/*! \brief
+ *
+ *
+*/
 void Tab::setFonts()
 {
     QSettings settings("SASM Project", "SASM");
@@ -105,17 +120,28 @@ void Tab::setFonts()
 
 
 
-
+/*! \brief
+ *
+ *
+*/
 QTextDocument * Tab::getCodeDocument()
 {
     return code->document();
 }
 
+/*! \brief
+ *
+ *
+*/
 QString Tab::getCurrentFilePath()
 {
     return currentFilePath;
 }
 
+/*! \brief
+ *
+ *
+*/
 void Tab::saveCodeToFile(const QString &filePath, Assembler *assembler, bool changeCodeModifiedFlag, bool debugMode)
 {
     QFile outfile;
@@ -133,6 +159,10 @@ void Tab::saveCodeToFile(const QString &filePath, Assembler *assembler, bool cha
     outfile.close();
 }
 
+/*! \brief
+ *
+ *
+*/
 void Tab::loadCodeFromFile(const QString &filePath)
 {
     QFile file;
@@ -146,6 +176,10 @@ void Tab::loadCodeFromFile(const QString &filePath)
     file.close();
 }
 
+/*! \brief
+ *
+ *
+*/
 void Tab::saveInputToFile(const QString &filePath)
 {
     QFile outfile;
@@ -156,6 +190,10 @@ void Tab::saveInputToFile(const QString &filePath)
     outfile.close();
 }
 
+/*! \brief
+ *
+ *
+*/
 void Tab::loadOutputFromFile(const QString &filePath)
 {
     QFile outputFile;
@@ -167,22 +205,33 @@ void Tab::loadOutputFromFile(const QString &filePath)
     outputFile.close();
 }
 
+/*! \brief
+ *
+ *
+*/
 void Tab::appendOutput(QString msg)
 {
     msg = output->toPlainText().right(2000) + msg.right(2000);
     msg = msg.right(2000);
     output->setText(msg);
-    //scroll
+    //! Scroll
     QTextCursor cursor = output->textCursor();
     cursor.movePosition(QTextCursor::End);
     output->setTextCursor(cursor);
 }
 
+/*! \brief
+ *
+ *
+*/
 void Tab::clearOutput()
 {
     output->clear();
 }
-
+/*! \brief Destructor for the Tab objects.
+ *
+ *
+*/
 Tab::~Tab()
 {
     delete input;

@@ -50,6 +50,23 @@
 #include <QVBoxLayout>
 #include <QCloseEvent>
 
+/**
+ * @file finddialog.h
+ * The dialog box used to find text.
+ */
+
+
+
+/*! \brief This class represents the "find text" functionality
+ *
+ *
+ * All of the methods including
+ *  Find
+ *  Find All
+ *  Find&Replace
+ * Are defined here.
+ */
+
 class FindDialog : public QWidget
 {
     Q_OBJECT

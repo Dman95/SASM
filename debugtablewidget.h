@@ -12,7 +12,20 @@
 #include "watchsettinswidget.h"
 #include "ruqplaintextedit.h"
 
+/**
+ * @file debugtablewidget.h
+ * Defines the debugging window which the user interfaces with it.
+ */
+
 enum DebugTableWidgetType {registersTable, memoryTable};
+
+
+/**
+ * ! \brief This class represents the Memory table.
+ *
+ * This class contains the methods and variables relevant to the memory window under the debugger.
+ * Methods include adding variable watches, modifying variable contents, and adding registers.
+ * */
 
 class DebugTableWidget : public QTableWidget
 {

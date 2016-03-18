@@ -40,6 +40,11 @@
 
 #include "debuganycommandwidget.h"
 
+/**
+ * @file debuganycommandwidget.cpp
+ * Impliments the debugger's stepping features
+ */
+
 DebugAnyCommandWidget::DebugAnyCommandWidget(QWidget *parent) :
     QWidget(parent)
 {

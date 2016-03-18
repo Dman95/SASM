@@ -40,12 +40,19 @@
 
 #include "assembler.h"
 
+/**
+ * @file assembler.cpp
+ * Impliments the Assmbler class
+ */
+
+//! Determines whether the target processor is x86 or x64
 Assembler::Assembler(bool x86, QObject *parent) :
     QObject(parent)
 {
     this->x86 = x86;
 }
 
+//! Returns a bool whether the processor is x86.
 bool Assembler::isx86()
 {
     return x86;

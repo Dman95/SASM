@@ -39,6 +39,11 @@
 ****************************************************************************/
 
 #include "getstartedwidget.h"
+/**
+
+ * @file getstartedwidget.cpp
+ * Impliments the opening window.
+ */
 
 GetStartedWidget::GetStartedWidget(QWidget *parent) :
     QWidget(parent)

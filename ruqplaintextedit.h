@@ -50,16 +50,31 @@
 #include <QPointer>
 #include <QSettings>
 
+/**
+ * @file ruqplaintextedit.h
+ * Text editor base class definition file.
+ */
+
+
+/*! \brief This defines the base class which the text editor is derived from.
+ *
+ * The class contains methods that are used in the editor. These range from simple
+ * copying and pasting to enabling/disabling the debugger.
+ */
+
 class RuQPlainTextEdit : public QPlainTextEdit
 {
     Q_OBJECT
 
 public:
+    //! The class constructor creates the editor, given a specified parent QWidget object.
     RuQPlainTextEdit(QWidget *parent = 0);
     ~RuQPlainTextEdit();
 
+    //! Creates a menu
     QMenu *createMenu();
 
+    //! Defines a structure to keep track of a watched variable.
     struct Watch {
         QString name;
         int type;
@@ -73,28 +88,47 @@ protected:
 
 private:
     RuQPlainTextEdit::Watch variableOnCurrentLine();
+
     QPointer<QMenu> contextMenu;
+    //! Creates a comment
     QAction *commentAction;
+    //! Removes a comment
     QAction *uncommentAction;
+    //! Undo the last action
     QAction *undoAction;
+    //! Do the previous action again.
     QAction *redoAction;
+    //! Cut a selected text string.
     QAction *cutAction;
+    //! Copy a selected text string.
     QAction *copyAction;
+    //! Pase the clipboard contents.
     QAction *pasteAction;
+    //! UNKNOWN
     QAction *deleteAction;
+    //! Select all of the text.
     QAction *selectAllAction;
+    //! Add a watch on a variable.
     QAction *addWatchAction;
+    //! Used to keep track if the debugger is enabled.
     bool debugEnabled;
 
 public slots:
+    //! Method that comments the user selected code.
     void commentSelectedCode();
+    //! Method for uncommenting a previously commented code block.
     void uncommentSelectedCode();
+
     void deleteSelected();
+    //! Method for adding a variable watch.
     void addWatch();
+    //! Used to enable the debugger.
     void setDebugEnabled();
+    //! Used to disable the debugger.
     void setDebugDisabled();
 
 signals:
+    //! UNKNOWN
     void addWatchSignal(RuQPlainTextEdit::Watch variable);
 };
 

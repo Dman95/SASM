@@ -47,6 +47,18 @@
 #include <QTextDocument>
 #include "assembler.h"
 
+/**
+ * @file highlighter.h
+ * Defines the highlighting class.
+ */
+
+/*! \brief This class defines the rules of syntax highlighting.
+ *
+ *  Because some assemblers use different keywords, it is
+ *  essential to distinguish between rules.
+ *  Each rule set is defined as a Highlighter instance.
+ */
+
 class Highlighter : public QSyntaxHighlighter
 {
 public:

@@ -40,6 +40,11 @@
 
 #include "mainwindow.h"
 
+/**
+ * @file mainwindow.cpp
+ * Code for all of the windows and features.
+ */
+
 MainWindow::MainWindow(const QStringList &args, QWidget *parent)
     : QMainWindow(parent), settings("SASM Project", "SASM")
 {
@@ -53,10 +58,10 @@ MainWindow::MainWindow(const QStringList &args, QWidget *parent)
                 SLOT(otherInstanceDataReceived(QByteArray))
     );
 
-    //set save and open directory
+    //! Set save and open directory
     saveOpenDirectory = settings.value("saveopendirectory", QString(Common::applicationDataPath() + "/Projects")).toString();
 
-    //initial variables
+    //! Initial variables
     programIsBuilded = false;
     prevCodeEditor = 0;
     findDialog = 0;
@@ -73,11 +78,11 @@ MainWindow::MainWindow(const QStringList &args, QWidget *parent)
     memoryDock = 0;
     registersDock = 0;
 
-    //initialize assembler
+    //! Initialize assembler
     assembler = 0;
     recreateAssembler(true);
 
-    //set code field start text
+    //! Set code field start text
     startText = settings.value("starttext", QString()).toString();
     if (startText.isEmpty()) {
         settings.setValue("starttext", assembler->getStartText());
@@ -97,10 +102,10 @@ MainWindow::MainWindow(const QStringList &args, QWidget *parent)
     refreshEditMenu();
     setAcceptDrops(true);
 
-    //restore log splitter state
+    //! Restore log splitter state
     splitter->restoreState(settings.value("logsplitterstate").toByteArray());
 
-    //open documents from command line
+    //! Open documents from command line
     for (int i = 1; i < args.size(); i++)
         openFile(args[i]);
 }
@@ -114,21 +119,21 @@ void MainWindow::enableOrDisableLinkingEdit(int disableLinkingCheckboxState)
 
 void MainWindow::initUi()
 {
-    //Resize
+    //! Resize
     settings.beginGroup("MainWindow");
     resize(settings.value("size", QSize(1024, 650)).toSize()); //default 1024x650
     move(settings.value("pos", QPoint(200, 200)).toPoint());
-    //set maximized
+    //! Set maximized
     setWindowState(windowState() | (Qt::WindowState) settings.value("maximized", (int) Qt::WindowNoState).toInt());
     settings.endGroup();
 
-    //Get Started window
+    //! Get Started window
     getStartedWidget = new GetStartedWidget;
     connect(getStartedWidget->newButton, SIGNAL(clicked()), this, SLOT(newFile()));
     connect(getStartedWidget->openButton, SIGNAL(clicked()), this, SLOT(openFile()));
     connect(getStartedWidget->prevSessionButton, SIGNAL(clicked()), this, SLOT(restorePrevSession()));
 
-    //Create form
+    //! Create form
     splitter = new QSplitter;
     splitter->setOrientation(Qt::Vertical);
     workLayout = new QVBoxLayout;
@@ -138,24 +143,24 @@ void MainWindow::initUi()
     workWidget = new QWidget;
     workWidget->setLayout(workLayout);
 
-    //Stacked widget
+    //! Stacked widget
     mainWidget = new QStackedWidget;
     mainWidget->addWidget(getStartedWidget);
     mainWidget->addWidget(workWidget);
     mainWidget->setCurrentIndex(0); //get started
     setCentralWidget(mainWidget);
 
-    //Create highlighter
+    //! Create highlighter
     highlighter = new Highlighter(assembler);
 
-    //Create tabs
+    //! Create tabs
     tabs = new QTabWidget;
     connect(tabs, SIGNAL(tabCloseRequested(int)), this, SLOT(deleteTab(int)));
     connect(tabs, SIGNAL(currentChanged(int)), this, SLOT(changeCurrentTab(int)));
     tabs->setTabsClosable(true);
     tabs->setMovable(true);
 
-    //Create compiler field
+    //! Create compiler field
     compilerOut = new RuQTextEdit;
     compilerOut->setReadOnly(true);
     QFont compilerOutFont;
@@ -163,10 +168,10 @@ void MainWindow::initUi()
     compilerOut->setFont(compilerOutFont);
     compilerOut->setText(tr("Build log:") + '\n');
 
-    //Create gdb command widget
+    //! Create gdb command widget
     debugAnyCommandWidget = new DebugAnyCommandWidget;
 
-    //Add widgets on splitter
+    //! Add widgets on splitter
     splitter->addWidget(tabs);
     splitter->addWidget(compilerOut);
     workLayout->addWidget(debugAnyCommandWidget);
@@ -174,7 +179,7 @@ void MainWindow::initUi()
     debugAnyCommandWidget->close();
     debugAnyCommandWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
     splitter->setSizes(QList<int>() << splitter->size().height() - compilerOutSize << compilerOutSize);
-    //Restore previous session if it in settings
+    //! Restore previous session if it in settings
     if (settings.value("startwindow", 0).toInt() == 1)
         restorePrevSession(true);
 }
@@ -384,7 +389,7 @@ void MainWindow::createActions()
     if (key == "default")
         key = stdKey.toString();
     deleteTabAction->setShortcut(key);
-    //Action in edit menu connects in refreshEditMenu function!
+    //! Action in edit menu connects in refreshEditMenu function!
 
 
     buildAction = new QAction(QIcon(":/images/build.png"), tr("Build this"), this);
@@ -408,7 +413,8 @@ void MainWindow::createActions()
 
     stopAction = new QAction(QIcon(":/images/stop.png"), tr("Stop"), this);
     connect(stopAction, SIGNAL(triggered()), this, SLOT(stopProgram()));
-    stopAction->setEnabled(false); //enable in runProgram(), disable in stop
+    //! Enable in runProgram(), disable in stop
+    stopAction->setEnabled(false);
 
     debugAction = new QAction(QIcon(":/images/debug.png"), tr("Debug"), this);
     key = keySettings.value("debug", "default").toString();
@@ -468,7 +474,7 @@ void MainWindow::createActions()
     connect(settingsAction, SIGNAL(triggered()), this, SLOT(openSettings()));
 
     connect(mainWidget, SIGNAL(currentChanged(int)), this, SLOT(changeActionsState(int)));
-    //disable some actions if get started widget opened
+    //! Disable some actions if get started widget opened
     changeActionsState(mainWidget->currentIndex());
 
     helpAction = new QAction(tr("Help"), this);
@@ -519,7 +525,7 @@ void MainWindow::refreshEditMenu()
 {
     CodeEditor *codeEditor = 0;
 
-    //disconnect from previous
+    //! Disconnect from previous
     if (prevCodeEditor) {
         disconnect(commentAction, SIGNAL(triggered()), prevCodeEditor, SLOT(commentSelectedCode()));
         disconnect(uncommentAction, SIGNAL(triggered()), prevCodeEditor, SLOT(uncommentSelectedCode()));
@@ -537,7 +543,7 @@ void MainWindow::refreshEditMenu()
         disconnect(prevCodeEditor, SIGNAL(redoAvailable(bool)), redoAction, SLOT(setEnabled(bool)));
     }
 
-    //connect to current
+    //! Connect to current
     if (tabs->currentIndex() != -1) {
         codeEditor = ((Tab *) tabs->currentWidget())->code;
         connect(commentAction, SIGNAL(triggered()), codeEditor, SLOT(commentSelectedCode()));
@@ -570,7 +576,8 @@ void MainWindow::newFile()
         settings.setValue("tabgeometry", ((Tab *) tabs->currentWidget())->saveGeometry());
         settings.setValue("tabwindowstate", ((Tab *) tabs->currentWidget())->saveState());
     }
-    mainWidget->setCurrentIndex(1); //tabs
+    //! Tabs
+    mainWidget->setCurrentIndex(1);
     Tab *tab = new Tab;
     tab->code->setPlainText(startText);
     tabs->addTab(tab, tr("New"));
@@ -602,7 +609,7 @@ void MainWindow::openFile()
 
 void MainWindow::setCurrentTabName(const QString &filePath, int index)
 {
-    //Taking name of file (without path)
+    //! Taking name of file (without path)
     QString caption;
     int i;
     if ((i = filePath.lastIndexOf('/')) == -1)
@@ -674,10 +681,11 @@ bool MainWindow::closeApp()
 {
     int tabsCount = tabs->count();
     if (tabsCount > 0) {
-        //consider all tabs
+        //! Consider all tabs
         tabs->setCurrentIndex(0);
         for (int i = 0; i < tabsCount; i++) {
-            if (!deleteTab(tabs->currentIndex(), true)) //left only saved tabs
+            //! Left only saved tabs
+            if (!deleteTab(tabs->currentIndex(), true))
                 return false;
         }
     }
@@ -734,13 +742,14 @@ bool MainWindow::deleteTab(int index, bool saveFileName)
         if (debugger && index == tabs->currentIndex())
             debugExit();
         if (tabs->count() == 1)
-            mainWidget->setCurrentIndex(0); //get started
+            //! Get started
+            mainWidget->setCurrentIndex(0);
         Tab *tabForDeleting = (Tab *) tabs->widget(index);
         if (!saveFileName || tabForDeleting->getCurrentFilePath().isEmpty()) {
             tabs->removeTab(index);
             delete tabForDeleting;
         } else {
-            //if tab did not delete
+            //! If tab did not delete
             tabs->setCurrentIndex(tabs->currentIndex() + 1);
         }
         if (tabForDeleting->code == prevCodeEditor)
@@ -777,7 +786,7 @@ bool MainWindow::okToContinue(int index)
 
 void MainWindow::changeCurrentTab(int index)
 {
-    //set highlighter
+    //! Set highlighter
     if (tabs->count() == 0)
         return;
     Tab *currentTab = (Tab *) tabs->widget(index);
@@ -806,7 +815,7 @@ void MainWindow::buildProgram(bool debugMode)
     currentTab->saveCodeToFile(path, assembler, false, debugMode && settings.value("insertdebugstring", true).toBool());
 
     if (debugMode) {
-        //save input to file
+        //! Save input to file
         QString inputPath = Common::pathInTemp("input.txt");
         Tab *currentTab = (Tab *) tabs->currentWidget();
         currentTab->saveInputToFile(inputPath);
@@ -817,7 +826,7 @@ void MainWindow::buildProgram(bool debugMode)
 
     QString stdioMacros = Common::pathInTemp("macro.o");
 
-    //assembler
+    //! Assembler
     QString assemblerPath = assembler->getAssemblerPath();
     if (settings.contains("assemblerpath"))
         assemblerPath = settings.value("assemblerpath").toString();
@@ -848,11 +857,11 @@ void MainWindow::buildProgram(bool debugMode)
         return;
     }
 
-    //GCC
+    //! GCC
     QString linkerOptions = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m32";
     if (settings.contains("linkingoptions"))
         linkerOptions = settings.value("linkingoptions").toString();
-    //macro.c compilation/copying
+    //! macro.c compilation/copying
     QFile macro;
     #ifdef Q_OS_WIN32
         QString linker = settings.value("linkerpath", applicationDataPath() + "/MinGW/bin/gcc.exe").toString();
@@ -868,7 +877,7 @@ void MainWindow::buildProgram(bool debugMode)
         macro.setFileName(applicationDataPath() + "/NASM/macro.c");
         macro.copy(Common::pathInTemp("macro.c"));
 
-        //macro.c compilation
+        //! macro.c compilation
         QStringList gccMArguments;
         gccMArguments << "-x" << "c" << Common::pathInTemp("macro.c") << "-c" << "-g" << "-o" << stdioMacros;
         if (settings.value("mode", QString("x86")).toString() == "x86")
@@ -880,7 +889,7 @@ void MainWindow::buildProgram(bool debugMode)
         gccMProcess.waitForFinished();
     #endif
 
-    //final linking
+    //! Final linking
     bool disableLinking = settings.value("disablelinking", false).toBool();
     QString linkerOutput;
     if (!disableLinking) {
@@ -928,7 +937,7 @@ void MainWindow::buildProgram(bool debugMode)
     if (!builded) {
         printLogWithTime(tr("Warning! Errors have occurred in the build:") + '\n', Qt::red);
 
-        //print errors
+        //! Print errors
         printLog(logText, Qt::red);
         if (!disableLinking) {
             logFile.setFileName(linkerOutput);
@@ -939,10 +948,10 @@ void MainWindow::buildProgram(bool debugMode)
             printLog(logText, Qt::red);
         }
 
-        //QMessageBox::critical(0, tr("Warning!"), tr("Errors have occurred in the build!"));
+        //! QMessageBox::critical(0, tr("Warning!"), tr("Errors have occurred in the build!"));
     } else {
         printLogWithTime(tr("Built successfully.") + '\n', Qt::darkGreen);
-        //print warnings
+        //! print warnings
         printLog(logText, Qt::red);
         if (!disableLinking) {
             logFile.setFileName(linkerOutput);
@@ -1092,7 +1101,8 @@ void MainWindow::printOutput(QString msg, int index)
 
 void MainWindow::debug()
 {
-    if (!debugger) { //start debugger
+    //! Start debugger if true
+    if (!debugger) {
         debuggerWasStarted = false;
         buildProgram(true);
         if (!programIsBuilded) {
@@ -1117,7 +1127,9 @@ void MainWindow::debug()
         connect(debugger, SIGNAL(wasStopped()), this, SLOT(changeDebugActionToStart()));
         connect(debugger, SIGNAL(needToContinue()), this, SLOT(debug()));
         code->setDebugEnabled();
-    } else { //pause or continue debugger
+    }
+    //Pause or continue debugger
+    else {
         debugAction->setEnabled(false);
         if (debugger->isStopped()) {
             debugAction->setText(tr("Pause"));
@@ -1152,29 +1164,29 @@ void MainWindow::enableDebugActions()
     debugAction->setText(tr("Continue"));
     debugAction->setIcon(QIcon(":/images/continue.png"));
 
-    //set all user's breakpoints
+    //! Set all user's breakpoints
     CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
     int lineNumber;
     foreach (lineNumber, *(code->getBreakpoints())) {
         debugger->changeBreakpoint(lineNumber, true);
     }
 
-    //enable all actions
+    //! Enable all actions
     debugNextAction->setEnabled(true);
     debugNextNiAction->setEnabled(true);
     debugShowRegistersAction->setEnabled(true);
     debugShowMemoryAction->setEnabled(true);
     stopAction->setEnabled(true);
 
-    //change stopAction
+    //! Change stopAction
     disconnect(stopAction, SIGNAL(triggered()), this, SLOT(stopProgram()));
     connect(stopAction, SIGNAL(triggered()), this, SLOT(debugExit()));
 
-    //block run and build
+    //! Block run and build
     buildAction->setEnabled(false);
     runAction->setEnabled(false);
 
-    //restore windows
+    //! Restore windows
     debugShowRegistersAction->setChecked(settings.value("debugregisters", false).toBool());
     debugShowMemoryAction->setChecked(settings.value("debugmemory", false).toBool());
 }
@@ -1190,13 +1202,13 @@ void MainWindow::disableDebugActions(bool start)
     debugShowMemoryAction->setEnabled(false);
     stopAction->setEnabled(false);
 
-    //change stopAction
+    //! Change stopAction
     if (!start) {
         disconnect(stopAction, SIGNAL(triggered()), this, SLOT(debugExit()));
         connect(stopAction, SIGNAL(triggered()), this, SLOT(stopProgram()));
     }
 
-    //enable run and build
+    //!Enable run and build
     buildAction->setEnabled(true);
     runAction->setEnabled(true);
 }
@@ -1233,7 +1245,7 @@ void MainWindow::debugShowMemory()
             memoryDock = new QDockWidget(tr("Memory"), this);
             memoryDock->setAllowedAreas(Qt::AllDockWidgetAreas);
 
-            //create table
+            //! Create table
             memoryWindow = new DebugTableWidget(0, 3, memoryTable, memoryDock);
             connect(memoryWindow, SIGNAL(closeSignal()), this, SLOT(setShowMemoryToUnchecked()));
             connect(memoryWindow, SIGNAL(debugShowMemory()), this, SLOT(debugShowMemory()));
@@ -1254,7 +1266,7 @@ void MainWindow::debugShowMemory()
             if (memoryDock)
                 memoryDock->show();
 
-            //fill table
+            //! Fill table
             memoryWindow->initializeMemoryWindow(watches);
         }
         if (debugger->isStopped()) {
@@ -1282,11 +1294,12 @@ void MainWindow::debugShowMemory()
                     int type = settings->typeComboBox->currentIndex();
                     QStringList printFormat;
                     printFormat << "p" << "p/x" << "p/t" << "p/c" << "p/d" << "p/u" << "p/f";
-
-                    if (! settings->addressCheckbox->isChecked()) { //watch as variable
+                    //! If true, watch as variable
+                    if (! settings->addressCheckbox->isChecked()) {
                         debugger->doInput(printFormat[type] + " (" + sizeFormat[size] + watchAsArray + ")" +
                                           memoryWindow->item(i, 0)->text() + "\n", infoMemory);
-                    } else { //watch as random address
+                    } else {
+                        //! Watch as random address
                         debugger->doInput(printFormat[type] + " (" + sizeFormat[size] + watchAsArray + ")" +
                                           "*((" + sizeFormat[size] + "*) " + memoryWindow->item(i, 0)->text() + ")" +
                                           "\n", infoMemory);
@@ -1412,7 +1425,8 @@ void MainWindow::debugExit()
     disconnect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
     disconnect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
     code->setDebugDisabled();
-    delete debugger; //many actions perform here - deleting of highlighting too
+     //! Many actions performed here - deleting of highlighting too
+    delete debugger;
     debugger = 0;
     closeAnyCommandWidget();
     debugShowRegistersAction->setChecked(false);
@@ -1464,15 +1478,15 @@ void MainWindow::find()
 void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool all,
                           bool replace, const QString &replaceText)
 {
+    //! Clear all highlights and disable highlighting of current line
     for (int i = 0; i < tabs->count(); i++) {
-        //clear all highlights and disable highlighting of current line
         CodeEditor *code = ((Tab *) tabs->widget(i))->code;
         disconnect(code, SIGNAL(cursorPositionChanged()), code, SLOT(highlightCurrentLine()));
         code->setExtraSelections(QList<QTextEdit::ExtraSelection>());
     }
-
+     //! Restore highlight
     if (pattern.isEmpty()) {
-        //restore highlight
+
         for (int i = 0; i < tabs->count(); i++) {
             CodeEditor *code = ((Tab *) tabs->widget(i))->code;
             connect(code, SIGNAL(cursorPositionChanged()), code, SLOT(highlightCurrentLine()));
@@ -1481,7 +1495,8 @@ void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool a
                 code->highlightDebugLine(code->currentDebugLine);
         }
     } else {
-        if (all) { //find all
+         //If true, find all
+        if (all) {
             for (int i = 0; i < tabs->count(); i++) {
                 QTextEdit::ExtraSelection selection;
                 QList<QTextEdit::ExtraSelection> extraSelections;
@@ -1495,7 +1510,8 @@ void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool a
                         newCursor = document->find(pattern, newCursor, QTextDocument::FindCaseSensitively);
                     else
                         newCursor = document->find(pattern, newCursor, 0);
-                    if (replace && i == tabs->currentIndex()) { //replace mode
+                    //! Replace mode
+                    if (replace && i == tabs->currentIndex()) {
                         newCursor.removeSelectedText();
                         newCursor.insertText(replaceText);
                     }
@@ -1505,18 +1521,20 @@ void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool a
                     }
                 }
 
-                //highlight all
+                //! Highlight all
                 code->setExtraSelections(extraSelections);
             }
-        } else { //find next only
+        }
+       //!Find next only
+        else {
             QTextEdit::ExtraSelection selection;
             QList<QTextEdit::ExtraSelection> extraSelections;
             selection.format.setBackground(QBrush(Qt::green));
             QTextDocument *document = ((Tab *) tabs->currentWidget())->getCodeDocument();
             CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
             static QTextCursor newCursor(document);
-            //if documents differ, cursor is ignored in QTextDocument::find()
-            if (replace) { //replace mode
+            //! if documents differ, cursor is ignored in QTextDocument::find()
+            if (replace) {
                 newCursor.removeSelectedText();
                 newCursor.insertText(replaceText);
             }
@@ -1524,7 +1542,8 @@ void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool a
                 newCursor = document->find(pattern, newCursor, QTextDocument::FindCaseSensitively);
             else
                 newCursor = document->find(pattern, newCursor, 0);
-            if (newCursor.isNull()) { //continue from start
+             //! Continue from start
+            if (newCursor.isNull()) {
                 if (cs == Qt::CaseSensitive)
                     newCursor = document->find(pattern, newCursor, QTextDocument::FindCaseSensitively);
                 else
@@ -1564,7 +1583,7 @@ void MainWindow::restorePrevSession(bool notNotify)
 
 void MainWindow::writeSettings()
 {
-    //GUI
+    //! GUI
     settings.beginGroup("MainWindow");
     settings.setValue("size", size());
     settings.setValue("pos", pos());
@@ -1573,28 +1592,31 @@ void MainWindow::writeSettings()
     settings.endGroup();
     settings.setValue("windowstate", saveState());
 
-    //Opened tabs
+    //! Opened tabs
     int prevTabsCount = settings.value("tabscount", 0).toInt();
-    for (int i = 0; i < prevTabsCount; i++) //remove previous
+    //! Remove previous
+    for (int i = 0; i < prevTabsCount; i++)
+    {
         settings.remove(QString("Tabs/") + QString::number(i));
-
-    settings.setValue("tabscount", tabs->count()); //create current
+    }
+    //! Create current
+    settings.setValue("tabscount", tabs->count());
     settings.beginGroup("Tabs");
     for (int i = 0; i < tabs->count(); i++) {
         settings.setValue(QString::number(i), ((Tab *) tabs->widget(i))->getCurrentFilePath());
     }
     settings.endGroup();
 
-    //save and open directory
+    //! Save and open directory
     settings.setValue("saveopendirectory", saveOpenDirectory);
 
-    //splitters state
+    //! Splitters state
     settings.setValue("logsplitterstate", splitter->saveState());
 }
 
 void MainWindow::openSettings()
 {
-    //initialize
+    //! Initialize
     if (!settingsWindow) {
         settingsWindow = new QWidget(this, Qt::Window);
         settingsWindow->setWindowModality(Qt::WindowModal);
@@ -1609,24 +1631,30 @@ void MainWindow::openSettings()
         connect(settingsUi.disableLinkingCheckbox, SIGNAL(stateChanged(int)),
                 this, SLOT(enableOrDisableLinkingEdit(int)));
 
-        //colors
+        //! Colors
         colorSignalMapper = new QSignalMapper(this);
-        colorButtons << settingsUi.keywordsColorButton << settingsUi.registersColorButton << //foreground
+        colorButtons <<
+                        //! Foreground
+                        settingsUi.keywordsColorButton << settingsUi.registersColorButton <<
                         settingsUi.numbersColorButton << settingsUi.memoryColorButton <<
                         settingsUi.labelsColorButton << settingsUi.commentsColorButton <<
                         settingsUi.systemColorButton << settingsUi.iomacroColorButton <<
                         settingsUi.quotationColorButton <<
-                        settingsUi.keywordsColorButton_2 << settingsUi.registersColorButton_2 << //background
+                        //! Background
+                        settingsUi.keywordsColorButton_2 << settingsUi.registersColorButton_2 <<
                         settingsUi.numbersColorButton_2 << settingsUi.memoryColorButton_2 <<
                         settingsUi.labelsColorButton_2 << settingsUi.commentsColorButton_2 <<
                         settingsUi.systemColorButton_2 << settingsUi.iomacroColorButton_2 <<
                         settingsUi.quotationColorButton_2 <<
-                        settingsUi.backgroundColorButton << settingsUi.lineNumberPanelColorButton <<//common
+                        //! Common
+                        settingsUi.backgroundColorButton << settingsUi.lineNumberPanelColorButton <<
                         settingsUi.fontColorButton <<
                         settingsUi.currentLineColorButton << settingsUi.debugLineColorButton <<
                         settingsUi.lineNumberFontColorButton;
 
-        defaultColors <<  QColor(Qt::blue) << QColor(153, 0, 204) << //according to colorButtons
+        defaultColors <<
+                          //! According to colorButtons
+                          QColor(Qt::blue) << QColor(153, 0, 204) <<
                           QColor(255, 122, 0) << QColor(0, 128, 255) <<
                           QColor(128, 0, 0) << QColor(Qt::darkGreen) <<
                           QColor(Qt::darkCyan) << QColor(Qt::blue) <<
@@ -1640,8 +1668,9 @@ void MainWindow::openSettings()
                           QPalette().color(QPalette::WindowText) <<
                           QColor(232, 232, 255) << QColor(235, 200, 40) <<
                           QColor(QPalette::WindowText);
+        //! Add color to associative array
         for (int i = 0; i < colorButtons.size(); i++) {
-            //add color to associative array
+
             QString name = colorButtons[i]->objectName();
             name.remove("Button");
             name.replace("_2", "bg");
@@ -1653,20 +1682,24 @@ void MainWindow::openSettings()
         }
         connect(colorSignalMapper, SIGNAL(mapped(QWidget*)), this, SLOT(pickColor(QWidget*)));
 
-        //fonts
+        //! Fonts
         fontsSignalMapper = new QSignalMapper(this);
-        fontCheckBoxes << settingsUi.keywordsBoldCheckBox << settingsUi.registersBoldCheckBox << //bold
+        fontCheckBoxes <<
+                          //! Bold
+                          settingsUi.keywordsBoldCheckBox << settingsUi.registersBoldCheckBox <<
                           settingsUi.numbersBoldCheckBox << settingsUi.memoryBoldCheckBox <<
                           settingsUi.labelsBoldCheckBox << settingsUi.commentsBoldCheckBox <<
                           settingsUi.systemBoldCheckBox << settingsUi.iomacroBoldCheckBox <<
                           settingsUi.quotationBoldCheckBox <<
-                          settingsUi.keywordsItalicCheckBox << settingsUi.registersItalicCheckBox << //italic
+                          //! Italic
+                          settingsUi.keywordsItalicCheckBox << settingsUi.registersItalicCheckBox <<
                           settingsUi.numbersItalicCheckBox << settingsUi.memoryItalicCheckBox <<
                           settingsUi.labelsItalicCheckBox << settingsUi.commentsItalicCheckBox <<
                           settingsUi.systemItalicCheckBox << settingsUi.iomacroItalicCheckBox <<
                           settingsUi.quotationItalicCheckBox;
+         //! Add font to associative array
         for (int i = 0; i < fontCheckBoxes.size(); i++) {
-            //add font to associative array
+
             QString name = fontCheckBoxes[i]->objectName();
             name.remove("CheckBox");
             name = name.toLower();
@@ -1684,8 +1717,8 @@ void MainWindow::openSettings()
         initAssemblerSettings(false);
     }
 
-    //set settings
-    //common
+    //! Set settings
+    //! Common
     settingsUi.startWindow->setCurrentIndex(settings.value("startwindow", 0).toInt());
     settingsUi.language->setCurrentIndex(settings.value("language", 0).toInt());
     settingsUi.fontComboBox->setCurrentFont(QFont(settings.value("fontfamily",
@@ -1697,14 +1730,12 @@ void MainWindow::openSettings()
         settingsUi.registersNoRadioButton->setChecked(true);
     settingsUi.insertDebugStringCheckBox->setChecked(settings.value("insertdebugstring", true).toBool());
 
-    //colors
+    //! Colors
     for (int i = 0; i < colorButtons.size(); i++) {
-        //init
         pickColor((QWidget *) colorButtons[i], true);
     }
-    //fonts
+    //! Fonts
     for (int i = 0; i < fontCheckBoxes.size(); i++) {
-        //init
         changeHighlightingFont((QWidget *) fontCheckBoxes[i], true);
     }
 
@@ -1715,25 +1746,31 @@ void MainWindow::openSettings()
 void MainWindow::initAssemblerSettings(bool firstOpening)
 {
     if (firstOpening) {
-        /******************************************************************************
-                                assembler dependent options begin
-        ******************************************************************************/
+        /*!
+         *
+         *  Assembler Dependent Options Begin
+         *
+         */
         connect(settingsUi.nasmRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
         connect(settingsUi.gasRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
         connect(settingsUi.fasmRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
         #ifdef Q_OS_WIN32
             connect(settingsUi.masmRadioButton, SIGNAL(clicked()), this, SLOT(changeAssembler()));
             connect(settingsUi.masmRadioButton, SIGNAL(clicked()), this, SLOT(printMasmInfo()));
-        #else //Linux
+        //! Else it is Linux
+        #else
             settingsUi.masmRadioButton->setEnabled(false);
         #endif
-        /******************************************************************************
-                                assembler dependent options end
-        ******************************************************************************/
+
+            /*!
+             *
+             *  Assembler Dependent Options End
+             *
+             */
 
         connect(settingsUi.x86RadioButton, SIGNAL(toggled(bool)), this, SLOT(changeMode(bool)));
 
-        //Start text editor
+        //! Start text editor
         settingsStartTextEditor = new CodeEditor(0, false);
         settingsHighlighter = new Highlighter(assembler);
         settingsHighlighter->setDocument(settingsStartTextEditor->document());
@@ -1744,7 +1781,7 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
 
     settingsStartTextEditor->setPlainText(settings.value("starttext").toString());
 
-    //build options
+    //! Build options
     QString options = assembler->getAssemblerOptions();
     settingsUi.assemblyOptionsEdit->setText(settings.value("assemblyoptions", options).toString());
 
@@ -1765,16 +1802,19 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
     #endif
 
     disconnect(settingsUi.x86RadioButton, SIGNAL(toggled(bool)), this, SLOT(changeMode(bool)));
-    //mode
+    //! Mode
     if (assembler->isx86())
         settingsUi.x86RadioButton->setChecked(true);
     else
         settingsUi.x64RadioButton->setChecked(true);
     connect(settingsUi.x86RadioButton, SIGNAL(toggled(bool)), this, SLOT(changeMode(bool)));
 
-    /******************************************************************************
-                            assembler dependent options begin
-    ******************************************************************************/
+    /*!
+     *
+     *  Assembler Dependent Options Begin
+     *
+     */
+
     QString assemblerName = settings.value("assembler", QString("NASM")).toString();
     if (assemblerName == "MASM") {
         settingsUi.x64RadioButton->setEnabled(false);
@@ -1789,22 +1829,26 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
     } else if (assemblerName == "MASM") {
         settingsUi.masmRadioButton->setChecked(true);
     }
-    /******************************************************************************
-                            assembler dependent options end
-    ******************************************************************************/
 }
+
+/*!
+ *
+ *  Assembler Dependent Options End
+ *
+ */
 
 void MainWindow::printMasmInfo()
 {
     settingsUi.infoLabel->setText(tr("Please set path to MASM assembler (ml.exe) and linker (link.exe) on your computer ") +
                                   tr("in fields \"Assembler path\" and \"Linker path\" above."));
 }
-
+/*!
+ *
+ *  Assembler Dependent Options Begin
+ *
+ */
 void MainWindow::changeAssembler()
 {
-    /******************************************************************************
-                            assembler dependent options begin
-    ******************************************************************************/
     if (settingsUi.nasmRadioButton->isChecked())
         settings.setValue("assembler", QString("NASM"));
     else if (settingsUi.gasRadioButton->isChecked()) {
@@ -1815,10 +1859,13 @@ void MainWindow::changeAssembler()
         settings.setValue("assembler", QString("MASM"));
     }
     recreateAssembler();
-    /******************************************************************************
-                            assembler dependent options end
-    ******************************************************************************/
 }
+
+/*!
+ *
+ *  Assembler Dependent Options End
+ *
+ */
 
 void MainWindow::changeMode(bool x86)
 {
@@ -1838,9 +1885,12 @@ void MainWindow::recreateAssembler(bool start)
     bool x86 = true;
     if (settings.value("mode", QString("x86")).toString() != "x86")
         x86 = false;
-    /******************************************************************************
-                            assembler dependent options begin
-    ******************************************************************************/
+    /*!
+     *
+     *  Assembler Dependent Options Begin
+     *
+     */
+
     QString assemblerName = settings.value("assembler", QString("NASM")).toString();
     if (!start) {
         if (assemblerName == "MASM") {
@@ -1863,9 +1913,13 @@ void MainWindow::recreateAssembler(bool start)
     } else if (assemblerName == "MASM") {
         assembler = new MASM(x86);
     }
-    /******************************************************************************
-                            assembler dependent options end
-    ******************************************************************************/
+
+    /*!
+     *
+     *  Assembler Dependent Options End
+     *
+     */
+
 
     if (!start) {
         settingsUi.assemblyOptionsEdit->setText(assembler->getAssemblerOptions());
@@ -1942,7 +1996,7 @@ void MainWindow::saveSettings()
     settings.setValue("allregisters", settingsUi.registersYesRadioButton->isChecked());
     settings.setValue("insertdebugstring", settingsUi.insertDebugStringCheckBox->isChecked());
 
-    //change fonts
+    //! Change fonts
     settings.setValue("fontfamily", settingsUi.fontComboBox->currentFont().family());
     settings.setValue("fontsize", settingsUi.fontSizeSpinBox->value());
     for (int i = 0; i < tabs->count(); i++) {
@@ -2024,7 +2078,7 @@ void MainWindow::exitSettings()
 
 void MainWindow::resetAllSettings()
 {
-    //ask before execution
+    //! Ask before execution
     QMessageBox msgBox;
     msgBox.setIcon(QMessageBox::Warning);
     msgBox.addButton(tr("Yes"), QMessageBox::YesRole);
@@ -2040,7 +2094,8 @@ void MainWindow::resetAllSettings()
     settings.remove("MainWindow/pos");
 
     int prevTabsCount = settings.value("tabscount", 0).toInt();
-    for (int i = 0; i < prevTabsCount; i++) //remove previous
+    //! Remove previous
+    for (int i = 0; i < prevTabsCount; i++)
         settings.remove(QString("Tabs/") + QString::number(i));
 
     settings.clear();
@@ -2051,7 +2106,8 @@ void MainWindow::resetAllSettings()
 
 void MainWindow::changeActionsState(int widgetIndex)
 {
-    if (widgetIndex == 0) { //get started window
+    //! Get started window
+    if (widgetIndex == 0) {
         closeAction->setEnabled(false);
         saveAction->setEnabled(false);
         saveAsAction->setEnabled(false);
@@ -2101,9 +2157,11 @@ void MainWindow::openHelp()
     help = new QTextBrowser;
     help->setAttribute(Qt::WA_DeleteOnClose);
     QFile helpFile;
-    if (settings.value("language", 0).toInt() == 0) { //russian language
+    //! language 0=Russian
+    if (settings.value("language", 0).toInt() == 0) {
         helpFile.setFileName(":help/help.html");
-    } else { //english language
+    } else {
+        //! English language
         helpFile.setFileName(":help/helpENG.html");
     }
 
@@ -2177,6 +2235,6 @@ bool MainWindow::removeDirRecuresively(const QString &dirName){
 
 MainWindow::~MainWindow()
 {
-    //delete all temporary files
+    //! Delete all temporary files
     removeDirRecuresively(Common::pathInTemp(QString()));
 }

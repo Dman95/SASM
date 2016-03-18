@@ -43,6 +43,15 @@
 
 #include "assembler.h"
 
+/**
+ * @file gas.h
+ * Defines the GAS assembler.
+ */
+
+/*! \brief This class defines the behavior for the GAS assembler.
+ *
+ */
+
 class GAS : public Assembler
 {
     Q_OBJECT

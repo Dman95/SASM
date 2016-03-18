@@ -1,0 +1,88 @@
+\hypertarget{class_g_a_s}{}\section{G\+A\+S Class Reference}
+\label{class_g_a_s}\index{G\+A\+S@{G\+A\+S}}
+
+
+This class defines the behavior for the \hyperlink{class_g_a_s}{G\+A\+S} assembler.  
+
+
+
+
+{\ttfamily \#include $<$gas.\+h$>$}
+
+Inheritance diagram for G\+A\+S\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_g_a_s}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_g_a_s_af13f9f492a83b6a8d13607e2dbc08726}{}{\bfseries G\+A\+S} (bool x86, Q\+Object $\ast$parent=0)\label{class_g_a_s_af13f9f492a83b6a8d13607e2dbc08726}
+
+\item 
+\hypertarget{class_g_a_s_adc206282c20b7a3f69b40c294883c1f0}{}Q\+String \hyperlink{class_g_a_s_adc206282c20b7a3f69b40c294883c1f0}{get\+Assembler\+Path} ()\label{class_g_a_s_adc206282c20b7a3f69b40c294883c1f0}
+
+\begin{DoxyCompactList}\small\item\em Return the default path to the assembler. \end{DoxyCompactList}\item 
+\hypertarget{class_g_a_s_a21833928db55133bad977fca971fad3a}{}Q\+String \hyperlink{class_g_a_s_a21833928db55133bad977fca971fad3a}{get\+Linker\+Path} ()\label{class_g_a_s_a21833928db55133bad977fca971fad3a}
+
+\begin{DoxyCompactList}\small\item\em Returns the default path to the linker. \end{DoxyCompactList}\item 
+quint64 \hyperlink{class_g_a_s_ab1d4e22ffd3a438afa4dad4025ab2735}{get\+Main\+Offset} (Q\+File \&lst, Q\+String entry\+Label)
+\item 
+void \hyperlink{class_g_a_s_a572e0d7058f6f5d65a90c77a8b727460}{parse\+Lst\+File} (Q\+File \&lst, Q\+Vector$<$ \hyperlink{struct_assembler_1_1_line_num}{Assembler\+::\+Line\+Num} $>$ \&lines, quint64 offset)
+\item 
+\hypertarget{class_g_a_s_a50f67e9e0a7a5d235397bee4cc05a2a0}{}void {\bfseries fill\+Highligher\+Rules} (Q\+Vector$<$ \hyperlink{struct_assembler_1_1_highlighting_rule}{Assembler\+::\+Highlighting\+Rule} $>$ \&highlighting\+Rules, Q\+List$<$ Q\+Text\+Char\+Format $\ast$ $>$ \&formats, bool \&\hyperlink{class_assembler_a8e2ae531c6d59dfea8c7bb90febda262}{multi\+Line\+Comments}, Q\+Reg\+Exp \&comment\+Start\+Expression, Q\+Reg\+Exp \&comment\+End\+Expression)\label{class_g_a_s_a50f67e9e0a7a5d235397bee4cc05a2a0}
+
+\item 
+\hypertarget{class_g_a_s_aeb1894b36402e608ac97ce73547f51bd}{}Q\+String \hyperlink{class_g_a_s_aeb1894b36402e608ac97ce73547f51bd}{get\+Start\+Text} ()\label{class_g_a_s_aeb1894b36402e608ac97ce73547f51bd}
+
+\begin{DoxyCompactList}\small\item\em Return the default start text (default project code) \end{DoxyCompactList}\item 
+\hypertarget{class_g_a_s_ae5477b2cccdb69b665be5d183d6b7086}{}void \hyperlink{class_g_a_s_ae5477b2cccdb69b665be5d183d6b7086}{put\+Debug\+String} (\hyperlink{class_code_editor}{Code\+Editor} $\ast$code)\label{class_g_a_s_ae5477b2cccdb69b665be5d183d6b7086}
+
+\begin{DoxyCompactList}\small\item\em Puts the debug string that makes frame (mov ebp, esp) \end{DoxyCompactList}\item 
+\hypertarget{class_g_a_s_af74e0b595c4ac405ba75895f7aadeb66}{}Q\+String \hyperlink{class_g_a_s_af74e0b595c4ac405ba75895f7aadeb66}{get\+Assembler\+Options} ()\label{class_g_a_s_af74e0b595c4ac405ba75895f7aadeb66}
+
+\begin{DoxyCompactList}\small\item\em Returns the default assembler options. \end{DoxyCompactList}\item 
+\hypertarget{class_g_a_s_a127305521d703d7cca95a087a220d9f0}{}Q\+String \hyperlink{class_g_a_s_a127305521d703d7cca95a087a220d9f0}{get\+Linker\+Options} ()\label{class_g_a_s_a127305521d703d7cca95a087a220d9f0}
+
+\begin{DoxyCompactList}\small\item\em Returns the default linker options. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+This class defines the behavior for the \hyperlink{class_g_a_s}{G\+A\+S} assembler. 
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_g_a_s_ab1d4e22ffd3a438afa4dad4025ab2735}{}\index{G\+A\+S@{G\+A\+S}!get\+Main\+Offset@{get\+Main\+Offset}}
+\index{get\+Main\+Offset@{get\+Main\+Offset}!G\+A\+S@{G\+A\+S}}
+\subsubsection[{get\+Main\+Offset}]{\setlength{\rightskip}{0pt plus 5cm}quint64 G\+A\+S\+::get\+Main\+Offset (
+\begin{DoxyParamCaption}
+\item[{Q\+File \&}]{lst, }
+\item[{Q\+String}]{entry\+Label}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{class_g_a_s_ab1d4e22ffd3a438afa4dad4025ab2735}
+get file with listing and name of entry label -\/ main or start. Returns the offset of this label -\/ number of strings and where the label is placed. 
+
+Implements \hyperlink{class_assembler_aa41f46e0cd774718d84bf4e5bd9c65b7}{Assembler}.
+
+\hypertarget{class_g_a_s_a572e0d7058f6f5d65a90c77a8b727460}{}\index{G\+A\+S@{G\+A\+S}!parse\+Lst\+File@{parse\+Lst\+File}}
+\index{parse\+Lst\+File@{parse\+Lst\+File}!G\+A\+S@{G\+A\+S}}
+\subsubsection[{parse\+Lst\+File}]{\setlength{\rightskip}{0pt plus 5cm}void G\+A\+S\+::parse\+Lst\+File (
+\begin{DoxyParamCaption}
+\item[{Q\+File \&}]{lst, }
+\item[{Q\+Vector$<$ {\bf Assembler\+::\+Line\+Num} $>$ \&}]{lines, }
+\item[{quint64}]{offset}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{class_g_a_s_a572e0d7058f6f5d65a90c77a8b727460}
+Parses the listing file lst and fills Q\+Vector lines with results of parsing. offset -\/ difference between program code in memory and in file. 
+
+Implements \hyperlink{class_assembler_aa724d277157a407d4d7fd3d0a23e84a7}{Assembler}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{gas_8h}{gas.\+h}\item 
+\hyperlink{gas_8cpp}{gas.\+cpp}\end{DoxyCompactItemize}

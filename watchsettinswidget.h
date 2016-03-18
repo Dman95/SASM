@@ -47,6 +47,16 @@
 #include <QCheckBox>
 #include <QHBoxLayout>
 
+/**
+ * @file watchsettingswidget.h
+ * Moniters the settings.
+ */
+
+/*! \brief
+ *
+ *
+*/
+
 class WatchSettinsWidget : public QWidget
 {
     Q_OBJECT

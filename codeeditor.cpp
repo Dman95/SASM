@@ -40,6 +40,11 @@
 
 #include "codeeditor.h"
 
+/**
+ * @file codeeditor.cpp
+ * Impliments the code editing area
+ */
+
 CodeEditor::CodeEditor(QWidget *parent, bool withBeakpoints) :
     RuQPlainTextEdit(parent), debugImage(":/images/debugLine.png"),
     breakpointImage(":/images/breakpoint.png"),
@@ -88,9 +93,10 @@ void CodeEditor::updateLineNumberArea(const QRect &rect, int dy)
         lineNumberArea->scroll(0, dy);
     else
         lineNumberArea->update(0, rect.y(), lineNumberArea->width(), rect.height());
-        //indirectly invokes CodeEditor::lineNumberAreaPaintEvent() throw virtual LineNumberArea::paintEvent()
+        //! Indirectly invokes CodeEditor::lineNumberAreaPaintEvent() throw virtual LineNumberArea::paintEvent()
 
-    if (rect.contains(viewport()->rect())) //viewport - visible part of widget
+    //! Viewport - visible part of widget
+    if (rect.contains(viewport()->rect()))
         updateLineNumberAreaWidth(0);
 }
 
@@ -104,7 +110,7 @@ void CodeEditor::resizeEvent(QResizeEvent *e)
 
 void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
-    //paint on line number area
+    // !Paint on line number area
     QPainter painter(lineNumberArea);
     painter.fillRect(event->rect(), settings.value("linenumberpanelcolor", palette().color(QPalette::Window)).value<QColor>());
 
@@ -121,7 +127,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
                              Qt::AlignRight, number);
 
             if (blockNumber + 1 == currentDebugLine)
-                //blocks counting starts with 0, line number is equivalent (block number + 1)
+                //! Blocks counting starts with 0, line number is equivalent (block number + 1)
                 //if QTextOption::NoWrap is not set, lines count - visible lines, block count - lines divided by '\n'
                 painter.drawPixmap(lineNumberArea->width() - debugAreaWidth + 3,
                                    top + fontMetrics().height() / 2 - debugImage.height() / 2,
@@ -142,8 +148,8 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 void CodeEditor::lineNumberAreaMousePressEvent(QMouseEvent *event)
 {
     if (hasBreakpoints) {
-        //if mouse click has been made - add breakpoint
-        //counting line number
+        //! If mouse click has been made - add breakpoint
+        //! Counting line number
         int lineNumber = 0;
         int sumHeight = 0;
         QTextBlock block = firstVisibleBlock();

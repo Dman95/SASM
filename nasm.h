@@ -43,6 +43,15 @@
 
 #include "assembler.h"
 
+/**
+ * @file nasm.h
+ * Defines the NASM assembler
+ */
+
+/*! \brief This class defines the behavior for the NASM assembler.
+ *
+ */
+
 class NASM : public Assembler
 {
     Q_OBJECT

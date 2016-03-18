@@ -40,6 +40,11 @@
 
  #include "highlighter.h"
 
+/**
+ * @file highlighter.cpp
+ * The code highlighting features are defined here.
+ */
+
  Highlighter::Highlighter(Assembler *assembler, QTextDocument *parent)
      : QSyntaxHighlighter(parent)
  {

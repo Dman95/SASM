@@ -1,0 +1,70 @@
+\hypertarget{class_single_application}{}\section{Single\+Application Class Reference}
+\label{class_single_application}\index{Single\+Application@{Single\+Application}}
+Inheritance diagram for Single\+Application\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_single_application}
+\end{center}
+\end{figure}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_single_application_afc6621000a339c859a5f188946505af8}{}void {\bfseries other\+Instance\+Data\+Received} (Q\+Byte\+Array ba)\label{class_single_application_afc6621000a339c859a5f188946505af8}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_single_application_aa2de0d9769181e267d261f08e3ddc5d9}{Single\+Application} (int \&, char $\ast$\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Constructor. Checks and fires up Local\+Server or closes the program if another instance already exists. \end{DoxyCompactList}\item 
+\hypertarget{class_single_application_aa845dd6c6f0b01d8959f4056ded1295b}{}\hyperlink{class_single_application_aa845dd6c6f0b01d8959f4056ded1295b}{$\sim$\+Single\+Application} ()\label{class_single_application_aa845dd6c6f0b01d8959f4056ded1295b}
+
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_single_application_a0f048d0c518bd246e3d65760804636a4}{}void \hyperlink{class_single_application_a0f048d0c518bd246e3d65760804636a4}{slot\+Connection\+Established} ()\label{class_single_application_a0f048d0c518bd246e3d65760804636a4}
+
+\begin{DoxyCompactList}\small\item\em Executed when the show\+Up command is sent to Local\+Server. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_single_application_ace092941b52064f187862d7be27b7c6a}{}\hyperlink{class_single_application_private}{Single\+Application\+Private} $\ast$ {\bfseries d\+\_\+ptr}\label{class_single_application_ace092941b52064f187862d7be27b7c6a}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_single_application_aa2de0d9769181e267d261f08e3ddc5d9}{}\index{Single\+Application@{Single\+Application}!Single\+Application@{Single\+Application}}
+\index{Single\+Application@{Single\+Application}!Single\+Application@{Single\+Application}}
+\subsubsection[{Single\+Application}]{\setlength{\rightskip}{0pt plus 5cm}Single\+Application\+::\+Single\+Application (
+\begin{DoxyParamCaption}
+\item[{int \&}]{argc, }
+\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [explicit]}}\label{class_single_application_aa2de0d9769181e267d261f08e3ddc5d9}
+
+
+Constructor. Checks and fires up Local\+Server or closes the program if another instance already exists. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & \\
+\hline
+{\em argv} & \\
+\hline
+\end{DoxyParams}
+Garantee thread safe behaviour with a shared memory block
+
+Successful creation means that no main process exists So we start a Local Server to listen for connections
+
+Connect to the Local Server of the main process to notify it that a new process had been started
+
+Even though a shared memory block exists, the original application might have crashed So only after a successful connection is the second instance terminated
+
+Terminate the program using S\+T\+D\+Lib's exit function 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{singleapplication_8h}{singleapplication.\+h}\item 
+\hyperlink{singleapplication_8cpp}{singleapplication.\+cpp}\end{DoxyCompactItemize}
