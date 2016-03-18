@@ -198,6 +198,7 @@ private:
     QString backupMode;
     QString backupAssemblerOptions;
     QString backupLinkerOptions;
+    QString backupObjectFileName;
     bool backupDisableLinking;
     QString backupAssemblerPath;
     QString backupStartText;

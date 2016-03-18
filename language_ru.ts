@@ -266,7 +266,7 @@
         <location filename="mainwindow.cpp" line="224"/>
         <location filename="mainwindow.cpp" line="413"/>
         <location filename="mainwindow.cpp" line="508"/>
-        <location filename="mainwindow.cpp" line="1182"/>
+        <location filename="mainwindow.cpp" line="1184"/>
         <source>Debug</source>
         <translation>Отладка</translation>
     </message>
@@ -279,7 +279,7 @@
     <message>
         <location filename="mainwindow.cpp" line="237"/>
         <location filename="mainwindow.cpp" line="474"/>
-        <location filename="mainwindow.cpp" line="2108"/>
+        <location filename="mainwindow.cpp" line="2117"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
@@ -390,37 +390,37 @@
         <translation>Ошибка! Каталога программы не существует. Пожалуйста, переустановите программу.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="846"/>
+        <location filename="mainwindow.cpp" line="847"/>
         <source>Unable to start assembler. Check your settings.</source>
         <translation>Запустить исполняемый файл ассемблера не удалось! Проверьте настройки.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="900"/>
+        <location filename="mainwindow.cpp" line="902"/>
         <source>Unable to start linker. Check your settings.</source>
         <translation>Запустить исполняемый файл компоновщика не удалось! Проверьте настройки.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1121"/>
+        <location filename="mainwindow.cpp" line="1123"/>
         <source>Pause</source>
         <translation>Приостановить</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1795"/>
+        <location filename="mainwindow.cpp" line="1799"/>
         <source>Please set path to MASM assembler (ml.exe) and linker (link.exe) on your computer </source>
         <translation>Пожалуйста, укажите пути до ассемблера (ml.exe) и компоновщика (link.exe) MASM на Вашем компьютере </translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1796"/>
+        <location filename="mainwindow.cpp" line="1800"/>
         <source>in fields &quot;Assembler path&quot; and &quot;Linker path&quot; above.</source>
         <translation>в полях &quot;Ассемблер&quot; и &quot;Компоновщик&quot; выше.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2116"/>
+        <location filename="mainwindow.cpp" line="2125"/>
         <source>SASM (SimpleASM) </source>
         <translation>SASM (SimpleASM) </translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2117"/>
+        <location filename="mainwindow.cpp" line="2126"/>
         <source>simple Open Source IDE for NASM, MASM, GAS and FASM assembler languages.</source>
         <translation>простая Open Source среда разработки для языков ассемблера NASM, MASM, GAS и FASM.</translation>
     </message>
@@ -455,9 +455,9 @@
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1126"/>
-        <location filename="mainwindow.cpp" line="1137"/>
-        <location filename="mainwindow.cpp" line="1150"/>
+        <location filename="mainwindow.cpp" line="1128"/>
+        <location filename="mainwindow.cpp" line="1139"/>
+        <location filename="mainwindow.cpp" line="1152"/>
         <source>Continue</source>
         <translation>Продолжить</translation>
     </message>
@@ -501,13 +501,13 @@
         <translation>Исполняемые файлы (*.exe);;Все файлы (*.*)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1016"/>
+        <location filename="mainwindow.cpp" line="1018"/>
         <source>The program finished normally. Execution time: %1 s</source>
         <oldsource>The program finished normally. Execution time: %1 ms</oldsource>
         <translation>Программа выполнена успешно. Время выполнения: %1 с</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1020"/>
+        <location filename="mainwindow.cpp" line="1022"/>
         <source>The program crashed! Execution time: %1 s</source>
         <oldsource>The program crashed! Execution time: %1 ms</oldsource>
         <translation>Программа завершена аварийно. Время выполнения: %1 с</translation>
@@ -560,7 +560,7 @@ All files (*.*)</source>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="762"/>
-        <location filename="mainwindow.cpp" line="2021"/>
+        <location filename="mainwindow.cpp" line="2030"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
@@ -571,7 +571,7 @@ All files (*.*)</source>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="764"/>
-        <location filename="mainwindow.cpp" line="2022"/>
+        <location filename="mainwindow.cpp" line="2031"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -598,12 +598,12 @@ All files (*.*)</source>
         <translation>Каталога NASM не существует. Пожалуйста, переустановите программу.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="960"/>
+        <location filename="mainwindow.cpp" line="962"/>
         <source>The program is already running.</source>
         <translation>Программа уже запущена.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="977"/>
+        <location filename="mainwindow.cpp" line="979"/>
         <source>The program is executing...</source>
         <translation>Программа выполняется...</translation>
     </message>
@@ -617,7 +617,7 @@ All files (*.*)</source>
         <translation type="obsolete">Программа завершена аварийно!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2121"/>
+        <location filename="mainwindow.cpp" line="2130"/>
         <source>Development and idea - Dmitriy Manushin</source>
         <translation>Идея и разработка - Дмитрий Манушин</translation>
     </message>
@@ -634,7 +634,7 @@ All files (*.*)</source>
         <translation type="obsolete">Integer</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1348"/>
+        <location filename="mainwindow.cpp" line="1350"/>
         <source>Registers</source>
         <translation>Регистры</translation>
     </message>
@@ -656,14 +656,14 @@ All files (*.*)</source>
         <translation type="obsolete">Каталога NASM не существует. Пожалуйста, переустановите программу.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="927"/>
+        <location filename="mainwindow.cpp" line="929"/>
         <source>Warning! Errors have occurred in the build:</source>
         <oldsource>Warning! Errors have occurred in the build:
 </oldsource>
         <translation>Внимание! В ходе построения обнаружены ошибки:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2023"/>
+        <location filename="mainwindow.cpp" line="2032"/>
         <source>Warning!</source>
         <translation>Внимание!</translation>
     </message>
@@ -672,7 +672,7 @@ All files (*.*)</source>
         <translation type="obsolete">При построении программы обнаружены ошибки!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="942"/>
+        <location filename="mainwindow.cpp" line="944"/>
         <source>Built successfully.</source>
         <oldsource>Built successfully.
 </oldsource>
@@ -691,55 +691,55 @@ All files (*.*)</source>
         <translation type="obsolete">Программа выполнена.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1052"/>
+        <location filename="mainwindow.cpp" line="1054"/>
         <source>The program stopped.</source>
         <oldsource>The program stopped.
 </oldsource>
         <translation>Программа остановлена.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1054"/>
+        <location filename="mainwindow.cpp" line="1056"/>
         <source>The program is not running.</source>
         <translation>Программа не была запущена.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1097"/>
+        <location filename="mainwindow.cpp" line="1099"/>
         <source>Before debugging you need to build the program.</source>
         <oldsource>Before debugging you need to build the program.
 </oldsource>
         <translation>Перед отладкой следует построить программу.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1101"/>
+        <location filename="mainwindow.cpp" line="1103"/>
         <source>Debugging started...</source>
         <oldsource>Debugging started...
 </oldsource>
         <translation>Отладка началась...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1231"/>
+        <location filename="mainwindow.cpp" line="1233"/>
         <source>Memory</source>
         <translation>Память</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1418"/>
+        <location filename="mainwindow.cpp" line="1420"/>
         <source>Debugging finished.</source>
         <oldsource>Debugging finished.
 </oldsource>
         <translation>Отладка завершена.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1549"/>
+        <location filename="mainwindow.cpp" line="1551"/>
         <source>In the previous session was not open any of the saved tabs!</source>
         <translation>В предыдущей сессии не было открыто ни одной сохранённой вкладки!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2024"/>
+        <location filename="mainwindow.cpp" line="2033"/>
         <source>All settings will be deleted and all unsaved data will be lost. Are you sure?</source>
         <translation>Все настройки будут удалены, а несохранённые данные потеряны! Вы уверены?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2115"/>
+        <location filename="mainwindow.cpp" line="2124"/>
         <source>About SASM</source>
         <translation>О программе</translation>
     </message>
@@ -748,17 +748,17 @@ All files (*.*)</source>
         <translation type="obsolete">SASM (SimpleASM) 2.0 Beta - простая Open Source среда разработки на языке ассемблера NASM.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2118"/>
+        <location filename="mainwindow.cpp" line="2127"/>
         <source>Licensed under the GNU GPL v3.0</source>
         <translation>Распространяется по лицензии GNU GPL v3.0</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2119"/>
+        <location filename="mainwindow.cpp" line="2128"/>
         <source>Based on the Qt.</source>
         <translation>Основана на Qt.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2120"/>
+        <location filename="mainwindow.cpp" line="2129"/>
         <source>Copyright © 2013 Dmitriy Manushin</source>
         <oldsource>Copyright Â© 2013 Dmitriy Manushin</oldsource>
         <translation>Copyright © 2013 Дмитрий Манушин</translation>
@@ -768,12 +768,12 @@ All files (*.*)</source>
         <translation type="obsolete">Разработка - Dmitriy Manushin</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2122"/>
+        <location filename="mainwindow.cpp" line="2131"/>
         <source>Icon and advices - Alick Gaybullaev</source>
         <translation>Иконка и советы - Алик Гайбуллаев</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2123"/>
+        <location filename="mainwindow.cpp" line="2132"/>
         <source>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com</source>
         <oldsource>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com
 
@@ -781,27 +781,27 @@ All files (*.*)</source>
         <translation>Пожелания и сообщения об ошибках отправляйте на адрес Dman1095@gmail.com</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2124"/>
+        <location filename="mainwindow.cpp" line="2133"/>
         <source>More information on the site: http://dman95.github.io/SASM/</source>
         <translation>Сайт программы: http://dman95.github.io/SASM/</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2125"/>
+        <location filename="mainwindow.cpp" line="2134"/>
         <source>Donate:</source>
         <translation>Поддержите проект:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2126"/>
+        <location filename="mainwindow.cpp" line="2135"/>
         <source>PayPal - Dman1095@gmail.com</source>
         <translation>PayPal - Dman1095@gmail.com</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2127"/>
+        <location filename="mainwindow.cpp" line="2136"/>
         <source>WMZ - Z282016332582</source>
         <translation>WMZ - Z282016332582</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2128"/>
+        <location filename="mainwindow.cpp" line="2137"/>
         <source>WMR - R331674303467</source>
         <translation>WMR - R331674303467</translation>
     </message>
@@ -1194,6 +1194,11 @@ WMR - R331674303467</translation>
         <location filename="settings.ui" line="2083"/>
         <source>Disable linking:</source>
         <translation>Не запускать компоновщик:</translation>
+    </message>
+    <message>
+        <location filename="settings.ui" line="2100"/>
+        <source>Object file name:</source>
+        <translation>Имя объектного файла:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1616"/>

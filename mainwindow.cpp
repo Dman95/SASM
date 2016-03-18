@@ -831,7 +831,8 @@ void MainWindow::buildProgram(bool debugMode)
     QStringList assemblerArguments = assemblerOptions.split(QChar(' '));
     assemblerArguments.replaceInStrings("$SOURCE$", Common::pathInTemp("program.asm"));
     assemblerArguments.replaceInStrings("$LSTOUTPUT$", Common::pathInTemp("program.lst"));
-    assemblerArguments.replaceInStrings("$PROGRAM.OBJ$", Common::pathInTemp("program.o"));
+    assemblerArguments.replaceInStrings("$PROGRAM.OBJ$",
+        Common::pathInTemp(settings.value("objectfilename", "program.o").toString()));
     assemblerArguments.replaceInStrings("$PROGRAM$", Common::pathInTemp("SASMprog.exe"));
     assemblerArguments.replaceInStrings("$MACRO.OBJ$", stdioMacros);
     QProcess assemblerProcess;
@@ -884,7 +885,8 @@ void MainWindow::buildProgram(bool debugMode)
     QString linkerOutput;
     if (!disableLinking) {
         QStringList linkerArguments = linkerOptions.split(QChar(' '));
-        linkerArguments.replaceInStrings("$PROGRAM.OBJ$", Common::pathInTemp("program.o"));
+        linkerArguments.replaceInStrings("$PROGRAM.OBJ$",
+            Common::pathInTemp(settings.value("objectfilename", "program.o").toString()));
         linkerArguments.replaceInStrings("$MACRO.OBJ$", stdioMacros);
         linkerArguments.replaceInStrings("$PROGRAM$", Common::pathInTemp("SASMprog.exe"));
         linkerArguments.replaceInStrings("$SOURCE$", Common::pathInTemp("program.asm"));
@@ -1749,6 +1751,8 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
     QString linkerOptions = assembler->getLinkerOptions();
     settingsUi.linkingOptionsEdit->setText(settings.value("linkingoptions", linkerOptions).toString());
 
+    settingsUi.objectFileNameEdit->setText(settings.value("objectfilename", "program.o").toString());
+
     settingsUi.disableLinkingCheckbox->setChecked(settings.value("disablelinking", false).toBool());
 
     QString assemblerPath = assembler->getAssemblerPath();
@@ -1866,11 +1870,13 @@ void MainWindow::recreateAssembler(bool start)
     if (!start) {
         settingsUi.assemblyOptionsEdit->setText(assembler->getAssemblerOptions());
         settingsUi.linkingOptionsEdit->setText(assembler->getLinkerOptions());
+        settingsUi.objectFileNameEdit->setText("program.o");
         settingsUi.disableLinkingCheckbox->setChecked(false);
         settingsUi.assemblerPathEdit->setText(assembler->getAssemblerPath());
         settingsUi.linkerPathEdit->setText(assembler->getLinkerPath());
         settings.setValue("assemblyoptions", assembler->getAssemblerOptions());
         settings.setValue("linkingoptions", assembler->getLinkerOptions());
+        settings.setValue("objectfilename", "program.o");
         settings.setValue("disablelinking", false);
         settings.setValue("assemblerpath", assembler->getAssemblerPath());
         settings.setValue("linkerpath", assembler->getLinkerPath());
@@ -1892,6 +1898,7 @@ void MainWindow::backupSettings()
     backupAssemblerOptions = settings.value("assemblyoptions", assembler->getAssemblerOptions()).toString();
     backupAssemblerPath = settings.value("assemblerpath", assembler->getAssemblerPath()).toString();
     backupLinkerOptions = settings.value("linkingoptions", assembler->getLinkerOptions()).toString();
+    backupObjectFileName = settings.value("objectfilename", "program.o").toString();
     backupDisableLinking = settings.value("disablelinking", false).toBool();
     backupStartText = settings.value("starttext", assembler->getStartText()).toString();
     backupLinkerPath = settings.value("linkerpath", assembler->getLinkerPath()).toString();
@@ -1905,6 +1912,7 @@ void MainWindow::restoreSettingsAndExit()
     settings.setValue("assemblyoptions", backupAssemblerOptions);
     settings.setValue("assemblerpath", backupAssemblerPath);
     settings.setValue("linkingoptions", backupLinkerOptions);
+    settings.setValue("objectfilename", backupObjectFileName);
     settings.setValue("disablelinking", backupDisableLinking);
     settings.setValue("starttext", backupStartText);
     settings.setValue("linkerpath", backupLinkerPath);
@@ -1947,6 +1955,7 @@ void MainWindow::saveSettings()
 
     settings.setValue("assemblyoptions", settingsUi.assemblyOptionsEdit->text());
     settings.setValue("linkingoptions", settingsUi.linkingOptionsEdit->text());
+    settings.setValue("objectfilename", settingsUi.objectFileNameEdit->text());
     settings.setValue("disablelinking", settingsUi.disableLinkingCheckbox->isChecked());
     settings.setValue("assemblerpath", settingsUi.assemblerPathEdit->text());
     settings.setValue("linkerpath", settingsUi.linkerPathEdit->text());
