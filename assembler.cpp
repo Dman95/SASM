@@ -42,7 +42,7 @@
 
 /**
  * @file assembler.cpp
- * Impliments the Assmbler class
+ * Implements the Assembler class
  */
 
 //! Determines whether the target processor is x86 or x64

@@ -42,7 +42,7 @@
 
 /**
  * @file codeeditor.cpp
- * Impliments the code editing area
+ * Implements the code editing area
  */
 
 CodeEditor::CodeEditor(QWidget *parent, bool withBeakpoints) :

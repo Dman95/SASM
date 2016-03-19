@@ -48,7 +48,7 @@
 
 /**
  * @file common.h
- * Base UNKNOWN
+ * Contains common functions.
  */
 
 

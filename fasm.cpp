@@ -42,7 +42,7 @@
 
 /**
  * @file fasm.cpp
- * Impliments the FASM assembler
+ * Implements the FASM assembler
  */
 
 FASM::FASM(bool x86, QObject *parent) :

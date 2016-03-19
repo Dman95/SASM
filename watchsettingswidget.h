@@ -38,8 +38,8 @@
 **
 ****************************************************************************/
 
-#ifndef WATCHSETTINSWIDGET_H
-#define WATCHSETTINSWIDGET_H
+#ifndef WATCHSETTINGSWIDGET_H
+#define WATCHSETTINGSWIDGET_H
 
 #include <QWidget>
 #include <QLineEdit>
@@ -49,20 +49,18 @@
 
 /**
  * @file watchsettingswidget.h
- * Moniters the settings.
+ * Define the WatchSettingsWidget class.
  */
 
-/*! \brief
- *
- *
+/*! \brief The WatchSettingsWidget class gives an ability to set up watches.
 */
 
-class WatchSettinsWidget : public QWidget
+class WatchSettingsWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit WatchSettinsWidget(QWidget *parent = 0);
-    ~WatchSettinsWidget();
+    explicit WatchSettingsWidget(QWidget *parent = 0);
+    ~WatchSettingsWidget();
     int sumSize();
     QComboBox *typeComboBox;
     QComboBox *sizeComboBox;
@@ -77,4 +75,4 @@ signals:
     void settingsChanged(void);
 };
 
-#endif // WATCHSETTINSWIDGET_H
+#endif // WATCHSETTINGSWIDGET_H

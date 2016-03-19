@@ -54,7 +54,7 @@
  */
 
 /*! \brief The RuQTextEdit defines the methods specified by QT's QTextEdit class. These are things like
- * copying/pasting, edit, undo, etc...
+ * copying/pasting, edit, undo, etc.
  *
  *
 */

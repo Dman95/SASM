@@ -42,7 +42,7 @@
 
 /**
  * @file gas.cpp
- * Impliments the GAS assembler.
+ * Implements the GAS assembler.
  */
 
 GAS::GAS(bool x86, QObject *parent) :

@@ -61,7 +61,6 @@
 #include "tab.h"
 #include "highlighter.h"
 #include "debugger.h"
-#include "commanddebugwindow.h"
 #include "finddialog.h"
 #include "ruqtextedit.h"
 #include "getstartedwidget.h"
@@ -85,8 +84,7 @@
 
 /*! \brief The MainWindow class defines the actions and behavior of the main user interface.
  *
- * Longer explanation here
-*/
+ */
 
 class MainWindow : public QMainWindow
 {
@@ -231,30 +229,8 @@ public slots:
     bool closeApp();
     void refreshEditMenu();
     void changeCurrentSavedState(bool changed);
-
-    //! Custom UNKNOWN
-    void openFile(QString path)
-    {
-        if (path.isEmpty())
-            return;
-
-        newFile();
-        Tab *curTab = (Tab *) tabs->currentWidget();
-        curTab->loadCodeFromFile(path);
-        setCurrentTabName(path);
-//        connect(curTab, SIGNAL(fileOpened(QString)), this, SLOT(openFile(QString)));
-    }
-
-    void otherInstanceDataReceived(QByteArray data)
-    {
-        this->showNormal();
-        this->raise();
-        this->activateWindow();
-
-        QList<QByteArray> arguments = data.split(0x00);
-        for (int i = 1; i < arguments.size() - 1; i++)
-            openFile(QString(arguments[i]));
-    }
+    void openFile(QString path);
+    void otherInstanceDataReceived(QByteArray data);
 
     //! Build
     void buildProgram(bool debugMode = false);

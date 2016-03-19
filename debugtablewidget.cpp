@@ -42,7 +42,7 @@
 
 /**
  * @file debugtablewidget.cpp
- * Impliments the debuging memory window
+ * Implements the debugging memory or registers window
  */
 
 QByteArray DebugTableWidget::memoryHeaderState;
@@ -151,7 +151,7 @@ void DebugTableWidget::addVariable(const QString &variableName, int rowNumber)
         insertRow(rowNumber);
         QTableWidgetItem *name = new QTableWidgetItem(variableName);
         QTableWidgetItem *value = new QTableWidgetItem;
-        WatchSettinsWidget *settings = new WatchSettinsWidget;
+        WatchSettingsWidget *settings = new WatchSettingsWidget;
         connect(settings, SIGNAL(settingsChanged()), this, SIGNAL(debugShowMemory()));
         setItem(rowNumber, 0, name);
         setItem(rowNumber, 1, value);
@@ -169,7 +169,7 @@ void DebugTableWidget::addVariable(const RuQPlainTextEdit::Watch &variable, int 
         insertRow(rowNumber);
         QTableWidgetItem *name = new QTableWidgetItem(variable.name);
         QTableWidgetItem *value = new QTableWidgetItem;
-        WatchSettinsWidget *settings = new WatchSettinsWidget;
+        WatchSettingsWidget *settings = new WatchSettingsWidget;
         settings->sizeComboBox->setCurrentIndex(variable.size);
         settings->typeComboBox->setCurrentIndex(variable.type);
         settings->addressCheckbox->setChecked(variable.address);

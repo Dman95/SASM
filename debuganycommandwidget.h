@@ -52,17 +52,14 @@
 /**
  * @file debuganycommandwidget.h
  *
- * UNKNOWN
+ * File for the GDB arbitrary command widget.
  */
 
 
 
 
-/*! \brief This class does......
- *
- *
- *
- * */
+/*! \brief This class represents the GDB arbitrary command widget.
+ */
 
 class DebugAnyCommandWidget : public QWidget
 {

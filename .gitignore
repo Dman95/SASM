@@ -17,5 +17,4 @@ Makefile
 ehthumbs.db
 Thumbs.db
 
-*.html
-*.png
+doc/*

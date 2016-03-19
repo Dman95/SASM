@@ -44,13 +44,11 @@
 #include <QObject>
 
 /**
- * @file signallock.h
- * UNKNOWN
+ * @file signallocker.h
+ * Defines the SignalLocker.
  */
 
-/*! \brief UNKNOWN
- *
- * UNKNOWN
+/*! \brief Class that can be unlocked by a signal.
 */
 
 class SignalLocker : public QObject

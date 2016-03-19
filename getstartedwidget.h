@@ -48,7 +48,7 @@
 
 /**
  * @file getstartedwidget.h
- * Defines the enry window.
+ * Defines the entry window.
  */
 
 class GetStartedWidget : public QWidget

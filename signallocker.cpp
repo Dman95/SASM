@@ -41,8 +41,8 @@
 #include "signallocker.h"
 
 /**
- * @file singleapplication.cpp
- * What is this?
+ * @file signallocker.cpp
+ * Implements the SignalLocker.
  */
 
 SignalLocker::SignalLocker(QObject *parent) :

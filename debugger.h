@@ -142,10 +142,10 @@ private:
     //! List of the variable watches
     QList<Debugger::memoryInfo> watches;
 
-    //! UNKNOWN
+    //! Flag for checking if Debugger::processAction call is first time in current debug session
     bool firstAction;
 
-    //! UNKNOWN
+    //! Information about location of breakpoints
     QList<LineNum> breakPairs;
 
     Assembler *assembler;
@@ -169,7 +169,7 @@ signals:
     //! Highlight the current debug line.
     void highlightLine(int);
     void finished();
-    //! Emited when debugger is ready to get commands like step into, etc. -> Omitted or Emited?
+    //! Signal is emited when debugger is ready to get commands like step into and etc.
     void started();
     void printRegisters(QList<Debugger::registersInfo>);
     void printMemory(QList<Debugger::memoryInfo>);

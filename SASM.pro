@@ -44,7 +44,7 @@ SOURCES += main.cpp\
     ruqplaintextedit.cpp \
     getstartedwidget.cpp \
     debugtablewidget.cpp \
-    watchsettinswidget.cpp \
+    watchsettingswidget.cpp \
     debuganycommandwidget.cpp \
     assembler.cpp \
     nasm.cpp \
@@ -65,7 +65,7 @@ HEADERS  += mainwindow.h \
     ruqplaintextedit.h \
     getstartedwidget.h \
     debugtablewidget.h \
-    watchsettinswidget.h \
+    watchsettingswidget.h \
     debuganycommandwidget.h \
     assembler.h \
     nasm.h \

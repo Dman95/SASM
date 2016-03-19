@@ -42,7 +42,7 @@
 
 /**
  * @file debuganycommandwidget.cpp
- * Impliments the debugger's stepping features
+ * Implements the GDB arbitrary command widget.
  */
 
 DebugAnyCommandWidget::DebugAnyCommandWidget(QWidget *parent) :

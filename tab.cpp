@@ -42,14 +42,8 @@
 
 /**
  * @file tab.cpp
- * Implimentation of the WatchSettingsWidget
+ * Implementation of the Tab class.
  */
-
-
-/*! \brief UNKNOWN
- *
- *
-*/
 
 Tab::Tab(QWidget *parent) :
     QMainWindow(parent)

@@ -42,7 +42,7 @@
 
 /**
  * @file masm.cpp
- * Impliments the MASM Assembler
+ * Implements the MASM Assembler
  */
 
 

@@ -108,7 +108,7 @@ private:
     int debugAreaWidth;
     QPixmap debugImage;
     QPixmap breakpointImage;
-    //! Number of lines with breakpoints
+    //! Breakpoint line numbers
     QList<int> breakpoints;
     int firstTopMargin;
     bool hasBreakpoints;

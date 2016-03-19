@@ -42,7 +42,7 @@
 
 /**
  * @file nasm.cpp
- * Impliments the NASM Assembler
+ * Implements the NASM Assembler
  */
 
 NASM::NASM(bool x86, QObject *parent) :

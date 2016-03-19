@@ -38,5 +38,6 @@ from site http://dman95.github.io/SASM/ or
 from OBS repository https://build.opensuse.org/package/show/home:Dman95/SASM
 
 More help info in file help.html
+Also SASM supports doxygen: run "doxygen configfile" to generate documentation.
 
 Copyright © 2013 Dmitriy Manushin

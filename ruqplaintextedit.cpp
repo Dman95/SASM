@@ -42,7 +42,7 @@
 
 /**
  * @file ruplaintextedit.cpp
- * UNKNOWN
+ * Implements the text editor base class
  */
 
 RuQPlainTextEdit::RuQPlainTextEdit(QWidget *parent) :

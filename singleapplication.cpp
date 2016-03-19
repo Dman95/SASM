@@ -13,7 +13,7 @@
 
 /**
  * @file singleapplication.cpp
- * What is this?
+ * Implements SingleApplication.
  */
 
 

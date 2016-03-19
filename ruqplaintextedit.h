@@ -102,9 +102,9 @@ private:
     QAction *cutAction;
     //! Copy a selected text string.
     QAction *copyAction;
-    //! Pase the clipboard contents.
+    //! Paste the clipboard contents.
     QAction *pasteAction;
-    //! UNKNOWN
+    //! Delete a selected text string.
     QAction *deleteAction;
     //! Select all of the text.
     QAction *selectAllAction;
@@ -128,7 +128,7 @@ public slots:
     void setDebugDisabled();
 
 signals:
-    //! UNKNOWN
+    //! Signal which emited when watch variable action is selected.
     void addWatchSignal(RuQPlainTextEdit::Watch variable);
 };
 

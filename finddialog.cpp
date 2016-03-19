@@ -42,7 +42,7 @@
 
 /**
  * @file finddialog.cpp
- * Impliments the find text widget.
+ * Implements the find text widget.
  */
 
 FindDialog::FindDialog(QWidget *parent)

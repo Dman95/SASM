@@ -42,7 +42,7 @@
 /**
 
  * @file getstartedwidget.cpp
- * Impliments the opening window.
+ * Implements the opening window.
  */
 
 GetStartedWidget::GetStartedWidget(QWidget *parent) :

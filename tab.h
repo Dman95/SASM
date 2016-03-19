@@ -54,12 +54,10 @@
 
 /**
  * @file tab.h
- * UNKNOWN
+ * Defines the Tab class.
  */
 
-/*! \brief UNKNOWN
- *
- * UNKNOWN
+/*! \brief The Tab class represents tab in window.
 */
 
 class Tab : public QMainWindow

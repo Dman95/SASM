@@ -607,6 +607,31 @@ void MainWindow::openFile()
     openFile(fileName);
 }
 
+void MainWindow::openFile(QString path)
+{
+    if (path.isEmpty()) {
+        return;
+    }
+
+    newFile();
+    Tab *curTab = (Tab *) tabs->currentWidget();
+    curTab->loadCodeFromFile(path);
+    setCurrentTabName(path);
+    //connect(curTab, SIGNAL(fileOpened(QString)), this, SLOT(openFile(QString)));
+}
+
+void MainWindow::otherInstanceDataReceived(QByteArray data)
+{
+    this->showNormal();
+    this->raise();
+    this->activateWindow();
+
+    QList<QByteArray> arguments = data.split(0x00);
+    for (int i = 1; i < arguments.size() - 1; i++) {
+        openFile(QString(arguments[i]));
+    }
+}
+
 void MainWindow::setCurrentTabName(const QString &filePath, int index)
 {
     //! Taking name of file (without path)
@@ -1273,7 +1298,7 @@ void MainWindow::debugShowMemory()
             debugger->setWatchesCount(memoryWindow->rowCount() - 1);
             for (int i = 0; i < memoryWindow->rowCount() - 1; i++) {
                 if (memoryWindow->cellWidget(i, 2)) {
-                    WatchSettinsWidget *settings = (WatchSettinsWidget *) memoryWindow->cellWidget(i, 2);
+                    WatchSettingsWidget *settings = (WatchSettingsWidget *) memoryWindow->cellWidget(i, 2);
 
                     int arraySize = 0;
 
@@ -1331,7 +1356,7 @@ void MainWindow::saveWatches(DebugTableWidget *table)
     for (int i = 0; i < table->rowCount() - 1; i++) {
         RuQPlainTextEdit::Watch watch;
         watch.name = table->item(i, 0)->text();
-        WatchSettinsWidget *settings = (WatchSettinsWidget *) table->cellWidget(i, 2);
+        WatchSettingsWidget *settings = (WatchSettingsWidget *) table->cellWidget(i, 2);
         watch.type = settings->typeComboBox->currentIndex();
         watch.size = settings->sizeComboBox->currentIndex();
         watch.address = settings->addressCheckbox->isChecked();

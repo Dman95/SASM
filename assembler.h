@@ -71,23 +71,30 @@ class Assembler : public QObject
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Struct for setting correspondence between
+     * program text line numbers and addresses in memory
+     */
     struct LineNum {
-         //! String number in code in SASM code area ->What does string number in code mean?
+         //! Program text line number
         quint64 numInCode;
-         //! Address of instruction in memory -> which instruction? Of the user's?
+         //! Address of instruction on this line in memory
         quint64 numInMem;
         bool operator ==(const LineNum& ln)
         {
             return ln.numInCode == numInCode;
         }
     };
+    /*!
+     * \brief Struct for setting pattern's highlighting rules
+     */
     struct HighlightingRule
     {
         HighlightingRule() : isComment(false) {
         }
         //! Pattern to highlight
         QRegExp pattern;
-        //! Whighlighting format UNKNOWN FILL THIS IN
+        //! Highlighting format - foreground color, background color, bold style and etc.
         QTextCharFormat format;
         bool isComment;
     };
@@ -102,26 +109,41 @@ public:
     //! Returns the default path to the linker.
     virtual QString getLinkerPath() = 0;
 
-    //! get file with listing and name of entry label - main or start.
-    //! Returns the offset of this label - number of strings and where the label is placed.
+    /*!
+     * \brief Get entry point offset in object file.
+     * \param lst listing file
+     * \param entryLabel entry point label name - main or start
+     * \return entry point address in object file
+     */
     virtual quint64 getMainOffset(QFile &lst, QString entryLabel) = 0;
 
-    //! Parses the listing file lst and fills QVector lines with results of parsing.
-    //! offset - difference between program code in memory and in file.
+    /*!
+     * \brief Parses the listing file \a lst and fills vector \a lines with results of parsing
+     * \param lst listing file
+     * \param lines vector with info to fill
+     * \param offset difference between address of instruction in object file
+     *               and address of instruction in memory
+     */
     virtual void parseLstFile(QFile &lst,
                               QVector<Assembler::LineNum> &lines,
                               quint64 offset) = 0;
 
-    //! Fills QVector with the highlighting rules.
-    //! Qlist with formats (see NASM, MASM, FASM, GAS as examples). commentStartExpression - /* in C++ for example,
-    //! commentEndExpression - */ in C++ for example - expressions for multi line highlighting - workes if multiLineComments == true.
+    /*!
+     * \brief Sets highlighting for assembly listing
+     * \param highlightingRules highlighting rules to fill
+     * \param formats formats for different types of highlighted expressions
+     *        (see NASM, MASM, FASM, GAS as examples)
+     * \param multiLineComments is needed to support multiline comments
+     * \param commentStartExpression multiline comment start ("/" + "*" in C for example)
+     * \param commentEndExpression multiline comment end ("*" + "/" in C for example)
+     */
     virtual void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
                                      QList<QTextCharFormat *> &formats,
                                      bool &multiLineComments,
                                      QRegExp &commentStartExpression,
                                      QRegExp &commentEndExpression) = 0;
 
-     //! Return the default start text (default project code)
+    //! Returns the default start text (default project code)
     virtual QString getStartText() = 0;
 
     //! Puts the debug string that makes frame (mov ebp, esp)
@@ -167,7 +189,7 @@ public slots:
  *
  * When commenting use doxygen's syntax. Place the comment above the intended line. After adding the feature, run
  * doxygen.exe configfile to update the documentation. Be sure to double check the documentation to ensure the
- * added comments were parsed  correctly.
+ * added comments were parsed correctly.
  *
  * \section section2 Adding Assembler Support
  *
@@ -198,15 +220,18 @@ public slots:
  * \section section3 Adding Language Support
  *
  *
- * \subsection Help File
+ * \subsection help Help File
  *
- * The help file, __.xxx, needs to be translated and saved into a new xx.xxx file. The
+ * The help file, helpENG.html, needs to be translated and saved into a new help<NEW LANGUAGE>.html file.
+ * The
  * void MainWindow::openHelp()
  * must be modified to support the added language. This is done by adding another if statement.
  *
- * \subsection startText
+ * \subsection interface Interface language
  *
- * The default assembler skeleton needs to have its comments translated.
+ * New language_<new language>.ts file needs to be created and filled with translations using Qt Linguist.
+ * Compiled language_<new language>.qm and qt_<new_language>.qm files need to be added in SASM folder.
+ * Support of new language needs to be added in settings (mainwindow.cpp) and in loading code (main.cpp).
  */
 
 

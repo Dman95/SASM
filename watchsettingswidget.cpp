@@ -38,25 +38,20 @@
 **
 ****************************************************************************/
 
-#include "watchsettinswidget.h"
+#include "watchsettingswidget.h"
 /**
  * @file watchsettingswidget.cpp
- *
- */
-
-/**
- * @file watchsettinswidget.cpp
- * Implimentation of the WatchSettingsWidget
+ * Implements the WatchSettingsWidget class.
  */
 
 /*! \brief  This defines the layout such as spacing and items of the variable watch
  * area.
  *
  *
- *First, the parent widget is passed to the class. Next, the form items are added
+ * First, the parent widget is passed to the class. Next, the form items are added
  * and spaced appropriately. The form items are then further defined and then connected.
 */
-WatchSettinsWidget::WatchSettinsWidget(QWidget *parent) :
+WatchSettingsWidget::WatchSettingsWidget(QWidget *parent) :
     QWidget(parent)
 {
     layout = new QHBoxLayout(this);
@@ -95,21 +90,21 @@ WatchSettinsWidget::WatchSettinsWidget(QWidget *parent) :
     setLayout(layout);
 }
 
-int WatchSettinsWidget::sumSize()
+int WatchSettingsWidget::sumSize()
 {
     return typeComboBox->sizeHint().width() + sizeComboBox->sizeHint().width()
             + arraySizeEdit->fontMetrics().width(arraySizeEdit->placeholderText())
             + addressCheckbox->sizeHint().width() + 50;
 }
 
-QSize WatchSettinsWidget::sizeHint() const
+QSize WatchSettingsWidget::sizeHint() const
 {
     return QSize(typeComboBox->sizeHint().width() + sizeComboBox->sizeHint().width()
             + arraySizeEdit->fontMetrics().width(arraySizeEdit->placeholderText())
             + addressCheckbox->sizeHint().width() + 50, 0);
 }
 
-WatchSettinsWidget::~WatchSettinsWidget()
+WatchSettingsWidget::~WatchSettingsWidget()
 {
     delete arraySizeEdit;
     delete typeComboBox;

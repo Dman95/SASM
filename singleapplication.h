@@ -13,12 +13,14 @@
 
 /**
  * @file singleapplication.h
- * Defines the methods provided by QT's QAPPLICATION_CLASS
+ * Defines SingleApplication class.
  */
-
 
 class SingleApplicationPrivate;
 
+/*!
+ * \brief The SingleApplication class provides single-window mode ability.
+ */
 class SingleApplication : public QAPPLICATION_CLASS
 {
   Q_OBJECT

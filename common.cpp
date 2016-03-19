@@ -42,7 +42,7 @@
 
 /**
  * @file common.cpp
- * UNKNOWN
+ * Contains common functions.
  */
 
 QString Common::applicationDataPath()
