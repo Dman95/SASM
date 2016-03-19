@@ -603,7 +603,10 @@ void MainWindow::openFile()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open file"), saveOpenDirectory,
                                                     tr("Assembler source files (*.asm);;All files (*.*)"));
-    saveOpenDirectory = fileName;
+    if (fileName.isEmpty()) {
+        return;
+    }
+    saveOpenDirectory = QFileInfo(fileName).absoluteDir().absolutePath();
     openFile(fileName);
 }
 
@@ -671,9 +674,10 @@ bool MainWindow::saveAsFile(int index)
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save file"), saveOpenDirectory,
                                                     tr("Assembler source files (*.asm);;All files (*.*)"));
-    saveOpenDirectory = fileName;
-    if (fileName.isEmpty())
+    if (fileName.isEmpty()) {
         return false;
+    }
+    saveOpenDirectory = QFileInfo(fileName).absoluteDir().absolutePath();
     Tab *tab;
     if (index == -1)
         tab = (Tab *) tabs->currentWidget();
@@ -694,9 +698,9 @@ void MainWindow::saveExe()
     }
     QString saveFileName = QFileDialog::getSaveFileName(this, tr("Save .exe file"), saveOpenDirectory,
                                                     tr("Execution files (*.exe);;All files (*.*)"));
-    saveOpenDirectory = saveFileName;
     if (saveFileName.isEmpty())
         return;
+    saveOpenDirectory = QFileInfo(saveFileName).absoluteDir().absolutePath();
     QFile exeFile(Common::pathInTemp("SASMprog.exe"));
     QFile::remove(saveFileName);
     exeFile.copy(saveFileName);
