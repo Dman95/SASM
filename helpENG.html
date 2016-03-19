@@ -170,6 +170,7 @@ gdb (gdb (for debugging).</P>
 <P>Paths to the assembler and the linker are specified in according fields.</P>
 <P>Check the "Disable linking" is used when building a program to run the linker is not necessary: the assembler generates an executable file. It may be useful, for example, in one mode in FASM below.<P>
 <P>In the "Assembly options" and "Linking options" fields you can specify options, passed assembler and linker respectively. In options you can specify string variables, which will be replaced with the names of the respective files.</P>
+<P>In the "Object file name" field you can specify name for temporary output object file, which replace $PROGRAM.OBJ$ variable. This option is needed for linkers which determines file format using file name extension (e.g., golink).</P>
 <P>Let's consider such variables:</P>
 </P>
 <table border="1" cellspacing="0" cellpadding="0">
@@ -199,7 +200,14 @@ gdb (gdb (for debugging).</P>
 <P>
 <P>Thus, by setting options on the "Build" tab, you can change the assembler and the linker as well as set different build configurations. </P>
 <H4>Linker additional configurations:</H4>
-<P>Sometimes it is necessary to use the ld linker instead of gcc (for example, to compile the program with start entry point). In Windows, it is needed to replace the end of the path to the linker from "MinGW/bin/gcc.exe" to "MinGW/mingw32/bin/ld.exe" (or "MinGW64/bin/gcc.exe" to "MinGW64/x86_64-w64-mingw32/bin/ld.exe" for 64-bit mode). In Linux, just replace "gcc" to "ld". This linker options should be replaced by "$PROGRAM.OBJ$ -g -o $PROGRAM$".</P>
+<P>Sometimes it is necessary to use the ld linker instead of gcc (for example, to compile the program with start entry point).</P>
+<P>In Windows, it is needed to replace the end of the path to the linker from "MinGW/bin/gcc.exe" to "MinGW/mingw32/bin/ld.exe" (or "MinGW64/bin/gcc.exe" to "MinGW64/x86_64-w64-mingw32/bin/ld.exe" for 64-bit mode).</P>
+<P>In Linux, just replace "gcc" to "ld".</P>
+<P>This linker options should be replaced by "$PROGRAM.OBJ$ -g -o $PROGRAM$".</P>
+<P>&nbsp;</P>
+<P>Also SASM partially supports golink linker (only for building and running, not for debugging).</P>
+<P>To enable it you should specify path to golink.exe and linker options "$PROGRAM.OBJ$ /fo $PROGRAM$ /console /debug coff /entry:&lt;YOUR ENTRY&gt; &lt;DLLS&gt;".</P>
+<P>Also it is needed to set "Object file name" to "program.obj".</P>
 <H4>Assembler additional configurations:</H4>
 <P>We describe the configuration in the table. The first column shows configuration's assembler. The second - assembly options. Third - linker (standard gcc with its options, the above ld, disable linking, link.exe for MASM with the appropriate options). If the text is enclosed in braces, you can choose any one of the separated by a vertical bar. </P>
 <TABLE border="1" cellspacing="0" cellpadding="0">
@@ -214,7 +222,7 @@ gdb (gdb (for debugging).</P>
 <TR>
 <TD>NASM</TD>
 <TD>-g -f {win32|win64|elf} $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$</TD>
-<TD>{gcc|ld}</TD>
+<TD>{gcc|ld|golink}</TD>
 </TR>
 <TR>
 <TD>GAS</TD>
@@ -224,7 +232,7 @@ gdb (gdb (for debugging).</P>
 <TR>
 <TD>FASM</TD>
 <TD>$SOURCE$ $PROGRAM.OBJ$ -s $LSTOUTPUT$</TD>
-<TD>{gcc|ld}</TD>
+<TD>{gcc|ld|golink}</TD>
 </TR>
 <TR>
 <TD>FASM</TD>
