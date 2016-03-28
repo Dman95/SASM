@@ -415,7 +415,7 @@ void MASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
                       "\\bbyte\\b" << "\\bword\\b" <<
                       "\\bdword\\b" << "\\bqword\\b" <<
                       "\\btword\\b" << "\\boword\\b" <<
-                      "\\yword\\b" << "\\bfword\\b" <<
+                      "\\byword\\b" << "\\bfword\\b" <<
                       "\\bmmword\\b" << "\\bsdword\\b" <<
                       "\\bsqword\\b" << "\\bsword\\b" <<
                       "\\bxmmword\\b" << "\\bymmword\\b" <<

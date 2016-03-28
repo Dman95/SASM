@@ -388,7 +388,7 @@ void NASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
                       "\\bbyte[\\s\\[]" << "\\bword[\\s\\[]" <<
                       "\\bdword[\\s\\[]" << "\\bqword[\\s\\[]" <<
                       "\\btword[\\s\\[]" << "\\boword[\\s\\[]" <<
-                      "\\yword[\\s\\[]" << "\\bDEFAULT\\b" <<
+                      "\\byword[\\s\\[]" << "\\bDEFAULT\\b" <<
                       "\\bABS\\b" << "\\bREL\\b";
     foreach (const QString &pattern, memoryPatterns) {
         rule.pattern = QRegExp(pattern);
