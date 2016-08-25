@@ -48,6 +48,7 @@
 RuQTextEdit::RuQTextEdit(QWidget *parent) :
     QTextEdit(parent)
 {
+    setAcceptRichText(false);
     QSettings settings("SASM Project", "SASM");
     QPalette palette = this->palette();
     palette.setColor(QPalette::Base, settings.value("backgroundcolor", palette.color(QPalette::Base)).value<QColor>());

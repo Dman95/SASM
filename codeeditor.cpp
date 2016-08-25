@@ -371,19 +371,28 @@ void CodeEditor::keyPressEvent(QKeyEvent *e)
 
 void CodeEditor::dragEnterEvent(QDragEnterEvent *event)
 {
-    event->acceptProposedAction();
+    if (event->mimeData()->hasUrls()) {
+        event->acceptProposedAction();
+    } else {
+        RuQPlainTextEdit::dragEnterEvent(event);
+    }
 }
 
 void CodeEditor::dropEvent(QDropEvent *event)
 {
-    foreach (const QUrl &url, event->mimeData()->urls())
-    {
-        const QString &fileName = url.toLocalFile();
+    if (event->mimeData()->hasUrls()) {
+        foreach (const QUrl &url, event->mimeData()->urls())
+        {
+            const QString &fileName = url.toLocalFile();
 
-        if (fileName.isEmpty())
-            continue;
+            if (fileName.isEmpty())
+                continue;
 
-        emit fileOpened(fileName);
+            emit fileOpened(fileName);
+        }
+        event->acceptProposedAction();
+    } else {
+        RuQPlainTextEdit::dropEvent(event);
     }
 }
 
