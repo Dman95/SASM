@@ -170,7 +170,7 @@ void Debugger::processMessage(QString output, QString error)
     }
 
     if (c == 1) {
-	if (error.indexOf("No symbol table is loaded",0,Qt::CaseInsensitive)!=-1) {
+    if (error.indexOf("No symbol",0,Qt::CaseInsensitive)!=-1) {
             dbgSymbols = false;
         } else {
             dbgSymbols = true;
