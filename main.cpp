@@ -44,6 +44,7 @@
 #include <QTextCodec>
 #include <QSettings>
 #include <QPushButton>
+#include <QtSingleApplication>
 
 /**
  * @file main.cpp
@@ -52,7 +53,18 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QtSingleApplication a(argc, argv);
+    if (a.isRunning()) {
+        //we already have one instance of our application
+        if (argc <= 1) {
+            a.sendMessage(QString("activate"));
+        } else {
+            for (int i = 1; i < argc; ++i) {
+                a.sendMessage(QString("run") + QString(argv[i]));
+            }
+        }
+        return 0;
+    }
     QTranslator translator, qtTranslator;
     QSettings settings("SASM Project", "SASM");
     #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
@@ -91,6 +103,8 @@ int main(int argc, char *argv[])
     }
 
     MainWindow w(a.arguments());
+
+    QObject::connect(&a, SIGNAL(messageReceived(const QString&)), &w, SLOT(onMessageReceived(const QString&)));
 
     w.show();
     w.activateWindow();

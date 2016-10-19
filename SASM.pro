@@ -33,6 +33,8 @@ INSTALLS += data
 INSTALLS += shortcutfiles
 INSTALLS += docfiles
 
+include(singleapplication/qtsingleapplication.pri)
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     tab.cpp \

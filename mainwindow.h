@@ -298,6 +298,9 @@ public slots:
     void openHelp();
     void openAbout();
 
+    //! Single Application message
+    void onMessageReceived(const QString &message);
+
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
 

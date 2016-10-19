@@ -2206,6 +2206,15 @@ void MainWindow::openAbout()
                        );
 }
 
+void MainWindow::onMessageReceived(const QString &message)
+{
+    raise();
+    activateWindow();
+    if (message.startsWith("run")) {
+        openFile(message.mid(3));
+    }
+}
+
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
     if (event->mimeData()->hasUrls())
