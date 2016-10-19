@@ -51,13 +51,6 @@ MainWindow::MainWindow(const QStringList &args, QWidget *parent)
     setWindowTitle("SASM");
     setWindowIcon(QIcon(":images/mainIcon.png"));
 
-    QObject::connect(
-                QApplication::instance(),
-                SIGNAL(otherInstanceDataReceived(QByteArray)),
-                this,
-                SLOT(otherInstanceDataReceived(QByteArray))
-    );
-
     //! Set save and open directory
     saveOpenDirectory = settings.value("saveopendirectory", QString(Common::applicationDataPath() + "/Projects")).toString();
 
@@ -621,18 +614,6 @@ void MainWindow::openFile(QString path)
     curTab->loadCodeFromFile(path);
     setCurrentTabName(path);
     //connect(curTab, SIGNAL(fileOpened(QString)), this, SLOT(openFile(QString)));
-}
-
-void MainWindow::otherInstanceDataReceived(QByteArray data)
-{
-    this->showNormal();
-    this->raise();
-    this->activateWindow();
-
-    QList<QByteArray> arguments = data.split(0x00);
-    for (int i = 1; i < arguments.size() - 1; i++) {
-        openFile(QString(arguments[i]));
-    }
 }
 
 void MainWindow::setCurrentTabName(const QString &filePath, int index)

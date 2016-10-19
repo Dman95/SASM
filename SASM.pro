@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -52,8 +52,7 @@ SOURCES += main.cpp\
     common.cpp \
     fasm.cpp \
     signallocker.cpp \
-    masm.cpp \
-    singleapplication.cpp
+    masm.cpp
 
 HEADERS  += mainwindow.h \
     tab.h \
@@ -73,8 +72,7 @@ HEADERS  += mainwindow.h \
     common.h \
     fasm.h \
     signallocker.h \
-    masm.h \
-    singleapplication.h
+    masm.h
 
 FORMS += settings.ui
 

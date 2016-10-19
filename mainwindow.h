@@ -230,7 +230,6 @@ public slots:
     void refreshEditMenu();
     void changeCurrentSavedState(bool changed);
     void openFile(QString path);
-    void otherInstanceDataReceived(QByteArray data);
 
     //! Build
     void buildProgram(bool debugMode = false);

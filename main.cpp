@@ -44,8 +44,6 @@
 #include <QTextCodec>
 #include <QSettings>
 #include <QPushButton>
-#include <QObject>
-#include "singleapplication.h"
 
 /**
  * @file main.cpp
@@ -54,12 +52,7 @@
 
 int main(int argc, char *argv[])
 {
-//    QApplication a(argc, argv);
-    QApplication::setApplicationName("SASM");
-    QApplication::setOrganizationName("YourOrganizationName");
-
-    SingleApplication a(argc, argv);
-
+    QApplication a(argc, argv);
     QTranslator translator, qtTranslator;
     QSettings settings("SASM Project", "SASM");
     #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
