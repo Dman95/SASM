@@ -1021,8 +1021,9 @@ void MainWindow::startCountProgramTime()
 
 void MainWindow::getOutput()
 {
-    QString out(runProcess->readAllStandardOutput());
-    printOutput(out, outputIndex);
+    QByteArray output = runProcess->readAllStandardOutput();
+    QString outputString = QString::fromLocal8Bit(output.constData(), output.size());
+    printOutput(outputString, outputIndex);
 }
 
 void MainWindow::testStopOfProgram()
