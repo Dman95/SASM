@@ -754,7 +754,7 @@
     <message>
         <location filename="settings.ui" line="51"/>
         <location filename="settings.ui" line="66"/>
-        <location filename="settings.ui" line="1568"/>
+        <location filename="settings.ui" line="1573"/>
         <source>Common</source>
         <translation>Genel</translation>
     </message>
@@ -801,231 +801,236 @@
         <translation>Çin (中国)</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="176"/>
-        <location filename="settings.ui" line="348"/>
-        <location filename="settings.ui" line="1888"/>
+        <location filename="settings.ui" line="158"/>
+        <source>German (Deutsche)</source>
+        <translation>Almanca (Deutsche)</translation>
+    </message>
+    <message>
+        <location filename="settings.ui" line="181"/>
+        <location filename="settings.ui" line="353"/>
+        <location filename="settings.ui" line="1893"/>
         <source>To apply the changes require a restart!</source>
         <translation>Değişikliklerin uygulanması için yeniden başlatma gereklidir!</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="185"/>
+        <location filename="settings.ui" line="190"/>
         <source>Show all registers in debug:</source>
         <translation>Hata Ayıklarken Yazmaçların Tamamını Göster:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="192"/>
+        <location filename="settings.ui" line="197"/>
         <source>Yes</source>
         <translation>Evet</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="205"/>
+        <location filename="settings.ui" line="210"/>
         <source>No, show only general purpose</source>
         <translation>Hayır, sadece genelde kullanılanları göster</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="235"/>
+        <location filename="settings.ui" line="240"/>
         <source>Insert debug string:</source>
         <translation>Hata Ayıklama Metni Ekle:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="279"/>
+        <location filename="settings.ui" line="284"/>
         <source>Code editor</source>
         <translation>Kod Editörü</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="287"/>
-        <location filename="settings.ui" line="1576"/>
+        <location filename="settings.ui" line="292"/>
+        <location filename="settings.ui" line="1581"/>
         <source>Font:</source>
         <translation>Yazı Tipi:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="310"/>
+        <location filename="settings.ui" line="315"/>
         <source>Size:</source>
         <translation>Boyut:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="374"/>
+        <location filename="settings.ui" line="379"/>
         <source>Default code editor text:</source>
         <translation>Varsayılan kod editör metni:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="392"/>
+        <location filename="settings.ui" line="397"/>
         <source>Reset all (need a restart)...</source>
         <translation>Tümünü Sıfırla (yeniden başlatma gerektirir)...</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="428"/>
+        <location filename="settings.ui" line="433"/>
         <source>Colors</source>
         <translation>Renkler</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="434"/>
+        <location filename="settings.ui" line="439"/>
         <source>Syntax highlighting</source>
         <translation>Söz Dizim Renklendirmesi</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="453"/>
+        <location filename="settings.ui" line="458"/>
         <source>System:</source>
         <translation>Sistem:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="559"/>
+        <location filename="settings.ui" line="564"/>
         <source>Bold:</source>
         <translation>Kalın:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="579"/>
+        <location filename="settings.ui" line="584"/>
         <source>Italic:</source>
         <translation>Eğik:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="586"/>
+        <location filename="settings.ui" line="591"/>
         <source>Foreground:</source>
         <translation>Ön Plan:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="804"/>
+        <location filename="settings.ui" line="809"/>
         <source>Keywords:</source>
         <translation>Anahtar Kelimeler:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="811"/>
-        <location filename="settings.ui" line="1733"/>
+        <location filename="settings.ui" line="816"/>
+        <location filename="settings.ui" line="1738"/>
         <source>Background:</source>
         <translation>Arkaplan:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="861"/>
+        <location filename="settings.ui" line="866"/>
         <source>Numbers:</source>
         <translation>Sayılar:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="911"/>
+        <location filename="settings.ui" line="916"/>
         <source>Labels:</source>
         <translation>Etiketler:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="918"/>
+        <location filename="settings.ui" line="923"/>
         <source>Comments:</source>
         <translation>Yorumlar:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1011"/>
+        <location filename="settings.ui" line="1016"/>
         <source>Quotation:</source>
         <translation>String:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1324"/>
+        <location filename="settings.ui" line="1329"/>
         <source>Memory:</source>
         <translation>Bellek:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1331"/>
+        <location filename="settings.ui" line="1336"/>
         <source>I/O macro:</source>
         <translation>G/Ç Makrosu:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1364"/>
+        <location filename="settings.ui" line="1369"/>
         <source>Registers:</source>
         <translation>Yazmaçlar:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1626"/>
+        <location filename="settings.ui" line="1631"/>
         <source>Enable highlighting</source>
         <translation>Renklendirmeyi Aktif Et</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1676"/>
+        <location filename="settings.ui" line="1681"/>
         <source>Current line:</source>
         <translation>Mevcut Satır:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1683"/>
+        <location filename="settings.ui" line="1688"/>
         <source>Debugging line:</source>
         <translation>Hata Ayıklama Satırı:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1783"/>
+        <location filename="settings.ui" line="1788"/>
         <source>Line number panel:</source>
         <translation>Satır Numarası Paneli:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1833"/>
+        <location filename="settings.ui" line="1838"/>
         <source>Line number font:</source>
         <translation>Satır Numarası:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1925"/>
+        <location filename="settings.ui" line="1930"/>
         <source>Build</source>
         <translation>Derle</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1936"/>
+        <location filename="settings.ui" line="1941"/>
         <source>Mode:</source>
         <translation>Derleme Modu:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1945"/>
+        <location filename="settings.ui" line="1950"/>
         <source>x86</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1958"/>
+        <location filename="settings.ui" line="1963"/>
         <source>x64</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1986"/>
+        <location filename="settings.ui" line="1991"/>
         <source>Assembler:</source>
         <translation>Çevirici:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1995"/>
+        <location filename="settings.ui" line="2000"/>
         <source>NASM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2008"/>
+        <location filename="settings.ui" line="2013"/>
         <source>GAS</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2018"/>
+        <location filename="settings.ui" line="2023"/>
         <source>FASM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2028"/>
+        <location filename="settings.ui" line="2033"/>
         <source>MASM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2053"/>
+        <location filename="settings.ui" line="2058"/>
         <source>Assembly options:</source>
         <translation>Çevirici Seçenekleri:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2063"/>
+        <location filename="settings.ui" line="2068"/>
         <source>Linking options:</source>
         <translation>Bağlayıcı Seçenekleri:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2073"/>
+        <location filename="settings.ui" line="2078"/>
         <source>Assembler path:</source>
         <translation>Çevirici Yolu:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2083"/>
+        <location filename="settings.ui" line="2088"/>
         <source>Linker path:</source>
         <translation>Bağlayıcı Yolu:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2093"/>
+        <location filename="settings.ui" line="2098"/>
         <source>Disable linking:</source>
         <translation>Bağlayıcıyı iptal et:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2110"/>
+        <location filename="settings.ui" line="2115"/>
         <source>Object file name:</source>
         <translation>Nesne dosyası adı:</translation>
     </message>

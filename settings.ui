@@ -153,6 +153,11 @@
                 <string>Chinese (中国)</string>
                </property>
               </item>
+              <item>
+               <property name="text">
+                <string>German (Deutsche)</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item>

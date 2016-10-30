@@ -954,7 +954,7 @@ WMR - R331674303467</translation>
     <message>
         <location filename="settings.ui" line="51"/>
         <location filename="settings.ui" line="66"/>
-        <location filename="settings.ui" line="1568"/>
+        <location filename="settings.ui" line="1573"/>
         <source>Common</source>
         <translation>Общие</translation>
     </message>
@@ -998,30 +998,35 @@ WMR - R331674303467</translation>
     <message>
         <location filename="settings.ui" line="153"/>
         <source>Chinese (中国)</source>
-        <translation type="unfinished">Китайский (中国)</translation>
+        <translation>Китайский (中国)</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="185"/>
+        <location filename="settings.ui" line="158"/>
+        <source>German (Deutsche)</source>
+        <translation>Немецкий (Deutsche)</translation>
+    </message>
+    <message>
+        <location filename="settings.ui" line="190"/>
         <source>Show all registers in debug:</source>
         <translation>Показывать все регистры при отладке:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="192"/>
+        <location filename="settings.ui" line="197"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="205"/>
+        <location filename="settings.ui" line="210"/>
         <source>No, show only general purpose</source>
         <translation>Нет, показывать только основные</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="235"/>
+        <location filename="settings.ui" line="240"/>
         <source>Insert debug string:</source>
         <translation>Добавлять отладочную строку:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="279"/>
+        <location filename="settings.ui" line="284"/>
         <source>Code editor</source>
         <translation>Редактор кода</translation>
     </message>
@@ -1042,206 +1047,206 @@ WMR - R331674303467</translation>
         <translation type="obsolete">Справа</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="428"/>
+        <location filename="settings.ui" line="433"/>
         <source>Colors</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="434"/>
+        <location filename="settings.ui" line="439"/>
         <source>Syntax highlighting</source>
         <translation>Подсветка синтаксиса</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="453"/>
+        <location filename="settings.ui" line="458"/>
         <source>System:</source>
         <translation>Препроцессор:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="559"/>
+        <location filename="settings.ui" line="564"/>
         <source>Bold:</source>
         <translation>Жирный:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="579"/>
+        <location filename="settings.ui" line="584"/>
         <source>Italic:</source>
         <translation>Курсив:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="586"/>
+        <location filename="settings.ui" line="591"/>
         <source>Foreground:</source>
         <translation>Текст:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="804"/>
+        <location filename="settings.ui" line="809"/>
         <source>Keywords:</source>
         <translation>Ключевые слова:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="811"/>
-        <location filename="settings.ui" line="1733"/>
+        <location filename="settings.ui" line="816"/>
+        <location filename="settings.ui" line="1738"/>
         <source>Background:</source>
         <translation>Фон:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="861"/>
+        <location filename="settings.ui" line="866"/>
         <source>Numbers:</source>
         <translation>Числа:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="911"/>
+        <location filename="settings.ui" line="916"/>
         <source>Labels:</source>
         <translation>Метки:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="918"/>
+        <location filename="settings.ui" line="923"/>
         <source>Comments:</source>
         <translation>Комментарии:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1011"/>
+        <location filename="settings.ui" line="1016"/>
         <source>Quotation:</source>
         <translation>Строки:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1324"/>
+        <location filename="settings.ui" line="1329"/>
         <source>Memory:</source>
         <translation>Память:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1331"/>
+        <location filename="settings.ui" line="1336"/>
         <source>I/O macro:</source>
         <translation>I/O макросы:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1364"/>
+        <location filename="settings.ui" line="1369"/>
         <source>Registers:</source>
         <translation>Регистры:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1676"/>
+        <location filename="settings.ui" line="1681"/>
         <source>Current line:</source>
         <translation>Текущая строка:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1683"/>
+        <location filename="settings.ui" line="1688"/>
         <source>Debugging line:</source>
         <translation>Строка отладки:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1783"/>
+        <location filename="settings.ui" line="1788"/>
         <source>Line number panel:</source>
         <translation>Панель с номерами строк:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1833"/>
+        <location filename="settings.ui" line="1838"/>
         <source>Line number font:</source>
         <translation>Номера строк:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1925"/>
+        <location filename="settings.ui" line="1930"/>
         <source>Build</source>
         <translation>Построение</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1936"/>
+        <location filename="settings.ui" line="1941"/>
         <source>Mode:</source>
         <translation>Режим:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1945"/>
+        <location filename="settings.ui" line="1950"/>
         <source>x86</source>
         <translation>x86</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1958"/>
+        <location filename="settings.ui" line="1963"/>
         <source>x64</source>
         <translation>x64</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1986"/>
+        <location filename="settings.ui" line="1991"/>
         <source>Assembler:</source>
         <translation>Ассемблер:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1995"/>
+        <location filename="settings.ui" line="2000"/>
         <source>NASM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2008"/>
+        <location filename="settings.ui" line="2013"/>
         <source>GAS</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2018"/>
+        <location filename="settings.ui" line="2023"/>
         <source>FASM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2028"/>
+        <location filename="settings.ui" line="2033"/>
         <source>MASM</source>
         <translation>MASM</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2053"/>
+        <location filename="settings.ui" line="2058"/>
         <source>Assembly options:</source>
         <translation>Опции ассемблера:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2063"/>
+        <location filename="settings.ui" line="2068"/>
         <source>Linking options:</source>
         <translation>Опции компоновщика:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2073"/>
+        <location filename="settings.ui" line="2078"/>
         <source>Assembler path:</source>
         <translation>Ассемблер:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2083"/>
+        <location filename="settings.ui" line="2088"/>
         <source>Linker path:</source>
         <translation>Компоновщик:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2093"/>
+        <location filename="settings.ui" line="2098"/>
         <source>Disable linking:</source>
         <translation>Не запускать компоновщик:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2110"/>
+        <location filename="settings.ui" line="2115"/>
         <source>Object file name:</source>
         <translation>Имя объектного файла:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1626"/>
+        <location filename="settings.ui" line="1631"/>
         <source>Enable highlighting</source>
         <translation>Включить подсветку</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="176"/>
-        <location filename="settings.ui" line="348"/>
-        <location filename="settings.ui" line="1888"/>
+        <location filename="settings.ui" line="181"/>
+        <location filename="settings.ui" line="353"/>
+        <location filename="settings.ui" line="1893"/>
         <source>To apply the changes require a restart!</source>
         <translation>Для применения изменений необходим перезапуск!</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="287"/>
-        <location filename="settings.ui" line="1576"/>
+        <location filename="settings.ui" line="292"/>
+        <location filename="settings.ui" line="1581"/>
         <source>Font:</source>
         <translation>Шрифт:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="310"/>
+        <location filename="settings.ui" line="315"/>
         <source>Size:</source>
         <translation>Размер:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="374"/>
+        <location filename="settings.ui" line="379"/>
         <source>Default code editor text:</source>
         <translation>Начальный текст в поле кода:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="392"/>
+        <location filename="settings.ui" line="397"/>
         <source>Reset all (need a restart)...</source>
         <translation>Сбросить все настройки на начальные (требуется перезапуск) ...</translation>
     </message>
