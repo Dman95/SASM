@@ -2172,7 +2172,7 @@ void MainWindow::openHelp()
     if (settings.value("language", 0).toInt() == 0) {
         helpFile.setFileName(":help/help.html");
     } else {
-        //! English and Turkish languages
+        //! English and other languages
         helpFile.setFileName(":help/helpENG.html");
     }
 

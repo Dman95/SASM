@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="tr_TR">
+<TS version="2.1" language="zh_CN">
 <context>
     <name>DebugAnyCommandWidget</name>
     <message>
         <location filename="debuganycommandwidget.cpp" line="53"/>
         <source>GDB command:</source>
-        <translation>GDB Komutu:</translation>
+        <translation>GDB命令：</translation>
     </message>
     <message>
         <location filename="debuganycommandwidget.cpp" line="55"/>
         <source>Perform</source>
-        <translation>Uygula</translation>
+        <translation>执行</translation>
     </message>
     <message>
         <location filename="debuganycommandwidget.cpp" line="56"/>
         <source>Print</source>
-        <translation>Yazdır</translation>
+        <translation>打印</translation>
     </message>
 </context>
 <context>
@@ -24,58 +24,58 @@
     <message>
         <location filename="debugtablewidget.cpp" line="64"/>
         <source>Variable or expression</source>
-        <translation>Değişken ya da İfade</translation>
+        <translation>变量或表达式</translation>
     </message>
     <message>
         <location filename="debugtablewidget.cpp" line="64"/>
         <source>Value</source>
-        <translation>Değer</translation>
+        <translation>值</translation>
     </message>
     <message>
         <location filename="debugtablewidget.cpp" line="64"/>
         <source>Type</source>
-        <translation>Tip</translation>
+        <translation>类型</translation>
     </message>
     <message>
         <location filename="debugtablewidget.cpp" line="66"/>
         <source>Memory</source>
-        <translation>Bellek</translation>
+        <translation>内存</translation>
     </message>
     <message>
         <location filename="debugtablewidget.cpp" line="74"/>
         <source>Register</source>
-        <translation>Yazmaç</translation>
+        <translation>寄存器</translation>
     </message>
     <message>
         <location filename="debugtablewidget.cpp" line="74"/>
         <source>Hex</source>
-        <translation>Onaltılık</translation>
+        <translation>Hex</translation>
     </message>
     <message>
         <location filename="debugtablewidget.cpp" line="74"/>
         <source>Info</source>
-        <translation>Bilgi</translation>
+        <translation>消息</translation>
     </message>
     <message>
         <location filename="debugtablewidget.cpp" line="76"/>
         <source>Registers</source>
-        <translation>Yazmaçlar</translation>
+        <translation>寄存器组</translation>
     </message>
     <message>
         <location filename="debugtablewidget.cpp" line="90"/>
         <location filename="debugtablewidget.cpp" line="120"/>
         <source>Add variable...</source>
-        <translation>Değişken Ekle...</translation>
+        <translation>添加变量...</translation>
     </message>
     <message>
         <location filename="debugtablewidget.cpp" line="132"/>
         <source>Wrong variable or address: &quot;%1&quot;</source>
-        <translation>Hatalı değişken ya da adres: &quot;%1&quot;</translation>
+        <translation>错误的变量或地址：&quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="debugtablewidget.cpp" line="234"/>
         <source>Delete watch</source>
-        <translation>İzleyiciyi Durdur</translation>
+        <translation>删除监视表达式</translation>
     </message>
 </context>
 <context>
@@ -84,27 +84,27 @@
         <location filename="debugger.cpp" line="152"/>
         <source>GDB error
 </source>
-        <translation>GDB Hatası</translation>
+        <translation>GDB 错误</translation>
     </message>
     <message>
         <location filename="debugger.cpp" line="215"/>
         <source>An error has occurred in the debugger. Please check the names of the sections.</source>
-        <translation>Hata ayıklayıcıda bir hata meydana geldi. Lütfen bölüm isimlerini kontrol edin.</translation>
+        <translation>调试器中出现一个错误。请检查各个 section 的名字。</translation>
     </message>
     <message>
         <location filename="debugger.cpp" line="570"/>
         <source>Entry point was not found! Entry point should have label &quot;main&quot; (if gcc linker is used) or &quot;start&quot; (otherwise).</source>
-        <translation>Giriş Noktası Bulunamadı. Giriş noktası &quot;main&quot; etiketine sahip olmalıdır.(Eğer gcc bağlayıcı kullanılıyorsa) ya da &quot;start etiketine sahip olmalıdır(gcc bağlayıcı kullanmıyorsa).</translation>
+        <translation>没有发现入口！入口应该有&quot;main&quot;标签（如果使用的是gcc linker）或&quot;start&quot;标签（否则的话）。</translation>
     </message>
     <message>
         <location filename="debugger.cpp" line="582"/>
         <source>Executable sections were not found! </source>
-        <translation>Çalıştırılabilir bölümler bulunamadı!</translation>
+        <translation>没有发现 section！</translation>
     </message>
     <message>
         <location filename="debugger.cpp" line="583"/>
         <source>For correct debugging executable sections should have name &quot;.text&quot; or &quot;.code&quot; (for MASM only).</source>
-        <translation>Hata ayıklama işleminin kabul edilebilir olması için bölümler &quot;.text&quot; ya da &quot;.code&quot; olmalıdır (sadece MASM için).</translation>
+        <translation>正确地调试可执行文件, section 应该以&quot;.text&quot;或&quot;.code&quot;命名（仅MASM）。</translation>
     </message>
 </context>
 <context>
@@ -113,48 +113,48 @@
         <location filename="finddialog.cpp" line="51"/>
         <location filename="finddialog.cpp" line="102"/>
         <source>Find what:</source>
-        <translation>Aranacak Kelime:</translation>
+        <translation>查找内容：</translation>
     </message>
     <message>
         <location filename="finddialog.cpp" line="55"/>
         <location filename="finddialog.cpp" line="101"/>
         <source>Replace with:</source>
-        <translation>Bununla Değiştir:</translation>
+        <translation>替换为：</translation>
     </message>
     <message>
         <location filename="finddialog.cpp" line="59"/>
         <source>Match case</source>
-        <translation>Büyük/Küçük Harf Duyarlı</translation>
+        <translation>大小写匹配</translation>
     </message>
     <message>
         <location filename="finddialog.cpp" line="61"/>
         <source>Find next</source>
-        <translation>Sonrakini Bul</translation>
+        <translation>查找下一个</translation>
     </message>
     <message>
         <location filename="finddialog.cpp" line="65"/>
         <source>Find all</source>
-        <translation>Hepsini Bul</translation>
+        <translation>查找全部</translation>
     </message>
     <message>
         <location filename="finddialog.cpp" line="68"/>
         <source>Replace</source>
-        <translation>Değiştir</translation>
+        <translation>替换</translation>
     </message>
     <message>
         <location filename="finddialog.cpp" line="71"/>
         <source>Replace all</source>
-        <translation>Tamamını Değiştir</translation>
+        <translation>替换全部</translation>
     </message>
     <message>
         <location filename="finddialog.cpp" line="74"/>
         <source>Close</source>
-        <translation>Kapat</translation>
+        <translation>关闭</translation>
     </message>
     <message>
         <location filename="finddialog.cpp" line="130"/>
         <source>Find and replace</source>
-        <translation>Bul ve Değiştir</translation>
+        <translation>查找和替换</translation>
     </message>
 </context>
 <context>
@@ -162,22 +162,22 @@
     <message>
         <location filename="getstartedwidget.cpp" line="65"/>
         <source>Welcome to the SASM!</source>
-        <translation>SASM&apos;e Hoş Geldiniz!</translation>
+        <translation>欢迎使用 SASM！</translation>
     </message>
     <message>
         <location filename="getstartedwidget.cpp" line="79"/>
         <source>Create new project</source>
-        <translation>Yeni Proje Oluştur</translation>
+        <translation>创建新的项目</translation>
     </message>
     <message>
         <location filename="getstartedwidget.cpp" line="84"/>
         <source>Open project</source>
-        <translation>Proje Aç</translation>
+        <translation>打开项目</translation>
     </message>
     <message>
         <location filename="getstartedwidget.cpp" line="89"/>
         <source>Restore last session</source>
-        <translation>Son Oturumu Kurtar</translation>
+        <translation>恢复最近的会话</translation>
     </message>
 </context>
 <context>
@@ -186,17 +186,17 @@
         <location filename="masm.cpp" line="55"/>
         <location filename="masm.cpp" line="58"/>
         <source>Error!</source>
-        <translation>Hata!</translation>
+        <translation>错误！</translation>
     </message>
     <message>
         <location filename="masm.cpp" line="55"/>
         <source>MASM is available on Windows only.</source>
-        <translation>MASM yalnızca Windows üzerinde kullanılabilir .</translation>
+        <translation>MASM 仅在 Windows 下可用。</translation>
     </message>
     <message>
         <location filename="masm.cpp" line="58"/>
         <source>Only 32-bit version of MASM is available.</source>
-        <translation>MASM&apos;in sadece 32 bit sürümü mevcuttur.</translation>
+        <translation>仅32位版本的 MASM 可用。</translation>
     </message>
 </context>
 <context>
@@ -204,25 +204,25 @@
     <message>
         <location filename="mainwindow.cpp" line="162"/>
         <source>Build log:</source>
-        <translation>Derleme Logu:</translation>
+        <translation>构建日志：</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="182"/>
         <location filename="mainwindow.cpp" line="487"/>
         <source>File</source>
-        <translation>Dosya</translation>
+        <translation>文件</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="193"/>
         <location filename="mainwindow.cpp" line="493"/>
         <source>Edit</source>
-        <translation>Düzenle</translation>
+        <translation>编辑</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="213"/>
         <location filename="mainwindow.cpp" line="501"/>
         <source>Build</source>
-        <translation>Derle</translation>
+        <translation>构建</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="222"/>
@@ -230,417 +230,417 @@
         <location filename="mainwindow.cpp" line="507"/>
         <location filename="mainwindow.cpp" line="1207"/>
         <source>Debug</source>
-        <translation>Hata Ayıklayıcı</translation>
+        <translation>调试</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="233"/>
         <location filename="mainwindow.cpp" line="466"/>
         <source>Settings</source>
-        <translation>Ayarlar</translation>
+        <translation>设置</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="235"/>
         <location filename="mainwindow.cpp" line="473"/>
         <location filename="mainwindow.cpp" line="2186"/>
         <source>Help</source>
-        <translation>Yardım</translation>
+        <translation>帮助</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="244"/>
         <location filename="mainwindow.cpp" line="576"/>
         <source>New</source>
-        <translation>Yeni</translation>
+        <translation>新建</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="252"/>
         <source>Open</source>
-        <translation>Aç</translation>
+        <translation>打开</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="260"/>
         <source>Close file</source>
-        <translation>Dosyayı Kapat</translation>
+        <translation>关闭文件</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="269"/>
         <source>Save</source>
-        <translation>Kaydet</translation>
+        <translation>保存</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="277"/>
         <source>Save as</source>
-        <translation>Farklı Kaydet</translation>
+        <translation>另存为</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="285"/>
         <source>Save .exe</source>
-        <translation>.exe olarak Kaydet</translation>
+        <translation>保存 .exe</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="292"/>
         <source>Exit</source>
-        <translation>Çıkış</translation>
+        <translation>退出</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="300"/>
         <source>Find and replace</source>
-        <translation>Bıl ve Değiştir</translation>
+        <translation>查找和替换</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="309"/>
         <source>Undo</source>
-        <translation>Geri Al</translation>
+        <translation>重做</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="316"/>
         <source>Redo</source>
-        <translation>İleri Al</translation>
+        <translation>重做</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="323"/>
         <source>Cut</source>
-        <translation>Kes</translation>
+        <translation>剪切</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="330"/>
         <source>Copy</source>
-        <translation>Kopyala</translation>
+        <translation>复制</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="337"/>
         <source>Paste</source>
-        <translation>Yapıştır</translation>
+        <translation>粘贴</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="344"/>
         <source>Delete</source>
-        <translation>Sil</translation>
+        <translation>删除</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="351"/>
         <source>Select all</source>
-        <translation>Tümünü Seç</translation>
+        <translation>全选</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="358"/>
         <source>Comment</source>
-        <translation>Yorum</translation>
+        <translation>注释</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="365"/>
         <source>Remove comment</source>
-        <translation>Yorumu Sil</translation>
+        <translation>删除注释</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="372"/>
         <source>Indent</source>
-        <translation>Girinti</translation>
+        <translation>缩进</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="379"/>
         <source>Remove indent</source>
-        <translation>Girintiyi Sil</translation>
+        <translation>删除缩进</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="388"/>
         <source>Build this</source>
-        <translation>Bunu derle</translation>
+        <translation>构建这个</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="396"/>
         <source>Build and run</source>
-        <translation>Derle ve Çalıştır</translation>
+        <translation>构建并运行</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="404"/>
         <source>Run in new window</source>
-        <translation>Yeni Pencerede Çalıştır</translation>
+        <translation>在新窗口中运行</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="407"/>
         <source>Stop</source>
-        <translation>Durdur</translation>
+        <translation>停止</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="421"/>
         <source>Step over</source>
-        <translation>Adım Adım</translation>
+        <translation>跳过</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="429"/>
         <source>Step into</source>
-        <translation>Adım Atlayarak</translation>
+        <translation>跳入</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="437"/>
         <source>Toggle breakpoint</source>
-        <translation>Breakpoint koy</translation>
+        <translation>切换断点</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="445"/>
         <source>Show registers</source>
-        <translation>Yazmaçları Göster</translation>
+        <translation>显示寄存器组</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="454"/>
         <source>Show memory</source>
-        <translation>Belleği Göster</translation>
+        <translation>显示内存</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="481"/>
         <source>About</source>
-        <translation>Hakkında</translation>
+        <translation>关于</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="597"/>
         <source>Open file</source>
-        <translation>Dosya Aç</translation>
+        <translation>打开文件</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="598"/>
         <location filename="mainwindow.cpp" line="657"/>
         <source>Assembler source files (*.asm);;All files (*.*)</source>
-        <translation>Çevirici kaynak dosyaları (*.asm);;Tüm Dosyalar(*.*)</translation>
+        <translation>汇编源文件(* .as);;所有文件(*.*)</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="656"/>
         <source>Save file</source>
-        <translation>Dosyayı Kaydet</translation>
+        <translation>保存文件</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="680"/>
         <source>Save .exe file</source>
-        <translation>.exe Dosyası Olarak Kaydet</translation>
+        <translation>保存.exe 文件</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="681"/>
         <source>Execution files (*.exe);;All files (*.*)</source>
-        <translation>Çalıştırılabilir dosyalar (*.exe);;Tüm Dosyalar(*.*)</translation>
+        <translation>执行文件 (*.exe);;所有文件 (*.*)</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="781"/>
         <location filename="mainwindow.cpp" line="2095"/>
         <source>Yes</source>
-        <translation>Evet</translation>
+        <translation>是</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="782"/>
         <source>No</source>
-        <translation>Hayır</translation>
+        <translation>不</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="783"/>
         <location filename="mainwindow.cpp" line="2096"/>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation>取消</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="784"/>
         <location filename="mainwindow.cpp" line="785"/>
         <source>Save changes?</source>
-        <translation>Değişiklikleri Kaydet?</translation>
+        <translation>保存更改吗？</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="811"/>
         <source>Build started...</source>
-        <translation>Derleme başlatılıyor...</translation>
+        <translation>开始构建...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="815"/>
         <source>Error! Program directory does not exist. Please reinstall the program.</source>
-        <translation>Hata! Program dizini bulunamadı. Lütfen programı tekrar kurun.</translation>
+        <translation>错误！程序目录不存在。请重新安装程序。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="816"/>
         <source>Error!</source>
-        <translation>Hata!</translation>
+        <translation>错误！</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="816"/>
         <source>Directory NASM does not exist. Please reinstall the program.</source>
-        <translation>NASM dizini bulunamadı. Lütfen programı tekrar kurun.</translation>
+        <translation>目录 NASM 不存在。请重新安装程序。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="866"/>
         <source>Unable to start assembler. Check your settings.</source>
-        <translation>Çevirici  başlatılamadı. Ayarlarınızı kontrol edin.</translation>
+        <translation>无法启动汇编器。请检查您的设置。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="921"/>
         <source>Unable to start linker. Check your settings.</source>
-        <translation>Bağlayıcı başlatılamadı. Ayarlarınızı kontrol edin.</translation>
+        <translation>无法启动链接器。请检查您的设置。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="948"/>
         <source>Warning! Errors have occurred in the build:</source>
-        <translation>Uyarı! Derleme esnasında bazı hatalar meydana geldi:</translation>
+        <translation>警告！在构建中出现错误：</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="963"/>
         <source>Built successfully.</source>
-        <translation>Derleme Başarılı.</translation>
+        <translation>构建成功。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="981"/>
         <source>The program is already running.</source>
-        <translation>Program zaten çalışıyor.</translation>
+        <translation>该程序已在运行。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="998"/>
         <source>The program is executing...</source>
-        <translation>Program çalıştırılıyor...</translation>
+        <translation>程序正在执行...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1038"/>
         <source>The program finished normally. Execution time: %1 s</source>
-        <translation>Program normal olarak sonlandı. Çalışma zamanı: %1 s</translation>
+        <translation>程序正常完成。执行时间：%1 s</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1042"/>
         <source>The program crashed! Execution time: %1 s</source>
-        <translation>Programda kırılma meydana geldi! Çalışma zamanı: %1 s</translation>
+        <translation>程序崩溃！执行时间：%1 s</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1074"/>
         <source>The program stopped.</source>
-        <translation>Program durduruldu.</translation>
+        <translation>程序停止。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1076"/>
         <source>The program is not running.</source>
-        <translation>Program çalışmıyor.</translation>
+        <translation>程序没有在运行。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1120"/>
         <source>Before debugging you need to build the program.</source>
-        <translation>Hata ayıklamadan önce programın derlenmesi gerekiyor.</translation>
+        <translation>在调试之前，你需要构建程序。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1124"/>
         <source>Debugging started...</source>
-        <translation>Hata Ayıklama Başlatılıyor...</translation>
+        <translation>正在调试...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1146"/>
         <source>Pause</source>
-        <translation>Beklet</translation>
+        <translation>暂停</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1151"/>
         <location filename="mainwindow.cpp" line="1162"/>
         <location filename="mainwindow.cpp" line="1175"/>
         <source>Continue</source>
-        <translation>Devam Et</translation>
+        <translation>继续</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1256"/>
         <source>Memory</source>
-        <translation>Bellek</translation>
+        <translation>内存</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1374"/>
         <source>Registers</source>
-        <translation>Yazmaçlar</translation>
+        <translation>寄存器组</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1445"/>
         <source>Debugging finished.</source>
-        <translation>Hata Ayıklama Tamamlandı.</translation>
+        <translation>调试完成。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1581"/>
         <source>In the previous session was not open any of the saved tabs!</source>
-        <translation>Önceki oturumda kaydedilmiş olan sekmelerden herhangi biri açık değildi!</translation>
+        <translation>在上一个会话没有打开任何保存的标签！</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1853"/>
         <source>Please set path to MASM assembler (ml.exe) and linker (link.exe) on your computer </source>
-        <translation>Lütfen  MASM çevirici (ml.exe) ve bağlayıcı (link.exe) PATH ayarlarını yapılandırın</translation>
+        <translation>在你的电脑上请给MASM汇编器（ml.exe）和链接器（link.exe）设置路径</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1854"/>
         <source>in fields &quot;Assembler path&quot; and &quot;Linker path&quot; above.</source>
-        <translation>Assembler yolu ve Bağlayıcı yolu yukarıdaki alanlarda.</translation>
+        <translation>在“汇编器路径”和“链接器路径”字段中。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2097"/>
         <source>Warning!</source>
-        <translation>Uyarı!</translation>
+        <translation>警告！</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2098"/>
         <source>All settings will be deleted and all unsaved data will be lost. Are you sure?</source>
-        <translation>Tüm ayarlar silinecek ve kaydedilmemiş tüm veriler kaybolacak. Emin misiniz?</translation>
+        <translation>所有设置将被删除，所有未保存的数据将丢失。你确定？</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2193"/>
         <source>About SASM</source>
-        <translation>SASM Hakkında</translation>
+        <translation>关于 SASM</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2194"/>
         <source>SASM (SimpleASM) </source>
-        <translation></translation>
+        <translation>SASM (SimpleASM)</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2195"/>
         <source>simple Open Source IDE for NASM, MASM, GAS and FASM assembler languages.</source>
-        <translation>NASM, MASM, GAS ve FASM assembler dilleri için basit ve açık kaynak kodlu IDE.</translation>
+        <translation>NASM， MASM， GAS和FASM汇编语言的轻量开源IDE。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2196"/>
         <source>Licensed under the GNU GPL v3.0</source>
-        <translation>Lisans: GNU GPL v3.0</translation>
+        <translation>GNU GPL v3.0 授权</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2197"/>
         <source>Based on the Qt.</source>
-        <translation>Qt Tabanında.</translation>
+        <translation>基于 Qt。</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2198"/>
         <source>Copyright © 2013 Dmitriy Manushin</source>
-        <translation>Copyright © 2013 Dmitriy Manushin</translation>
+        <translation>版权所有©2013 Dmitriy Manushin</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2199"/>
         <source>Development and idea - Dmitriy Manushin</source>
-        <translation>Geliştirme ve Fikir - Dmitriy Manushin</translation>
+        <translation>开发和主意 - Dmitriy Manushin</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2200"/>
         <source>Icon and advices - Alick Gaybullaev</source>
-        <translation>İkon ve Tavsiyeler - Alick Gaybullaev</translation>
+        <translation>图标和建议 - Alick Gaibulloev</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2201"/>
         <source>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com</source>
-        <translation>Öneri ve hata mesajlarını Dman1095@gmail.com adresine mail atın</translation>
+        <translation>期望和错误消息发送到电子邮件︰ Dman1095@gmail.com</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2202"/>
         <source>More information on the site: http://dman95.github.io/SASM/</source>
-        <translation>Daha fazla bilgi için http://dman95.github.io/SASM/ adresini ziyaret edin</translation>
+        <translation>更多信息在：http://dman95.github.io/SASM/</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2203"/>
         <source>Donate:</source>
-        <translation>Bağış:</translation>
+        <translation>捐赠：</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2204"/>
         <source>PayPal - Dman1095@gmail.com</source>
-        <translation></translation>
+        <translation>PayPal - Dman1095@gmail.com</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2205"/>
         <source>WMZ - Z282016332582</source>
-        <translation></translation>
+        <translation>WMZ - Z282016332582</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2206"/>
         <source>WMR - R331674303467</source>
-        <translation></translation>
+        <translation>WMR - R331674303467</translation>
     </message>
 </context>
 <context>
@@ -648,52 +648,52 @@
     <message>
         <location filename="ruqplaintextedit.cpp" line="59"/>
         <source>Comment</source>
-        <translation>Yorum</translation>
+        <translation>注释</translation>
     </message>
     <message>
         <location filename="ruqplaintextedit.cpp" line="63"/>
         <source>Remove comment</source>
-        <translation>Yorumu Sil</translation>
+        <translation>删除注释</translation>
     </message>
     <message>
         <location filename="ruqplaintextedit.cpp" line="67"/>
         <source>Undo</source>
-        <translation>Geri Al</translation>
+        <translation>撤销</translation>
     </message>
     <message>
         <location filename="ruqplaintextedit.cpp" line="71"/>
         <source>Redo</source>
-        <translation>İleri Al</translation>
+        <translation>重做</translation>
     </message>
     <message>
         <location filename="ruqplaintextedit.cpp" line="75"/>
         <source>Cut</source>
-        <translation>Kes</translation>
+        <translation>剪切</translation>
     </message>
     <message>
         <location filename="ruqplaintextedit.cpp" line="79"/>
         <source>Copy</source>
-        <translation>Kopyala</translation>
+        <translation>复制</translation>
     </message>
     <message>
         <location filename="ruqplaintextedit.cpp" line="83"/>
         <source>Paste</source>
-        <translation>Yapıştır</translation>
+        <translation>粘贴</translation>
     </message>
     <message>
         <location filename="ruqplaintextedit.cpp" line="87"/>
         <source>Delete</source>
-        <translation>Sil</translation>
+        <translation>删除</translation>
     </message>
     <message>
         <location filename="ruqplaintextedit.cpp" line="91"/>
         <source>Select all</source>
-        <translation>Tümünü Seç</translation>
+        <translation>全选</translation>
     </message>
     <message>
         <location filename="ruqplaintextedit.cpp" line="139"/>
         <source>Watch &apos;%1&apos;</source>
-        <translation>İzle &apos;%1&apos;</translation>
+        <translation>监控 &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -701,42 +701,42 @@
     <message>
         <location filename="ruqtextedit.cpp" line="58"/>
         <source>Undo</source>
-        <translation>Geri Al</translation>
+        <translation>撤销</translation>
     </message>
     <message>
         <location filename="ruqtextedit.cpp" line="62"/>
         <source>Redo</source>
-        <translation>İleri Al</translation>
+        <translation>重做</translation>
     </message>
     <message>
         <location filename="ruqtextedit.cpp" line="66"/>
         <source>Cut</source>
-        <translation>Kes</translation>
+        <translation>剪切</translation>
     </message>
     <message>
         <location filename="ruqtextedit.cpp" line="70"/>
         <source>Copy</source>
-        <translation>Kopyala</translation>
+        <translation>复制</translation>
     </message>
     <message>
         <location filename="ruqtextedit.cpp" line="74"/>
         <source>Paste</source>
-        <translation>Yapıştır</translation>
+        <translation>粘贴</translation>
     </message>
     <message>
         <location filename="ruqtextedit.cpp" line="78"/>
         <source>Delete</source>
-        <translation>Sil</translation>
+        <translation>删除</translation>
     </message>
     <message>
         <location filename="ruqtextedit.cpp" line="82"/>
         <source>Select all</source>
-        <translation>Tümünü Seç</translation>
+        <translation>全选</translation>
     </message>
     <message>
         <location filename="ruqtextedit.cpp" line="86"/>
         <source>Clear</source>
-        <translation>Temizle</translation>
+        <translation>清空</translation>
     </message>
 </context>
 <context>
@@ -744,290 +744,288 @@
     <message>
         <location filename="settings.ui" line="14"/>
         <source>Settings</source>
-        <translation>Ayarlar</translation>
+        <translation>设置</translation>
     </message>
     <message>
         <location filename="settings.ui" line="34"/>
         <source>SASM Options</source>
-        <translation>SASM Seçenekleri</translation>
+        <translation>SASM 选项</translation>
     </message>
     <message>
         <location filename="settings.ui" line="51"/>
         <location filename="settings.ui" line="66"/>
         <location filename="settings.ui" line="1568"/>
         <source>Common</source>
-        <translation>Genel</translation>
+        <translation>常规</translation>
     </message>
     <message>
         <location filename="settings.ui" line="80"/>
         <source>On start:</source>
-        <translation>Başlangıçta:</translation>
+        <translation>初始页面：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="100"/>
         <source>Open get started window</source>
-        <translation>Başlangıç ekranını getir</translation>
+        <translation>打开&quot;开始入门&quot;窗口</translation>
     </message>
     <message>
         <location filename="settings.ui" line="105"/>
         <source>Restore previous session</source>
-        <translation>Önceki oturumu kurtar</translation>
+        <translation>还原上一个会话</translation>
     </message>
     <message>
         <location filename="settings.ui" line="130"/>
         <source>Language:</source>
-        <translation>Dil:</translation>
+        <translation>语言：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="138"/>
         <source>Russian (Русский)</source>
-        <oldsource>Russian</oldsource>
-        <translation>Rus (Русский)</translation>
+        <translation>俄语 (Русский)</translation>
     </message>
     <message>
         <location filename="settings.ui" line="143"/>
         <source>English</source>
-        <translation>Ingilizce (English)</translation>
+        <translation type="unfinished">英语 (English)</translation>
     </message>
     <message>
         <location filename="settings.ui" line="148"/>
         <source>Turkish (Türk)</source>
-        <oldsource>Turkish</oldsource>
-        <translation>Türk</translation>
+        <translation>土耳其语 (Türk)</translation>
     </message>
     <message>
         <location filename="settings.ui" line="153"/>
         <source>Chinese (中国)</source>
-        <translation>Çin (中国)</translation>
+        <translation type="unfinished">中国</translation>
     </message>
     <message>
         <location filename="settings.ui" line="176"/>
         <location filename="settings.ui" line="348"/>
         <location filename="settings.ui" line="1888"/>
         <source>To apply the changes require a restart!</source>
-        <translation>Değişikliklerin uygulanması için yeniden başlatma gereklidir!</translation>
+        <translation>要应用更改需要重新启动本程序！</translation>
     </message>
     <message>
         <location filename="settings.ui" line="185"/>
         <source>Show all registers in debug:</source>
-        <translation>Hata Ayıklarken Yazmaçların Tamamını Göster:</translation>
+        <translation>在调试中显示所有寄存器：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="192"/>
         <source>Yes</source>
-        <translation>Evet</translation>
+        <translation>是</translation>
     </message>
     <message>
         <location filename="settings.ui" line="205"/>
         <source>No, show only general purpose</source>
-        <translation>Hayır, sadece genelde kullanılanları göster</translation>
+        <translation>不，只显示一般用途</translation>
     </message>
     <message>
         <location filename="settings.ui" line="235"/>
         <source>Insert debug string:</source>
-        <translation>Hata Ayıklama Metni Ekle:</translation>
+        <translation>插入调试字符串：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="279"/>
         <source>Code editor</source>
-        <translation>Kod Editörü</translation>
+        <translation>代码编辑器</translation>
     </message>
     <message>
         <location filename="settings.ui" line="287"/>
         <location filename="settings.ui" line="1576"/>
         <source>Font:</source>
-        <translation>Yazı Tipi:</translation>
+        <translation>字体：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="310"/>
         <source>Size:</source>
-        <translation>Boyut:</translation>
+        <translation>大小：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="374"/>
         <source>Default code editor text:</source>
-        <translation>Varsayılan kod editör metni:</translation>
+        <translation>默认代码编辑器文本：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="392"/>
         <source>Reset all (need a restart)...</source>
-        <translation>Tümünü Sıfırla (yeniden başlatma gerektirir)...</translation>
+        <translation>全部重置（需要重新启动）...</translation>
     </message>
     <message>
         <location filename="settings.ui" line="428"/>
         <source>Colors</source>
-        <translation>Renkler</translation>
+        <translation>颜色</translation>
     </message>
     <message>
         <location filename="settings.ui" line="434"/>
         <source>Syntax highlighting</source>
-        <translation>Söz Dizim Renklendirmesi</translation>
+        <translation>语法高亮显示</translation>
     </message>
     <message>
         <location filename="settings.ui" line="453"/>
         <source>System:</source>
-        <translation>Sistem:</translation>
+        <translation>系统：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="559"/>
         <source>Bold:</source>
-        <translation>Kalın:</translation>
+        <translation>粗体：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="579"/>
         <source>Italic:</source>
-        <translation>Eğik:</translation>
+        <translation>斜体：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="586"/>
         <source>Foreground:</source>
-        <translation>Ön Plan:</translation>
+        <translation>前景色：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="804"/>
         <source>Keywords:</source>
-        <translation>Anahtar Kelimeler:</translation>
+        <translation>关键字：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="811"/>
         <location filename="settings.ui" line="1733"/>
         <source>Background:</source>
-        <translation>Arkaplan:</translation>
+        <translation>背景色：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="861"/>
         <source>Numbers:</source>
-        <translation>Sayılar:</translation>
+        <translation>数字：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="911"/>
         <source>Labels:</source>
-        <translation>Etiketler:</translation>
+        <translation>标签：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="918"/>
         <source>Comments:</source>
-        <translation>Yorumlar:</translation>
+        <translation>注释：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1011"/>
         <source>Quotation:</source>
-        <translation>String:</translation>
+        <translation>引用：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1324"/>
         <source>Memory:</source>
-        <translation>Bellek:</translation>
+        <translation>内存：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1331"/>
         <source>I/O macro:</source>
-        <translation>G/Ç Makrosu:</translation>
+        <translation>I/O宏：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1364"/>
         <source>Registers:</source>
-        <translation>Yazmaçlar:</translation>
+        <translation>寄存器：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1626"/>
         <source>Enable highlighting</source>
-        <translation>Renklendirmeyi Aktif Et</translation>
+        <translation>启用高亮显示</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1676"/>
         <source>Current line:</source>
-        <translation>Mevcut Satır:</translation>
+        <translation>当前行：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1683"/>
         <source>Debugging line:</source>
-        <translation>Hata Ayıklama Satırı:</translation>
+        <translation>调试行：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1783"/>
         <source>Line number panel:</source>
-        <translation>Satır Numarası Paneli:</translation>
+        <translation>行号面板：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1833"/>
         <source>Line number font:</source>
-        <translation>Satır Numarası:</translation>
+        <translation>行号字体：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1925"/>
         <source>Build</source>
-        <translation>Derle</translation>
+        <translation>构建</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1936"/>
         <source>Mode:</source>
-        <translation>Derleme Modu:</translation>
+        <translation>模式：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1945"/>
         <source>x86</source>
-        <translation></translation>
+        <translation>x86</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1958"/>
         <source>x64</source>
-        <translation></translation>
+        <translation>x64</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1986"/>
         <source>Assembler:</source>
-        <translation>Çevirici:</translation>
+        <translation>汇编器：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1995"/>
         <source>NASM</source>
-        <translation></translation>
+        <translation>NASM</translation>
     </message>
     <message>
         <location filename="settings.ui" line="2008"/>
         <source>GAS</source>
-        <translation></translation>
+        <translation>GAS</translation>
     </message>
     <message>
         <location filename="settings.ui" line="2018"/>
         <source>FASM</source>
-        <translation></translation>
+        <translation>FASM</translation>
     </message>
     <message>
         <location filename="settings.ui" line="2028"/>
         <source>MASM</source>
-        <translation></translation>
+        <translation>MASM</translation>
     </message>
     <message>
         <location filename="settings.ui" line="2053"/>
         <source>Assembly options:</source>
-        <translation>Çevirici Seçenekleri:</translation>
+        <translation>汇编选项：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="2063"/>
         <source>Linking options:</source>
-        <translation>Bağlayıcı Seçenekleri:</translation>
+        <translation>链接选项：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="2073"/>
         <source>Assembler path:</source>
-        <translation>Çevirici Yolu:</translation>
+        <translation>汇编器路径：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="2083"/>
         <source>Linker path:</source>
-        <translation>Bağlayıcı Yolu:</translation>
+        <translation>链接器路径：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="2093"/>
         <source>Disable linking:</source>
-        <translation>Bağlayıcıyı iptal et:</translation>
+        <translation>停用链接：</translation>
     </message>
     <message>
         <location filename="settings.ui" line="2110"/>
         <source>Object file name:</source>
-        <translation>Nesne dosyası adı:</translation>
+        <translation>对象文件名：</translation>
     </message>
 </context>
 <context>
@@ -1035,12 +1033,12 @@
     <message>
         <location filename="tab.cpp" line="66"/>
         <source>Input</source>
-        <translation>Girdi</translation>
+        <translation>输入</translation>
     </message>
     <message>
         <location filename="tab.cpp" line="75"/>
         <source>Output</source>
-        <translation>Çıktı</translation>
+        <translation>输出</translation>
     </message>
 </context>
 <context>
@@ -1048,67 +1046,67 @@
     <message>
         <location filename="watchsettingswidget.cpp" line="61"/>
         <source>Address</source>
-        <translation>Adres</translation>
+        <translation>Address</translation>
     </message>
     <message>
         <location filename="watchsettingswidget.cpp" line="69"/>
         <source>Array size</source>
-        <translation>Dizi Boyutu</translation>
+        <translation>Array size</translation>
     </message>
     <message>
         <location filename="watchsettingswidget.cpp" line="72"/>
         <source>Smart</source>
-        <translation></translation>
+        <translation>Smart</translation>
     </message>
     <message>
         <location filename="watchsettingswidget.cpp" line="72"/>
         <source>Hex</source>
-        <translation></translation>
+        <translation>Hex</translation>
     </message>
     <message>
         <location filename="watchsettingswidget.cpp" line="72"/>
         <source>Bin</source>
-        <translation></translation>
+        <translation>Bin</translation>
     </message>
     <message>
         <location filename="watchsettingswidget.cpp" line="72"/>
         <source>Char</source>
-        <translation></translation>
+        <translation>Char</translation>
     </message>
     <message>
         <location filename="watchsettingswidget.cpp" line="73"/>
         <source>Int</source>
-        <translation></translation>
+        <translation>Int</translation>
     </message>
     <message>
         <location filename="watchsettingswidget.cpp" line="73"/>
         <source>UInt</source>
-        <translation></translation>
+        <translation>UInt</translation>
     </message>
     <message>
         <location filename="watchsettingswidget.cpp" line="73"/>
         <source>Float</source>
-        <translation></translation>
+        <translation>Float</translation>
     </message>
     <message>
         <location filename="watchsettingswidget.cpp" line="77"/>
         <source>d</source>
-        <translation></translation>
+        <translation>d</translation>
     </message>
     <message>
         <location filename="watchsettingswidget.cpp" line="77"/>
         <source>w</source>
-        <translation></translation>
+        <translation>w</translation>
     </message>
     <message>
         <location filename="watchsettingswidget.cpp" line="77"/>
         <source>b</source>
-        <translation></translation>
+        <translation>b</translation>
     </message>
     <message>
         <location filename="watchsettingswidget.cpp" line="77"/>
         <source>q</source>
-        <translation></translation>
+        <translation>q</translation>
     </message>
 </context>
 </TS>

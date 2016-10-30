@@ -4,5 +4,7 @@
         <file>language_ru.qm</file>
         <file>language_tr.qm</file>
         <file>qt_tr.qm</file>
+        <file>language_zh.qm</file>
+        <file>qt_zh.qm</file>
     </qresource>
 </RCC>

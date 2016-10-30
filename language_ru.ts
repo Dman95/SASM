@@ -105,30 +105,30 @@
 <context>
     <name>Debugger</name>
     <message>
-        <location filename="debugger.cpp" line="150"/>
+        <location filename="debugger.cpp" line="152"/>
         <source>GDB error
 </source>
         <translation>Ошибка GDB
 </translation>
     </message>
     <message>
-        <location filename="debugger.cpp" line="213"/>
+        <location filename="debugger.cpp" line="215"/>
         <source>An error has occurred in the debugger. Please check the names of the sections.</source>
         <translation>Во время отладки произошла ошибка. Проверьте названия секций.</translation>
     </message>
     <message>
-        <location filename="debugger.cpp" line="568"/>
+        <location filename="debugger.cpp" line="570"/>
         <source>Entry point was not found! Entry point should have label &quot;main&quot; (if gcc linker is used) or &quot;start&quot; (otherwise).</source>
         <translation>Точка входа не найдена! Точка входа должна иметь метку &quot;main&quot; (если используется gcc) или &quot;start&quot; (в противном случае).</translation>
     </message>
     <message>
-        <location filename="debugger.cpp" line="580"/>
+        <location filename="debugger.cpp" line="582"/>
         <source>Executable sections were not found! </source>
         <oldsource>Executable sections were not found!</oldsource>
         <translation>Исполняемые секции не найдены! </translation>
     </message>
     <message>
-        <location filename="debugger.cpp" line="581"/>
+        <location filename="debugger.cpp" line="583"/>
         <source>For correct debugging executable sections should have name &quot;.text&quot; or &quot;.code&quot; (for MASM only).</source>
         <translation>Для правильной работы отладки секции с кодом должны называться &quot;.text&quot; или &quot;.code&quot; (только для MASM).</translation>
     </message>
@@ -238,189 +238,189 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="mainwindow.cpp" line="169"/>
+        <location filename="mainwindow.cpp" line="162"/>
         <source>Build log:</source>
         <oldsource>Build log:
 </oldsource>
         <translation>Результаты построения:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="189"/>
-        <location filename="mainwindow.cpp" line="494"/>
+        <location filename="mainwindow.cpp" line="182"/>
+        <location filename="mainwindow.cpp" line="487"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="200"/>
-        <location filename="mainwindow.cpp" line="500"/>
+        <location filename="mainwindow.cpp" line="193"/>
+        <location filename="mainwindow.cpp" line="493"/>
         <source>Edit</source>
         <translation>Правка</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="220"/>
-        <location filename="mainwindow.cpp" line="508"/>
+        <location filename="mainwindow.cpp" line="213"/>
+        <location filename="mainwindow.cpp" line="501"/>
         <source>Build</source>
         <translation>Построение</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="229"/>
-        <location filename="mainwindow.cpp" line="419"/>
-        <location filename="mainwindow.cpp" line="514"/>
-        <location filename="mainwindow.cpp" line="1225"/>
+        <location filename="mainwindow.cpp" line="222"/>
+        <location filename="mainwindow.cpp" line="412"/>
+        <location filename="mainwindow.cpp" line="507"/>
+        <location filename="mainwindow.cpp" line="1207"/>
         <source>Debug</source>
         <translation>Отладка</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="240"/>
-        <location filename="mainwindow.cpp" line="473"/>
+        <location filename="mainwindow.cpp" line="233"/>
+        <location filename="mainwindow.cpp" line="466"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="242"/>
-        <location filename="mainwindow.cpp" line="480"/>
-        <location filename="mainwindow.cpp" line="2204"/>
+        <location filename="mainwindow.cpp" line="235"/>
+        <location filename="mainwindow.cpp" line="473"/>
+        <location filename="mainwindow.cpp" line="2186"/>
         <source>Help</source>
         <translation>Помощь</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="251"/>
-        <location filename="mainwindow.cpp" line="583"/>
+        <location filename="mainwindow.cpp" line="244"/>
+        <location filename="mainwindow.cpp" line="576"/>
         <source>New</source>
         <translation>Новый</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="259"/>
+        <location filename="mainwindow.cpp" line="252"/>
         <source>Open</source>
         <translation>Открыть</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="267"/>
+        <location filename="mainwindow.cpp" line="260"/>
         <source>Close file</source>
         <translation>Закрыть файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="276"/>
+        <location filename="mainwindow.cpp" line="269"/>
         <source>Save</source>
         <translation>Сохранить</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="284"/>
+        <location filename="mainwindow.cpp" line="277"/>
         <source>Save as</source>
         <translation>Сохранить как</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="292"/>
+        <location filename="mainwindow.cpp" line="285"/>
         <source>Save .exe</source>
         <translation>Сохранить .exe</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="299"/>
+        <location filename="mainwindow.cpp" line="292"/>
         <source>Exit</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="307"/>
+        <location filename="mainwindow.cpp" line="300"/>
         <source>Find and replace</source>
         <translation>Поиск и замена</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="316"/>
+        <location filename="mainwindow.cpp" line="309"/>
         <source>Undo</source>
         <translation>Отменить</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="323"/>
+        <location filename="mainwindow.cpp" line="316"/>
         <source>Redo</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="330"/>
+        <location filename="mainwindow.cpp" line="323"/>
         <source>Cut</source>
         <translation>Вырезать</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="337"/>
+        <location filename="mainwindow.cpp" line="330"/>
         <source>Copy</source>
         <translation>Копировать</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="344"/>
+        <location filename="mainwindow.cpp" line="337"/>
         <source>Paste</source>
         <translation>Вставить</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="351"/>
+        <location filename="mainwindow.cpp" line="344"/>
         <source>Delete</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="358"/>
+        <location filename="mainwindow.cpp" line="351"/>
         <source>Select all</source>
         <translation>Выделить всё</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="365"/>
+        <location filename="mainwindow.cpp" line="358"/>
         <source>Comment</source>
         <translation>Закомментировать</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="372"/>
+        <location filename="mainwindow.cpp" line="365"/>
         <source>Remove comment</source>
         <translation>Раскомментировать</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="379"/>
+        <location filename="mainwindow.cpp" line="372"/>
         <source>Indent</source>
         <translation>Отступ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="386"/>
+        <location filename="mainwindow.cpp" line="379"/>
         <source>Remove indent</source>
         <translation>Убрать отступ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="395"/>
+        <location filename="mainwindow.cpp" line="388"/>
         <source>Build this</source>
         <translation>Построить</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="834"/>
+        <location filename="mainwindow.cpp" line="815"/>
         <source>Error! Program directory does not exist. Please reinstall the program.</source>
         <translation>Ошибка! Каталога программы не существует. Пожалуйста, переустановите программу.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="885"/>
+        <location filename="mainwindow.cpp" line="866"/>
         <source>Unable to start assembler. Check your settings.</source>
         <translation>Запустить исполняемый файл ассемблера не удалось! Проверьте настройки.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="940"/>
+        <location filename="mainwindow.cpp" line="921"/>
         <source>Unable to start linker. Check your settings.</source>
         <translation>Запустить исполняемый файл компоновщика не удалось! Проверьте настройки.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1164"/>
+        <location filename="mainwindow.cpp" line="1146"/>
         <source>Pause</source>
         <translation>Приостановить</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1871"/>
+        <location filename="mainwindow.cpp" line="1853"/>
         <source>Please set path to MASM assembler (ml.exe) and linker (link.exe) on your computer </source>
         <translation>Пожалуйста, укажите пути до ассемблера (ml.exe) и компоновщика (link.exe) MASM на Вашем компьютере </translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1872"/>
+        <location filename="mainwindow.cpp" line="1854"/>
         <source>in fields &quot;Assembler path&quot; and &quot;Linker path&quot; above.</source>
         <translation>в полях &quot;Ассемблер&quot; и &quot;Компоновщик&quot; выше.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2212"/>
+        <location filename="mainwindow.cpp" line="2194"/>
         <source>SASM (SimpleASM) </source>
         <translation>SASM (SimpleASM) </translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2213"/>
+        <location filename="mainwindow.cpp" line="2195"/>
         <source>simple Open Source IDE for NASM, MASM, GAS and FASM assembler languages.</source>
         <translation>простая Open Source среда разработки для языков ассемблера NASM, MASM, GAS и FASM.</translation>
     </message>
@@ -445,49 +445,49 @@
         <translation type="obsolete">Запустить</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="411"/>
+        <location filename="mainwindow.cpp" line="404"/>
         <source>Run in new window</source>
         <translation>Запустить в отдельном окне</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="414"/>
+        <location filename="mainwindow.cpp" line="407"/>
         <source>Stop</source>
         <translation>Остановить</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1169"/>
-        <location filename="mainwindow.cpp" line="1180"/>
-        <location filename="mainwindow.cpp" line="1193"/>
+        <location filename="mainwindow.cpp" line="1151"/>
+        <location filename="mainwindow.cpp" line="1162"/>
+        <location filename="mainwindow.cpp" line="1175"/>
         <source>Continue</source>
         <translation>Продолжить</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="436"/>
+        <location filename="mainwindow.cpp" line="429"/>
         <source>Step into</source>
         <translation>Шаг с заходом</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="428"/>
+        <location filename="mainwindow.cpp" line="421"/>
         <source>Step over</source>
         <translation>Шаг без захода</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="403"/>
+        <location filename="mainwindow.cpp" line="396"/>
         <source>Build and run</source>
         <translation>Построить и запустить</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="444"/>
+        <location filename="mainwindow.cpp" line="437"/>
         <source>Toggle breakpoint</source>
         <translation>Точка останова</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="452"/>
+        <location filename="mainwindow.cpp" line="445"/>
         <source>Show registers</source>
         <translation>Показать регистры</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="461"/>
+        <location filename="mainwindow.cpp" line="454"/>
         <source>Show memory</source>
         <translation>Показать память</translation>
     </message>
@@ -496,18 +496,18 @@
         <translation type="obsolete">Программа</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="700"/>
+        <location filename="mainwindow.cpp" line="681"/>
         <source>Execution files (*.exe);;All files (*.*)</source>
         <translation>Исполняемые файлы (*.exe);;Все файлы (*.*)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1056"/>
+        <location filename="mainwindow.cpp" line="1038"/>
         <source>The program finished normally. Execution time: %1 s</source>
         <oldsource>The program finished normally. Execution time: %1 ms</oldsource>
         <translation>Программа выполнена успешно. Время выполнения: %1 с</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1060"/>
+        <location filename="mainwindow.cpp" line="1042"/>
         <source>The program crashed! Execution time: %1 s</source>
         <oldsource>The program crashed! Execution time: %1 ms</oldsource>
         <translation>Программа завершена аварийно. Время выполнения: %1 с</translation>
@@ -525,30 +525,30 @@
         <translation type="obsolete">Команда gdb</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="488"/>
+        <location filename="mainwindow.cpp" line="481"/>
         <source>About</source>
         <translation>О программе</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="604"/>
+        <location filename="mainwindow.cpp" line="597"/>
         <source>Open file</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="605"/>
-        <location filename="mainwindow.cpp" line="676"/>
+        <location filename="mainwindow.cpp" line="598"/>
+        <location filename="mainwindow.cpp" line="657"/>
         <source>Assembler source files (*.asm);;All files (*.*)</source>
         <oldsource>Assembler source file (*.asm)
 All files (*.*)</oldsource>
         <translation>Исходные коды ассемблера (*.asm);;Все файлы (*.*)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="675"/>
+        <location filename="mainwindow.cpp" line="656"/>
         <source>Save file</source>
         <translation>Сохранить файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="699"/>
+        <location filename="mainwindow.cpp" line="680"/>
         <source>Save .exe file</source>
         <translation>Сохранить .exe</translation>
     </message>
@@ -559,30 +559,30 @@ All files (*.*)</source>
 Все файлы (*.*)</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="800"/>
-        <location filename="mainwindow.cpp" line="2113"/>
+        <location filename="mainwindow.cpp" line="781"/>
+        <location filename="mainwindow.cpp" line="2095"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="801"/>
+        <location filename="mainwindow.cpp" line="782"/>
         <source>No</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="802"/>
-        <location filename="mainwindow.cpp" line="2114"/>
+        <location filename="mainwindow.cpp" line="783"/>
+        <location filename="mainwindow.cpp" line="2096"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="803"/>
-        <location filename="mainwindow.cpp" line="804"/>
+        <location filename="mainwindow.cpp" line="784"/>
+        <location filename="mainwindow.cpp" line="785"/>
         <source>Save changes?</source>
         <translation>Сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="830"/>
+        <location filename="mainwindow.cpp" line="811"/>
         <source>Build started...</source>
         <oldsource>Build started...
 </oldsource>
@@ -593,17 +593,17 @@ All files (*.*)</source>
         <translation type="obsolete">Ошибка! Каталога NASM не существует. Пожалуйста, переустановите программу.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="835"/>
+        <location filename="mainwindow.cpp" line="816"/>
         <source>Directory NASM does not exist. Please reinstall the program.</source>
         <translation>Каталога NASM не существует. Пожалуйста, переустановите программу.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1000"/>
+        <location filename="mainwindow.cpp" line="981"/>
         <source>The program is already running.</source>
         <translation>Программа уже запущена.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1017"/>
+        <location filename="mainwindow.cpp" line="998"/>
         <source>The program is executing...</source>
         <translation>Программа выполняется...</translation>
     </message>
@@ -617,7 +617,7 @@ All files (*.*)</source>
         <translation type="obsolete">Программа завершена аварийно!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2217"/>
+        <location filename="mainwindow.cpp" line="2199"/>
         <source>Development and idea - Dmitriy Manushin</source>
         <translation>Идея и разработка - Дмитрий Манушин</translation>
     </message>
@@ -634,7 +634,7 @@ All files (*.*)</source>
         <translation type="obsolete">Integer</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1392"/>
+        <location filename="mainwindow.cpp" line="1374"/>
         <source>Registers</source>
         <translation>Регистры</translation>
     </message>
@@ -647,7 +647,7 @@ All files (*.*)</source>
         <translation type="obsolete">Ошибка! Каталога NASM не существует. Пожалуйста, переустановите программу.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="835"/>
+        <location filename="mainwindow.cpp" line="816"/>
         <source>Error!</source>
         <translation>Ошибка!</translation>
     </message>
@@ -656,14 +656,14 @@ All files (*.*)</source>
         <translation type="obsolete">Каталога NASM не существует. Пожалуйста, переустановите программу.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="967"/>
+        <location filename="mainwindow.cpp" line="948"/>
         <source>Warning! Errors have occurred in the build:</source>
         <oldsource>Warning! Errors have occurred in the build:
 </oldsource>
         <translation>Внимание! В ходе построения обнаружены ошибки:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2115"/>
+        <location filename="mainwindow.cpp" line="2097"/>
         <source>Warning!</source>
         <translation>Внимание!</translation>
     </message>
@@ -672,7 +672,7 @@ All files (*.*)</source>
         <translation type="obsolete">При построении программы обнаружены ошибки!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="982"/>
+        <location filename="mainwindow.cpp" line="963"/>
         <source>Built successfully.</source>
         <oldsource>Built successfully.
 </oldsource>
@@ -691,55 +691,55 @@ All files (*.*)</source>
         <translation type="obsolete">Программа выполнена.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1092"/>
+        <location filename="mainwindow.cpp" line="1074"/>
         <source>The program stopped.</source>
         <oldsource>The program stopped.
 </oldsource>
         <translation>Программа остановлена.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1094"/>
+        <location filename="mainwindow.cpp" line="1076"/>
         <source>The program is not running.</source>
         <translation>Программа не была запущена.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1138"/>
+        <location filename="mainwindow.cpp" line="1120"/>
         <source>Before debugging you need to build the program.</source>
         <oldsource>Before debugging you need to build the program.
 </oldsource>
         <translation>Перед отладкой следует построить программу.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1142"/>
+        <location filename="mainwindow.cpp" line="1124"/>
         <source>Debugging started...</source>
         <oldsource>Debugging started...
 </oldsource>
         <translation>Отладка началась...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1274"/>
+        <location filename="mainwindow.cpp" line="1256"/>
         <source>Memory</source>
         <translation>Память</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1463"/>
+        <location filename="mainwindow.cpp" line="1445"/>
         <source>Debugging finished.</source>
         <oldsource>Debugging finished.
 </oldsource>
         <translation>Отладка завершена.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1599"/>
+        <location filename="mainwindow.cpp" line="1581"/>
         <source>In the previous session was not open any of the saved tabs!</source>
         <translation>В предыдущей сессии не было открыто ни одной сохранённой вкладки!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2116"/>
+        <location filename="mainwindow.cpp" line="2098"/>
         <source>All settings will be deleted and all unsaved data will be lost. Are you sure?</source>
         <translation>Все настройки будут удалены, а несохранённые данные потеряны! Вы уверены?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2211"/>
+        <location filename="mainwindow.cpp" line="2193"/>
         <source>About SASM</source>
         <translation>О программе</translation>
     </message>
@@ -748,17 +748,17 @@ All files (*.*)</source>
         <translation type="obsolete">SASM (SimpleASM) 2.0 Beta - простая Open Source среда разработки на языке ассемблера NASM.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2214"/>
+        <location filename="mainwindow.cpp" line="2196"/>
         <source>Licensed under the GNU GPL v3.0</source>
         <translation>Распространяется по лицензии GNU GPL v3.0</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2215"/>
+        <location filename="mainwindow.cpp" line="2197"/>
         <source>Based on the Qt.</source>
         <translation>Основана на Qt.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2216"/>
+        <location filename="mainwindow.cpp" line="2198"/>
         <source>Copyright © 2013 Dmitriy Manushin</source>
         <oldsource>Copyright Â© 2013 Dmitriy Manushin</oldsource>
         <translation>Copyright © 2013 Дмитрий Манушин</translation>
@@ -768,12 +768,12 @@ All files (*.*)</source>
         <translation type="obsolete">Разработка - Dmitriy Manushin</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2218"/>
+        <location filename="mainwindow.cpp" line="2200"/>
         <source>Icon and advices - Alick Gaybullaev</source>
         <translation>Иконка и советы - Алик Гайбуллаев</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2219"/>
+        <location filename="mainwindow.cpp" line="2201"/>
         <source>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com</source>
         <oldsource>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com
 
@@ -781,27 +781,27 @@ All files (*.*)</source>
         <translation>Пожелания и сообщения об ошибках отправляйте на адрес Dman1095@gmail.com</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2220"/>
+        <location filename="mainwindow.cpp" line="2202"/>
         <source>More information on the site: http://dman95.github.io/SASM/</source>
         <translation>Сайт программы: http://dman95.github.io/SASM/</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2221"/>
+        <location filename="mainwindow.cpp" line="2203"/>
         <source>Donate:</source>
         <translation>Поддержите проект:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2222"/>
+        <location filename="mainwindow.cpp" line="2204"/>
         <source>PayPal - Dman1095@gmail.com</source>
         <translation>PayPal - Dman1095@gmail.com</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2223"/>
+        <location filename="mainwindow.cpp" line="2205"/>
         <source>WMZ - Z282016332582</source>
         <translation>WMZ - Z282016332582</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2224"/>
+        <location filename="mainwindow.cpp" line="2206"/>
         <source>WMR - R331674303467</source>
         <translation>WMR - R331674303467</translation>
     </message>
@@ -954,7 +954,7 @@ WMR - R331674303467</translation>
     <message>
         <location filename="settings.ui" line="51"/>
         <location filename="settings.ui" line="66"/>
-        <location filename="settings.ui" line="1563"/>
+        <location filename="settings.ui" line="1568"/>
         <source>Common</source>
         <translation>Общие</translation>
     </message>
@@ -996,27 +996,32 @@ WMR - R331674303467</translation>
         <translation>Турецкий (Türk)</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="180"/>
+        <location filename="settings.ui" line="153"/>
+        <source>Chinese (中国)</source>
+        <translation type="unfinished">Китайский (中国)</translation>
+    </message>
+    <message>
+        <location filename="settings.ui" line="185"/>
         <source>Show all registers in debug:</source>
         <translation>Показывать все регистры при отладке:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="187"/>
+        <location filename="settings.ui" line="192"/>
         <source>Yes</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="200"/>
+        <location filename="settings.ui" line="205"/>
         <source>No, show only general purpose</source>
         <translation>Нет, показывать только основные</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="230"/>
+        <location filename="settings.ui" line="235"/>
         <source>Insert debug string:</source>
         <translation>Добавлять отладочную строку:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="274"/>
+        <location filename="settings.ui" line="279"/>
         <source>Code editor</source>
         <translation>Редактор кода</translation>
     </message>
@@ -1037,206 +1042,206 @@ WMR - R331674303467</translation>
         <translation type="obsolete">Справа</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="423"/>
+        <location filename="settings.ui" line="428"/>
         <source>Colors</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="429"/>
+        <location filename="settings.ui" line="434"/>
         <source>Syntax highlighting</source>
         <translation>Подсветка синтаксиса</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="448"/>
+        <location filename="settings.ui" line="453"/>
         <source>System:</source>
         <translation>Препроцессор:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="554"/>
+        <location filename="settings.ui" line="559"/>
         <source>Bold:</source>
         <translation>Жирный:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="574"/>
+        <location filename="settings.ui" line="579"/>
         <source>Italic:</source>
         <translation>Курсив:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="581"/>
+        <location filename="settings.ui" line="586"/>
         <source>Foreground:</source>
         <translation>Текст:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="799"/>
+        <location filename="settings.ui" line="804"/>
         <source>Keywords:</source>
         <translation>Ключевые слова:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="806"/>
-        <location filename="settings.ui" line="1728"/>
+        <location filename="settings.ui" line="811"/>
+        <location filename="settings.ui" line="1733"/>
         <source>Background:</source>
         <translation>Фон:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="856"/>
+        <location filename="settings.ui" line="861"/>
         <source>Numbers:</source>
         <translation>Числа:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="906"/>
+        <location filename="settings.ui" line="911"/>
         <source>Labels:</source>
         <translation>Метки:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="913"/>
+        <location filename="settings.ui" line="918"/>
         <source>Comments:</source>
         <translation>Комментарии:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1006"/>
+        <location filename="settings.ui" line="1011"/>
         <source>Quotation:</source>
         <translation>Строки:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1319"/>
+        <location filename="settings.ui" line="1324"/>
         <source>Memory:</source>
         <translation>Память:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1326"/>
+        <location filename="settings.ui" line="1331"/>
         <source>I/O macro:</source>
         <translation>I/O макросы:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1359"/>
+        <location filename="settings.ui" line="1364"/>
         <source>Registers:</source>
         <translation>Регистры:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1671"/>
+        <location filename="settings.ui" line="1676"/>
         <source>Current line:</source>
         <translation>Текущая строка:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1678"/>
+        <location filename="settings.ui" line="1683"/>
         <source>Debugging line:</source>
         <translation>Строка отладки:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1778"/>
+        <location filename="settings.ui" line="1783"/>
         <source>Line number panel:</source>
         <translation>Панель с номерами строк:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1828"/>
+        <location filename="settings.ui" line="1833"/>
         <source>Line number font:</source>
         <translation>Номера строк:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1920"/>
+        <location filename="settings.ui" line="1925"/>
         <source>Build</source>
         <translation>Построение</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1931"/>
+        <location filename="settings.ui" line="1936"/>
         <source>Mode:</source>
         <translation>Режим:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1940"/>
+        <location filename="settings.ui" line="1945"/>
         <source>x86</source>
         <translation>x86</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1953"/>
+        <location filename="settings.ui" line="1958"/>
         <source>x64</source>
         <translation>x64</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1981"/>
+        <location filename="settings.ui" line="1986"/>
         <source>Assembler:</source>
         <translation>Ассемблер:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1990"/>
+        <location filename="settings.ui" line="1995"/>
         <source>NASM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2003"/>
+        <location filename="settings.ui" line="2008"/>
         <source>GAS</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2013"/>
+        <location filename="settings.ui" line="2018"/>
         <source>FASM</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2023"/>
+        <location filename="settings.ui" line="2028"/>
         <source>MASM</source>
         <translation>MASM</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2048"/>
+        <location filename="settings.ui" line="2053"/>
         <source>Assembly options:</source>
         <translation>Опции ассемблера:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2058"/>
+        <location filename="settings.ui" line="2063"/>
         <source>Linking options:</source>
         <translation>Опции компоновщика:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2068"/>
+        <location filename="settings.ui" line="2073"/>
         <source>Assembler path:</source>
         <translation>Ассемблер:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2078"/>
+        <location filename="settings.ui" line="2083"/>
         <source>Linker path:</source>
         <translation>Компоновщик:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2088"/>
+        <location filename="settings.ui" line="2093"/>
         <source>Disable linking:</source>
         <translation>Не запускать компоновщик:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2105"/>
+        <location filename="settings.ui" line="2110"/>
         <source>Object file name:</source>
         <translation>Имя объектного файла:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1621"/>
+        <location filename="settings.ui" line="1626"/>
         <source>Enable highlighting</source>
         <translation>Включить подсветку</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="171"/>
-        <location filename="settings.ui" line="343"/>
-        <location filename="settings.ui" line="1883"/>
+        <location filename="settings.ui" line="176"/>
+        <location filename="settings.ui" line="348"/>
+        <location filename="settings.ui" line="1888"/>
         <source>To apply the changes require a restart!</source>
         <translation>Для применения изменений необходим перезапуск!</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="282"/>
-        <location filename="settings.ui" line="1571"/>
+        <location filename="settings.ui" line="287"/>
+        <location filename="settings.ui" line="1576"/>
         <source>Font:</source>
         <translation>Шрифт:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="305"/>
+        <location filename="settings.ui" line="310"/>
         <source>Size:</source>
         <translation>Размер:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="369"/>
+        <location filename="settings.ui" line="374"/>
         <source>Default code editor text:</source>
         <translation>Начальный текст в поле кода:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="387"/>
+        <location filename="settings.ui" line="392"/>
         <source>Reset all (need a restart)...</source>
         <translation>Сбросить все настройки на начальные (требуется перезапуск) ...</translation>
     </message>

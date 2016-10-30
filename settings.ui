@@ -148,6 +148,11 @@
                 <string>Turkish (Türk)</string>
                </property>
               </item>
+              <item>
+               <property name="text">
+                <string>Chinese (中国)</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item>
@@ -2145,7 +2150,7 @@
  <connections/>
  <buttongroups>
   <buttongroup name="buttonGroup_2"/>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_3"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

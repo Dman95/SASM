@@ -87,4 +87,5 @@ RC_FILE = icon.rc
 
 CODECFORTR      = UTF-8
 TRANSLATIONS    += language_ru.ts \
-                   language_tr.ts
+                   language_tr.ts \
+                   language_zh.ts
