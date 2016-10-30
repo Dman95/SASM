@@ -125,8 +125,10 @@ void Debugger::readOutputToBuffer()
 {
     if (!process)
         return;
-    errorBuffer += process->readAllStandardError();
-    buffer += process->readAllStandardOutput();
+    QByteArray error = process->readAllStandardError();
+    errorBuffer += QString::fromLocal8Bit(error.constData(), error.size());
+    QByteArray output = process->readAllStandardOutput();
+    buffer += QString::fromLocal8Bit(output.constData(), output.size());
 }
 
 void Debugger::processOutput()
