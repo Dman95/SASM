@@ -1002,8 +1002,8 @@ WMR - R331674303467</translation>
     </message>
     <message>
         <location filename="settings.ui" line="158"/>
-        <source>German (Deutsche)</source>
-        <translation>Немецкий (Deutsche)</translation>
+        <source>German (Deutsch)</source>
+        <translation>Немецкий (Deutsch)</translation>
     </message>
     <message>
         <location filename="settings.ui" line="190"/>

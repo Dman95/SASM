@@ -781,7 +781,7 @@
     <message>
         <location filename="settings.ui" line="138"/>
         <source>Russian (Русский)</source>
-        <translation>Russe (Русский)</translation>
+        <translation>Russisch (Русский)</translation>
     </message>
     <message>
         <location filename="settings.ui" line="143"/>
@@ -800,8 +800,8 @@
     </message>
     <message>
         <location filename="settings.ui" line="158"/>
-        <source>German (Deutsche)</source>
-        <translation>Deutsche</translation>
+        <source>German (Deutsch)</source>
+        <translation>Deutsch</translation>
     </message>
     <message>
         <location filename="settings.ui" line="181"/>
