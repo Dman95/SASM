@@ -8,5 +8,7 @@
         <file>qt_zh.qm</file>
         <file>language_de.qm</file>
         <file>qt_de.qm</file>
+        <file>language_it.qm</file>
+        <file>qt_it.qm</file>
     </qresource>
 </RCC>
