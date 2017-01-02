@@ -18,3 +18,5 @@ ehthumbs.db
 Thumbs.db
 
 doc/*
+.qmake.stash
+sasm.app
