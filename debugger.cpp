@@ -431,107 +431,76 @@ void Debugger::processAction(QString output, QString error)
         registersInfo info;
         QSettings settings("SASM Project", "SASM");
 
+        QSet<QString> general;
+        QString ip;
+        QSet<QString> segment;
+        segment << "cs" << "ds" << "ss" << "es" << "fs" << "gs";
+        QSet<QString> flags;
+        flags << "eflags" << "mxcsr";
+        QSet<QString> fpu_info;
+        fpu_info << "fctrl" << "fstat" << "ftag" << "fiseg" << "fioff" << "foseg" << "fooff" << "fop";
+        QRegExp mmx("mm\\d+");
+        QRegExp xmm("xmm\\d+");
+        QRegExp ymm("ymm\\d+");
+        QRegExp fpu_stack("st\\d+");
+
         if (settings.value("mode", QString("x86")).toString() == "x86") {
-            QSet<QString> general;
+            //x86
             general << "eax" << "ebx" << "ecx" << "edx" << "esi" << "edi" << "esp" << "ebp";
-            QSet<QString> segment;
-            segment << "cs" << "ds" << "ss" << "es" << "fs" << "gs";
-            QSet<QString> flags;
-            flags << "eflags" << "mxcsr";
-            QRegExp fpu_stack("st[0-7]");
-            QSet<QString> fpu_info;
-            fpu_info << "fctrl" << "fstat" << "ftag" << "fiseg" << "fioff" << "foseg" << "fooff" << "fop";
+            ip = "eip";
+        } else {
+            //x64
+            general << "rax" << "rbx" << "rcx" << "rdx" << "rsi" << "rdi" << "rsp" << "rbp" <<
+                       "r8" << "r9" << "r10" << "r11" << "r12" << "r13" << "r14" << "r15";
+            ip = "rip";
+        }
 
-            QRegExp mmx("mm[0-7]");
-            QRegExp xmm("xmm[0-7]");
-            QRegExp ymm("ymm[0-7]");
+        for (int i = 0; !registersStream.atEnd(); i++) {
+            registersStream >> info.name;
 
-            for (int i = 0; !registersStream.atEnd(); i++) {
-                registersStream >> info.name;
+            if (info.name.isEmpty()) {
+                // last empty line
+                break;
+            }
 
-                if (info.name.isEmpty()) {
-                    // last empty line
+            if (general.contains(info.name) || segment.contains(info.name) || fpu_info.contains(info.name)) {
+                registersStream >> info.hexValue >> info.decValue;
+            } else if ((info.name == ip) || flags.contains(info.name) || fpu_stack.exactMatch(info.name)) {
+                registersStream >> info.hexValue;
+                registersStream.skipWhiteSpace();
+                info.decValue = registersStream.readLine();
+            } else if (mmx.exactMatch(info.name) || xmm.exactMatch(info.name) || ymm.exactMatch(info.name)) {
+                QMap<QString, QString> fields;
+
+                if (!readStruct(registersStream, &fields)) {
+                    // bad news
+                    emit printLog(QString("can not parse register data: ") + info.name + "\n", Qt::red);
                     break;
                 }
 
-                if (general.contains(info.name) || segment.contains(info.name) || fpu_info.contains(info.name)) {
-                    registersStream >> info.hexValue >> info.decValue;
+                if (mmx.exactMatch(info.name))
+                    info.decValue = fields["v8_int8"];
+                else if (xmm.exactMatch(info.name))
+                    info.decValue = fields["uint128"];
+                else if (ymm.exactMatch(info.name))
+                    info.decValue = fields["v2_int128"];
 
-                } else if ((info.name == "eip") || flags.contains(info.name) || fpu_stack.exactMatch(info.name)) {
-                    registersStream >> info.hexValue;
-                    registersStream.skipWhiteSpace();
-                    info.decValue = registersStream.readLine();
-
-                } else if (mmx.exactMatch(info.name) || xmm.exactMatch(info.name) || ymm.exactMatch(info.name)) {
-                    QMap<QString, QString> fields;
-
-                    if (!readStruct(registersStream, &fields)) {
-                        // bad news
-                        emit printLog(QString("can not parse register data: ") + info.name + "\n", Qt::red);
-                        break;
-                    }
-
-                    if (mmx.exactMatch(info.name))
-                        info.decValue = fields["v8_int8"];
-                    else if (xmm.exactMatch(info.name))
-                        info.decValue = fields["uint128"];
-                    else if (ymm.exactMatch(info.name))
-                        info.decValue = fields["v2_int128"];
-
-                    info.hexValue = "";
-
-                } else {
-                    // unknown register, try to skip it.
-                    // if register data occupy multiple lines it may couse multiple messages
-                    registersStream.readLine();
-                    emit printLog(QString("unknown register: ") + info.name + "\n", Qt::red);
-                    continue;
-                }
-
-                registers.append(info);
-                if (i == 0 && info.name != "eax" && registersOk) {
-                    doInput(QString("info registers\n"), infoRegisters);
-                    registersOk = false;
-                    return;
-                }
+                info.hexValue = "";
+            } else {
+                // unknown register, try to skip it.
+                registersStream.readLine();
+                emit printLog(QString("unknown register: ") + info.name + "\n", Qt::red);
+                continue;
             }
 
-        } else { //x64
-            int count = 24;
-            if (settings.value("allregisters", false).toBool())
-                count += 33;
-            for (int i = 0; i < count; i++) {
-                if (i == 17 || (i >= 24 && i <= 31) || i == 56) {
-                    registersStream >> info.name >> info.hexValue;
-                    registersStream.skipWhiteSpace();
-                    info.decValue = registersStream.readLine();
-                } else if (i == 16) {
-                    registersStream >> info.name >> info.hexValue;
-                    registersStream.skipWhiteSpace();
-                    char c;
-                    registersStream >> c;
-                    while (c != ' ')
-                        registersStream >> c;
-                    info.decValue = registersStream.readLine();
-                } else if (i >= 40 && i <= 55) {
-                    registersStream >> info.name;
-                    QRegExp r("uint128 = 0x[0-9a-fA-F]+");
-                    QString s = registersStream.readLine();
-                    while (r.indexIn(s) == -1)
-                        s = registersStream.readLine();
-                    info.decValue = r.capturedTexts().at(0).mid(QString("uint128 = ").length());
-                    info.hexValue = "";
-                } else {
-                    registersStream >> info.name >> info.hexValue >> info.decValue;
-                }
-                registers.append(info);
-                if (i == 0 && info.name != "rax" && registersOk) {
-                    doInput(QString("info registers\n"), infoRegisters);
-                    registersOk = false;
-                    return;
-                }
+            registers.append(info);
+            if (i == 0 && info.name != "eax" && info.name != "rax" && registersOk) {
+                doInput(QString("info registers\n"), infoRegisters);
+                registersOk = false;
+                return;
             }
         }
+
         emit printRegisters(registers);
         return;
     }
