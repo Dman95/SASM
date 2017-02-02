@@ -81,20 +81,20 @@
 <context>
     <name>Debugger</name>
     <message>
-        <location filename="debugger.cpp" line="152"/>
+        <location filename="debugger.cpp" line="160"/>
         <source>GDB error
 </source>
         <translation>Errore GDB</translation>
     </message>
     <message>
-        <location filename="debugger.cpp" line="215"/>
+        <location filename="debugger.cpp" line="223"/>
         <source>An error has occurred in the debugger. Please check the names of the sections.</source>
         <translation>Errore nel debugger. Controlla i nomi dei segmenti.</translation>
     </message>
     <message>
         <location filename="debugger.cpp" line="570"/>
         <source>Entry point was not found! Entry point should have label &quot;main&quot; (if gcc linker is used) or &quot;start&quot; (otherwise).</source>
-        <translation>Manca il punto d'entrata! Deve essere &quot;main&quot; (linker gcc) o &quot;start&quot; (altri linker).</translation>
+        <translation>Manca il punto d&apos;entrata! Deve essere &quot;main&quot; (linker gcc) o &quot;start&quot; (altri linker).</translation>
     </message>
     <message>
         <location filename="debugger.cpp" line="582"/>
@@ -448,7 +448,7 @@
     <message>
         <location filename="mainwindow.cpp" line="815"/>
         <source>Error! Program directory does not exist. Please reinstall the program.</source>
-        <translation>Errore! L'elenco di programmi non esiste. Installa il programma di nuovo.</translation>
+        <translation>Errore! L&apos;elenco di programmi non esiste. Installa il programma di nuovo.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="816"/>
@@ -458,12 +458,12 @@
     <message>
         <location filename="mainwindow.cpp" line="816"/>
         <source>Directory NASM does not exist. Please reinstall the program.</source>
-        <translation>L'elenco di NASM non esiste. Installa il programma di nuovo.</translation>
+        <translation>L&apos;elenco di NASM non esiste. Installa il programma di nuovo.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="866"/>
         <source>Unable to start assembler. Check your settings.</source>
-        <translation>L'assembler non è lanciabile. Controlla le impostazioni.</translation>
+        <translation>L&apos;assembler non è lanciabile. Controlla le impostazioni.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="921"/>
@@ -615,7 +615,7 @@
     <message>
         <location filename="mainwindow.cpp" line="2201"/>
         <source>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com</source>
-        <translation>Richieste e segnalazioni d'errore mandale all'e-mail seguante: Dman1095@gmail.com</translation>
+        <translation>Richieste e segnalazioni d&apos;errore mandale all&apos;e-mail seguante: Dman1095@gmail.com</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2202"/>
@@ -754,7 +754,7 @@
     <message>
         <location filename="settings.ui" line="51"/>
         <location filename="settings.ui" line="66"/>
-        <location filename="settings.ui" line="1573"/>
+        <location filename="settings.ui" line="1578"/>
         <source>Common</source>
         <translation>Generale</translation>
     </message>
@@ -766,7 +766,7 @@
     <message>
         <location filename="settings.ui" line="100"/>
         <source>Open get started window</source>
-        <translation>Apri finestra all'inizio</translation>
+        <translation>Apri finestra all&apos;inizio</translation>
     </message>
     <message>
         <location filename="settings.ui" line="105"/>
@@ -779,37 +779,33 @@
         <translation>Lingua:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="138"/>
-        <source>Russian (Русский)</source>
-        <translation>Russo (Русский)</translation>
+        <source>Русский</source>
+        <oldsource>Russian (Русский)</oldsource>
+        <translation type="obsolete">Russo (Русский)</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="143"/>
         <source>English</source>
-        <translation>Inglese (English)</translation>
+        <translation type="vanished">Inglese (English)</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="148"/>
         <source>Turkish (Türk)</source>
-        <translation>Turco (Türk)</translation>
+        <translation type="vanished">Turco (Türk)</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="153"/>
         <source>Chinese (中国)</source>
-        <translation>Cinese (中国)</translation>
+        <translation type="vanished">Cinese (中国)</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="158"/>
         <source>German (Deutsche)</source>
-        <translation>Tedesco</translation>
+        <translation type="vanished">Tedesco</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="163"/>
-        <source>Italian (Italiano)</source>
-        <translation>Italiano</translation>
+        <source>Italiano</source>
+        <oldsource>Italian (Italiano)</oldsource>
+        <translation type="obsolete">Italiano</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="181"/>
+        <location filename="settings.ui" line="186"/>
         <location filename="settings.ui" line="358"/>
         <location filename="settings.ui" line="1898"/>
         <source>To apply the changes require a restart!</source>
@@ -847,14 +843,14 @@
         <translation>Font:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="315"/>
+        <location filename="settings.ui" line="320"/>
         <source>Size:</source>
         <translation>Misura:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="379"/>
+        <location filename="settings.ui" line="384"/>
         <source>Default code editor text:</source>
-        <translation>Testo standard d'editore codice:</translation>
+        <translation>Testo standard d&apos;editore codice:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="402"/>
@@ -867,173 +863,173 @@
         <translation>Colori</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="439"/>
+        <location filename="settings.ui" line="444"/>
         <source>Syntax highlighting</source>
         <translation>Syntax highlighting</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="458"/>
+        <location filename="settings.ui" line="463"/>
         <source>System:</source>
         <translation>Sistema:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="564"/>
+        <location filename="settings.ui" line="569"/>
         <source>Bold:</source>
         <translation>Baldo:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="584"/>
+        <location filename="settings.ui" line="589"/>
         <source>Italic:</source>
         <translation>Corsivo:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="591"/>
+        <location filename="settings.ui" line="596"/>
         <source>Foreground:</source>
         <translation>Primo piano:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="809"/>
+        <location filename="settings.ui" line="814"/>
         <source>Keywords:</source>
         <translation>Parole chiavi:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="816"/>
-        <location filename="settings.ui" line="1738"/>
+        <location filename="settings.ui" line="821"/>
+        <location filename="settings.ui" line="1743"/>
         <source>Background:</source>
         <translation>Sfondo:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="866"/>
+        <location filename="settings.ui" line="871"/>
         <source>Numbers:</source>
         <translation>Numeri:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="916"/>
+        <location filename="settings.ui" line="921"/>
         <source>Labels:</source>
         <translation>Marchi:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="923"/>
+        <location filename="settings.ui" line="928"/>
         <source>Comments:</source>
         <translation>Commenti:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1016"/>
+        <location filename="settings.ui" line="1021"/>
         <source>Quotation:</source>
         <translation>Quotazione:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1329"/>
+        <location filename="settings.ui" line="1334"/>
         <source>Memory:</source>
         <translation>Memoria:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1336"/>
+        <location filename="settings.ui" line="1341"/>
         <source>I/O macro:</source>
         <translation>Macro I/O:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1369"/>
+        <location filename="settings.ui" line="1374"/>
         <source>Registers:</source>
         <translation>Registri:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1631"/>
+        <location filename="settings.ui" line="1636"/>
         <source>Enable highlighting</source>
         <translation>Accentua</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1681"/>
+        <location filename="settings.ui" line="1686"/>
         <source>Current line:</source>
         <translation>Riga attuale:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1688"/>
+        <location filename="settings.ui" line="1693"/>
         <source>Debugging line:</source>
         <translation>Riga debug:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1788"/>
+        <location filename="settings.ui" line="1793"/>
         <source>Line number panel:</source>
         <translation>Numero riga panel:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1838"/>
+        <location filename="settings.ui" line="1843"/>
         <source>Line number font:</source>
         <translation>Numero riga font:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1930"/>
+        <location filename="settings.ui" line="1935"/>
         <source>Build</source>
         <translation>Compila</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1941"/>
+        <location filename="settings.ui" line="1946"/>
         <source>Mode:</source>
         <translation>Modo:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1950"/>
+        <location filename="settings.ui" line="1955"/>
         <source>x86</source>
         <translation>x86</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1963"/>
+        <location filename="settings.ui" line="1968"/>
         <source>x64</source>
         <translation>x64</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1991"/>
+        <location filename="settings.ui" line="1996"/>
         <source>Assembler:</source>
         <translation>Assembler:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2000"/>
+        <location filename="settings.ui" line="2005"/>
         <source>NASM</source>
         <translation>NASM</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2013"/>
+        <location filename="settings.ui" line="2018"/>
         <source>GAS</source>
         <translation>GAS</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2023"/>
+        <location filename="settings.ui" line="2028"/>
         <source>FASM</source>
         <translation>FASM</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2033"/>
+        <location filename="settings.ui" line="2038"/>
         <source>MASM</source>
         <translation>MASM</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2058"/>
+        <location filename="settings.ui" line="2063"/>
         <source>Assembly options:</source>
         <translation>Impostazioni assembler:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2068"/>
+        <location filename="settings.ui" line="2073"/>
         <source>Linking options:</source>
         <translation>Impostazioni linker:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2078"/>
+        <location filename="settings.ui" line="2083"/>
         <source>Assembler path:</source>
         <translation>Percorso assembler:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2088"/>
+        <location filename="settings.ui" line="2093"/>
         <source>Linker path:</source>
         <translation>Percorso linker:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2098"/>
+        <location filename="settings.ui" line="2103"/>
         <source>Disable linking:</source>
         <translation>Disattiva linker:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2115"/>
+        <location filename="settings.ui" line="2120"/>
         <source>Object file name:</source>
         <translation>Nome di file oggetto:</translation>
     </message>

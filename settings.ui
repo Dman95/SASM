@@ -135,32 +135,32 @@
              <widget class="QComboBox" name="language">
               <item>
                <property name="text">
-                <string>Russian (Русский)</string>
+                <string notr="true">Русский</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>English</string>
+                <string notr="true">English</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Turkish (Türk)</string>
+                <string notr="true">Türk</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Chinese (中国)</string>
+                <string notr="true">中国</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>German (Deutsch)</string>
+                <string notr="true">Deutsch</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Italian (Italiano)</string>
+                <string notr="true">Italiano</string>
                </property>
               </item>
              </widget>

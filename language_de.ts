@@ -81,13 +81,13 @@
 <context>
     <name>Debugger</name>
     <message>
-        <location filename="debugger.cpp" line="152"/>
+        <location filename="debugger.cpp" line="160"/>
         <source>GDB error
 </source>
         <translation>GDB Fehler</translation>
     </message>
     <message>
-        <location filename="debugger.cpp" line="215"/>
+        <location filename="debugger.cpp" line="223"/>
         <source>An error has occurred in the debugger. Please check the names of the sections.</source>
         <translation>Fehler im Debugger. Bitte die Namen der Segmente prüfen.</translation>
     </message>
@@ -754,7 +754,7 @@
     <message>
         <location filename="settings.ui" line="51"/>
         <location filename="settings.ui" line="66"/>
-        <location filename="settings.ui" line="1573"/>
+        <location filename="settings.ui" line="1578"/>
         <source>Common</source>
         <translation>Allgemein</translation>
     </message>
@@ -779,256 +779,253 @@
         <translation>Sprache:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="138"/>
-        <source>Russian (Русский)</source>
-        <translation>Russisch (Русский)</translation>
+        <source>Русский</source>
+        <oldsource>Russian (Русский)</oldsource>
+        <translation type="obsolete">Russisch (Русский)</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="143"/>
         <source>English</source>
-        <translation>Englisch (English)</translation>
+        <translation type="vanished">Englisch (English)</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="148"/>
         <source>Turkish (Türk)</source>
-        <translation>Türkisch (Türk)</translation>
+        <translation type="vanished">Türkisch (Türk)</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="153"/>
         <source>Chinese (中国)</source>
-        <translation>Chinesisch (中国)</translation>
+        <translation type="vanished">Chinesisch (中国)</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="158"/>
-        <source>German (Deutsch)</source>
-        <translation>Deutsch</translation>
+        <source>Deutsch</source>
+        <oldsource>German (Deutsch)</oldsource>
+        <translation type="obsolete">Deutsch</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="181"/>
-        <location filename="settings.ui" line="353"/>
-        <location filename="settings.ui" line="1893"/>
+        <location filename="settings.ui" line="186"/>
+        <location filename="settings.ui" line="358"/>
+        <location filename="settings.ui" line="1898"/>
         <source>To apply the changes require a restart!</source>
         <translation>Die Änderungen erfordern einen Neustart!</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="190"/>
+        <location filename="settings.ui" line="195"/>
         <source>Show all registers in debug:</source>
         <translation>Alle Register beim Debuggen anzeigen:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="197"/>
+        <location filename="settings.ui" line="202"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="210"/>
+        <location filename="settings.ui" line="215"/>
         <source>No, show only general purpose</source>
         <translation>Nein, nur die Wichtigsten anzeigen</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="240"/>
+        <location filename="settings.ui" line="245"/>
         <source>Insert debug string:</source>
         <translation>Debug String einfügen:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="284"/>
+        <location filename="settings.ui" line="289"/>
         <source>Code editor</source>
         <translation>Code Editor</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="292"/>
-        <location filename="settings.ui" line="1581"/>
+        <location filename="settings.ui" line="297"/>
+        <location filename="settings.ui" line="1586"/>
         <source>Font:</source>
         <translation>Schriftart:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="315"/>
+        <location filename="settings.ui" line="320"/>
         <source>Size:</source>
         <translation>Größe:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="379"/>
+        <location filename="settings.ui" line="384"/>
         <source>Default code editor text:</source>
         <translation>Standard Code Editor Text:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="397"/>
+        <location filename="settings.ui" line="402"/>
         <source>Reset all (need a restart)...</source>
         <translation>Alles wiederherstellen (Neustart erforderlich)...</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="433"/>
+        <location filename="settings.ui" line="438"/>
         <source>Colors</source>
         <translation>Farben</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="439"/>
+        <location filename="settings.ui" line="444"/>
         <source>Syntax highlighting</source>
         <translation>Syntax Highlighting</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="458"/>
+        <location filename="settings.ui" line="463"/>
         <source>System:</source>
         <translation>System:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="564"/>
+        <location filename="settings.ui" line="569"/>
         <source>Bold:</source>
         <translation>Fett:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="584"/>
+        <location filename="settings.ui" line="589"/>
         <source>Italic:</source>
         <translation>Kursiv:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="591"/>
+        <location filename="settings.ui" line="596"/>
         <source>Foreground:</source>
         <translation>Vordergrund:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="809"/>
+        <location filename="settings.ui" line="814"/>
         <source>Keywords:</source>
         <translation>Keywörter:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="816"/>
-        <location filename="settings.ui" line="1738"/>
+        <location filename="settings.ui" line="821"/>
+        <location filename="settings.ui" line="1743"/>
         <source>Background:</source>
         <translation>Hintergrund:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="866"/>
+        <location filename="settings.ui" line="871"/>
         <source>Numbers:</source>
         <translation>Nummern:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="916"/>
+        <location filename="settings.ui" line="921"/>
         <source>Labels:</source>
         <translation>Labels:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="923"/>
+        <location filename="settings.ui" line="928"/>
         <source>Comments:</source>
         <translation>Kommentare:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1016"/>
+        <location filename="settings.ui" line="1021"/>
         <source>Quotation:</source>
         <translation>Strings:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1329"/>
+        <location filename="settings.ui" line="1334"/>
         <source>Memory:</source>
         <translation>Speicher:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1336"/>
+        <location filename="settings.ui" line="1341"/>
         <source>I/O macro:</source>
         <translation>E/A Makro:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1369"/>
+        <location filename="settings.ui" line="1374"/>
         <source>Registers:</source>
         <translation>Register:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1631"/>
+        <location filename="settings.ui" line="1636"/>
         <source>Enable highlighting</source>
         <translation>Hervorheben</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1681"/>
+        <location filename="settings.ui" line="1686"/>
         <source>Current line:</source>
         <translation>Aktuelle Zeile:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1688"/>
+        <location filename="settings.ui" line="1693"/>
         <source>Debugging line:</source>
         <translation>Debug Zeile:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1788"/>
+        <location filename="settings.ui" line="1793"/>
         <source>Line number panel:</source>
         <translation>Zeilennummer Panel:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1838"/>
+        <location filename="settings.ui" line="1843"/>
         <source>Line number font:</source>
         <translation>Zeilennummer Schrift:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1930"/>
+        <location filename="settings.ui" line="1935"/>
         <source>Build</source>
         <translation>Erstellen</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1941"/>
+        <location filename="settings.ui" line="1946"/>
         <source>Mode:</source>
         <translation>Modus:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1950"/>
+        <location filename="settings.ui" line="1955"/>
         <source>x86</source>
         <translation>x86</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1963"/>
+        <location filename="settings.ui" line="1968"/>
         <source>x64</source>
         <translation>x64</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="1991"/>
+        <location filename="settings.ui" line="1996"/>
         <source>Assembler:</source>
         <translation>Assembler:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2000"/>
+        <location filename="settings.ui" line="2005"/>
         <source>NASM</source>
         <translation>NASM</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2013"/>
+        <location filename="settings.ui" line="2018"/>
         <source>GAS</source>
         <translation>GAS</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2023"/>
+        <location filename="settings.ui" line="2028"/>
         <source>FASM</source>
         <translation>FASM</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2033"/>
+        <location filename="settings.ui" line="2038"/>
         <source>MASM</source>
         <translation>MASM</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2058"/>
+        <location filename="settings.ui" line="2063"/>
         <source>Assembly options:</source>
         <translation>Assembler Einstellungen:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2068"/>
+        <location filename="settings.ui" line="2073"/>
         <source>Linking options:</source>
         <translation>Linker Einstellungen:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2078"/>
+        <location filename="settings.ui" line="2083"/>
         <source>Assembler path:</source>
         <translation>Assembler Pfad:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2088"/>
+        <location filename="settings.ui" line="2093"/>
         <source>Linker path:</source>
         <translation>Linker Pfad:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2098"/>
+        <location filename="settings.ui" line="2103"/>
         <source>Disable linking:</source>
         <translation>Linken ausschalten:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2115"/>
+        <location filename="settings.ui" line="2120"/>
         <source>Object file name:</source>
         <translation>Objektdatei Name:</translation>
     </message>
