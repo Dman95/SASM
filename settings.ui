@@ -158,6 +158,11 @@
                 <string>German (Deutsch)</string>
                </property>
               </item>
+              <item>
+               <property name="text">
+                <string>Italian (Italiano)</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item>
