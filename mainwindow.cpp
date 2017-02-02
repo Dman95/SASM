@@ -858,7 +858,16 @@ void MainWindow::buildProgram(bool debugMode)
     QString assemblerOutput = Common::pathInTemp("compilererror.txt");
     assemblerProcess.setStandardOutputFile(assemblerOutput);
     assemblerProcess.setStandardErrorFile(assemblerOutput, QIODevice::Append);
-    assemblerProcess.setWorkingDirectory(applicationDataPath() + "/include");
+    bool currentDir = settings.value("currentdir", false).toBool();
+    if (currentDir) {
+        QString path = currentTab->getCurrentFilePath();
+        if (!path.isEmpty()) {
+            QString dirPath = QFileInfo(path).absoluteDir().absolutePath();
+            assemblerProcess.setWorkingDirectory(dirPath);
+        }
+    } else {
+        assemblerProcess.setWorkingDirectory(applicationDataPath() + "/include");
+    }
     assemblerProcess.start(assemblerPath, assemblerArguments);
     assemblerProcess.waitForFinished();
 
@@ -1803,6 +1812,8 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
 
     settingsUi.disableLinkingCheckbox->setChecked(settings.value("disablelinking", false).toBool());
 
+    settingsUi.runInCurrentDirectoryCheckbox->setChecked(settings.value("currentdir", false).toBool());
+
     QString assemblerPath = assembler->getAssemblerPath();
     settingsUi.assemblerPathEdit->setText(settings.value("assemblerpath", assemblerPath).toString());
 
@@ -1937,12 +1948,14 @@ void MainWindow::recreateAssembler(bool start)
         settingsUi.linkingOptionsEdit->setText(assembler->getLinkerOptions());
         settingsUi.objectFileNameEdit->setText("program.o");
         settingsUi.disableLinkingCheckbox->setChecked(false);
+        settingsUi.runInCurrentDirectoryCheckbox->setChecked(false);
         settingsUi.assemblerPathEdit->setText(assembler->getAssemblerPath());
         settingsUi.linkerPathEdit->setText(assembler->getLinkerPath());
         settings.setValue("assemblyoptions", assembler->getAssemblerOptions());
         settings.setValue("linkingoptions", assembler->getLinkerOptions());
         settings.setValue("objectfilename", "program.o");
         settings.setValue("disablelinking", false);
+        settings.setValue("currentdir", false);
         settings.setValue("assemblerpath", assembler->getAssemblerPath());
         settings.setValue("linkerpath", assembler->getLinkerPath());
         changeStartText();
@@ -1965,6 +1978,7 @@ void MainWindow::backupSettings()
     backupLinkerOptions = settings.value("linkingoptions", assembler->getLinkerOptions()).toString();
     backupObjectFileName = settings.value("objectfilename", "program.o").toString();
     backupDisableLinking = settings.value("disablelinking", false).toBool();
+    backupCurrentDir = settings.value("currentdir", false).toBool();
     backupStartText = settings.value("starttext", assembler->getStartText()).toString();
     backupLinkerPath = settings.value("linkerpath", assembler->getLinkerPath()).toString();
 }
@@ -1979,6 +1993,7 @@ void MainWindow::restoreSettingsAndExit()
     settings.setValue("linkingoptions", backupLinkerOptions);
     settings.setValue("objectfilename", backupObjectFileName);
     settings.setValue("disablelinking", backupDisableLinking);
+    settings.setValue("currentdir", backupCurrentDir);
     settings.setValue("starttext", backupStartText);
     settings.setValue("linkerpath", backupLinkerPath);
     settingsWindow->close();
@@ -2022,6 +2037,7 @@ void MainWindow::saveSettings()
     settings.setValue("linkingoptions", settingsUi.linkingOptionsEdit->text());
     settings.setValue("objectfilename", settingsUi.objectFileNameEdit->text());
     settings.setValue("disablelinking", settingsUi.disableLinkingCheckbox->isChecked());
+    settings.setValue("currentdir", settingsUi.runInCurrentDirectoryCheckbox->isChecked());
     settings.setValue("assemblerpath", settingsUi.assemblerPathEdit->text());
     settings.setValue("linkerpath", settingsUi.linkerPathEdit->text());
     settings.setValue("starttext", settingsStartTextEditor->document()->toPlainText());

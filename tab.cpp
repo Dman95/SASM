@@ -46,7 +46,8 @@
  */
 
 Tab::Tab(QWidget *parent) :
-    QMainWindow(parent)
+    QMainWindow(parent),
+    currentFilePath("")
 {
     //! Setting code field
     code = new CodeEditor;

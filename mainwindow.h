@@ -210,6 +210,7 @@ private:
     QString backupLinkerOptions;
     QString backupObjectFileName;
     bool backupDisableLinking;
+    bool backupCurrentDir;
     QString backupAssemblerPath;
     QString backupStartText;
     QString backupLinkerPath;
