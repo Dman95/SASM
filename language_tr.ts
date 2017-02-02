@@ -802,8 +802,8 @@
     </message>
     <message>
         <location filename="settings.ui" line="158"/>
-        <source>German (Deutsche)</source>
-        <translation>Almanca (Deutsche)</translation>
+        <source>German (Deutsch)</source>
+        <translation>Almanca (Deutsch)</translation>
     </message>
     <message>
         <location filename="settings.ui" line="181"/>
