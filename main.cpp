@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
         QPushButton *engButton = msgBox.addButton(QString("English"), QMessageBox::NoRole);
         QPushButton *turButton = msgBox.addButton(QString("Türk"), QMessageBox::NoRole);
         QPushButton *chiButton = msgBox.addButton(QString("中国"), QMessageBox::NoRole);
-        QPushButton *gerButton = msgBox.addButton(QString("Deutsche"), QMessageBox::NoRole);
+        QPushButton *gerButton = msgBox.addButton(QString("Deutsch"), QMessageBox::NoRole);
         QPushButton *itaButton = msgBox.addButton(QString("Italiano"), QMessageBox::NoRole);
         msgBox.setWindowTitle(QString("Choose language"));
         msgBox.setText(QString("Choose language / Выберите язык / Dil seçin / 选择你的语言 / Sprache auswählen / Scegli lingua"));

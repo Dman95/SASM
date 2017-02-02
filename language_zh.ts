@@ -800,8 +800,8 @@
     </message>
     <message>
         <location filename="settings.ui" line="158"/>
-        <source>German (Deutsche)</source>
-        <translation>德语 (Deutsche)</translation>
+        <source>German (Deutsch)</source>
+        <translation>德语 (Deutsch)</translation>
     </message>
     <message>
         <location filename="settings.ui" line="181"/>

@@ -45,6 +45,14 @@
  * Sets debugger information and runs the debugger.
  */
 
+namespace {
+    // read struct like {<name1> = <value1>, ,,, <nameN> = <valueN>}
+    // from stream. Values may be simple or complex, like {v1, v2, v3 .. }
+    // all i have to be simple, two-level complex values unsupported
+    bool readStruct(QTextStream& str, QMap<QString, QString>* map);
+}
+
+
 Debugger::Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler *assembler, QWidget *parent)
     : QObject(parent)
 {
@@ -422,85 +430,77 @@ void Debugger::processAction(QString output, QString error)
         QList<registersInfo> registers;
         registersInfo info;
         QSettings settings("SASM Project", "SASM");
+
+        QSet<QString> general;
+        QString ip;
+        QSet<QString> segment;
+        segment << "cs" << "ds" << "ss" << "es" << "fs" << "gs";
+        QSet<QString> flags;
+        flags << "eflags" << "mxcsr";
+        QSet<QString> fpu_info;
+        fpu_info << "fctrl" << "fstat" << "ftag" << "fiseg" << "fioff" << "foseg" << "fooff" << "fop";
+        QRegExp mmx("mm\\d+");
+        QRegExp xmm("xmm\\d+");
+        QRegExp ymm("ymm\\d+");
+        QRegExp fpu_stack("st\\d+");
+
         if (settings.value("mode", QString("x86")).toString() == "x86") {
-            int count = 16;
-            if (settings.value("allregisters", false).toBool())
-                count += 33;
-            for (int i = 0; i < count; i++) {
-                if (i == 8 || i == 9 || (i >= 16 && i <= 23) || i == 40) {
-                    registersStream >> info.name >> info.hexValue;
-                    registersStream.skipWhiteSpace();
-                    info.decValue = registersStream.readLine();
-                } else if (i >= 32 && i <= 39) {
-                    registersStream >> info.name;
-                    QRegExp r("uint128 = 0x[0-9a-fA-F]+");
-                    QString s = registersStream.readLine();
-                    while (r.indexIn(s) == -1)
-                        s = registersStream.readLine();
-                    info.decValue = r.capturedTexts().at(0).mid(QString("uint128 = ").length());
-                    info.hexValue = "";
-                } else if (i >= 41) {
-                    registersStream >> info.name;
-                    QString endLine("}}");
-                    QString s = "";
-                    do {
-                        s += registersStream.readLine();
-                    } while (!s.contains(endLine));
-                    s = s.simplified();
-                    QRegExp r("v8_int8 = (\\{.*\\})");
-                    r.setMinimal(true);
-                    if (r.indexIn(s) != -1) {
-                        info.decValue = r.cap(1);
-                    } else {
-                        info.decValue = "";
-                    }
-                    info.hexValue = "";
-                } else {
-                    registersStream >> info.name >> info.hexValue >> info.decValue;
-                }
-                registers.append(info);
-                if (i == 0 && info.name != "eax" && registersOk) {
-                    doInput(QString("info registers\n"), infoRegisters);
-                    registersOk = false;
-                    return;
-                }
+            //x86
+            general << "eax" << "ebx" << "ecx" << "edx" << "esi" << "edi" << "esp" << "ebp";
+            ip = "eip";
+        } else {
+            //x64
+            general << "rax" << "rbx" << "rcx" << "rdx" << "rsi" << "rdi" << "rsp" << "rbp" <<
+                       "r8" << "r9" << "r10" << "r11" << "r12" << "r13" << "r14" << "r15";
+            ip = "rip";
+        }
+
+        for (int i = 0; !registersStream.atEnd(); i++) {
+            registersStream >> info.name;
+
+            if (info.name.isEmpty()) {
+                // last empty line
+                break;
             }
-        } else { //x64
-            int count = 24;
-            if (settings.value("allregisters", false).toBool())
-                count += 33;
-            for (int i = 0; i < count; i++) {
-                if (i == 17 || (i >= 24 && i <= 31) || i == 56) {
-                    registersStream >> info.name >> info.hexValue;
-                    registersStream.skipWhiteSpace();
-                    info.decValue = registersStream.readLine();
-                } else if (i == 16) {
-                    registersStream >> info.name >> info.hexValue;
-                    registersStream.skipWhiteSpace();
-                    char c;
-                    registersStream >> c;
-                    while (c != ' ')
-                        registersStream >> c;
-                    info.decValue = registersStream.readLine();
-                } else if (i >= 40 && i <= 55) {
-                    registersStream >> info.name;
-                    QRegExp r("uint128 = 0x[0-9a-fA-F]+");
-                    QString s = registersStream.readLine();
-                    while (r.indexIn(s) == -1)
-                        s = registersStream.readLine();
-                    info.decValue = r.capturedTexts().at(0).mid(QString("uint128 = ").length());
-                    info.hexValue = "";
-                } else {
-                    registersStream >> info.name >> info.hexValue >> info.decValue;
+
+            if (general.contains(info.name) || segment.contains(info.name) || fpu_info.contains(info.name)) {
+                registersStream >> info.hexValue >> info.decValue;
+            } else if ((info.name == ip) || flags.contains(info.name) || fpu_stack.exactMatch(info.name)) {
+                registersStream >> info.hexValue;
+                registersStream.skipWhiteSpace();
+                info.decValue = registersStream.readLine();
+            } else if (mmx.exactMatch(info.name) || xmm.exactMatch(info.name) || ymm.exactMatch(info.name)) {
+                QMap<QString, QString> fields;
+
+                if (!readStruct(registersStream, &fields)) {
+                    // bad news
+                    emit printLog(QString("can not parse register data: ") + info.name + "\n", Qt::red);
+                    break;
                 }
-                registers.append(info);
-                if (i == 0 && info.name != "rax" && registersOk) {
-                    doInput(QString("info registers\n"), infoRegisters);
-                    registersOk = false;
-                    return;
-                }
+
+                if (mmx.exactMatch(info.name))
+                    info.decValue = fields["v8_int8"];
+                else if (xmm.exactMatch(info.name))
+                    info.decValue = fields["uint128"];
+                else if (ymm.exactMatch(info.name))
+                    info.decValue = fields["v2_int128"];
+
+                info.hexValue = "";
+            } else {
+                // unknown register, try to skip it.
+                registersStream.readLine();
+                emit printLog(QString("unknown register: ") + info.name + "\n", Qt::red);
+                continue;
+            }
+
+            registers.append(info);
+            if (i == 0 && info.name != "eax" && info.name != "rax" && registersOk) {
+                doInput(QString("info registers\n"), infoRegisters);
+                registersOk = false;
+                return;
             }
         }
+
         emit printRegisters(registers);
         return;
     }
@@ -656,4 +656,117 @@ Debugger::~Debugger() {
     process = 0;
     lines.clear();
     delete bufferTimer;
+}
+
+namespace {
+
+    // read struct like {<name1> = <value1>, ,,, <nameN> = <valueN>}
+    // from stream. Values may be simple or complex, like {v1, v2, v3 .. }
+    // all vi have to be simple, two-level complex values unsupported
+    //
+    // test end of stream before any reading, desperately trying not to hang on it
+    bool readStruct(QTextStream& str, QMap<QString, QString>* map) {
+        str.skipWhiteSpace();
+        if (str.atEnd())
+            return false;
+
+        QChar c;
+        str >> c;
+        if (c != '{')
+            return false;
+
+        // struct begin
+        while (!str.atEnd()) {
+            str.skipWhiteSpace();
+
+            // may be it just empty
+            str >> c;
+            if (c == '}')
+                return true;
+
+            // read name, until space or '='
+            QString name;
+            name += c;
+
+            for (;;) {
+                if (str.atEnd())
+                    return false;
+                str >> c;
+                if (c.isSpace() || (c == '=')) break;
+                name += c;
+            }
+
+            // read '='
+            if (c != '=') {
+                str.skipWhiteSpace();
+
+                if (str.atEnd())
+                    return false;
+                str >> c;
+                if (c != '=') // it has to be assignment
+                    return false;
+            }
+
+            str.skipWhiteSpace();
+
+            // read value, simple (until space, or ',', or '}') or complex (until '}')
+            QString value;
+
+            if (str.atEnd())
+                return false;
+            str >> c;
+
+            if (c != '{') {
+                // simple value
+                value += c;
+
+                for (;;) {
+                    if (str.atEnd())
+                        return false;
+                    str >> c;
+                    if (c.isSpace() || (c == ',') || (c == '}')) break;
+                    value += c;
+                }
+            } else {
+                // complex value
+                value += '{';
+
+                for (;;) {
+                    if (str.atEnd())
+                        return false;
+                    str >> c;
+                    if (c == '}') break;
+                    if (c.isSpace()) {
+                        // replace all space characters by simple space
+                        // and skip spaces after '{' and after space
+                        if (!value.endsWith('{') && !value.endsWith(' '))
+                            value += ' ';
+                    } else {
+                        value += c;
+                    }
+                }
+
+                value += '}';
+                c = ' '; // it was not last }, just end of value
+            }
+
+            (*map)[name] = value;
+
+            // to next name-value pair
+            if (c.isSpace()) {
+                str.skipWhiteSpace();
+                if (str.atEnd())
+                    return false;
+                str >> c;
+            }
+
+            if (c == '}')  // end of struct
+                return true;
+            if (c != ',')  // it has to be comma
+                return false;
+
+        }
+
+        return false;
+    }
 }
