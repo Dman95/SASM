@@ -228,7 +228,7 @@
         <location filename="mainwindow.cpp" line="222"/>
         <location filename="mainwindow.cpp" line="412"/>
         <location filename="mainwindow.cpp" line="507"/>
-        <location filename="mainwindow.cpp" line="1207"/>
+        <location filename="mainwindow.cpp" line="1218"/>
         <source>Debug</source>
         <translation>Hata Ayıklayıcı</translation>
     </message>
@@ -241,7 +241,7 @@
     <message>
         <location filename="mainwindow.cpp" line="235"/>
         <location filename="mainwindow.cpp" line="473"/>
-        <location filename="mainwindow.cpp" line="2186"/>
+        <location filename="mainwindow.cpp" line="2204"/>
         <source>Help</source>
         <translation>Yardım</translation>
     </message>
@@ -419,7 +419,7 @@
     </message>
     <message>
         <location filename="mainwindow.cpp" line="781"/>
-        <location filename="mainwindow.cpp" line="2095"/>
+        <location filename="mainwindow.cpp" line="2113"/>
         <source>Yes</source>
         <translation>Evet</translation>
     </message>
@@ -430,7 +430,7 @@
     </message>
     <message>
         <location filename="mainwindow.cpp" line="783"/>
-        <location filename="mainwindow.cpp" line="2096"/>
+        <location filename="mainwindow.cpp" line="2114"/>
         <source>Cancel</source>
         <translation>İptal</translation>
     </message>
@@ -461,184 +461,184 @@
         <translation>NASM dizini bulunamadı. Lütfen programı tekrar kurun.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="866"/>
+        <location filename="mainwindow.cpp" line="877"/>
         <source>Unable to start assembler. Check your settings.</source>
         <translation>Çevirici  başlatılamadı. Ayarlarınızı kontrol edin.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="921"/>
+        <location filename="mainwindow.cpp" line="932"/>
         <source>Unable to start linker. Check your settings.</source>
         <translation>Bağlayıcı başlatılamadı. Ayarlarınızı kontrol edin.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="948"/>
+        <location filename="mainwindow.cpp" line="959"/>
         <source>Warning! Errors have occurred in the build:</source>
         <translation>Uyarı! Derleme esnasında bazı hatalar meydana geldi:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="963"/>
+        <location filename="mainwindow.cpp" line="974"/>
         <source>Built successfully.</source>
         <translation>Derleme Başarılı.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="981"/>
+        <location filename="mainwindow.cpp" line="992"/>
         <source>The program is already running.</source>
         <translation>Program zaten çalışıyor.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="998"/>
+        <location filename="mainwindow.cpp" line="1009"/>
         <source>The program is executing...</source>
         <translation>Program çalıştırılıyor...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1038"/>
+        <location filename="mainwindow.cpp" line="1049"/>
         <source>The program finished normally. Execution time: %1 s</source>
         <translation>Program normal olarak sonlandı. Çalışma zamanı: %1 s</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1042"/>
+        <location filename="mainwindow.cpp" line="1053"/>
         <source>The program crashed! Execution time: %1 s</source>
         <translation>Programda kırılma meydana geldi! Çalışma zamanı: %1 s</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1074"/>
+        <location filename="mainwindow.cpp" line="1085"/>
         <source>The program stopped.</source>
         <translation>Program durduruldu.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1076"/>
+        <location filename="mainwindow.cpp" line="1087"/>
         <source>The program is not running.</source>
         <translation>Program çalışmıyor.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1120"/>
+        <location filename="mainwindow.cpp" line="1131"/>
         <source>Before debugging you need to build the program.</source>
         <translation>Hata ayıklamadan önce programın derlenmesi gerekiyor.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1124"/>
+        <location filename="mainwindow.cpp" line="1135"/>
         <source>Debugging started...</source>
         <translation>Hata Ayıklama Başlatılıyor...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1146"/>
+        <location filename="mainwindow.cpp" line="1157"/>
         <source>Pause</source>
         <translation>Beklet</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1151"/>
         <location filename="mainwindow.cpp" line="1162"/>
-        <location filename="mainwindow.cpp" line="1175"/>
+        <location filename="mainwindow.cpp" line="1173"/>
+        <location filename="mainwindow.cpp" line="1186"/>
         <source>Continue</source>
         <translation>Devam Et</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1256"/>
+        <location filename="mainwindow.cpp" line="1267"/>
         <source>Memory</source>
         <translation>Bellek</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1374"/>
+        <location filename="mainwindow.cpp" line="1385"/>
         <source>Registers</source>
         <translation>Yazmaçlar</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1445"/>
+        <location filename="mainwindow.cpp" line="1456"/>
         <source>Debugging finished.</source>
         <translation>Hata Ayıklama Tamamlandı.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1581"/>
+        <location filename="mainwindow.cpp" line="1592"/>
         <source>In the previous session was not open any of the saved tabs!</source>
         <translation>Önceki oturumda kaydedilmiş olan sekmelerden herhangi biri açık değildi!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1853"/>
+        <location filename="mainwindow.cpp" line="1866"/>
         <source>Please set path to MASM assembler (ml.exe) and linker (link.exe) on your computer </source>
         <translation>Lütfen  MASM çevirici (ml.exe) ve bağlayıcı (link.exe) PATH ayarlarını yapılandırın</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1854"/>
+        <location filename="mainwindow.cpp" line="1867"/>
         <source>in fields &quot;Assembler path&quot; and &quot;Linker path&quot; above.</source>
         <translation>Assembler yolu ve Bağlayıcı yolu yukarıdaki alanlarda.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2097"/>
+        <location filename="mainwindow.cpp" line="2115"/>
         <source>Warning!</source>
         <translation>Uyarı!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2098"/>
+        <location filename="mainwindow.cpp" line="2116"/>
         <source>All settings will be deleted and all unsaved data will be lost. Are you sure?</source>
         <translation>Tüm ayarlar silinecek ve kaydedilmemiş tüm veriler kaybolacak. Emin misiniz?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2193"/>
+        <location filename="mainwindow.cpp" line="2211"/>
         <source>About SASM</source>
         <translation>SASM Hakkında</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2194"/>
+        <location filename="mainwindow.cpp" line="2212"/>
         <source>SASM (SimpleASM) </source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2195"/>
+        <location filename="mainwindow.cpp" line="2213"/>
         <source>simple Open Source IDE for NASM, MASM, GAS and FASM assembler languages.</source>
         <translation>NASM, MASM, GAS ve FASM assembler dilleri için basit ve açık kaynak kodlu IDE.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2196"/>
+        <location filename="mainwindow.cpp" line="2214"/>
         <source>Licensed under the GNU GPL v3.0</source>
         <translation>Lisans: GNU GPL v3.0</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2197"/>
+        <location filename="mainwindow.cpp" line="2215"/>
         <source>Based on the Qt.</source>
         <translation>Qt Tabanında.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2198"/>
+        <location filename="mainwindow.cpp" line="2216"/>
         <source>Copyright © 2013 Dmitriy Manushin</source>
         <translation>Copyright © 2013 Dmitriy Manushin</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2199"/>
+        <location filename="mainwindow.cpp" line="2217"/>
         <source>Development and idea - Dmitriy Manushin</source>
         <translation>Geliştirme ve Fikir - Dmitriy Manushin</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2200"/>
+        <location filename="mainwindow.cpp" line="2218"/>
         <source>Icon and advices - Alick Gaybullaev</source>
         <translation>İkon ve Tavsiyeler - Alick Gaybullaev</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2201"/>
+        <location filename="mainwindow.cpp" line="2219"/>
         <source>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com</source>
         <translation>Öneri ve hata mesajlarını Dman1095@gmail.com adresine mail atın</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2202"/>
+        <location filename="mainwindow.cpp" line="2220"/>
         <source>More information on the site: http://dman95.github.io/SASM/</source>
         <translation>Daha fazla bilgi için http://dman95.github.io/SASM/ adresini ziyaret edin</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2203"/>
+        <location filename="mainwindow.cpp" line="2221"/>
         <source>Donate:</source>
         <translation>Bağış:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2204"/>
+        <location filename="mainwindow.cpp" line="2222"/>
         <source>PayPal - Dman1095@gmail.com</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2205"/>
+        <location filename="mainwindow.cpp" line="2223"/>
         <source>WMZ - Z282016332582</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2206"/>
+        <location filename="mainwindow.cpp" line="2224"/>
         <source>WMR - R331674303467</source>
         <translation></translation>
     </message>
@@ -1021,12 +1021,17 @@
         <translation>Bağlayıcı Yolu:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2103"/>
+        <location filename="settings.ui" line="2113"/>
         <source>Disable linking:</source>
         <translation>Bağlayıcıyı iptal et:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2120"/>
+        <location filename="settings.ui" line="2130"/>
+        <source>Build in current directory:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="settings.ui" line="2103"/>
         <source>Object file name:</source>
         <translation>Nesne dosyası adı:</translation>
     </message>
@@ -1034,12 +1039,12 @@
 <context>
     <name>Tab</name>
     <message>
-        <location filename="tab.cpp" line="66"/>
+        <location filename="tab.cpp" line="67"/>
         <source>Input</source>
         <translation>Girdi</translation>
     </message>
     <message>
-        <location filename="tab.cpp" line="75"/>
+        <location filename="tab.cpp" line="76"/>
         <source>Output</source>
         <translation>Çıktı</translation>
     </message>

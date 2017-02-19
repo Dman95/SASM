@@ -228,7 +228,7 @@
         <location filename="mainwindow.cpp" line="222"/>
         <location filename="mainwindow.cpp" line="412"/>
         <location filename="mainwindow.cpp" line="507"/>
-        <location filename="mainwindow.cpp" line="1207"/>
+        <location filename="mainwindow.cpp" line="1218"/>
         <source>Debug</source>
         <translation>Lancia debugger</translation>
     </message>
@@ -241,7 +241,7 @@
     <message>
         <location filename="mainwindow.cpp" line="235"/>
         <location filename="mainwindow.cpp" line="473"/>
-        <location filename="mainwindow.cpp" line="2186"/>
+        <location filename="mainwindow.cpp" line="2204"/>
         <source>Help</source>
         <translation>Aiuto</translation>
     </message>
@@ -419,7 +419,7 @@
     </message>
     <message>
         <location filename="mainwindow.cpp" line="781"/>
-        <location filename="mainwindow.cpp" line="2095"/>
+        <location filename="mainwindow.cpp" line="2113"/>
         <source>Yes</source>
         <translation>Sì</translation>
     </message>
@@ -430,7 +430,7 @@
     </message>
     <message>
         <location filename="mainwindow.cpp" line="783"/>
-        <location filename="mainwindow.cpp" line="2096"/>
+        <location filename="mainwindow.cpp" line="2114"/>
         <source>Cancel</source>
         <translation>Interrompi</translation>
     </message>
@@ -461,184 +461,184 @@
         <translation>L&apos;elenco di NASM non esiste. Installa il programma di nuovo.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="866"/>
+        <location filename="mainwindow.cpp" line="877"/>
         <source>Unable to start assembler. Check your settings.</source>
         <translation>L&apos;assembler non è lanciabile. Controlla le impostazioni.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="921"/>
+        <location filename="mainwindow.cpp" line="932"/>
         <source>Unable to start linker. Check your settings.</source>
         <translation>Il linker non è lanciabile. Controlla le impostazioni.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="948"/>
+        <location filename="mainwindow.cpp" line="959"/>
         <source>Warning! Errors have occurred in the build:</source>
         <translation>Avviso! Durante la compilazione si manifestano errori:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="963"/>
+        <location filename="mainwindow.cpp" line="974"/>
         <source>Built successfully.</source>
         <translation>Compilazione completa.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="981"/>
+        <location filename="mainwindow.cpp" line="992"/>
         <source>The program is already running.</source>
         <translation>Il programma è già in corso.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="998"/>
+        <location filename="mainwindow.cpp" line="1009"/>
         <source>The program is executing...</source>
         <translation>Il programma è in corso...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1038"/>
+        <location filename="mainwindow.cpp" line="1049"/>
         <source>The program finished normally. Execution time: %1 s</source>
         <translation>Il programma è terminato con successo. Durata: %1 s</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1042"/>
+        <location filename="mainwindow.cpp" line="1053"/>
         <source>The program crashed! Execution time: %1 s</source>
         <translation>Il programma è stato interrotto! Durata: %1 s</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1074"/>
+        <location filename="mainwindow.cpp" line="1085"/>
         <source>The program stopped.</source>
         <translation>Il programma è stato fermato.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1076"/>
+        <location filename="mainwindow.cpp" line="1087"/>
         <source>The program is not running.</source>
         <translation>Il programma non corre.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1120"/>
+        <location filename="mainwindow.cpp" line="1131"/>
         <source>Before debugging you need to build the program.</source>
         <translation>Occorre una compilazione del programma prima di poter lanciare il debugger.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1124"/>
+        <location filename="mainwindow.cpp" line="1135"/>
         <source>Debugging started...</source>
         <translation>Debugger in corse...</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1146"/>
+        <location filename="mainwindow.cpp" line="1157"/>
         <source>Pause</source>
         <translation>Pausa</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1151"/>
         <location filename="mainwindow.cpp" line="1162"/>
-        <location filename="mainwindow.cpp" line="1175"/>
+        <location filename="mainwindow.cpp" line="1173"/>
+        <location filename="mainwindow.cpp" line="1186"/>
         <source>Continue</source>
         <translation>Continua</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1256"/>
+        <location filename="mainwindow.cpp" line="1267"/>
         <source>Memory</source>
         <translation>Memoria</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1374"/>
+        <location filename="mainwindow.cpp" line="1385"/>
         <source>Registers</source>
         <translation>Registri</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1445"/>
+        <location filename="mainwindow.cpp" line="1456"/>
         <source>Debugging finished.</source>
         <translation>Debugging terminato.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1581"/>
+        <location filename="mainwindow.cpp" line="1592"/>
         <source>In the previous session was not open any of the saved tabs!</source>
         <translation>La sessione precedente non aveva tab salvati!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1853"/>
+        <location filename="mainwindow.cpp" line="1866"/>
         <source>Please set path to MASM assembler (ml.exe) and linker (link.exe) on your computer </source>
         <translation>Inserisci il percorso del assembler MASM (ml.exe) e linker (link.exe).</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1854"/>
+        <location filename="mainwindow.cpp" line="1867"/>
         <source>in fields &quot;Assembler path&quot; and &quot;Linker path&quot; above.</source>
         <translation>nei campi &quot;Percorso assembler&quot; e &quot;Percorso linker&quot; sopra.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2097"/>
+        <location filename="mainwindow.cpp" line="2115"/>
         <source>Warning!</source>
         <translation>Avviso!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2098"/>
+        <location filename="mainwindow.cpp" line="2116"/>
         <source>All settings will be deleted and all unsaved data will be lost. Are you sure?</source>
         <translation>Le impostazioni ed ogni file con modifiche saranno cancellati. Sei sicuro?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2193"/>
+        <location filename="mainwindow.cpp" line="2211"/>
         <source>About SASM</source>
         <translation>Su SASM</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2194"/>
+        <location filename="mainwindow.cpp" line="2212"/>
         <source>SASM (SimpleASM) </source>
         <translation>SASM (SimpleASM) </translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2195"/>
+        <location filename="mainwindow.cpp" line="2213"/>
         <source>simple Open Source IDE for NASM, MASM, GAS and FASM assembler languages.</source>
         <translation>semplice Open Source IDE per NASM, MASM, GAS e FASM assembler.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2196"/>
+        <location filename="mainwindow.cpp" line="2214"/>
         <source>Licensed under the GNU GPL v3.0</source>
         <translation>Concesso su licenza GNU GPL v3.0</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2197"/>
+        <location filename="mainwindow.cpp" line="2215"/>
         <source>Based on the Qt.</source>
         <translation>Basato su Qt.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2198"/>
+        <location filename="mainwindow.cpp" line="2216"/>
         <source>Copyright © 2013 Dmitriy Manushin</source>
         <translation>Copyright © 2013 Dmitriy Manushin</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2199"/>
+        <location filename="mainwindow.cpp" line="2217"/>
         <source>Development and idea - Dmitriy Manushin</source>
         <translation>Sviluppo ed idea - Dmitriy Manushin</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2200"/>
+        <location filename="mainwindow.cpp" line="2218"/>
         <source>Icon and advices - Alick Gaybullaev</source>
         <translation>Icona ed aiuto - Alick Gaybullaev</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2201"/>
+        <location filename="mainwindow.cpp" line="2219"/>
         <source>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com</source>
         <translation>Richieste e segnalazioni d&apos;errore mandale all&apos;e-mail seguante: Dman1095@gmail.com</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2202"/>
+        <location filename="mainwindow.cpp" line="2220"/>
         <source>More information on the site: http://dman95.github.io/SASM/</source>
         <translation>Ulteriori informationi sul sito: http://dman95.github.io/SASM/</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2203"/>
+        <location filename="mainwindow.cpp" line="2221"/>
         <source>Donate:</source>
         <translation>Dona:</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2204"/>
+        <location filename="mainwindow.cpp" line="2222"/>
         <source>PayPal - Dman1095@gmail.com</source>
         <translation>PayPal - Dman1095@gmail.com</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2205"/>
+        <location filename="mainwindow.cpp" line="2223"/>
         <source>WMZ - Z282016332582</source>
         <translation>WMZ - Z282016332582</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="2206"/>
+        <location filename="mainwindow.cpp" line="2224"/>
         <source>WMR - R331674303467</source>
         <translation>WMR - R331674303467</translation>
     </message>
@@ -1024,12 +1024,17 @@
         <translation>Percorso linker:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2103"/>
+        <location filename="settings.ui" line="2113"/>
         <source>Disable linking:</source>
         <translation>Disattiva linker:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="2120"/>
+        <location filename="settings.ui" line="2130"/>
+        <source>Build in current directory:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="settings.ui" line="2103"/>
         <source>Object file name:</source>
         <translation>Nome di file oggetto:</translation>
     </message>
@@ -1037,12 +1042,12 @@
 <context>
     <name>Tab</name>
     <message>
-        <location filename="tab.cpp" line="66"/>
+        <location filename="tab.cpp" line="67"/>
         <source>Input</source>
         <translation>Input</translation>
     </message>
     <message>
-        <location filename="tab.cpp" line="75"/>
+        <location filename="tab.cpp" line="76"/>
         <source>Output</source>
         <translation>Output</translation>
     </message>
