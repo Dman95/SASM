@@ -864,6 +864,8 @@ void MainWindow::buildProgram(bool debugMode)
         if (!path.isEmpty()) {
             QString dirPath = QFileInfo(path).absoluteDir().absolutePath();
             assemblerProcess.setWorkingDirectory(dirPath);
+        } else {
+            assemblerProcess.setWorkingDirectory(applicationDataPath() + "/include");
         }
     } else {
         assemblerProcess.setWorkingDirectory(applicationDataPath() + "/include");
