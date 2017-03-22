@@ -520,14 +520,18 @@ bool Debugger::isStopped()
 
 void Debugger::pause()
 {
+    if (pid == 0)
+	return;
     actionTypeQueue.clear();
     #ifdef Q_OS_WIN32
         HANDLE proc;
-        proc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, (DWORD) pid);
-        DebugBreakProcess(proc);
-        CloseHandle(proc);
+        proc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, (DWORD)pid);
+        if (proc != INVALID_HANDLE) {
+    	    DebugBreakProcess(proc);
+    	    CloseHandle(proc);
+        }
     #else
-        kill(pid, SIGINT);
+    	kill(pid, SIGINT);
     #endif
 }
 
