@@ -163,6 +163,11 @@
                 <string notr="true">Italiano</string>
                </property>
               </item>
+              <item>
+               <property name="text">
+                <string notr="true">Español</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item>
