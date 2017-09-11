@@ -10,5 +10,7 @@
         <file>qt_de.qm</file>
         <file>language_it.qm</file>
         <file>qt_it.qm</file>
+        <file>language_pl.qm</file>
+        <file>qt_pl.qm</file>
     </qresource>
 </RCC>

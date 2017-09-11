@@ -41,7 +41,7 @@
       <enum>Qt::LeftToRight</enum>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <property name="elideMode">
       <enum>Qt::ElideNone</enum>
@@ -161,6 +161,11 @@
               <item>
                <property name="text">
                 <string notr="true">Italiano</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Polski</string>
                </property>
               </item>
              </widget>
@@ -2176,8 +2181,8 @@
  <resources/>
  <connections/>
  <buttongroups>
+  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup_3"/>
-  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

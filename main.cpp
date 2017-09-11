@@ -79,8 +79,9 @@ int main(int argc, char *argv[])
         QPushButton *chiButton = msgBox.addButton(QString("中国"), QMessageBox::NoRole);
         QPushButton *gerButton = msgBox.addButton(QString("Deutsch"), QMessageBox::NoRole);
         QPushButton *itaButton = msgBox.addButton(QString("Italiano"), QMessageBox::NoRole);
+        QPushButton *polButton = msgBox.addButton(QString("Polski"), QMessageBox::NoRole);
         msgBox.setWindowTitle(QString("Choose language"));
-        msgBox.setText(QString("Choose language / Выберите язык / Dil seçin / 选择你的语言 / Sprache auswählen / Scegli lingua"));
+        msgBox.setText(QString("<p align='center'>Choose language</p>"));
         msgBox.exec();
 
         if (msgBox.clickedButton() == rusButton) {
@@ -95,6 +96,8 @@ int main(int argc, char *argv[])
             settings.setValue("language", 4);
         } else if (msgBox.clickedButton() == itaButton) {
             settings.setValue("language", 5);
+        } else if (msgBox.clickedButton() == polButton) {
+            settings.setValue("language", 6);
         }
     }
     if (settings.value("language", 0).toInt() == 0) { //russian language
@@ -126,6 +129,12 @@ int main(int argc, char *argv[])
         a.installTranslator(&translator);
 
         qtTranslator.load(":/translations/qt_it.qm");
+        a.installTranslator(&qtTranslator);
+    } else if (settings.value("language", 0).toInt() == 6) { //polish language
+        translator.load(":/translations/language_pl.qm");
+        a.installTranslator(&translator);
+
+        qtTranslator.load(":/translations/qt_pl.qm");
         a.installTranslator(&qtTranslator);
     }
 
