@@ -1319,11 +1319,11 @@ void MainWindow::debugShowMemory()
                     //! If true, watch as variable
                     if (! settings->addressCheckbox->isChecked()) {
                         debugger->doInput(printFormat[type] + " (" + sizeFormat[size] + watchAsArray + ")" +
-                                          memoryWindow->item(i, 0)->text() + "\n", infoMemory);
+                                          "(" + memoryWindow->item(i, 0)->text() + ")" + "\n", infoMemory);
                     } else {
                         //! Watch as random address
                         debugger->doInput(printFormat[type] + " (" + sizeFormat[size] + watchAsArray + ")" +
-                                          "*((" + sizeFormat[size] + "*) " + memoryWindow->item(i, 0)->text() + ")" +
+                                          "*((" + sizeFormat[size] + "*) " + "(" + memoryWindow->item(i, 0)->text() + ")" + ")" +
                                           "\n", infoMemory);
                     }
                 }
