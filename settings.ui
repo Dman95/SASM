@@ -168,6 +168,11 @@
                 <string>Polski</string>
                </property>
               </item>
+              <item>
+               <property name="text">
+                <string>עברית</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item>
