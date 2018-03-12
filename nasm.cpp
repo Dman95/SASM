@@ -46,7 +46,7 @@
  */
 
 NASM::NASM(bool x86, QObject *parent) :
-    Assembler(x86, parent)
+    GccBasedAssembler(x86, parent)
 {
 }
 
@@ -59,17 +59,6 @@ QString NASM::getAssemblerPath()
     #endif
 }
 
-QString NASM::getLinkerPath()
-{
-    #ifdef Q_OS_WIN32
-        if (isx86())
-            return Common::applicationDataPath() + "/MinGW/bin/gcc.exe";
-        else
-            return Common::applicationDataPath() + "/MinGW64/bin/gcc.exe";
-    #else
-        return "gcc";
-    #endif
-}
 
 quint64 NASM::getMainOffset(QFile &lst, QString entryLabel)
 {
@@ -216,16 +205,6 @@ QString NASM::getAssemblerOptions()
         else
             options = "-g -f elf64 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
     #endif
-    return options;
-}
-
-QString NASM::getLinkerOptions()
-{
-    QString options;
-    if (isx86())
-        options = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m32";
-    else
-        options = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m64";
     return options;
 }
 

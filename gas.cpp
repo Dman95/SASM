@@ -46,7 +46,7 @@
  */
 
 GAS::GAS(bool x86, QObject *parent) :
-    Assembler(x86, parent)
+    GccBasedAssembler(x86, parent)
 {
 }
 
@@ -59,18 +59,6 @@ QString GAS::getAssemblerPath()
             return Common::applicationDataPath() + "/GAS/64/as.exe";
     #else
         return "as";
-    #endif
-}
-
-QString GAS::getLinkerPath()
-{
-    #ifdef Q_OS_WIN32
-        if (isx86())
-            return Common::applicationDataPath() + "/MinGW/bin/gcc.exe";
-        else
-            return Common::applicationDataPath() + "/MinGW64/bin/gcc.exe";
-    #else
-        return "gcc";
     #endif
 }
 
@@ -209,15 +197,6 @@ QString GAS::getAssemblerOptions()
     return options;
 }
 
-QString GAS::getLinkerOptions()
-{
-    QString options;
-    if (isx86())
-        options = "$PROGRAM.OBJ$ -g -o $PROGRAM$ -m32";
-    else
-        options = "$PROGRAM.OBJ$ -g -o $PROGRAM$ -m64";
-    return options;
-}
 
 void GAS::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
                               QList<QTextCharFormat *> &formats,

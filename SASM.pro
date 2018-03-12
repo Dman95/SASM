@@ -54,7 +54,8 @@ SOURCES += main.cpp\
     common.cpp \
     fasm.cpp \
     signallocker.cpp \
-    masm.cpp
+    masm.cpp \
+    gccbasedassembler.cpp
 
 HEADERS  += mainwindow.h \
     tab.h \
@@ -74,7 +75,8 @@ HEADERS  += mainwindow.h \
     common.h \
     fasm.h \
     signallocker.h \
-    masm.h
+    masm.h \
+    gccbasedassembler.h
 
 FORMS += settings.ui
 

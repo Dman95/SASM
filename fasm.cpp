@@ -46,7 +46,7 @@
  */
 
 FASM::FASM(bool x86, QObject *parent) :
-    Assembler(x86, parent)
+    GccBasedAssembler(x86, parent)
 {
 }
 
@@ -56,18 +56,6 @@ QString FASM::getAssemblerPath()
         return Common::applicationDataPath() + "/FASM/fasm.exe";
     #else
         return "fasm";
-    #endif
-}
-
-QString FASM::getLinkerPath()
-{
-    #ifdef Q_OS_WIN32
-        if (isx86())
-            return Common::applicationDataPath() + "/MinGW/bin/gcc.exe";
-        else
-            return Common::applicationDataPath() + "/MinGW64/bin/gcc.exe";
-    #else
-        return "gcc";
     #endif
 }
 
@@ -209,16 +197,6 @@ void FASM::putDebugString(CodeEditor *code)
 QString FASM::getAssemblerOptions()
 {
     return "$SOURCE$ $PROGRAM.OBJ$ -s $LSTOUTPUT$";
-}
-
-QString FASM::getLinkerOptions()
-{
-    QString options;
-    if (isx86())
-        options = "$PROGRAM.OBJ$ -g -o $PROGRAM$ -m32";
-    else
-        options = "$PROGRAM.OBJ$ -g -o $PROGRAM$ -m64";
-    return options;
 }
 
 void FASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,

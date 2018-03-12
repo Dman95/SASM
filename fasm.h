@@ -43,7 +43,7 @@
 
 #include <QProcess>
 #include <QLinkedList>
-#include "assembler.h"
+#include "gccbasedassembler.h"
 
 /**
  * @file fasm.h
@@ -55,13 +55,12 @@
  *
  */
 
-class FASM : public Assembler
+class FASM : public GccBasedAssembler
 {
     Q_OBJECT
 public:
     explicit FASM(bool x86, QObject *parent = 0);
     QString getAssemblerPath();
-    QString getLinkerPath();
     quint64 getMainOffset(QFile &lstOut, QString entryLabel);
     void parseLstFile(QFile &lstOut, QVector<Assembler::LineNum> &lines, quint64 offset);
     void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
@@ -72,7 +71,6 @@ public:
     QString getStartText();
     void putDebugString(CodeEditor *code);
     QString getAssemblerOptions();
-    QString getLinkerOptions();
     QString getListingFilePath(QFile &lstOut);
 
 signals:

@@ -41,7 +41,7 @@
 #ifndef NASM_H
 #define NASM_H
 
-#include "assembler.h"
+#include "gccbasedassembler.h"
 
 /**
  * @file nasm.h
@@ -52,13 +52,12 @@
  *
  */
 
-class NASM : public Assembler
+class NASM : public GccBasedAssembler
 {
     Q_OBJECT
 public:
     explicit NASM(bool x86, QObject *parent = 0);
     QString getAssemblerPath();
-    QString getLinkerPath();
     quint64 getMainOffset(QFile &lst, QString entryLabel);
     void parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 offset);
     void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
@@ -69,8 +68,7 @@ public:
     QString getStartText();
     void putDebugString(CodeEditor *code);
     QString getAssemblerOptions();
-    QString getLinkerOptions();
-    
+
 signals:
     
 public slots:
