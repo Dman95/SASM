@@ -54,6 +54,11 @@ QString NASM::getAssemblerPath()
 {
     #ifdef Q_OS_WIN32
         return Common::applicationDataPath() + "/NASM/nasm.exe";
+    #elif __linux__
+        return "nasm";
+    #elif defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
+        // TODO: ugly harcoded path
+        return "/usr/local/bin/nasm";
     #else
         return "nasm";
     #endif
@@ -66,8 +71,13 @@ QString NASM::getLinkerPath()
             return Common::applicationDataPath() + "/MinGW/bin/gcc.exe";
         else
             return Common::applicationDataPath() + "/MinGW64/bin/gcc.exe";
+    #elif __linux__
+        return "nasm";
+    #elif defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
+        // TODO: ugly harcoded path
+        return "/usr/bin/cc";
     #else
-        return "gcc";
+        return "cc";
     #endif
 }
 

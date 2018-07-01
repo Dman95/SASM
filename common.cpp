@@ -56,20 +56,25 @@ QString Common::applicationDataPath()
             appDir = QCoreApplication::applicationDirPath();
         }
         return appDir;
-    #else
+    #elif __linux__
         QString path = QCoreApplication::applicationDirPath();
         QString appDir = path.left(path.length() - 4) + QString("/share/sasm"); //replace /bin with /share/sasm
         if (! QFile::exists(appDir)) {
             appDir = QCoreApplication::applicationDirPath() + "/share/sasm";
         }
+
         if (! QFile::exists(appDir)) {
             appDir = QCoreApplication::applicationDirPath() + "/Linux/share/sasm";
         }
+    #elif defined(__FreeBSD__) || defined(__OpenBSD__) || defined( __NetBSD__) || defined(__DragonFly__)
+        QString path = QCoreApplication::applicationDirPath();
+        QString appDir = path.left(path.length() - 4) + QString("/share/sasm");
         if (! QFile::exists(appDir)) {
-            appDir = QCoreApplication::applicationDirPath();
+            appDir = QCoreApplication::applicationDirPath() + "/BSD/share/sasm";
         }
-        return appDir;
     #endif
+
+        return appDir;
 }
 
 QString Common::pathInTemp(QString path)

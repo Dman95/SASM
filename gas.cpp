@@ -57,6 +57,11 @@ QString GAS::getAssemblerPath()
             return Common::applicationDataPath() + "/GAS/32/as.exe";
         else
             return Common::applicationDataPath() + "/GAS/64/as.exe";
+    #elif __linux__
+        return "nasm";
+    #elif defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
+        // TODO: ugly harcoded path
+        return "/usr/bin/as";
     #else
         return "as";
     #endif
@@ -69,8 +74,13 @@ QString GAS::getLinkerPath()
             return Common::applicationDataPath() + "/MinGW/bin/gcc.exe";
         else
             return Common::applicationDataPath() + "/MinGW64/bin/gcc.exe";
+    #elif __linux__
+        return "as";
+    #elif defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
+        // TODO: ugly harcoded path
+        return "/usr/bin/cc";
     #else
-        return "gcc";
+        return "cc";
     #endif
 }
 
