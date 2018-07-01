@@ -831,9 +831,6 @@ void MainWindow::buildProgram(bool debugMode)
         currentTab->saveInputToFile(inputPath);
     }
 
-    while (! QFile::exists(path)) {
-    }
-
     QString stdioMacros = Common::pathInTemp("macro.o");
 
     //! Assembler
