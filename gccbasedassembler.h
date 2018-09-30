@@ -6,8 +6,8 @@ class GccBasedAssembler : public Assembler
 {
 public:
     explicit GccBasedAssembler(bool x86, QObject *parent = 0);
-    QString getLinkerPath() override;
-    QString getLinkerOptions() override;
+    QString getLinkerPath();
+    QString getLinkerOptions();
 private:
     bool m_isPieEnabled;
 };

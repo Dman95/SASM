@@ -1798,6 +1798,7 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
         settingsHighlighter->setDocument(settingsStartTextEditor->document());
         QVBoxLayout *startTextLayout = new QVBoxLayout;
         startTextLayout->addWidget(settingsStartTextEditor);
+        settingsStartTextEditor->setFixedHeight(120);
         settingsUi.startTextWidget->setLayout(startTextLayout);
     }
 
