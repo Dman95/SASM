@@ -173,6 +173,11 @@
                 <string>עברית</string>
                </property>
               </item>
+              <item>
+               <property name="text">
+                <string>Español</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item>
@@ -2186,8 +2191,8 @@
  <resources/>
  <connections/>
  <buttongroups>
+  <buttongroup name="buttonGroup_3"/>
   <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_2"/>
-  <buttongroup name="buttonGroup_3"/>
  </buttongroups>
 </ui>

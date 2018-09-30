@@ -92,4 +92,5 @@ TRANSLATIONS    += language_ru.ts \
                    language_de.ts \
                    language_it.ts \
                    language_pl.ts \
-                   language_he.ts
+                   language_he.ts \
+                   language_es.ts

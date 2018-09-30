@@ -45,6 +45,7 @@
 #include <QSettings>
 #include <QPushButton>
 #include <QtSingleApplication>
+#include <QInputDialog>
 
 /**
  * @file main.cpp
@@ -71,36 +72,20 @@ int main(int argc, char *argv[])
         QTextCodec *codec = QTextCodec::codecForName("UTF-8");
         QTextCodec::setCodecForCStrings(codec);
     #endif
-    if (! settings.contains("language")) { //language choosing
-        QMessageBox msgBox;
-        QPushButton *rusButton = msgBox.addButton(QString("Русский"), QMessageBox::NoRole);
-        QPushButton *engButton = msgBox.addButton(QString("English"), QMessageBox::NoRole);
-        QPushButton *turButton = msgBox.addButton(QString("Türk"), QMessageBox::NoRole);
-        QPushButton *chiButton = msgBox.addButton(QString("中国"), QMessageBox::NoRole);
-        QPushButton *gerButton = msgBox.addButton(QString("Deutsch"), QMessageBox::NoRole);
-        QPushButton *itaButton = msgBox.addButton(QString("Italiano"), QMessageBox::NoRole);
-        QPushButton *polButton = msgBox.addButton(QString("Polski"), QMessageBox::NoRole);
-        QPushButton *hebButton = msgBox.addButton(QString("עברית"), QMessageBox::NoRole);
-        msgBox.setWindowTitle(QString("Choose language"));
-        msgBox.setText(QString("<p align='center'>Choose language</p>"));
-        msgBox.exec();
-
-        if (msgBox.clickedButton() == rusButton) {
-            settings.setValue("language", 0);
-        } else if (msgBox.clickedButton() == engButton) {
-            settings.setValue("language", 1);
-        } else if (msgBox.clickedButton() == turButton) {
-            settings.setValue("language", 2);
-        } else if (msgBox.clickedButton() == chiButton) {
-            settings.setValue("language", 3);
-        } else if (msgBox.clickedButton() == gerButton) {
-            settings.setValue("language", 4);
-        } else if (msgBox.clickedButton() == itaButton) {
-            settings.setValue("language", 5);
-        } else if (msgBox.clickedButton() == polButton) {
-            settings.setValue("language", 6);
-        } else if (msgBox.clickedButton() == hebButton) {
-            settings.setValue("language", 7);
+    if (!settings.contains("language")) { //language choosing
+        QStringList items;
+        items << QString("Русский") << QString("English") << QString("Türk") <<
+                 QString("中国") << QString("Deutsch") << QString("Italiano") <<
+                 QString("Polski") << QString("עברית") << QString("Español");
+        bool ok = false;
+        QString selected = QInputDialog::getItem(0, QString("Choose language"),
+            QString("Language:"), items, 0, false, &ok);
+        if (ok) {
+            for (int i = 0; i < items.size(); ++i) {
+                if (selected == items[i]) {
+                    settings.setValue("language", i);
+                }
+            }
         }
     }
     if (settings.value("language", 0).toInt() == 0) { //russian language
@@ -144,6 +129,12 @@ int main(int argc, char *argv[])
         a.installTranslator(&translator);
 
         qtTranslator.load(":/translations/qt_he.qm");
+        a.installTranslator(&qtTranslator);
+    } else if (settings.value("language", 0).toInt() == 8) { //spanish language
+        translator.load(":/translations/language_es.qm");
+        a.installTranslator(&translator);
+
+        qtTranslator.load(":/translations/qt_es.qm");
         a.installTranslator(&qtTranslator);
     }
 
