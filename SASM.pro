@@ -18,16 +18,32 @@ isEmpty(PREFIX) {
 BINDIR = $$PREFIX/bin
 DATADIR = $$PREFIX/share
 
-binfile.files += sasm
-binfile.files += Linux/bin/*
-binfile.path = $$BINDIR
-data.files += Linux/share/sasm/*
-data.path = $$DATADIR/sasm/
-shortcutfiles.files += Linux/share/applications/sasm.desktop
-shortcutfiles.path = $$DATADIR/applications/
-docfiles.files += Linux/share/doc/sasm/changelog.gz
-docfiles.files += Linux/share/doc/sasm/copyright
-docfiles.path = $$DATADIR/doc/sasm/
+!unix:!linux {
+    binfile.files += sasm
+    binfile.files += Linux/bin/*
+    binfile.path = $$BINDIR
+    data.files += Linux/share/sasm/*
+    data.path = $$DATADIR/sasm/
+    shortcutfiles.files += Linux/share/applications/sasm.desktop
+    shortcutfiles.path = $$DATADIR/applications/
+    docfiles.files += Linux/share/doc/sasm/changelog.gz
+    docfiles.files += Linux/share/doc/sasm/copyright
+    docfiles.path = $$DATADIR/doc/sasm/
+}
+
+unix:!linux {
+    binfile.files += sasm
+    binfile.files += BSD/bin/*
+    binfile.path = $$BINDIR
+    data.files += BSD/share/sasm/*
+    data.path = $$DATADIR/sasm/
+    shortcutfiles.files += BSD/share/applications/sasm.desktop
+    shortcutfiles.path = $$DATADIR/applications/
+    docfiles.files += BSD/share/doc/sasm/changelog.gz
+    docfiles.files += BSD/share/doc/sasm/copyright
+    docfiles.path = $$DATADIR/doc/sasm/
+}
+
 INSTALLS += binfile
 INSTALLS += data
 INSTALLS += shortcutfiles

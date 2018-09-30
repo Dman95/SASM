@@ -54,6 +54,8 @@ QString NASM::getAssemblerPath()
 {
     #ifdef Q_OS_WIN32
         return Common::applicationDataPath() + "/NASM/nasm.exe";
+    #elif defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
+        return "/usr/local/bin/nasm";
     #else
         return "nasm";
     #endif

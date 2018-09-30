@@ -38,6 +38,8 @@ QString GccBasedAssembler::getLinkerPath()
         return Common::applicationDataPath() + "/MinGW/bin/gcc.exe";
     else
         return Common::applicationDataPath() + "/MinGW64/bin/gcc.exe";
+#elif defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
+    return "/usr/bin/cc";
 #else
     return "gcc";
 #endif

@@ -57,6 +57,8 @@ QString GAS::getAssemblerPath()
             return Common::applicationDataPath() + "/GAS/32/as.exe";
         else
             return Common::applicationDataPath() + "/GAS/64/as.exe";
+    #elif defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__NetBSD__) || defined(__DragonFly__)
+        return "/usr/bin/as";
     #else
         return "as";
     #endif
