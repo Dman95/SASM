@@ -41,7 +41,7 @@
 #ifndef GAS_H
 #define GAS_H
 
-#include "assembler.h"
+#include "gccbasedassembler.h"
 
 /**
  * @file gas.h
@@ -52,13 +52,12 @@
  *
  */
 
-class GAS : public Assembler
+class GAS : public GccBasedAssembler
 {
     Q_OBJECT
 public:
     explicit GAS(bool x86, QObject *parent = 0);
     QString getAssemblerPath();
-    QString getLinkerPath();
     quint64 getMainOffset(QFile &lst, QString entryLabel);
     void parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 offset);
     void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
@@ -68,9 +67,7 @@ public:
                              QRegExp &commentEndExpression);
     QString getStartText();
     void putDebugString(CodeEditor *code);
-    QString getAssemblerOptions();
-    QString getLinkerOptions();
-    
+    QString getAssemblerOptions();   
 signals:
     
 public slots:
