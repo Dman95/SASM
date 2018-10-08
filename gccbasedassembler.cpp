@@ -49,9 +49,9 @@ QString GccBasedAssembler::getLinkerOptions()
 {
     QString options;
     if (isx86())
-        options = "$PROGRAM.OBJ$ -g -o $PROGRAM$ -m32";
+        options = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m32";
     else
-         options = "$PROGRAM.OBJ$ -g -o $PROGRAM$ -m64";
+        options = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m64";
     if (m_isPieEnabled)
         options += " -fno-pie -no-pie";
     return options;
