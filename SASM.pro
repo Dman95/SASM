@@ -20,7 +20,6 @@ DATADIR = $$PREFIX/share
 
 bsd {
     binfile.files += sasm
-    binfile.files += BSD/bin/*
     binfile.path = $$BINDIR
     data.files += BSD/share/sasm/*
     data.path = $$DATADIR/sasm/
