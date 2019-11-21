@@ -86,10 +86,18 @@ QString Common::pathInTemp(QString path)
     if (lastSymbol == QChar('/') || lastSymbol == QChar('\\')) {
         temp.chop(1);
     }
-    if (! QFile::exists(temp + "/SASM")) {
-        QDir().mkpath(temp + "/SASM");
+
+    // Generate temporary directory including username
+    QString name = qgetenv("USER");
+    if (name.isEmpty())
+        name = qgetenv("USERNAME");
+
+    QString tempPath = temp+"/SASM"+name;
+
+    if (! QFile::exists(tempPath)) {
+        QDir().mkpath(tempPath);
     }
-    QString tempPath = temp + "/SASM";
+
     if (!path.isEmpty()) {
         tempPath += "/" + path;
     }
