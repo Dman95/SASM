@@ -870,6 +870,10 @@ void MainWindow::buildProgram(bool debugMode)
     } else {
         assemblerProcess.setWorkingDirectory(applicationDataPath() + "/include");
     }
+
+    if (settings.value("sasmverbose", false).toBool())
+        printLog("Assembler: "+assemblerPath+" "+assemblerArguments.join(" ")+"\n", Qt::darkGreen);
+
     assemblerProcess.start(assemblerPath, assemblerArguments);
     assemblerProcess.waitForFinished();
 
@@ -925,6 +929,10 @@ void MainWindow::buildProgram(bool debugMode)
         linkerOutput = Common::pathInTemp("linkererror.txt");
         linkerProcess.setStandardOutputFile(linkerOutput);
         linkerProcess.setStandardErrorFile(linkerOutput, QIODevice::Append);
+
+        if (settings.value("sasmverbose", false).toBool())
+            printLog("Linker: "+linker+" "+linkerArguments.join(" ")+"\n", Qt::darkGreen);
+
         linkerProcess.start(linker, linkerArguments);
         linkerProcess.waitForFinished();
 
@@ -1138,7 +1146,7 @@ void MainWindow::debug()
 
         QString gdbpath = settings.value("gdbpath", "gdb").toString();
 
-        debugger = new Debugger(compilerOut, path, Common::pathInTemp(QString()), assembler, gdbpath, 0, settings.value("gdbverbose", false).toBool());
+        debugger = new Debugger(compilerOut, path, Common::pathInTemp(QString()), assembler, gdbpath, 0, settings.value("sasmverbose", false).toBool());
 
         // connect print signals for output in Debugger
         connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
@@ -1833,7 +1841,7 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
 
     settingsUi.disableLinkingCheckbox->setChecked(settings.value("disablelinking", false).toBool());
 
-    settingsUi.gdbVerboseCheckBox->setChecked(settings.value("gdbverbose", false).toBool());
+    settingsUi.sasmVerboseCheckBox->setChecked(settings.value("sasmverbose", false).toBool());
 
     settingsUi.runInCurrentDirectoryCheckbox->setChecked(settings.value("currentdir", false).toBool());
 
@@ -1973,7 +1981,7 @@ void MainWindow::recreateAssembler(bool start)
         settingsUi.linkingOptionsEdit->setText(assembler->getLinkerOptions());
         settingsUi.objectFileNameEdit->setText("program.o");
         settingsUi.disableLinkingCheckbox->setChecked(false);
-        settingsUi.gdbVerboseCheckBox->setChecked(false);
+        settingsUi.sasmVerboseCheckBox->setChecked(false);
         settingsUi.runInCurrentDirectoryCheckbox->setChecked(false);
         settingsUi.assemblerPathEdit->setText(assembler->getAssemblerPath());
         settingsUi.gdbPathEdit->setText("gdb");
@@ -1983,7 +1991,7 @@ void MainWindow::recreateAssembler(bool start)
         settings.setValue("objectfilename", "program.o");
         settings.setValue("disablelinking", false);
         settings.setValue("currentdir", false);
-        settings.setValue("gdbverbose", false);
+        settings.setValue("sasmverbose", false);
         settings.setValue("gdbpath", "gdb");
         settings.setValue("assemblerpath", assembler->getAssemblerPath());
         settings.setValue("linkerpath", assembler->getLinkerPath());
@@ -2007,7 +2015,7 @@ void MainWindow::backupSettings()
     backupLinkerOptions = settings.value("linkingoptions", assembler->getLinkerOptions()).toString();
     backupObjectFileName = settings.value("objectfilename", "program.o").toString();
     backupGDBPath = settings.value("gdbpath", "gdb").toString();
-    backupGDBVerbose = settings.value("gdbverbose", false).toBool();
+    backupGDBVerbose = settings.value("sasmverbose", false).toBool();
     backupDisableLinking = settings.value("disablelinking", false).toBool();
     backupCurrentDir = settings.value("currentdir", false).toBool();
     backupStartText = settings.value("starttext", assembler->getStartText()).toString();
@@ -2025,7 +2033,7 @@ void MainWindow::restoreSettingsAndExit()
     settings.setValue("objectfilename", backupObjectFileName);
     settings.setValue("disablelinking", backupDisableLinking);
     settings.setValue("gdbpath", backupGDBPath);
-    settings.setValue("gdbverbose", backupGDBVerbose);
+    settings.setValue("sasmverbose", backupGDBVerbose);
     settings.setValue("currentdir", backupCurrentDir);
     settings.setValue("starttext", backupStartText);
     settings.setValue("linkerpath", backupLinkerPath);
@@ -2070,7 +2078,7 @@ void MainWindow::saveSettings()
     settings.setValue("linkingoptions", settingsUi.linkingOptionsEdit->text());
     settings.setValue("objectfilename", settingsUi.objectFileNameEdit->text());
     settings.setValue("disablelinking", settingsUi.disableLinkingCheckbox->isChecked());
-    settings.setValue("gdbverbose", settingsUi.gdbVerboseCheckBox->isChecked());
+    settings.setValue("sasmverbose", settingsUi.sasmVerboseCheckBox->isChecked());
     settings.setValue("currentdir", settingsUi.runInCurrentDirectoryCheckbox->isChecked());
     settings.setValue("assemblerpath", settingsUi.assemblerPathEdit->text());
     settings.setValue("gdbpath", settingsUi.gdbPathEdit->text());

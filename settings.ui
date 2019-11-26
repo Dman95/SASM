@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1439</width>
-    <height>947</height>
+    <width>1702</width>
+    <height>971</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -2175,12 +2175,12 @@
          <item row="10" column="0">
           <widget class="QLabel" name="gdbVerboseLabel">
            <property name="text">
-            <string>GDB verbose output:</string>
+            <string>SASM verbose mode:</string>
            </property>
           </widget>
          </item>
          <item row="10" column="1">
-          <widget class="QCheckBox" name="gdbVerboseCheckBox">
+          <widget class="QCheckBox" name="sasmVerboseCheckBox">
            <property name="text">
             <string/>
            </property>
@@ -2222,7 +2222,7 @@
  <connections/>
  <buttongroups>
   <buttongroup name="buttonGroup"/>
-  <buttongroup name="buttonGroup_3"/>
   <buttongroup name="buttonGroup_2"/>
+  <buttongroup name="buttonGroup_3"/>
  </buttongroups>
 </ui>

@@ -184,18 +184,18 @@ public:
     QLabel *disableLinkingLabel;
     QCheckBox *disableLinkingCheckbox;
     QLabel *gdbVerboseLabel;
-    QCheckBox *gdbVerboseCheckBox;
+    QCheckBox *sasmVerboseCheckBox;
     QLabel *infoLabel;
     QDialogButtonBox *buttonBox;
     QButtonGroup *buttonGroup;
-    QButtonGroup *buttonGroup_3;
     QButtonGroup *buttonGroup_2;
+    QButtonGroup *buttonGroup_3;
 
     void setupUi(QWidget *SettingsWindow)
     {
         if (SettingsWindow->objectName().isEmpty())
             SettingsWindow->setObjectName(QString::fromUtf8("SettingsWindow"));
-        SettingsWindow->resize(1439, 947);
+        SettingsWindow->resize(1702, 971);
         verticalLayout = new QVBoxLayout(SettingsWindow);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         settingsLabel = new QLabel(SettingsWindow);
@@ -1189,10 +1189,10 @@ public:
 
         formLayout->setWidget(10, QFormLayout::LabelRole, gdbVerboseLabel);
 
-        gdbVerboseCheckBox = new QCheckBox(buildTab);
-        gdbVerboseCheckBox->setObjectName(QString::fromUtf8("gdbVerboseCheckBox"));
+        sasmVerboseCheckBox = new QCheckBox(buildTab);
+        sasmVerboseCheckBox->setObjectName(QString::fromUtf8("sasmVerboseCheckBox"));
 
-        formLayout->setWidget(10, QFormLayout::FieldRole, gdbVerboseCheckBox);
+        formLayout->setWidget(10, QFormLayout::FieldRole, sasmVerboseCheckBox);
 
 
         verticalLayout_6->addLayout(formLayout);
@@ -1361,8 +1361,8 @@ public:
         runInCurrentDirectoryCheckbox->setText(QString());
         disableLinkingLabel->setText(QApplication::translate("SettingsWindow", "Disable linking:", nullptr));
         disableLinkingCheckbox->setText(QString());
-        gdbVerboseLabel->setText(QApplication::translate("SettingsWindow", "GDB verbose output:", nullptr));
-        gdbVerboseCheckBox->setText(QString());
+        gdbVerboseLabel->setText(QApplication::translate("SettingsWindow", "SASM verbose mode:", nullptr));
+        sasmVerboseCheckBox->setText(QString());
         infoLabel->setText(QString());
         tabWidget->setTabText(tabWidget->indexOf(buildTab), QApplication::translate("SettingsWindow", "Build", nullptr));
     } // retranslateUi
