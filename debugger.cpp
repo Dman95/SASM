@@ -53,7 +53,7 @@ namespace {
 }
 
 
-Debugger::Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler *assembler, QWidget *parent)
+Debugger::Debugger(QTextEdit *tEdit, const QString &i_path, const QString &tmp, Assembler *i_assembler, const QString &i_gdbpath, QWidget *parent, bool i_verbose)
     : QObject(parent)
 {
     QSettings settings("SASM Project", "SASM");
@@ -61,9 +61,16 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler
     pid = 0;
     firstAction = true;
     textEdit = tEdit;
+    path = i_path;
     tmpPath = tmp;
     registersOk = true;
-    this->assembler = assembler;
+    gdbPath = i_gdbpath;
+    assembler = i_assembler;
+    verbose = i_verbose;
+}
+
+bool Debugger::run()
+{
     #ifdef Q_OS_WIN32
         QString gdb;
         QString objdump;
@@ -85,7 +92,7 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler
             exitMessage = "__fu0__set_invalid_parameter_handler";
         }
     #else
-        QString gdb = "gdb";
+        QString gdb = gdbPath;
         QString objdump = "objdump";
         exitMessage = "libc_start_main";
     #endif
@@ -108,9 +115,10 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler
     objdumpResult = objdumpResult.mid(index + startAddress.length());
     entryPoint = objdumpResult.toLongLong(0, 16);
 
-
     QStringList arguments;
     arguments << path;
+
+    printLog(tr("Starting Debugger: ")+gdb+" "+arguments.join(" ")+"\n", Qt::darkGreen);
 
     process = new QProcess;
     process->start(gdb, arguments);
@@ -121,6 +129,27 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler
     bufferTimer = new QTimer;
     QObject::connect(bufferTimer, SIGNAL(timeout()), this, SLOT(processOutput()), Qt::QueuedConnection);
     bufferTimer->start(10);
+
+    process->waitForStarted();
+    if (process->state() == QProcess::NotRunning)
+    {
+        // read output for debug information
+        readOutputToBuffer();
+
+        printLog(tr("Failed to start debugger!"), Qt::red);
+        if (buffer != "")
+            printLog(buffer, Qt::red);
+
+        if (errorBuffer != "")
+            printLog(errorBuffer, Qt::red);
+
+        delete process;
+        process = 0;
+
+        return false;
+    }
+
+    return true;
 }
 
 void Debugger::emitStarted()
@@ -133,6 +162,7 @@ void Debugger::readOutputToBuffer()
 {
     if (!process)
         return;
+
     QByteArray error = process->readAllStandardError();
     errorBuffer += QString::fromLocal8Bit(error.constData(), error.size());
     QByteArray output = process->readAllStandardOutput();
@@ -142,9 +172,16 @@ void Debugger::readOutputToBuffer()
 void Debugger::processOutput()
 {
     bufferTimer->stop();
+
     int index = buffer.indexOf(QString("(gdb)"));
     int linefeedIndex = errorBuffer.indexOf("\n");
     if (index != -1) { //if whole message ready to processing (end of whole message is "(gdb)")
+        if (verbose)
+        {
+            printLog(buffer+"\n", Qt::red);
+            printLog(errorBuffer+"\n", Qt::red);
+        }
+
         QString output = buffer.left(index);
         QString error = errorBuffer.left(linefeedIndex);
         buffer.remove(0, index + 5); //remove processed message
@@ -174,13 +211,22 @@ void Debugger::processMessage(QString output, QString error)
         Reading symbols from C:\Users\Dmitri\Dropbox\Projects\SASMstatic\release\Program\SASMprog.exe...
         done.
         (gdb)*/
+
+        if (output.indexOf(QString(") 8.1.")) != -1) {
+            actionTypeQueue.enqueue(anyAction);
+            processAction(tr("GDB 8.1 not supported due to buggy implementation (b main [newline] run not producing a break). Please use a different version."));
+            QObject::disconnect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputToBuffer()));
+            emit finished();
+            return;
+        }
+
         c++;
         doInput(QString("disas main\n"), none);
         return;
     }
 
     if (c == 1) {
-    if (error.indexOf("No symbol",0,Qt::CaseInsensitive)!=-1) {
+    if (error.indexOf("No symbol", 0, Qt::CaseInsensitive)!=-1) {
             dbgSymbols = false;
         } else {
             dbgSymbols = true;
@@ -204,7 +250,7 @@ void Debugger::processMessage(QString output, QString error)
             //take offset in hexadecimal representation (10 symbols) from string and convert it to int
             c++;
             processLst(); //count accordance
-            run(); //perform Debugger::run(), that run program and open I/O files
+            gdb_cmd_run(); //perform Debugger::run(), that run program and open I/O files
             return;
         }
 
@@ -229,7 +275,7 @@ void Debugger::processMessage(QString output, QString error)
             offset = entryPoint; //changes in processLst()
             c++;
             processLst(); //count accordance
-            run(); //perform Debugger::run(), that run program and open I/O files
+            gdb_cmd_run(); //perform Debugger::run(), that run program and open I/O files
             return;
         }
 
@@ -277,6 +323,7 @@ void Debugger::processMessage(QString output, QString error)
 void Debugger::processAction(QString output, QString error)
 {
     bool backtrace = (output.indexOf(QRegExp("#\\d+  0x[0-9a-fA-F]{8,16} in .* ()")) != -1);
+
     if (output.indexOf(exitMessage) != -1 && !backtrace) {
         doInput("c\n", none);
         return;
@@ -536,6 +583,9 @@ void Debugger::pause()
 
 void Debugger::doInput(QString command, DebugActionType actionType)
 {
+    if (verbose)
+        printLog("CMD: "+command+"\n", Qt::darkYellow);
+
     if (actionType != none)
         actionTypeQueue.enqueue(actionType);
     //put \n after commands!
@@ -591,7 +641,7 @@ void Debugger::processLst()
     }
 }
 
-void Debugger::run()
+void Debugger::gdb_cmd_run()
 {
     //set breakpoint on main, run program amd open output and input files
     //put \n after commands!
@@ -647,16 +697,24 @@ void Debugger::changeBreakpoint(quint64 lineNumber, bool isAdded)
 
 Debugger::~Debugger() {
     emit highlightLine(-1);
-    if (process->state() == QProcess::Running) {
-        doInput("quit\n", none);
-        process->waitForFinished(1000);
-        if (process->state() == QProcess::Running) { //if still running
+    if (process)
+    {
+        if (process->state() == QProcess::Running) {
             doInput("quit\n", none);
-            process->terminate();
+            process->waitForFinished(1000);
+            if (process->state() == QProcess::Running) { //if still running
+                doInput("quit\n", none);
+                process->terminate();
+            }
         }
     }
-    delete process;
-    process = 0;
+
+    if (process != 0)
+    {
+        delete process;
+        process = 0;
+    }
+
     lines.clear();
     delete bufferTimer;
 }

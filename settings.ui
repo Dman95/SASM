@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>743</width>
-    <height>494</height>
+    <width>1439</width>
+    <height>947</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -41,7 +41,7 @@
       <enum>Qt::LeftToRight</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <property name="elideMode">
       <enum>Qt::ElideNone</enum>
@@ -1952,6 +1952,15 @@
          <property name="fieldGrowthPolicy">
           <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
          </property>
+         <property name="horizontalSpacing">
+          <number>12</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>12</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item row="0" column="0">
           <widget class="QLabel" name="modeLabel">
            <property name="text">
@@ -2119,14 +2128,41 @@
          <item row="6" column="1">
           <widget class="QLineEdit" name="objectFileNameEdit"/>
          </item>
-         <item row="8" column="0">
+         <item row="7" column="0">
+          <widget class="QLabel" name="gdbPathLabel">
+           <property name="text">
+            <string>GDB path (Unix only):</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="1">
+          <widget class="QLineEdit" name="gdbPathEdit"/>
+         </item>
+         <item row="11" column="0">
+          <widget class="QLabel" name="assemblerWorkingDirectoryLabel">
+           <property name="text">
+            <string>Build in current directory:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="1">
+          <widget class="QCheckBox" name="runInCurrentDirectoryCheckbox">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="12" column="0">
           <widget class="QLabel" name="disableLinkingLabel">
            <property name="text">
             <string>Disable linking:</string>
            </property>
           </widget>
          </item>
-         <item row="8" column="1">
+         <item row="12" column="1">
           <widget class="QCheckBox" name="disableLinkingCheckbox">
            <property name="enabled">
             <bool>true</bool>
@@ -2136,18 +2172,15 @@
            </property>
           </widget>
          </item>
-         <item row="7" column="0">
-          <widget class="QLabel" name="assemblerWorkingDirectoryLabel">
+         <item row="10" column="0">
+          <widget class="QLabel" name="gdbVerboseLabel">
            <property name="text">
-            <string>Build in current directory:</string>
+            <string>GDB verbose output:</string>
            </property>
           </widget>
          </item>
-         <item row="7" column="1">
-          <widget class="QCheckBox" name="runInCurrentDirectoryCheckbox">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
+         <item row="10" column="1">
+          <widget class="QCheckBox" name="gdbVerboseCheckBox">
            <property name="text">
             <string/>
            </property>
@@ -2188,8 +2221,8 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="buttonGroup_2"/>
-  <buttongroup name="buttonGroup_3"/>
   <buttongroup name="buttonGroup"/>
+  <buttongroup name="buttonGroup_3"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>

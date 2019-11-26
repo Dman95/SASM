@@ -39,6 +39,7 @@
 ****************************************************************************/
 
 #include "mainwindow.h"
+#include <iostream>
 
 /**
  * @file mainwindow.cpp
@@ -850,8 +851,7 @@ void MainWindow::buildProgram(bool debugMode)
     QStringList assemblerArguments = assemblerOptions.split(QChar(' '));
     assemblerArguments.replaceInStrings("$SOURCE$", Common::pathInTemp("program.asm"));
     assemblerArguments.replaceInStrings("$LSTOUTPUT$", Common::pathInTemp("program.lst"));
-    assemblerArguments.replaceInStrings("$PROGRAM.OBJ$",
-        Common::pathInTemp(settings.value("objectfilename", "program.o").toString()));
+    assemblerArguments.replaceInStrings("$PROGRAM.OBJ$", Common::pathInTemp(settings.value("objectfilename", "program.o").toString()));
     assemblerArguments.replaceInStrings("$PROGRAM$", Common::pathInTemp("SASMprog.exe"));
     assemblerArguments.replaceInStrings("$MACRO.OBJ$", stdioMacros);
     QProcess assemblerProcess;
@@ -1135,7 +1135,24 @@ void MainWindow::debug()
         printLogWithTime(tr("Debugging started...") + '\n', Qt::darkGreen);
         QString path = Common::pathInTemp("SASMprog.exe");
         CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
-        debugger = new Debugger(compilerOut, path, Common::pathInTemp(QString()), assembler);
+
+        QString gdbpath = settings.value("gdbpath", "gdb").toString();
+
+        debugger = new Debugger(compilerOut, path, Common::pathInTemp(QString()), assembler, gdbpath, 0, settings.value("gdbverbose", false).toBool());
+
+        // connect print signals for output in Debugger
+        connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
+        connect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
+
+        bool retval = debugger->run();
+
+        if (!retval)
+        {
+            delete debugger;
+            debugger = 0;
+            return;
+        }
+
         connect(debugger, SIGNAL(highlightLine(int)), code, SLOT(updateDebugLine(int)));
         connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
         connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
@@ -1143,11 +1160,10 @@ void MainWindow::debug()
         connect(code, SIGNAL(breakpointsChanged(quint64,bool)), debugger, SLOT(changeBreakpoint(quint64,bool)));
         connect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
                    this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
-        connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
-        connect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
         connect(debugger, SIGNAL(inMacro()), this, SLOT(debugNextNi()), Qt::QueuedConnection);
         connect(debugger, SIGNAL(wasStopped()), this, SLOT(changeDebugActionToStart()));
         connect(debugger, SIGNAL(needToContinue()), this, SLOT(debug()));
+
         code->setDebugEnabled();
     }
     //Pause or continue debugger
@@ -1813,7 +1829,11 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
 
     settingsUi.objectFileNameEdit->setText(settings.value("objectfilename", "program.o").toString());
 
+    settingsUi.gdbPathEdit->setText(settings.value("gdbpath", "gdb").toString());
+
     settingsUi.disableLinkingCheckbox->setChecked(settings.value("disablelinking", false).toBool());
+
+    settingsUi.gdbVerboseCheckBox->setChecked(settings.value("gdbverbose", false).toBool());
 
     settingsUi.runInCurrentDirectoryCheckbox->setChecked(settings.value("currentdir", false).toBool());
 
@@ -1898,6 +1918,7 @@ void MainWindow::changeMode(bool x86)
         settings.setValue("mode", QString("x86"));
     else
         settings.setValue("mode", QString("x64"));
+
     recreateAssembler();
 }
 
@@ -1907,6 +1928,7 @@ void MainWindow::recreateAssembler(bool start)
         delete assembler;
         assembler = 0;
     }
+
     bool x86 = true;
     if (settings.value("mode", QString("x86")).toString() != "x86")
         x86 = false;
@@ -1951,14 +1973,18 @@ void MainWindow::recreateAssembler(bool start)
         settingsUi.linkingOptionsEdit->setText(assembler->getLinkerOptions());
         settingsUi.objectFileNameEdit->setText("program.o");
         settingsUi.disableLinkingCheckbox->setChecked(false);
+        settingsUi.gdbVerboseCheckBox->setChecked(false);
         settingsUi.runInCurrentDirectoryCheckbox->setChecked(false);
         settingsUi.assemblerPathEdit->setText(assembler->getAssemblerPath());
+        settingsUi.gdbPathEdit->setText("gdb");
         settingsUi.linkerPathEdit->setText(assembler->getLinkerPath());
         settings.setValue("assemblyoptions", assembler->getAssemblerOptions());
         settings.setValue("linkingoptions", assembler->getLinkerOptions());
         settings.setValue("objectfilename", "program.o");
         settings.setValue("disablelinking", false);
         settings.setValue("currentdir", false);
+        settings.setValue("gdbverbose", false);
+        settings.setValue("gdbpath", "gdb");
         settings.setValue("assemblerpath", assembler->getAssemblerPath());
         settings.setValue("linkerpath", assembler->getLinkerPath());
         changeStartText();
@@ -1980,6 +2006,8 @@ void MainWindow::backupSettings()
     backupAssemblerPath = settings.value("assemblerpath", assembler->getAssemblerPath()).toString();
     backupLinkerOptions = settings.value("linkingoptions", assembler->getLinkerOptions()).toString();
     backupObjectFileName = settings.value("objectfilename", "program.o").toString();
+    backupGDBPath = settings.value("gdbpath", "gdb").toString();
+    backupGDBVerbose = settings.value("gdbverbose", false).toBool();
     backupDisableLinking = settings.value("disablelinking", false).toBool();
     backupCurrentDir = settings.value("currentdir", false).toBool();
     backupStartText = settings.value("starttext", assembler->getStartText()).toString();
@@ -1996,6 +2024,8 @@ void MainWindow::restoreSettingsAndExit()
     settings.setValue("linkingoptions", backupLinkerOptions);
     settings.setValue("objectfilename", backupObjectFileName);
     settings.setValue("disablelinking", backupDisableLinking);
+    settings.setValue("gdbpath", backupGDBPath);
+    settings.setValue("gdbverbose", backupGDBVerbose);
     settings.setValue("currentdir", backupCurrentDir);
     settings.setValue("starttext", backupStartText);
     settings.setValue("linkerpath", backupLinkerPath);
@@ -2040,8 +2070,10 @@ void MainWindow::saveSettings()
     settings.setValue("linkingoptions", settingsUi.linkingOptionsEdit->text());
     settings.setValue("objectfilename", settingsUi.objectFileNameEdit->text());
     settings.setValue("disablelinking", settingsUi.disableLinkingCheckbox->isChecked());
+    settings.setValue("gdbverbose", settingsUi.gdbVerboseCheckBox->isChecked());
     settings.setValue("currentdir", settingsUi.runInCurrentDirectoryCheckbox->isChecked());
     settings.setValue("assemblerpath", settingsUi.assemblerPathEdit->text());
+    settings.setValue("gdbpath", settingsUi.gdbPathEdit->text());
     settings.setValue("linkerpath", settingsUi.linkerPathEdit->text());
     settings.setValue("starttext", settingsStartTextEditor->document()->toPlainText());
 

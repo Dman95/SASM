@@ -81,7 +81,7 @@ class Debugger : public QObject
     Q_OBJECT
 
 public:
-    Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler *assembler, QWidget *parent = 0);
+    Debugger(QTextEdit *tEdit, const QString &path, const QString &tmp, Assembler *assembler, const QString &gdbpath, QWidget *parent = 0, bool verbose = true);
     ~Debugger();
     void setWatchesCount(int count);
 
@@ -101,15 +101,27 @@ public:
     bool isStopped();
     void pause();
 
+    //! Global gdb output buffer
+    QString buffer;
+
+    //! Global gdb error buffer
+    QString errorBuffer;
+
+    // start debugger
+    bool run();
+
 private:
     void processLst();
-    void run();
+    void gdb_cmd_run();
+
+    bool verbose;
 
     QProcess *process;
     QTextEdit *textEdit;
 
     //! Offset between program code in memory and in file
     quint64 offset;
+
 
     //! Accordance between program lines in memory and in file
     QVector<LineNum> lines;
@@ -125,13 +137,11 @@ private:
     //! Message on exit which shows when "continue" command used
     QRegExp cExitMessage;
 
+
+    QString path;
     QString tmpPath;
+    QString gdbPath;
 
-    //! Global gdb output buffer
-    QString buffer;
-
-    //! Global gdb error buffer
-    QString errorBuffer;
 
     //! Timer for checking output and sending ready output to processing with Debugger::processOutput() function
     QTimer *bufferTimer;

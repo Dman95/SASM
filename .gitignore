@@ -20,3 +20,7 @@ Thumbs.db
 doc/*
 .qmake.stash
 sasm.app
+
+*.swp
+*.o
+sasm
