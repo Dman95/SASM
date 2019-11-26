@@ -212,6 +212,8 @@ void Debugger::processMessage(QString output, QString error)
         done.
         (gdb)*/
 
+#if 0
+        // not required anymore, since GDB can be specified
         if (output.indexOf(QString(") 8.1.")) != -1) {
             actionTypeQueue.enqueue(anyAction);
             processAction(tr("GDB 8.1 not supported due to buggy implementation (b main [newline] run not producing a break). Please use a different version."));
@@ -219,6 +221,7 @@ void Debugger::processMessage(QString output, QString error)
             emit finished();
             return;
         }
+#endif
 
         c++;
         doInput(QString("disas main\n"), none);
