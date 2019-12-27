@@ -226,7 +226,10 @@ void DebugTableWidget::closeEvent(QCloseEvent *) {
 void DebugTableWidget::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::RightButton && type == memoryTable) {
-        contextMenuLineNumber = itemAt(event->pos())->row();
+        QTableWidgetItem *clicked_item = itemAt(event->pos());
+        if (!clicked_item) // background clicked
+            return;
+        contextMenuLineNumber = clicked_item->row();
         setCurrentCell(contextMenuLineNumber, 0);
         if (contextMenuLineNumber >= rowCount() - 1) //last line
             return;
