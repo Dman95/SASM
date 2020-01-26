@@ -1031,7 +1031,7 @@
     <message>
         <location filename="settings.ui" line="2130"/>
         <source>Build in current directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>Compila nella cartella corrente:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="2103"/>
