@@ -3,6 +3,8 @@
 #include <QProcess>
 #include <QProcessEnvironment>
 #include <QStringList>
+
+#ifndef Q_OS_WIN32
 namespace
 {
    bool testPieOnUnix()
@@ -19,6 +21,7 @@ namespace
        return gccResult.indexOf("--enable-default-pie") != -1;
    }
 }
+#endif
 
 GccBasedAssembler::GccBasedAssembler(bool x86, QObject *parent)
     : Assembler(x86, parent)
