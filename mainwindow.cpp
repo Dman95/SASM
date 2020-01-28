@@ -1217,6 +1217,7 @@ void MainWindow::disableDebugActions(bool start)
 {
     debugAction->setText(tr("Debug"));
     debugAction->setIcon(QIcon(":/images/debug.png"));
+    debugAction->setShortcut(debugKey);
 
     debugNextAction->setEnabled(false);
     debugNextNiAction->setEnabled(false);
