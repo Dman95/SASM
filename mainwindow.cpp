@@ -595,7 +595,7 @@ void MainWindow::changeCurrentSavedState(bool changed)
 void MainWindow::openFile()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open file"), saveOpenDirectory,
-                                                    tr("Assembler source files (*.asm);;All files (*.*)"));
+                                                    tr("Assembler source files (*.asm);;All files (*)"));
     if (fileName.isEmpty()) {
         return;
     }
@@ -654,7 +654,7 @@ bool MainWindow::saveFile(int index)
 bool MainWindow::saveAsFile(int index)
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save file"), saveOpenDirectory,
-                                                    tr("Assembler source files (*.asm);;All files (*.*)"));
+                                                    tr("Assembler source files (*.asm);;All files (*)"));
     if (fileName.isEmpty()) {
         return false;
     }
