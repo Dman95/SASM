@@ -605,7 +605,7 @@ void Debugger::run()
     }
     doInput(QString("cd " + tmpPath + "\n"), none);
     doInput(QString("run\n"), none);
-    doInput(QString("p dup2(open(\"input.txt\",0),0)\n"), none);
+    doInput(QString("p (int) dup2((int) open(\"input.txt\",0),0)\n"), none);
 }
 
 void Debugger::changeBreakpoint(quint64 lineNumber, bool isAdded)
