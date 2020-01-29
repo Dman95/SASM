@@ -1500,6 +1500,11 @@ void MainWindow::find()
         connect(findDialog, SIGNAL(findNext(QString,Qt::CaseSensitivity,bool,bool,QString)),
                 this, SLOT(findNext(QString,Qt::CaseSensitivity,bool,bool,QString)));
     }
+    CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
+    QString selectedText = code->textCursor().selectedText();
+    if (!selectedText.isEmpty()) {
+        findDialog->setSearchText(selectedText);
+    }
     findDialog->show();
     findDialog->activateWindow();
 }

@@ -83,6 +83,7 @@ signals:
 
 public slots:
     bool close();
+    void setSearchText(const QString &text);
 
 private slots:
     void findClicked();
