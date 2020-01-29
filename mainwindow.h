@@ -224,7 +224,7 @@ public slots:
     void newFile();
     void openFile();
     void closeFile();
-    bool saveFile(int index = -1);
+    bool saveFile(int index = -1, bool openSaveAs = true);
     bool saveAsFile(int index = -1);
     void saveExe();
     bool closeApp();

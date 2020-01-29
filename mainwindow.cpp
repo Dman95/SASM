@@ -635,7 +635,7 @@ void MainWindow::closeFile()
     deleteTab(tabs->currentIndex());
 }
 
-bool MainWindow::saveFile(int index)
+bool MainWindow::saveFile(int index, bool openSaveAs)
 {
     Tab *tab;
     if (index == -1)
@@ -644,7 +644,11 @@ bool MainWindow::saveFile(int index)
         tab = (Tab *) tabs->widget(index);
     QString filePath = tab->getCurrentFilePath();
     if (filePath.isEmpty()) {
-        return saveAsFile(index);
+        if (openSaveAs) {
+            return saveAsFile(index);
+        } else {
+            return false;
+        }
     } else {
         tab->saveCodeToFile(filePath, assembler);
         return true;
@@ -805,6 +809,8 @@ void MainWindow::changeCurrentTab(int index)
 
 void MainWindow::buildProgram(bool debugMode)
 {
+    saveFile(-1, false); //save file before building if program already was saved
+
     programIsBuilded = false;
 
     using Common::applicationDataPath;
