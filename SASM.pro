@@ -11,6 +11,10 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = sasm
 TEMPLATE = app
 
+mac: LIBS+= -Wl,-dead_strip
+mac: LIBS+= -Wl,-dead_strip_dylibs
+mac: LIBS+= -Wl,-bind_at_load
+
 isEmpty(PREFIX) {
  PREFIX = /usr
 }
