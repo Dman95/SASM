@@ -465,9 +465,8 @@ void Debugger::processAction(QString output, QString error)
                 break;
             }
 
-            if (general.contains(info.name) || segment.contains(info.name) || fpu_info.contains(info.name)) {
-                registersStream >> info.hexValue >> info.decValue;
-            } else if ((info.name == ip) || flags.contains(info.name) || fpu_stack.exactMatch(info.name)) {
+            if (general.contains(info.name) || segment.contains(info.name) || fpu_info.contains(info.name) ||
+                    info.name == ip || flags.contains(info.name) || fpu_stack.exactMatch(info.name)) {
                 registersStream >> info.hexValue;
                 registersStream.skipWhiteSpace();
                 info.decValue = registersStream.readLine();
