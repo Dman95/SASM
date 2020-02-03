@@ -364,7 +364,7 @@ void MainWindow::createActions()
 
     uncommentAction = new QAction(tr("Remove comment"), this);
     key = keySettings.value("uncomment", "default").toString();
-    stdKey = QKeySequence(QString("Shift+Ctrl+S"));
+    stdKey = QKeySequence(QString("Shift+Ctrl+Q"));
     if (key == "default")
         key = stdKey.toString();
     uncommentAction->setShortcut(key);
@@ -2226,7 +2226,7 @@ void MainWindow::openAbout()
                        tr("simple Open Source IDE for NASM, MASM, GAS and FASM assembler languages.") + '\n' +
                        tr("Licensed under the GNU GPL v3.0") + '\n' +
                        tr("Based on the Qt.") + '\n' +
-                       tr("Copyright © 2013 Dmitriy Manushin") + '\n' +
+                       tr("Copyright (c) 2013 Dmitriy Manushin") + '\n' +
                        tr("Development and idea - Dmitriy Manushin") + '\n' +
                        tr("Icon and advices - Alick Gaybullaev") + '\n' + '\n' +
                        tr("Wishes and error messages are sent to the e-mail: Dman1095@gmail.com") + '\n' +

@@ -56,12 +56,22 @@ RuQPlainTextEdit::RuQPlainTextEdit(QWidget *parent) :
 
     setDebugDisabled();
 
+    QSettings keySettings(Common::applicationDataPath() + "/keys.ini", QSettings::IniFormat);
+
     commentAction = new QAction(tr("Comment"), this);
-    commentAction->setShortcut(QString("Ctrl+Shift+Q"));
+    QString key = keySettings.value("comment", "default").toString();
+    QKeySequence stdKey = QKeySequence(QString("Shift+Ctrl+A"));
+    if (key == "default")
+        key = stdKey.toString();
+    commentAction->setShortcut(key);
     connect(commentAction, SIGNAL(triggered()), this, SLOT(commentSelectedCode()));
 
     uncommentAction = new QAction(tr("Remove comment"), this);
-    uncommentAction->setShortcut(QString("Ctrl+Shift+A"));
+    key = keySettings.value("uncomment", "default").toString();
+    stdKey = QKeySequence(QString("Shift+Ctrl+Q"));
+    if (key == "default")
+        key = stdKey.toString();
+    uncommentAction->setShortcut(key);
     connect(uncommentAction, SIGNAL(triggered()), this, SLOT(uncommentSelectedCode()));
 
     undoAction = new QAction(tr("Undo"), this);
