@@ -34,8 +34,8 @@ Further print commands:
 ===========================================================================
 
 Also you can download already compiled packages 
-from site http://dman95.github.io/SASM/ or 
-from OBS repository http://download.opensuse.org/repositories/home:/Dman95/
+from site https://dman95.github.io/SASM/ or 
+from OBS repository https://download.opensuse.org/repositories/home:/Dman95/
 
 More help info in file help.html
 Also SASM supports doxygen: run "doxygen configfile" to generate documentation. In this documentation you can also find a small developer guide which includes information about adding new assemblers and languages support.
