@@ -105,6 +105,16 @@ public:
     void setCurrentTabName(const QString &filePath, int index = -1);
     bool removeDirRecuresively(const QString &dirName);
 
+    // return current code editor
+    inline CodeEditor* codeEditor() const noexcept {
+        return ((Tab*)tabs->currentWidget())->code;
+    }
+
+    inline void incrementEditorFontSize(int size) {
+        auto newFont = codeEditor()->font();
+        newFont.setPointSize(newFont.pointSize() + size);
+        codeEditor()->setFont(newFont);
+    }
 private:
     //ui
     GetStartedWidget *getStartedWidget;
@@ -154,6 +164,10 @@ private:
     QAction *settingsAction;
     QAction *helpAction;
     QAction *aboutAction;
+
+    QAction *gotoLineAction;
+    QAction *zoomInAction;
+    QAction *zoomOutAction;
 
     //! Toolbars
     QToolBar *fileToolBar;
@@ -231,6 +245,9 @@ public slots:
     void refreshEditMenu();
     void changeCurrentSavedState(bool changed);
     void openFile(QString path);
+    void gotoLine();
+    void zoomIn();
+    void zoomOut();
 
     //! Build
     void buildProgram(bool debugMode = false);

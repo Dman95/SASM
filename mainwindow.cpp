@@ -40,19 +40,24 @@
 
 #include "mainwindow.h"
 
+#include <QColor>
+#include <QInputDialog>
 /**
  * @file mainwindow.cpp
  * Code for all of the windows and features.
  */
 
 MainWindow::MainWindow(const QStringList &args, QWidget *parent)
-    : QMainWindow(parent), settings("SASM Project", "SASM")
-{
+    : QMainWindow(parent), settings("SASM Project", "SASM") {
     setWindowTitle("SASM");
     setWindowIcon(QIcon(":images/mainIcon.png"));
 
     //! Set save and open directory
-    saveOpenDirectory = settings.value("saveopendirectory", QString(Common::applicationDataPath() + "/Projects")).toString();
+    saveOpenDirectory =
+        settings
+            .value("saveopendirectory",
+                   QString(Common::applicationDataPath() + "/Projects"))
+            .toString();
 
     //! Initial variables
     programIsBuilded = false;
@@ -149,17 +154,21 @@ void MainWindow::initUi()
     //! Create tabs
     tabs = new QTabWidget;
     connect(tabs, SIGNAL(tabCloseRequested(int)), this, SLOT(deleteTab(int)));
-    connect(tabs, SIGNAL(currentChanged(int)), this, SLOT(changeCurrentTab(int)));
+    connect(tabs, SIGNAL(currentChanged(int)), this,
+            SLOT(changeCurrentTab(int)));
     tabs->setTabsClosable(true);
     tabs->setMovable(true);
 
     //! Create compiler field
     compilerOut = new RuQTextEdit;
     compilerOut->setReadOnly(true);
-    QFont compilerOutFont;
-    compilerOutFont.setPointSize(settings.value("fontsize", 12).toInt());
+
+    QFont compilerOutFont(settings.value("consoleFontFamily").toString(),
+                          settings.value("consoleFontSize", 12).toInt());
+
     compilerOut->setFont(compilerOutFont);
     compilerOut->setText(tr("Build log:") + '\n');
+    compilerOut->setTextColor(QColor("white"));
 
     //! Create gdb command widget
     debugAnyCommandWidget = new DebugAnyCommandWidget;
@@ -208,15 +217,20 @@ void MainWindow::createMenus()
     editMenu->addSeparator();
     editMenu->addAction(putTabAction);
     editMenu->addAction(deleteTabAction);
+    editMenu->addAction(gotoLineAction);
+    editMenu->addAction(zoomInAction);
+    editMenu->addAction(zoomOutAction);
+
     connect(editMenu, SIGNAL(aboutToShow()), this, SLOT(refreshEditMenu()));
     connect(tabs, SIGNAL(currentChanged(int)), this, SLOT(refreshEditMenu()));
+
     buildMenu = menuBar()->addMenu(tr("Build"));
     buildMenu->addAction(buildAction);
     buildMenu->addSeparator();
     buildMenu->addAction(runAction);
-    #ifdef Q_OS_WIN32
-        buildMenu->addAction(runExeAction);
-    #endif
+#ifdef Q_OS_WIN32
+    buildMenu->addAction(runExeAction);
+#endif
     buildMenu->addSeparator();
     buildMenu->addAction(stopAction);
     debugMenu = menuBar()->addMenu(tr("Debug"));
@@ -409,81 +423,104 @@ void MainWindow::createActions()
     //! Enable in runProgram(), disable in stop
     stopAction->setEnabled(false);
 
+
+
     debugAction = new QAction(QIcon(":/images/debug.png"), tr("Debug"), this);
     key = keySettings.value("debug", "default").toString();
     stdKey = QKeySequence(QString("F5"));
-    if (key == "default")
-        key = stdKey.toString();
+    if (key == "default") key = stdKey.toString();
     debugAction->setShortcut(key);
     debugKey = key;
     connect(debugAction, SIGNAL(triggered()), this, SLOT(debug()));
 
-    debugNextNiAction = new QAction(QIcon(":/images/stepover.png"), tr("Step over"), this);
+    debugNextNiAction =
+        new QAction(QIcon(":/images/stepover.png"), tr("Step over"), this);
     key = keySettings.value("stepOver", "default").toString();
     stdKey = QKeySequence(QString("F10"));
-    if (key == "default")
-        key = stdKey.toString();
+    if (key == "default") key = stdKey.toString();
     debugNextNiAction->setShortcut(key);
     connect(debugNextNiAction, SIGNAL(triggered()), this, SLOT(debugNextNi()));
 
-    debugNextAction = new QAction(QIcon(":/images/stepinto.png"), tr("Step into"), this);
+    debugNextAction =
+        new QAction(QIcon(":/images/stepinto.png"), tr("Step into"), this);
     key = keySettings.value("stepInto", "default").toString();
     stdKey = QKeySequence(QString("F11"));
-    if (key == "default")
-        key = stdKey.toString();
+    if (key == "default") key = stdKey.toString();
     debugNextAction->setShortcut(key);
     connect(debugNextAction, SIGNAL(triggered()), this, SLOT(debugNext()));
 
     debugToggleBreakpointAction = new QAction(tr("Toggle breakpoint"), this);
     key = keySettings.value("breakpoint", "default").toString();
     stdKey = QKeySequence(QString("F8"));
-    if (key == "default")
-        key = stdKey.toString();
+    if (key == "default") key = stdKey.toString();
     debugToggleBreakpointAction->setShortcut(key);
-    connect(debugToggleBreakpointAction, SIGNAL(triggered()), this, SLOT(debugToggleBreakpoint()));
+    connect(debugToggleBreakpointAction, SIGNAL(triggered()), this,
+            SLOT(debugToggleBreakpoint()));
 
     debugShowRegistersAction = new QAction(tr("Show registers"), this);
     key = keySettings.value("showRegisters", "default").toString();
     stdKey = QKeySequence(QString("Ctrl+R"));
-    if (key == "default")
-        key = stdKey.toString();
+    if (key == "default") key = stdKey.toString();
     debugShowRegistersAction->setShortcut(key);
     debugShowRegistersAction->setCheckable(true);
-    connect(debugShowRegistersAction, SIGNAL(toggled(bool)), this, SLOT(debugShowRegisters()), Qt::QueuedConnection);
+    connect(debugShowRegistersAction, SIGNAL(toggled(bool)), this,
+            SLOT(debugShowRegisters()), Qt::QueuedConnection);
 
     debugShowMemoryAction = new QAction(tr("Show memory"), this);
     key = keySettings.value("showMemory", "default").toString();
     stdKey = QKeySequence(QString("Ctrl+M"));
-    if (key == "default")
-        key = stdKey.toString();
+    if (key == "default") key = stdKey.toString();
     debugShowMemoryAction->setShortcut(key);
     debugShowMemoryAction->setCheckable(true);
-    connect(debugShowMemoryAction, SIGNAL(toggled(bool)), this, SLOT(debugShowMemory()), Qt::QueuedConnection);
+    connect(debugShowMemoryAction, SIGNAL(toggled(bool)), this,
+            SLOT(debugShowMemory()), Qt::QueuedConnection);
 
     disableDebugActions(true);
-
 
     settingsAction = new QAction(tr("Settings"), this);
     connect(settingsAction, SIGNAL(triggered()), this, SLOT(openSettings()));
 
-    connect(mainWidget, SIGNAL(currentChanged(int)), this, SLOT(changeActionsState(int)));
+    connect(mainWidget, SIGNAL(currentChanged(int)), this,
+            SLOT(changeActionsState(int)));
+
+
+    gotoLineAction = new QAction(tr("Goto Line"), this);
+    gotoLineAction->setShortcut(QKeySequence("Ctrl+G"));
+    connect(gotoLineAction, SIGNAL(triggered()), this, SLOT(gotoLine()));
+
+    // increase font size
+    zoomInAction = new QAction(tr("Zoom in"), this);
+    zoomInAction->setShortcut(QKeySequence("Ctrl++"));
+    connect(zoomInAction, SIGNAL(triggered()), this, SLOT(zoomIn()));
+
+    zoomOutAction= new QAction(tr("Zoom out"), this);
+    zoomOutAction->setShortcut(QKeySequence("Ctrl+-"));
+    connect(zoomOutAction, SIGNAL(triggered()), this, SLOT(zoomOut()));
+
+
+
     //! Disable some actions if get started widget opened
+
     changeActionsState(mainWidget->currentIndex());
+
+    ///////////
 
     helpAction = new QAction(tr("Help"), this);
     key = keySettings.value("help", "default").toString();
     stdKey = QKeySequence(QKeySequence::HelpContents);
-    if (key == "default")
-        key = stdKey.toString();
+    if (key == "default") key = stdKey.toString();
     helpAction->setShortcut(key);
     connect(helpAction, SIGNAL(triggered()), this, SLOT(openHelp()));
 
     aboutAction = new QAction(tr("About"), this);
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(openAbout()));
+
+
+
+
 }
 
-void MainWindow::createToolBars()
-{
+void MainWindow::createToolBars() {
     fileToolBar = addToolBar(tr("File"));
     fileToolBar->addAction(newAction);
     fileToolBar->addAction(openAction);
@@ -945,24 +982,23 @@ void MainWindow::buildProgram(bool debugMode)
     logFile.open(QIODevice::ReadOnly);
     QTextStream log(&logFile);
     QString logText = log.readAll();
-    if (settings.value("assembler", QString("NASM")).toString() == "FASM" && logText.count(QChar('\n')) == 2
-            && logText.contains(QRegExp(" bytes\\.")))
+    if (settings.value("assembler", QString("NASM")).toString() == "FASM" &&
+        logText.count(QChar('\n')) == 2 &&
+        logText.contains(QRegExp(" bytes\\.")))
         logText.clear();
     if (settings.value("assembler", QString("NASM")).toString() == "MASM") {
-        if (logText.count(QChar('\n')) == 1 && logText.startsWith(" Assembling:"))
+        if (logText.count(QChar('\n')) == 1 &&
+            logText.startsWith(" Assembling:"))
             logText.clear();
         if (logText.count(QChar('\n')) == 6 && logText.contains("ASCII build"))
             logText.clear();
     }
     logFile.close();
 
-    bool builded;
-    if (QFile::exists(Common::pathInTemp("SASMprog.exe")))
-        builded = true;
-    else
-        builded = false;
+    bool builded = QFile::exists(Common::pathInTemp("SASMprog.exe"));
     if (!builded) {
-        printLogWithTime(tr("Warning! Errors have occurred in the build:") + '\n', Qt::red);
+        printLogWithTime(
+            tr("Warning! Errors have occurred in the build:") + '\n', Qt::red);
 
         //! Print errors
         printLog(logText, Qt::red);
@@ -1112,51 +1148,76 @@ void MainWindow::printLog(const QString &message, const QColor &color)
     compilerOut->setTextCursor(cursor);
 }
 
-void MainWindow::setProgramBuildedFlagToFalse()
-{
-    programIsBuilded = false;
-}
+void MainWindow::setProgramBuildedFlagToFalse() { programIsBuilded = false; }
 
-void MainWindow::printOutput(QString msg, int index)
-{
+void MainWindow::printOutput(QString msg, int index) {
     Tab *tab = 0;
     if (index != -1) {
-        tab = (Tab *) tabs->widget(index);
+        tab = (Tab *)tabs->widget(index);
     } else
-        tab = (Tab *) tabs->currentWidget();
+        tab = (Tab *)tabs->currentWidget();
     tab->appendOutput(msg);
 }
 
-void MainWindow::debug()
-{
+void MainWindow::debug() {
     //! Start debugger if true
     if (!debugger) {
         debuggerWasStarted = false;
         buildProgram(true);
         if (!programIsBuilded) {
-            printLogWithTime(tr("Before debugging you need to build the program.") + '\n', Qt::red);
+            printLogWithTime(
+                tr("Before debugging you need to build the program.") + '\n',
+                Qt::red);
             return;
         }
-        ((Tab *) tabs->currentWidget())->clearOutput();
-        printLogWithTime(tr("Debugging started...") + '\n', Qt::darkGreen);
+        ((Tab *)tabs->currentWidget())->clearOutput();
+
         QString path = Common::pathInTemp("SASMprog.exe");
-        CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
-        debugger = new Debugger(compilerOut, path, Common::pathInTemp(QString()), assembler);
-        connect(debugger, SIGNAL(highlightLine(int)), code, SLOT(updateDebugLine(int)));
-        connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
+        CodeEditor *code = ((Tab *)tabs->currentWidget())->code;
+
+        bool okBtn;
+        const auto programArgs = QInputDialog::getText(this,
+                                                       "Arguments",
+                                                       "Program arguments",
+                                                       QLineEdit::Normal,
+                                                       settings.value("programArgs").toString(), &okBtn);
+
+        if(!okBtn) {
+            printLogWithTime(tr("Debbuging canceled...") + '\n', Qt::red);
+            return;
+        }
+
+        settings.setValue("programArgs", programArgs);
+        printLogWithTime(tr("Debugging started...") + '\n', Qt::darkGreen);
+        debugger = new Debugger(compilerOut,
+                                path,
+                                programArgs,
+                                Common::pathInTemp(QString()),
+                                assembler);
+
+        connect(debugger, SIGNAL(highlightLine(int)), code,
+                SLOT(updateDebugLine(int)));
+        connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()),
+                Qt::QueuedConnection);
         connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
-        connect(debugger, SIGNAL(started()), this, SLOT(showAnyCommandWidget()));
-        connect(code, SIGNAL(breakpointsChanged(quint64,bool)), debugger, SLOT(changeBreakpoint(quint64,bool)));
+        connect(debugger, SIGNAL(started()), this,
+                SLOT(showAnyCommandWidget()));
+        connect(code, SIGNAL(breakpointsChanged(quint64, bool)), debugger,
+                SLOT(changeBreakpoint(quint64, bool)));
         connect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
-                   this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
-        connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
-        connect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
-        connect(debugger, SIGNAL(inMacro()), this, SLOT(debugNextNi()), Qt::QueuedConnection);
-        connect(debugger, SIGNAL(wasStopped()), this, SLOT(changeDebugActionToStart()));
+                this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
+        connect(debugger, SIGNAL(printLog(QString, QColor)), this,
+                SLOT(printLog(QString, QColor)));
+        connect(debugger, SIGNAL(printOutput(QString)), this,
+                SLOT(printOutput(QString)));
+        connect(debugger, SIGNAL(inMacro()), this, SLOT(debugNextNi()),
+                Qt::QueuedConnection);
+        connect(debugger, SIGNAL(wasStopped()), this,
+                SLOT(changeDebugActionToStart()));
         connect(debugger, SIGNAL(needToContinue()), this, SLOT(debug()));
         code->setDebugEnabled();
     }
-    //Pause or continue debugger
+    // Pause or continue debugger
     else {
         debugAction->setEnabled(false);
         if (debugger->isStopped()) {
@@ -1757,7 +1818,13 @@ void MainWindow::openSettings()
     settingsUi.language->setCurrentIndex(settings.value("language", 0).toInt());
     settingsUi.fontComboBox->setCurrentFont(QFont(settings.value("fontfamily",
                                                                  QString("Courier New")).value<QString>()));
+
+    settingsUi.consoleFontBox->setCurrentFont(QFont(settings.value("consoleFontFamily",
+                                                                   QString("Courier New")).value<QString>()));
+
     settingsUi.fontSizeSpinBox->setValue(settings.value("fontsize", 12).toInt());
+    settingsUi.consoleFontSizeSpinner->setValue(settings.value("consoleFontSize", 12).toInt());
+
     if (settings.value("allregisters", false).toBool())
         settingsUi.registersYesRadioButton->setChecked(true);
     else
@@ -2040,12 +2107,16 @@ void MainWindow::saveSettings()
     //! Change fonts
     settings.setValue("fontfamily", settingsUi.fontComboBox->currentFont().family());
     settings.setValue("fontsize", settingsUi.fontSizeSpinBox->value());
+    settings.setValue("consoleFontFamily", settingsUi.consoleFontBox->currentFont().family());
+    settings.setValue("consoleFontSize", settingsUi.consoleFontSizeSpinner->value());
+
     for (int i = 0; i < tabs->count(); i++) {
         Tab *tab = (Tab *) tabs->widget(i);
         tab->setFonts();
     }
-    QFont compilerOutFont;
-    compilerOutFont.setPointSize(settings.value("fontsize", 12).toInt());
+    const QFont compilerOutFont(settings.value("consoleFontFamily").toString(),
+                          settings.value("consoleFontSize", 12).toInt());
+
     compilerOut->setFont(compilerOutFont);
 
     settings.setValue("assemblyoptions", settingsUi.assemblyOptionsEdit->text());
@@ -2176,6 +2247,10 @@ void MainWindow::changeActionsState(int widgetIndex)
         debugShowRegistersAction->setEnabled(false);
         debugToggleBreakpointAction->setEnabled(false);
         debugShowMemoryAction->setEnabled(false);
+        gotoLineAction->setEnabled(false);
+        zoomInAction->setEnabled(false);
+        zoomOutAction->setEnabled(false);
+
     } else {
         closeAction->setEnabled(true);
         saveAction->setEnabled(true);
@@ -2191,11 +2266,13 @@ void MainWindow::changeActionsState(int widgetIndex)
         runExeAction->setEnabled(true);
         debugAction->setEnabled(true);
         debugToggleBreakpointAction->setEnabled(true);
+        gotoLineAction->setEnabled(true);
+        zoomInAction->setEnabled(true);
+        zoomOutAction->setEnabled(true);
     }
 }
 
-void MainWindow::openHelp()
-{
+void MainWindow::openHelp() {
     help = new QTextBrowser;
     help->setAttribute(Qt::WA_DeleteOnClose);
     QFile helpFile;
@@ -2219,27 +2296,57 @@ void MainWindow::openHelp()
     help->show();
 }
 
-void MainWindow::openAbout()
-{
-    QMessageBox::about(this, tr("About SASM"),
-                       tr("SASM (SimpleASM) ") + SASM_VERSION + " - " +
-                       tr("simple Open Source IDE for NASM, MASM, GAS and FASM assembler languages.") + '\n' +
-                       tr("Licensed under the GNU GPL v3.0") + '\n' +
-                       tr("Based on the Qt.") + '\n' +
-                       tr("Copyright (c) 2013 Dmitriy Manushin") + '\n' +
-                       tr("Development and idea - Dmitriy Manushin") + '\n' +
-                       tr("Icon and advices - Alick Gaybullaev") + '\n' + '\n' +
-                       tr("Wishes and error messages are sent to the e-mail: Dman1095@gmail.com") + '\n' +
-                       tr("More information on the site: http://dman95.github.io/SASM/") + '\n' + '\n' +
-                       tr("Donate:") + '\n' +
-                       tr("PayPal - Dman1095@gmail.com") + '\n' +
-                       tr("WMZ - Z282016332582") + '\n' +
-                       tr("WMR - R331674303467")
-                       );
+void MainWindow::openAbout() {
+    QMessageBox::about(
+        this, tr("About SASM"),
+        tr("SASM (SimpleASM) ") + SASM_VERSION + " - " +
+            tr("simple Open Source IDE for NASM, MASM, GAS and FASM assembler "
+               "languages.") +
+            '\n' + tr("Licensed under the GNU GPL v3.0") + '\n' +
+            tr("Based on the Qt.") + '\n' +
+            tr("Copyright (c) 2013 Dmitriy Manushin") + '\n' +
+            tr("Development and idea - Dmitriy Manushin") + '\n' +
+            tr("Icon and advices - Alick Gaybullaev") + '\n' + '\n' +
+            tr("Wishes and error messages are sent to the e-mail: "
+               "Dman1095@gmail.com") +
+            '\n' +
+            tr("More information on the site: http://dman95.github.io/SASM/") +
+            '\n' + '\n' + tr("Donate:") + '\n' +
+            tr("PayPal - Dman1095@gmail.com") + '\n' +
+            tr("WMZ - Z282016332582") + '\n' + tr("WMR - R331674303467"));
 }
 
-void MainWindow::onMessageReceived(const QString &message)
-{
+void MainWindow::gotoLine() {
+    bool ok;
+    const auto numberStr = QInputDialog::getText(this, "Go to line", "Line: ", QLineEdit::Normal, "", &ok);
+    if(ok) {
+        const auto lineNumber = numberStr.toInt(&ok, 10);
+        auto codeEditor = ((Tab*)tabs->currentWidget())->code;
+        const auto totalLines = codeEditor->document()->blockCount();
+
+        if(!ok || lineNumber < 0 || lineNumber > totalLines) {
+            auto qbox = new QMessageBox(this);
+            qbox->setText("Invalid line number");
+            qbox->setIcon(QMessageBox::Icon::Critical);
+            qbox->show();
+        } else {
+            const auto newCursor = QTextCursor(codeEditor->document()->findBlockByLineNumber(lineNumber - 1));
+            codeEditor->setTextCursor(newCursor);
+        }
+    }
+}
+
+
+
+void MainWindow::zoomIn(){
+    incrementEditorFontSize(2);
+}
+
+void MainWindow::zoomOut(){
+    incrementEditorFontSize(-2);
+}
+
+void MainWindow::onMessageReceived(const QString &message) {
     raise();
     activateWindow();
     if (message.startsWith("run")) {

@@ -68,20 +68,28 @@
  * Defines the debugger.
  */
 
-enum DebugActionType {ni, si, showLine, infoRegisters, infoMemory, anyAction, none, breakpoint};
-
+enum DebugActionType {
+    ni,
+    si,
+    showLine,
+    infoRegisters,
+    infoMemory,
+    anyAction,
+    none,
+    breakpoint
+};
 
 /**
  * ! \brief This class represents the debugger.
  *
  *
  * */
-class Debugger : public QObject
-{
+class Debugger : public QObject {
     Q_OBJECT
 
-public:
-    Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler *assembler, QWidget *parent = 0);
+   public:
+    Debugger(QTextEdit *tEdit, const QString &path, const QString& args, QString tmp,
+             Assembler *assembler, QWidget *parent = 0);
     ~Debugger();
     void setWatchesCount(int count);
 

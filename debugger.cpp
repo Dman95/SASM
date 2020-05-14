@@ -46,60 +46,67 @@
  */
 
 namespace {
-    // read struct like {<name1> = <value1>, ,,, <nameN> = <valueN>}
-    // from stream. Values may be simple or complex, like {v1, v2, v3 .. }
-    // all i have to be simple, two-level complex values unsupported
-    bool readStruct(QTextStream& str, QMap<QString, QString>* map);
-}
+// read struct like {<name1> = <value1>, ,,, <nameN> = <valueN>}
+// from stream. Values may be simple or complex, like {v1, v2, v3 .. }
+// all i have to be simple, two-level complex values unsupported
+bool readStruct(QTextStream& str, QMap<QString, QString>* map);
+}  // namespace
 
-
-Debugger::Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler *assembler, QWidget *parent)
-    : QObject(parent)
-{
+Debugger::Debugger(QTextEdit* tEdit, const QString& path, const QString& programArgs, QString tmp,
+                   Assembler* assembler, QWidget* parent)
+    : QObject(parent) {
     QSettings settings("SASM Project", "SASM");
     c = 0;
     pid = 0;
     firstAction = true;
     textEdit = tEdit;
+
     tmpPath = tmp;
     registersOk = true;
     this->assembler = assembler;
-    #ifdef Q_OS_WIN32
-        QString gdb;
-        QString objdump;
-        if (settings.value("mode", QString("x86")).toString() == "x86") {
-            gdb = QCoreApplication::applicationDirPath() + "/MinGW/bin/gdb.exe";
-            objdump = QCoreApplication::applicationDirPath() + "/MinGW/bin/objdump.exe";
-            if (! QFile::exists(gdb))
-                gdb = QCoreApplication::applicationDirPath() + "/Windows/MinGW/bin/gdb.exe";
-            if (! QFile::exists(objdump))
-                objdump = QCoreApplication::applicationDirPath() + "/Windows/MinGW/bin/objdump.exe";
-            exitMessage = "mingw_CRTStartup";
-        } else {
-            gdb = QCoreApplication::applicationDirPath() + "/MinGW64/bin/gdb.exe";
-            objdump = QCoreApplication::applicationDirPath() + "/MinGW/bin/objdump.exe";
-            if (! QFile::exists(gdb))
-                gdb = QCoreApplication::applicationDirPath() + "/Windows/MinGW64/bin/gdb.exe";
-            if (! QFile::exists(objdump))
-                objdump = QCoreApplication::applicationDirPath() + "/Windows/MinGW/bin/objdump.exe";
-            exitMessage = "__fu0__set_invalid_parameter_handler";
-        }
-    #else
-        QString gdb = "gdb";
-        QString objdump = "objdump";
-        exitMessage = "libc_start_main";
-    #endif
+#ifdef Q_OS_WIN32
+    QString gdb;
+    QString objdump;
+    if (settings.value("mode", QString("x86")).toString() == "x86") {
+        gdb = QCoreApplication::applicationDirPath() + "/MinGW/bin/gdb.exe";
+        objdump =
+            QCoreApplication::applicationDirPath() + "/MinGW/bin/objdump.exe";
+        if (!QFile::exists(gdb))
+            gdb = QCoreApplication::applicationDirPath() +
+                  "/Windows/MinGW/bin/gdb.exe";
+        if (!QFile::exists(objdump))
+            objdump = QCoreApplication::applicationDirPath() +
+                      "/Windows/MinGW/bin/objdump.exe";
+        exitMessage = "mingw_CRTStartup";
+    } else {
+        gdb = QCoreApplication::applicationDirPath() + "/MinGW64/bin/gdb.exe";
+        objdump =
+            QCoreApplication::applicationDirPath() + "/MinGW/bin/objdump.exe";
+        if (!QFile::exists(gdb))
+            gdb = QCoreApplication::applicationDirPath() +
+                  "/Windows/MinGW64/bin/gdb.exe";
+        if (!QFile::exists(objdump))
+            objdump = QCoreApplication::applicationDirPath() +
+                      "/Windows/MinGW/bin/objdump.exe";
+        exitMessage = "__fu0__set_invalid_parameter_handler";
+    }
+#else
+    QString gdb = "gdb";
+    QString objdump = "objdump";
+    exitMessage = "libc_start_main";
+#endif
     cExitMessage = QRegExp("\\[Inferior .* exited");
 
     connect(this, SIGNAL(wasStopped()), this, SLOT(emitStarted()));
 
-    //determine entry point
+    // determine entry point
     QProcess objdumpProcess;
-    QProcessEnvironment objdumpEnvironment = QProcessEnvironment::systemEnvironment();
+    QProcessEnvironment objdumpEnvironment =
+        QProcessEnvironment::systemEnvironment();
     QStringList objdumpArguments;
     objdumpArguments << "-f" << path;
-	objdumpEnvironment.insert("LC_MESSAGES", "en_US");
-	objdumpProcess.setProcessEnvironment(objdumpEnvironment);
+    objdumpEnvironment.insert("LC_MESSAGES", "en_US");
+    objdumpProcess.setProcessEnvironment(objdumpEnvironment);
     objdumpProcess.start(objdump, objdumpArguments);
     objdumpProcess.waitForFinished();
     QString objdumpResult = QString(objdumpProcess.readAllStandardOutput());
@@ -110,68 +117,71 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler
 
 
     QStringList arguments;
-    arguments << path;
+    arguments << "--args" << path;
+    if(!programArgs.isEmpty()) {
+        arguments.append(programArgs.split(" "));
+    }
 
     process = new QProcess;
     process->start(gdb, arguments);
 
-    QObject::connect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputToBuffer()));
-    QObject::connect(process, SIGNAL(readyReadStandardError()), this, SLOT(readOutputToBuffer()));
+    QObject::connect(process, SIGNAL(readyReadStandardOutput()), this,
+                     SLOT(readOutputToBuffer()));
+    QObject::connect(process, SIGNAL(readyReadStandardError()), this,
+                     SLOT(readOutputToBuffer()));
 
     bufferTimer = new QTimer;
-    QObject::connect(bufferTimer, SIGNAL(timeout()), this, SLOT(processOutput()), Qt::QueuedConnection);
+    QObject::connect(bufferTimer, SIGNAL(timeout()), this,
+                     SLOT(processOutput()), Qt::QueuedConnection);
     bufferTimer->start(10);
 }
 
-void Debugger::emitStarted()
-{
+void Debugger::emitStarted() {
     disconnect(this, SIGNAL(wasStopped()), this, SLOT(emitStarted()));
     emit started();
 }
 
-void Debugger::readOutputToBuffer()
-{
-    if (!process)
-        return;
+void Debugger::readOutputToBuffer() {
+    if (!process) return;
     QByteArray error = process->readAllStandardError();
     errorBuffer += QString::fromLocal8Bit(error.constData(), error.size());
     QByteArray output = process->readAllStandardOutput();
     buffer += QString::fromLocal8Bit(output.constData(), output.size());
 }
 
-void Debugger::processOutput()
-{
+void Debugger::processOutput() {
     bufferTimer->stop();
     int index = buffer.indexOf(QString("(gdb)"));
     int linefeedIndex = errorBuffer.indexOf("\n");
-    if (index != -1) { //if whole message ready to processing (end of whole message is "(gdb)")
+    if (index != -1) {  // if whole message ready to processing (end of whole
+                        // message is "(gdb)")
         QString output = buffer.left(index);
         QString error = errorBuffer.left(linefeedIndex);
-        buffer.remove(0, index + 5); //remove processed message
+        buffer.remove(0, index + 5);  // remove processed message
         errorBuffer.remove(0, linefeedIndex + 1);
         processMessage(output, error);
     }
     bufferTimer->start(10);
 }
 
-void Debugger::processMessage(QString output, QString error)
-{
+void Debugger::processMessage(QString output, QString error) {
     if (error.indexOf("PC register is not available") != -1) {
         emit printLog(tr("GDB error\n"), Qt::red);
         emit finished();
         return;
     }
-    if (c == 0) { //in start wait for printing of start gdb text like this:
+    if (c == 0) {  // in start wait for printing of start gdb text like this:
         /*GNU gdb (GDB) 7.4
         Copyright (C) 2012 Free Software Foundation, Inc.
-        License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
-        This is free software: you are free to change and redistribute it.
-        There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
-        and "show warranty" for details.
+        License GPLv3+: GNU GPL version 3 or later
+        <http://gnu.org/licenses/gpl.html> This is free software: you are free
+        to change and redistribute it. There is NO WARRANTY, to the extent
+        permitted by law.  Type "show copying" and "show warranty" for details.
         This GDB was configured as "i686-pc-mingw32".
         For bug reporting instructions, please see:
         <http://www.gnu.org/software/gdb/bugs/>...
-        Reading symbols from C:\Users\Dmitri\Dropbox\Projects\SASMstatic\release\Program\SASMprog.exe...
+        Reading symbols from
+        C:\Users\Dmitri\Dropbox\Projects\SASMstatic\release\Program\SASMprog.exe...
         done.
         (gdb)*/
         c++;
