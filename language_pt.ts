@@ -781,21 +781,6 @@
         <translation>Idioma:</translation>
     </message>
     <message>
-        <location filename="settings.ui" line="168"/>
-        <source>Polski</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="settings.ui" line="173"/>
-        <source>עברית</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="settings.ui" line="178"/>
-        <source>Español</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="settings.ui" line="206"/>
         <location filename="settings.ui" line="378"/>
         <location filename="settings.ui" line="1915"/>

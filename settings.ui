@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>743</width>
-    <height>494</height>
+    <height>506</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -165,17 +165,17 @@
               </item>
               <item>
                <property name="text">
-                <string>Polski</string>
+                <string notr="true">Polski</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>עברית</string>
+                <string notr="true">עברית</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Español</string>
+                <string notr="true">Español</string>
                </property>
               </item>
               <item>
@@ -328,7 +328,7 @@
               </property>
               <property name="currentFont">
                <font>
-                <family>Arial</family>
+                <family>Liberation Sans</family>
                 <pointsize>12</pointsize>
                </font>
               </property>
@@ -2193,8 +2193,8 @@
  <resources/>
  <connections/>
  <buttongroups>
+  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup_3"/>
-  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>
