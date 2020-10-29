@@ -178,6 +178,11 @@
                 <string>Español</string>
                </property>
               </item>
+              <item>
+               <property name="text">
+                <string notr="true">Português</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item>
