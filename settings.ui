@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>743</width>
-    <height>506</height>
+    <height>494</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -328,7 +328,7 @@
               </property>
               <property name="currentFont">
                <font>
-                <family>Liberation Sans</family>
+                <family>Arial</family>
                 <pointsize>12</pointsize>
                </font>
               </property>
