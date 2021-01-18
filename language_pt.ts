@@ -84,7 +84,8 @@
         <location filename="debugger.cpp" line="160"/>
         <source>GDB error
 </source>
-        <translation>Erro de GDB</translation>
+        <translation>Erro do GDB
+</translation>
     </message>
     <message>
         <location filename="debugger.cpp" line="225"/>
@@ -134,7 +135,7 @@
     <message>
         <location filename="finddialog.cpp" line="65"/>
         <source>Find all</source>
-        <translation>Proncurar todos</translation>
+        <translation>Procurar todos</translation>
     </message>
     <message>
         <location filename="finddialog.cpp" line="68"/>
@@ -162,22 +163,22 @@
     <message>
         <location filename="getstartedwidget.cpp" line="65"/>
         <source>Welcome to the SASM!</source>
-        <translation>!Bienvenido a SASM!</translation>
+        <translation>Bem vindo ao SASM!</translation>
     </message>
     <message>
         <location filename="getstartedwidget.cpp" line="79"/>
         <source>Create new project</source>
-        <translation>Crear nuevo proyecto</translation>
+        <translation>Criar novo projeto</translation>
     </message>
     <message>
         <location filename="getstartedwidget.cpp" line="84"/>
         <source>Open project</source>
-        <translation>Abrir proyecto</translation>
+        <translation>Abrir projeto</translation>
     </message>
     <message>
         <location filename="getstartedwidget.cpp" line="89"/>
         <source>Restore last session</source>
-        <translation>Recuperar última sesión</translation>
+        <translation>Recuperar a última sessão</translation>
     </message>
 </context>
 <context>
@@ -186,17 +187,17 @@
         <location filename="masm.cpp" line="55"/>
         <location filename="masm.cpp" line="58"/>
         <source>Error!</source>
-        <translation>!Error!</translation>
+        <translation>Erro!</translation>
     </message>
     <message>
         <location filename="masm.cpp" line="55"/>
         <source>MASM is available on Windows only.</source>
-        <translation>MASM sólo está disponible para Windows.</translation>
+        <translation>MASM apenas está disponível no Windows.</translation>
     </message>
     <message>
         <location filename="masm.cpp" line="58"/>
         <source>Only 32-bit version of MASM is available.</source>
-        <translation>Sólo la versión de 32 bits de MASM está disponible.</translation>
+        <translation>Apenas versões de 32-bit do MASM estão disponíveis.</translation>
     </message>
 </context>
 <context>
@@ -204,13 +205,13 @@
     <message>
         <location filename="mainwindow.cpp" line="162"/>
         <source>Build log:</source>
-        <translation>Registro de compilación:</translation>
+        <translation>Consola de compilação:</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="182"/>
         <location filename="mainwindow.cpp" line="487"/>
         <source>File</source>
-        <translation>Archivo</translation>
+        <translation>Ficheiro</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="193"/>
@@ -236,20 +237,20 @@
         <location filename="mainwindow.cpp" line="233"/>
         <location filename="mainwindow.cpp" line="466"/>
         <source>Settings</source>
-        <translation>Configuración</translation>
+        <translation>Configurações</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="235"/>
         <location filename="mainwindow.cpp" line="473"/>
         <location filename="mainwindow.cpp" line="2217"/>
         <source>Help</source>
-        <translation>Ayuda</translation>
+        <translation>Ajuda</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="244"/>
         <location filename="mainwindow.cpp" line="576"/>
         <source>New</source>
-        <translation>Nuevo</translation>
+        <translation>Novo</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="252"/>
@@ -259,7 +260,7 @@
     <message>
         <location filename="mainwindow.cpp" line="260"/>
         <source>Close file</source>
-        <translation>Cerrar archivo</translation>
+        <translation>Fechar ficheiro</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="269"/>
@@ -279,22 +280,22 @@
     <message>
         <location filename="mainwindow.cpp" line="292"/>
         <source>Exit</source>
-        <translation>Salir</translation>
+        <translation>Sair</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="300"/>
         <source>Find and replace</source>
-        <translation>Buscar y reemplazar</translation>
+        <translation>Procurar e substituir</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="309"/>
         <source>Undo</source>
-        <translation>Deshacer</translation>
+        <translation>Desfazer</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="316"/>
         <source>Redo</source>
-        <translation>Rehacer</translation>
+        <translation>Refazer</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="323"/>
@@ -309,7 +310,7 @@
     <message>
         <location filename="mainwindow.cpp" line="337"/>
         <source>Paste</source>
-        <translation>Pegar</translation>
+        <translation>Colar</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="344"/>
@@ -319,7 +320,7 @@
     <message>
         <location filename="mainwindow.cpp" line="351"/>
         <source>Select all</source>
-        <translation>Seleccionar todo</translation>
+        <translation>Selecionar tudo</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="358"/>
@@ -329,7 +330,7 @@
     <message>
         <location filename="mainwindow.cpp" line="365"/>
         <source>Remove comment</source>
-        <translation>Eliminar comentario</translation>
+        <translation>Eliminar comentário</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="372"/>
@@ -339,42 +340,42 @@
     <message>
         <location filename="mainwindow.cpp" line="379"/>
         <source>Remove indent</source>
-        <translation>Eliminar indentación</translation>
+        <translation>Eliminar identação</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="388"/>
         <source>Build this</source>
-        <translation>Compilar ésto</translation>
+        <translation>Compilar isto</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="396"/>
         <source>Build and run</source>
-        <translation>Compilar y ejecutar</translation>
+        <translation>Compilar e executar</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="404"/>
         <source>Run in new window</source>
-        <translation>Ejecutar en una nueva ventana</translation>
+        <translation>Executar numa nova janela</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="407"/>
         <source>Stop</source>
-        <translation>Detener</translation>
+        <translation>Parar</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="421"/>
         <source>Step over</source>
-        <translation>Siguiente procedimiento</translation>
+        <translation>Seguinte procedimento</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="429"/>
         <source>Step into</source>
-        <translation>Siguiente instrucción</translation>
+        <translation>Seguinte instrução</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="437"/>
         <source>Toggle breakpoint</source>
-        <translation>Activar/Desactivar breakpoint</translation>
+        <translation>Ativar/Desativar breakpoint</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="445"/>
@@ -384,50 +385,50 @@
     <message>
         <location filename="mainwindow.cpp" line="454"/>
         <source>Show memory</source>
-        <translation>Ver memoria</translation>
+        <translation>Ver memória</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="481"/>
         <source>About</source>
-        <translation>Acerca de</translation>
+        <translation>Sobre</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="597"/>
         <source>Open file</source>
-        <translation>Abrir archivo</translation>
+        <translation>Abrir ficheiro</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="598"/>
         <location filename="mainwindow.cpp" line="661"/>
         <source>Assembler source files (*.asm);;All files (*)</source>
         <oldsource>Assembler source files (*.asm);;All files (*.*)</oldsource>
-        <translation type="unfinished">Archivos de ensamblador (*.asm);;Todos los archivos (*.*)</translation>
+        <translation>Ficheiro de assemblador (*.asm);;Todos os ficheiros (*.*)</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="660"/>
         <source>Save file</source>
-        <translation>Guardar archivo</translation>
+        <translation>Guardar ficheiro</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="684"/>
         <source>Save .exe file</source>
-        <translation>Guardar archivo .exe</translation>
+        <translation>Guardar ficheiro .exe</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="685"/>
         <source>Execution files (*.exe);;All files (*.*)</source>
-        <translation>Archivos ejecutables (*.exe);;Todos los archivos (*.*)</translation>
+        <translation>Ficheiros executáveis (*.exe);;Todos os arquivos (*.*)</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="785"/>
         <location filename="mainwindow.cpp" line="2126"/>
         <source>Yes</source>
-        <translation>Si</translation>
+        <translation>Sim</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="786"/>
         <source>No</source>
-        <translation>No</translation>
+        <translation>Não</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="787"/>
@@ -439,87 +440,87 @@
         <location filename="mainwindow.cpp" line="788"/>
         <location filename="mainwindow.cpp" line="789"/>
         <source>Save changes?</source>
-        <translation>¿Guardar cambios?</translation>
+        <translation>Guardar alterações?</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="817"/>
         <source>Build started...</source>
-        <translation>Compilación iniciada...</translation>
+        <translation>Compilação iniciada...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="821"/>
         <source>Error! Program directory does not exist. Please reinstall the program.</source>
-        <translation>¡Error! El directorio del programa no existe. Por favor reinstale el programa.</translation>
+        <translation>Erro! O diretório do programa não existe. Por favor reinstale o programa.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="822"/>
         <source>Error!</source>
-        <translation>¡Error!</translation>
+        <translation>Erro!</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="822"/>
         <source>Directory NASM does not exist. Please reinstall the program.</source>
-        <translation>El directorio NASM no existe. Por favor reinstale el programa.</translation>
+        <translation>O directório NASM não exite. Por favor reinstale o programa.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="883"/>
         <source>Unable to start assembler. Check your settings.</source>
-        <translation>No se puede iniciar el ensamblador. Revise su configuración.</translation>
+        <translation>Não é possível iniciar o assemblador. Verifique as suas configurações.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="938"/>
         <source>Unable to start linker. Check your settings.</source>
-        <translation>No se puede iniciar el linkeador. Revise su configuración.</translation>
+        <translation>Não é possível iniciar o linker. Verifique as suas configurações.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="965"/>
         <source>Warning! Errors have occurred in the build:</source>
-        <translation>¡Atención! Han ocurrido errores en la compilación:</translation>
+        <translation>Atenção! Ocorreu um erro na compilação:</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="980"/>
         <source>Built successfully.</source>
-        <translation>Compilación exitosa.</translation>
+        <translation>Compilação com sucesso.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="998"/>
         <source>The program is already running.</source>
-        <translation>El programa ya está corriendo.</translation>
+        <translation>O programa já está a correr.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1015"/>
         <source>The program is executing...</source>
-        <translation>El programa se está ejecutando...</translation>
+        <translation>O programa está sendo executado...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1055"/>
         <source>The program finished normally. Execution time: %1 s</source>
-        <translation>El programa terminó correctamente. Tiempo de ejecución: %1 s</translation>
+        <translation>O programa terminou normalmente. Tempo de execução: %1 s</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1059"/>
         <source>The program crashed! Execution time: %1 s</source>
-        <translation>¡El programa ha dejado de funcionar! Tiempo de ejecución: %1 s</translation>
+        <translation>O programa deixou de funcionar! Tempo de execução: %1 s</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1091"/>
         <source>The program stopped.</source>
-        <translation>El programa se detuvo.</translation>
+        <translation>O programa parou.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1093"/>
         <source>The program is not running.</source>
-        <translation>El programa no está corriendo.</translation>
+        <translation>O programa não está a correr.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1137"/>
         <source>Before debugging you need to build the program.</source>
-        <translation>Antes de depurar necesita compilar el programa.</translation>
+        <translation>Antes de depurar necessita de compilar o programa.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1141"/>
         <source>Debugging started...</source>
-        <translation>Depuración iniciada...</translation>
+        <translation>Depuração iniciada...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1163"/>
@@ -536,7 +537,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1274"/>
         <source>Memory</source>
-        <translation>Memoria</translation>
+        <translation>Memória</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1392"/>
@@ -546,57 +547,57 @@
     <message>
         <location filename="mainwindow.cpp" line="1463"/>
         <source>Debugging finished.</source>
-        <translation>Depuración finalizada.</translation>
+        <translation>Depuração terminada.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1604"/>
         <source>In the previous session was not open any of the saved tabs!</source>
-        <translation>¡En las sesiones anteriores no había abierta ninguna de las tabs guardadas!</translation>
+        <translation>Na sessão anterior não foi aberta nenhuma das guias guardadas!</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1879"/>
         <source>Please set path to MASM assembler (ml.exe) and linker (link.exe) on your computer </source>
-        <translation>Por favor configure la ruta a MASM (ml.exe) y al linkeador (link.exe) en su computadora</translation>
+        <translation>Por favor defina o caminho para o assemblador MASM (ml.exe) e o linker (link.exe) no seu computador </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1880"/>
         <source>in fields &quot;Assembler path&quot; and &quot;Linker path&quot; above.</source>
-        <translation>en los campos &quot;Ruta del ensamblador&quot; y &quot;Ruta del linkeador&quot;.</translation>
+        <translation>Nos campos &quot;Caminho do assemblador&quot; e &quot;Caminho do linker&quot; acima.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2128"/>
         <source>Warning!</source>
-        <translation>¡Alerta!</translation>
+        <translation>Alerta!</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2129"/>
         <source>All settings will be deleted and all unsaved data will be lost. Are you sure?</source>
-        <translation>Toda su configuración será eliminada y los cambios que no hayan sido guardados se perderán. ¿Está seguro?</translation>
+        <translation>Todas as suas configurações serão elimanadas e todos os dados não guardados serão perdidos. Tem a certeza?</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2224"/>
         <source>About SASM</source>
-        <translation>Acerca de SASM</translation>
+        <translation>Sobre SASM</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2225"/>
         <source>SASM (SimpleASM) </source>
-        <translation>SASM (SimpleASM)</translation>
+        <translation>SASM (SimpleASM) </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2226"/>
         <source>simple Open Source IDE for NASM, MASM, GAS and FASM assembler languages.</source>
-        <translation>IDE simple y de código abierto para NASM, MASM, GAS y FASM.</translation>
+        <translation>Simples IDE de código-aberto para linguagens de assemblador NASM, MASM, GAS e FASM </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2227"/>
         <source>Licensed under the GNU GPL v3.0</source>
-        <translation>Bajo licencia GNU GPL v3.0</translation>
+        <translation>Licença sobre a GNU GPL v3.0</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2228"/>
         <source>Based on the Qt.</source>
-        <translation>Basado en Qt.</translation>
+        <translation>Baseado em Qt.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2229"/>
@@ -610,27 +611,27 @@
     <message>
         <location filename="mainwindow.cpp" line="2230"/>
         <source>Development and idea - Dmitriy Manushin</source>
-        <translation>Idea y desarrollo - Dmitriy Manushin</translation>
+        <translation>Desenvolvimento e ideia - Dmitriy Manushin</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2231"/>
         <source>Icon and advices - Alick Gaybullaev</source>
-        <translation>Íconos y consejos - Alick Gaybullaev</translation>
+        <translation>Icones e conselhos - Alick Gaybullaev</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2232"/>
         <source>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com</source>
-        <translation>Sugerencias y errores deben ser enviados al e-mail: Dman1095@gmail.com</translation>
+        <translation>Sugestões de erros devem ser enviadas para o e-mail: Dman1095@gmail.com</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2233"/>
         <source>More information on the site: http://dman95.github.io/SASM/</source>
-        <translation>Más información en el sitio: http://dman95.github.io/SASM/</translation>
+        <translation>Mais informações em: http://dman95.github.io/SASM/</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2234"/>
         <source>Donate:</source>
-        <translation>Donar:</translation>
+        <translation>Doar:</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2235"/>
@@ -658,17 +659,17 @@
     <message>
         <location filename="ruqplaintextedit.cpp" line="69"/>
         <source>Remove comment</source>
-        <translation>Eliminar comentario</translation>
+        <translation>Eliminar comentário</translation>
     </message>
     <message>
         <location filename="ruqplaintextedit.cpp" line="77"/>
         <source>Undo</source>
-        <translation>Deshacer</translation>
+        <translation>Desfazer</translation>
     </message>
     <message>
         <location filename="ruqplaintextedit.cpp" line="81"/>
         <source>Redo</source>
-        <translation>Rehacer</translation>
+        <translation>Refazer</translation>
     </message>
     <message>
         <location filename="ruqplaintextedit.cpp" line="85"/>
@@ -683,7 +684,7 @@
     <message>
         <location filename="ruqplaintextedit.cpp" line="93"/>
         <source>Paste</source>
-        <translation>Pegar</translation>
+        <translation>Colar</translation>
     </message>
     <message>
         <location filename="ruqplaintextedit.cpp" line="97"/>
@@ -693,12 +694,12 @@
     <message>
         <location filename="ruqplaintextedit.cpp" line="101"/>
         <source>Select all</source>
-        <translation>Seleccionar todo</translation>
+        <translation>Selecionar tudo</translation>
     </message>
     <message>
         <location filename="ruqplaintextedit.cpp" line="149"/>
         <source>Watch &apos;%1&apos;</source>
-        <translation>Vigilar &apos;%1&apos;</translation>
+        <translation>Observar &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
@@ -706,12 +707,12 @@
     <message>
         <location filename="ruqtextedit.cpp" line="58"/>
         <source>Undo</source>
-        <translation>Deshacer</translation>
+        <translation>Desfazer</translation>
     </message>
     <message>
         <location filename="ruqtextedit.cpp" line="62"/>
         <source>Redo</source>
-        <translation>Rehacer</translation>
+        <translation>Refazer</translation>
     </message>
     <message>
         <location filename="ruqtextedit.cpp" line="66"/>
@@ -726,7 +727,7 @@
     <message>
         <location filename="ruqtextedit.cpp" line="74"/>
         <source>Paste</source>
-        <translation>Pegar</translation>
+        <translation>Colar</translation>
     </message>
     <message>
         <location filename="ruqtextedit.cpp" line="78"/>
@@ -736,12 +737,12 @@
     <message>
         <location filename="ruqtextedit.cpp" line="82"/>
         <source>Select all</source>
-        <translation>Seleccionar todo</translation>
+        <translation>Selecionar tudo</translation>
     </message>
     <message>
         <location filename="ruqtextedit.cpp" line="86"/>
         <source>Clear</source>
-        <translation>Limpiar</translation>
+        <translation>Apagar</translation>
     </message>
 </context>
 <context>
@@ -749,34 +750,34 @@
     <message>
         <location filename="settings.ui" line="14"/>
         <source>Settings</source>
-        <translation>Configuración</translation>
+        <translation>Configurações</translation>
     </message>
     <message>
         <location filename="settings.ui" line="34"/>
         <source>SASM Options</source>
-        <translation>Opciones de SASM</translation>
+        <translation>Opções do SASM</translation>
     </message>
     <message>
         <location filename="settings.ui" line="51"/>
         <location filename="settings.ui" line="66"/>
         <location filename="settings.ui" line="1590"/>
         <source>Common</source>
-        <translation>Común</translation>
+        <translation>Base</translation>
     </message>
     <message>
         <location filename="settings.ui" line="80"/>
         <source>On start:</source>
-        <translation>Al iniciar:</translation>
+        <translation>Ao iniciar:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="100"/>
         <source>Open get started window</source>
-        <translation>Abrir ventana de bienvenida</translation>
+        <translation>Abrir janela de início</translation>
     </message>
     <message>
         <location filename="settings.ui" line="105"/>
         <source>Restore previous session</source>
-        <translation>Recuperar sesion anterior</translation>
+        <translation>Recuperar sessão anterior</translation>
     </message>
     <message>
         <location filename="settings.ui" line="130"/>
@@ -796,34 +797,34 @@
     <message>
         <location filename="settings.ui" line="178"/>
         <source>Español</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="settings.ui" line="201"/>
         <location filename="settings.ui" line="373"/>
         <location filename="settings.ui" line="1910"/>
         <source>To apply the changes require a restart!</source>
-        <translation>¡Es necesario reiniciar para aplicar los cambios!</translation>
+        <translation>Para aplicar as alterações é necessário reiniciar!</translation>
     </message>
     <message>
         <location filename="settings.ui" line="210"/>
         <source>Show all registers in debug:</source>
-        <translation>Mostrar todos los registros al depurar:</translation>
+        <translation>Mostrar todos os registros no depurador:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="217"/>
         <source>Yes</source>
-        <translation>Si</translation>
+        <translation>Sim</translation>
     </message>
     <message>
         <location filename="settings.ui" line="230"/>
         <source>No, show only general purpose</source>
-        <translation>No, sólo los de uso general</translation>
+        <translation>Não, apenas para uso geral</translation>
     </message>
     <message>
         <location filename="settings.ui" line="260"/>
         <source>Insert debug string:</source>
-        <translation>Insertar string de depuración:</translation>
+        <translation>Inserir linha de depuração:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="304"/>
@@ -834,32 +835,32 @@
         <location filename="settings.ui" line="312"/>
         <location filename="settings.ui" line="1598"/>
         <source>Font:</source>
-        <translation>Fuente:</translation>
+        <translation>Fonte:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="335"/>
         <source>Size:</source>
-        <translation>Tamaño:</translation>
+        <translation>Tamanho:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="383"/>
         <source>Default code editor text:</source>
-        <translation>Editor de texto por defecto:</translation>
+        <translation>Editor de texto predefinido:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="414"/>
         <source>Reset all (need a restart)...</source>
-        <translation>Reestablecer todo (necesita reiniciar)...</translation>
+        <translation>Redefinir tudo (necessita de reiniciar)...</translation>
     </message>
     <message>
         <location filename="settings.ui" line="450"/>
         <source>Colors</source>
-        <translation>Colores</translation>
+        <translation>Cores</translation>
     </message>
     <message>
         <location filename="settings.ui" line="456"/>
         <source>Syntax highlighting</source>
-        <translation>Resaltado de sintaxis</translation>
+        <translation>Realce de syntaxe</translation>
     </message>
     <message>
         <location filename="settings.ui" line="475"/>
@@ -869,12 +870,12 @@
     <message>
         <location filename="settings.ui" line="581"/>
         <source>Bold:</source>
-        <translation>Negrita:</translation>
+        <translation>Negrito:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="601"/>
         <source>Italic:</source>
-        <translation>Cursiva:</translation>
+        <translation>Itálico:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="608"/>
@@ -884,13 +885,13 @@
     <message>
         <location filename="settings.ui" line="826"/>
         <source>Keywords:</source>
-        <translation>Palabras clave:</translation>
+        <translation>Palavras reservadas:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="833"/>
         <location filename="settings.ui" line="1755"/>
         <source>Background:</source>
-        <translation>Fondo:</translation>
+        <translation>Fundo:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="883"/>
@@ -905,17 +906,17 @@
     <message>
         <location filename="settings.ui" line="940"/>
         <source>Comments:</source>
-        <translation>Comentarios:</translation>
+        <translation>Comentários:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1033"/>
         <source>Quotation:</source>
-        <translation>Citas:</translation>
+        <translation>Citações:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1346"/>
         <source>Memory:</source>
-        <translation>Memoria:</translation>
+        <translation>Memória:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1353"/>
@@ -930,27 +931,27 @@
     <message>
         <location filename="settings.ui" line="1648"/>
         <source>Enable highlighting</source>
-        <translation>Habilitar resaltado</translation>
+        <translation>Habilitar realce</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1698"/>
         <source>Current line:</source>
-        <translation>Línea actual:</translation>
+        <translation>Linha atual:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1705"/>
         <source>Debugging line:</source>
-        <translation>Linea en depuración:</translation>
+        <translation>Linha de depuração:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1805"/>
         <source>Line number panel:</source>
-        <translation>Panel de número de línea:</translation>
+        <translation>Painel do número de linhas:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1855"/>
         <source>Line number font:</source>
-        <translation>Fuente del número de línea:</translation>
+        <translation>Fonte do número de linhas:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1947"/>
@@ -975,7 +976,7 @@
     <message>
         <location filename="settings.ui" line="2008"/>
         <source>Assembler:</source>
-        <translation>Ensamblador:</translation>
+        <translation>Assemblador:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="2017"/>
@@ -1000,37 +1001,37 @@
     <message>
         <location filename="settings.ui" line="2075"/>
         <source>Assembly options:</source>
-        <translation>Opciones de ensamblado:</translation>
+        <translation>Opções do assemblador:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="2085"/>
         <source>Linking options:</source>
-        <translation>Opciones de linkeado:</translation>
+        <translation>Opções do linker:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="2095"/>
         <source>Assembler path:</source>
-        <translation>Ruta del ensamblador:</translation>
+        <translation>Caminho do assemblador:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="2105"/>
         <source>Linker path:</source>
-        <translation>Ruta del linkeador:</translation>
+        <translation>Caminho do linker:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="2115"/>
         <source>Object file name:</source>
-        <translation>Nombre del archivo objeto:</translation>
+        <translation>Nome do ficheiro objeto:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="2125"/>
         <source>Disable linking:</source>
-        <translation>Deshabilitar linkeado:</translation>
+        <translation>Desativar linker:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="2142"/>
         <source>Build in current directory:</source>
-        <translation>Compilar en el directorio actual:</translation>
+        <translation>Compilar no directório atual:</translation>
     </message>
 </context>
 <context>
@@ -1043,7 +1044,7 @@
     <message>
         <location filename="tab.cpp" line="76"/>
         <source>Output</source>
-        <translation>Salida</translation>
+        <translation>Saida</translation>
     </message>
 </context>
 <context>
@@ -1051,12 +1052,12 @@
     <message>
         <location filename="watchsettingswidget.cpp" line="61"/>
         <source>Address</source>
-        <translation>Dirección</translation>
+        <translation>Direção</translation>
     </message>
     <message>
         <location filename="watchsettingswidget.cpp" line="69"/>
         <source>Array size</source>
-        <translation>Tamaño del arreglo</translation>
+        <translation>Tamanho do vetor</translation>
     </message>
     <message>
         <location filename="watchsettingswidget.cpp" line="72"/>

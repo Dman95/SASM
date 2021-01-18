@@ -272,6 +272,7 @@ public:
         language->addItem(QString());
         language->addItem(QString());
         language->addItem(QString());
+        language->addItem(QString());
         language->setObjectName(QString::fromUtf8("language"));
 
         horizontalLayout_4->addWidget(language);
@@ -1236,6 +1237,7 @@ public:
         language->setItemText(6, QCoreApplication::translate("SettingsWindow", "Polski", nullptr));
         language->setItemText(7, QCoreApplication::translate("SettingsWindow", "\327\242\327\221\327\250\327\231\327\252", nullptr));
         language->setItemText(8, QCoreApplication::translate("SettingsWindow", "Espa\303\261ol", nullptr));
+        language->setItemText(9, QCoreApplication::translate("SettingsWindow", "Portugu\303\252s", nullptr));
 
         label_4->setText(QCoreApplication::translate("SettingsWindow", "To apply the changes require a restart!", nullptr));
         registersLabel_2->setText(QCoreApplication::translate("SettingsWindow", "Show all registers in debug:", nullptr));
