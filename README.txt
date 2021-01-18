@@ -24,6 +24,8 @@ You need:
 	libxcb-render0
 	libxcb-icccm4
 
+
+
 Download sources and unpack their.
 Go to directory with their: "cd <path>"
 Further print commands:
