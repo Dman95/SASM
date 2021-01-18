@@ -49,6 +49,7 @@
 #include <QTextStream>
 #include <QPointer>
 #include <QSettings>
+#include "common.h"
 
 /**
  * @file ruqplaintextedit.h

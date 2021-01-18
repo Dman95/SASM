@@ -365,7 +365,7 @@ void MainWindow::createActions()
 
     uncommentAction = new QAction(tr("Remove comment"), this);
     key = keySettings.value("uncomment", "default").toString();
-    stdKey = QKeySequence(QString("Shift+Ctrl+S"));
+    stdKey = QKeySequence(QString("Shift+Ctrl+Q"));
     if (key == "default")
         key = stdKey.toString();
     uncommentAction->setShortcut(key);
@@ -596,7 +596,7 @@ void MainWindow::changeCurrentSavedState(bool changed)
 void MainWindow::openFile()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open file"), saveOpenDirectory,
-                                                    tr("Assembler source files (*.asm);;All files (*.*)"));
+                                                    tr("Assembler source files (*.asm);;All files (*)"));
     if (fileName.isEmpty()) {
         return;
     }
@@ -636,7 +636,7 @@ void MainWindow::closeFile()
     deleteTab(tabs->currentIndex());
 }
 
-bool MainWindow::saveFile(int index)
+bool MainWindow::saveFile(int index, bool openSaveAs)
 {
     Tab *tab;
     if (index == -1)
@@ -645,7 +645,11 @@ bool MainWindow::saveFile(int index)
         tab = (Tab *) tabs->widget(index);
     QString filePath = tab->getCurrentFilePath();
     if (filePath.isEmpty()) {
-        return saveAsFile(index);
+        if (openSaveAs) {
+            return saveAsFile(index);
+        } else {
+            return false;
+        }
     } else {
         tab->saveCodeToFile(filePath, assembler);
         return true;
@@ -655,7 +659,7 @@ bool MainWindow::saveFile(int index)
 bool MainWindow::saveAsFile(int index)
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save file"), saveOpenDirectory,
-                                                    tr("Assembler source files (*.asm);;All files (*.*)"));
+                                                    tr("Assembler source files (*.asm);;All files (*)"));
     if (fileName.isEmpty()) {
         return false;
     }
@@ -806,6 +810,8 @@ void MainWindow::changeCurrentTab(int index)
 
 void MainWindow::buildProgram(bool debugMode)
 {
+    saveFile(-1, false); //save file before building if program already was saved
+
     programIsBuilded = false;
 
     using Common::applicationDataPath;
@@ -1241,6 +1247,7 @@ void MainWindow::disableDebugActions(bool start)
 {
     debugAction->setText(tr("Debug"));
     debugAction->setIcon(QIcon(":/images/debug.png"));
+    debugAction->setShortcut(debugKey);
 
     debugNextAction->setEnabled(false);
     debugNextNiAction->setEnabled(false);
@@ -1516,6 +1523,11 @@ void MainWindow::find()
         findDialog = new FindDialog(this);
         connect(findDialog, SIGNAL(findNext(QString,Qt::CaseSensitivity,bool,bool,QString)),
                 this, SLOT(findNext(QString,Qt::CaseSensitivity,bool,bool,QString)));
+    }
+    CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
+    QString selectedText = code->textCursor().selectedText();
+    if (!selectedText.isEmpty()) {
+        findDialog->setSearchText(selectedText);
     }
     findDialog->show();
     findDialog->activateWindow();
@@ -2254,7 +2266,7 @@ void MainWindow::openAbout()
                        tr("simple Open Source IDE for NASM, MASM, GAS and FASM assembler languages.") + '\n' +
                        tr("Licensed under the GNU GPL v3.0") + '\n' +
                        tr("Based on the Qt.") + '\n' +
-                       tr("Copyright © 2013 Dmitriy Manushin") + '\n' +
+                       tr("Copyright (c) 2013 Dmitriy Manushin") + '\n' +
                        tr("Development and idea - Dmitriy Manushin") + '\n' +
                        tr("Icon and advices - Alick Gaybullaev") + '\n' + '\n' +
                        tr("Wishes and error messages are sent to the e-mail: Dman1095@gmail.com") + '\n' +

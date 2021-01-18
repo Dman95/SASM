@@ -238,20 +238,14 @@ void Debugger::processMessage(QString output, QString error)
 
     if (dbgSymbols) { //debug symbols exists
         if (c == 1 && output != " ") {
-            //next disassembly top part of code for setting according with program in memory and program in file
             /*Dump of assembler code for function sasmStartL:
                0x00401390 <+0>:	xor    %eax,%eax
                0x00401392 <+2>:	ret
                0x00401393 <+3>:	add    %dl,-0x77(%ebp)
             End of assembler dump.*/
-            //we need first number (0x00401390)
-
-            //count offset
-            QRegExp r = QRegExp("0x[0-9a-fA-F]{8,16}");
-            int index = r.indexIn(output);
-            offset = output.mid(index, r.matchedLength()).toULongLong(0, 16);
-            //take offset in hexadecimal representation (10 symbols) from string and convert it to int
+            //skip this information (for gdb 8.0)
             c++;
+
             processLst(); //count accordance
             gdb_cmd_run(); //perform Debugger::run(), that run program and open I/O files
             return;
@@ -260,6 +254,16 @@ void Debugger::processMessage(QString output, QString error)
         //determine run of program
         //wait for message like this: Breakpoint 1, 0x00401390 in sasmStartL ()
         if (c == 2 && output.indexOf(QString(" in ")) != -1) {
+            //set accordance between program in memory and program in file
+            //in example we need 0x00401390
+
+            //count offset
+            QRegExp r = QRegExp("0x[0-9a-fA-F]{8,16}");
+            int index = r.indexIn(output);
+            //take offset in hexadecimal representation (10 symbols) from string and convert it to int
+            offset = output.mid(index, r.matchedLength()).toULongLong(0, 16);
+            processLst(); //count accordance
+
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
@@ -513,9 +517,8 @@ void Debugger::processAction(QString output, QString error)
                 break;
             }
 
-            if (general.contains(info.name) || segment.contains(info.name) || fpu_info.contains(info.name)) {
-                registersStream >> info.hexValue >> info.decValue;
-            } else if ((info.name == ip) || flags.contains(info.name) || fpu_stack.exactMatch(info.name)) {
+            if (general.contains(info.name) || segment.contains(info.name) || fpu_info.contains(info.name) ||
+                    info.name == ip || flags.contains(info.name) || fpu_stack.exactMatch(info.name)) {
                 registersStream >> info.hexValue;
                 registersStream.skipWhiteSpace();
                 info.decValue = registersStream.readLine();
@@ -656,7 +659,7 @@ void Debugger::gdb_cmd_run()
     }
     doInput(QString("cd " + tmpPath + "\n"), none);
     doInput(QString("run\n"), none);
-    doInput(QString("p dup2(open(\"input.txt\",0),0)\n"), none);
+    doInput(QString("p (int) dup2((int) open(\"input.txt\",0),0)\n"), none);
 }
 
 void Debugger::changeBreakpoint(quint64 lineNumber, bool isAdded)

@@ -185,6 +185,11 @@ bool FindDialog::close()
     return QWidget::close();
 }
 
+void FindDialog::setSearchText(const QString &text)
+{
+    searchEdit->setText(text);
+}
+
 void FindDialog::closeEvent(QCloseEvent *e)
 {
     close();

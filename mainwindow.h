@@ -75,7 +75,7 @@
 #include "signallocker.h"
 #include "masm.h"
 
-#define SASM_VERSION "3.10.1"
+#define SASM_VERSION "3.11.1"
 
 /**
  * @file mainwindow.h
@@ -226,7 +226,7 @@ public slots:
     void newFile();
     void openFile();
     void closeFile();
-    bool saveFile(int index = -1);
+    bool saveFile(int index = -1, bool openSaveAs = true);
     bool saveAsFile(int index = -1);
     void saveExe();
     bool closeApp();
