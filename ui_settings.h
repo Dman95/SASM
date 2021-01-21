@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'settings.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.4
+** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -1252,41 +1252,41 @@ public:
 
     void retranslateUi(QWidget *SettingsWindow)
     {
-        SettingsWindow->setWindowTitle(QApplication::translate("SettingsWindow", "Settings", nullptr));
-        settingsLabel->setText(QApplication::translate("SettingsWindow", "SASM Options", nullptr));
-        commonSettingsBox->setTitle(QApplication::translate("SettingsWindow", "Common", nullptr));
-        startWindowLabel->setText(QApplication::translate("SettingsWindow", "On start:", nullptr));
-        startWindow->setItemText(0, QApplication::translate("SettingsWindow", "Open get started window", nullptr));
-        startWindow->setItemText(1, QApplication::translate("SettingsWindow", "Restore previous session", nullptr));
+        SettingsWindow->setWindowTitle(QCoreApplication::translate("SettingsWindow", "Settings", nullptr));
+        settingsLabel->setText(QCoreApplication::translate("SettingsWindow", "SASM Options", nullptr));
+        commonSettingsBox->setTitle(QCoreApplication::translate("SettingsWindow", "Common", nullptr));
+        startWindowLabel->setText(QCoreApplication::translate("SettingsWindow", "On start:", nullptr));
+        startWindow->setItemText(0, QCoreApplication::translate("SettingsWindow", "Open get started window", nullptr));
+        startWindow->setItemText(1, QCoreApplication::translate("SettingsWindow", "Restore previous session", nullptr));
 
-        languageLabel->setText(QApplication::translate("SettingsWindow", "Language:", nullptr));
-        language->setItemText(6, QApplication::translate("SettingsWindow", "Polski", nullptr));
-        language->setItemText(7, QApplication::translate("SettingsWindow", "\327\242\327\221\327\250\327\231\327\252", nullptr));
-        language->setItemText(8, QApplication::translate("SettingsWindow", "Espa\303\261ol", nullptr));
+        languageLabel->setText(QCoreApplication::translate("SettingsWindow", "Language:", nullptr));
+        language->setItemText(6, QCoreApplication::translate("SettingsWindow", "Polski", nullptr));
+        language->setItemText(7, QCoreApplication::translate("SettingsWindow", "\327\242\327\221\327\250\327\231\327\252", nullptr));
+        language->setItemText(8, QCoreApplication::translate("SettingsWindow", "Espa\303\261ol", nullptr));
 
-        label_4->setText(QApplication::translate("SettingsWindow", "To apply the changes require a restart!", nullptr));
-        registersLabel_2->setText(QApplication::translate("SettingsWindow", "Show all registers in debug:", nullptr));
-        registersYesRadioButton->setText(QApplication::translate("SettingsWindow", "Yes", nullptr));
-        registersNoRadioButton->setText(QApplication::translate("SettingsWindow", "No, show only general purpose", nullptr));
-        insertDebugStringLabel->setText(QApplication::translate("SettingsWindow", "Insert debug string:", nullptr));
+        label_4->setText(QCoreApplication::translate("SettingsWindow", "To apply the changes require a restart!", nullptr));
+        registersLabel_2->setText(QCoreApplication::translate("SettingsWindow", "Show all registers in debug:", nullptr));
+        registersYesRadioButton->setText(QCoreApplication::translate("SettingsWindow", "Yes", nullptr));
+        registersNoRadioButton->setText(QCoreApplication::translate("SettingsWindow", "No, show only general purpose", nullptr));
+        insertDebugStringLabel->setText(QCoreApplication::translate("SettingsWindow", "Insert debug string:", nullptr));
         insertDebugStringCheckBox->setText(QString());
-        codeSettingsBox->setTitle(QApplication::translate("SettingsWindow", "Code editor", nullptr));
-        fontLabel->setText(QApplication::translate("SettingsWindow", "Font:", nullptr));
-        fontSizeLabel->setText(QApplication::translate("SettingsWindow", "Size:", nullptr));
-        label->setText(QApplication::translate("SettingsWindow", "To apply the changes require a restart!", nullptr));
-        label_2->setText(QApplication::translate("SettingsWindow", "Default code editor text:", nullptr));
-        resetAllButton->setText(QApplication::translate("SettingsWindow", "Reset all (need a restart)...", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(commonTab), QApplication::translate("SettingsWindow", "Common", nullptr));
-        groupBox->setTitle(QApplication::translate("SettingsWindow", "Syntax highlighting", nullptr));
+        codeSettingsBox->setTitle(QCoreApplication::translate("SettingsWindow", "Code editor", nullptr));
+        fontLabel->setText(QCoreApplication::translate("SettingsWindow", "Font:", nullptr));
+        fontSizeLabel->setText(QCoreApplication::translate("SettingsWindow", "Size:", nullptr));
+        label->setText(QCoreApplication::translate("SettingsWindow", "To apply the changes require a restart!", nullptr));
+        label_2->setText(QCoreApplication::translate("SettingsWindow", "Default code editor text:", nullptr));
+        resetAllButton->setText(QCoreApplication::translate("SettingsWindow", "Reset all (need a restart)...", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(commonTab), QCoreApplication::translate("SettingsWindow", "Common", nullptr));
+        groupBox->setTitle(QCoreApplication::translate("SettingsWindow", "Syntax highlighting", nullptr));
         iomacroBoldCheckBox->setText(QString());
-        systemLabel->setText(QApplication::translate("SettingsWindow", "System:", nullptr));
+        systemLabel->setText(QCoreApplication::translate("SettingsWindow", "System:", nullptr));
         quotationColorButton->setText(QString());
         systemColorButton->setText(QString());
         numbersItalicCheckBox->setText(QString());
-        label_6->setText(QApplication::translate("SettingsWindow", "Bold:", nullptr));
+        label_6->setText(QCoreApplication::translate("SettingsWindow", "Bold:", nullptr));
         numbersBoldCheckBox->setText(QString());
-        label_7->setText(QApplication::translate("SettingsWindow", "Italic:", nullptr));
-        label_3->setText(QApplication::translate("SettingsWindow", "Foreground:", nullptr));
+        label_7->setText(QCoreApplication::translate("SettingsWindow", "Italic:", nullptr));
+        label_3->setText(QCoreApplication::translate("SettingsWindow", "Foreground:", nullptr));
         systemItalicCheckBox->setText(QString());
         commentsColorButton_2->setText(QString());
         keywordsColorButton->setText(QString());
@@ -1294,16 +1294,16 @@ public:
         keywordsColorButton_2->setText(QString());
         iomacroColorButton_2->setText(QString());
         memoryItalicCheckBox->setText(QString());
-        keywordsLabel->setText(QApplication::translate("SettingsWindow", "Keywords:", nullptr));
-        label_5->setText(QApplication::translate("SettingsWindow", "Background:", nullptr));
+        keywordsLabel->setText(QCoreApplication::translate("SettingsWindow", "Keywords:", nullptr));
+        label_5->setText(QCoreApplication::translate("SettingsWindow", "Background:", nullptr));
         labelsColorButton->setText(QString());
-        numbersLabel->setText(QApplication::translate("SettingsWindow", "Numbers:", nullptr));
+        numbersLabel->setText(QCoreApplication::translate("SettingsWindow", "Numbers:", nullptr));
         quotationColorButton_2->setText(QString());
-        labelsLabel->setText(QApplication::translate("SettingsWindow", "Labels:", nullptr));
-        commentsLabel->setText(QApplication::translate("SettingsWindow", "Comments:", nullptr));
+        labelsLabel->setText(QCoreApplication::translate("SettingsWindow", "Labels:", nullptr));
+        commentsLabel->setText(QCoreApplication::translate("SettingsWindow", "Comments:", nullptr));
         memoryColorButton->setText(QString());
         systemColorButton_2->setText(QString());
-        iomacroLabel_2->setText(QApplication::translate("SettingsWindow", "Quotation:", nullptr));
+        iomacroLabel_2->setText(QCoreApplication::translate("SettingsWindow", "Quotation:", nullptr));
         labelsColorButton_2->setText(QString());
         registersBoldCheckBox->setText(QString());
         quotationBoldCheckBox->setText(QString());
@@ -1316,10 +1316,10 @@ public:
         quotationItalicCheckBox->setText(QString());
         commentsColorButton->setText(QString());
         labelsItalicCheckBox->setText(QString());
-        memoryLabel->setText(QApplication::translate("SettingsWindow", "Memory:", nullptr));
-        iomacroLabel->setText(QApplication::translate("SettingsWindow", "I/O macro:", nullptr));
+        memoryLabel->setText(QCoreApplication::translate("SettingsWindow", "Memory:", nullptr));
+        iomacroLabel->setText(QCoreApplication::translate("SettingsWindow", "I/O macro:", nullptr));
         keywordsItalicCheckBox->setText(QString());
-        registersLabel->setText(QApplication::translate("SettingsWindow", "Registers:", nullptr));
+        registersLabel->setText(QCoreApplication::translate("SettingsWindow", "Registers:", nullptr));
         commentsItalicCheckBox->setText(QString());
         labelsBoldCheckBox->setText(QString());
         registersItalicCheckBox->setText(QString());
@@ -1327,44 +1327,44 @@ public:
         memoryColorButton_2->setText(QString());
         registersColorButton->setText(QString());
         numbersColorButton_2->setText(QString());
-        groupBox_2->setTitle(QApplication::translate("SettingsWindow", "Common", nullptr));
-        fontLabel_2->setText(QApplication::translate("SettingsWindow", "Font:", nullptr));
+        groupBox_2->setTitle(QCoreApplication::translate("SettingsWindow", "Common", nullptr));
+        fontLabel_2->setText(QCoreApplication::translate("SettingsWindow", "Font:", nullptr));
         fontColorButton->setText(QString());
-        currentLineCheckBox->setText(QApplication::translate("SettingsWindow", "Enable highlighting", nullptr));
+        currentLineCheckBox->setText(QCoreApplication::translate("SettingsWindow", "Enable highlighting", nullptr));
         debugLineColorButton->setText(QString());
-        currentLineLabel->setText(QApplication::translate("SettingsWindow", "Current line:", nullptr));
-        debugLineLabel->setText(QApplication::translate("SettingsWindow", "Debugging line:", nullptr));
+        currentLineLabel->setText(QCoreApplication::translate("SettingsWindow", "Current line:", nullptr));
+        debugLineLabel->setText(QCoreApplication::translate("SettingsWindow", "Debugging line:", nullptr));
         currentLineColorButton->setText(QString());
-        backgroundLabel->setText(QApplication::translate("SettingsWindow", "Background:", nullptr));
+        backgroundLabel->setText(QCoreApplication::translate("SettingsWindow", "Background:", nullptr));
         backgroundColorButton->setText(QString());
-        lineNumberPanelLabel->setText(QApplication::translate("SettingsWindow", "Line number panel:", nullptr));
+        lineNumberPanelLabel->setText(QCoreApplication::translate("SettingsWindow", "Line number panel:", nullptr));
         lineNumberPanelColorButton->setText(QString());
-        lineNumberFontLabel->setText(QApplication::translate("SettingsWindow", "Line number font:", nullptr));
+        lineNumberFontLabel->setText(QCoreApplication::translate("SettingsWindow", "Line number font:", nullptr));
         lineNumberFontColorButton->setText(QString());
-        label_8->setText(QApplication::translate("SettingsWindow", "To apply the changes require a restart!", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(colorsTab), QApplication::translate("SettingsWindow", "Colors", nullptr));
-        modeLabel->setText(QApplication::translate("SettingsWindow", "Mode:", nullptr));
-        x86RadioButton->setText(QApplication::translate("SettingsWindow", "x86", nullptr));
-        x64RadioButton->setText(QApplication::translate("SettingsWindow", "x64", nullptr));
-        assemblerLabel->setText(QApplication::translate("SettingsWindow", "Assembler:", nullptr));
-        nasmRadioButton->setText(QApplication::translate("SettingsWindow", "NASM", nullptr));
-        gasRadioButton->setText(QApplication::translate("SettingsWindow", "GAS", nullptr));
-        fasmRadioButton->setText(QApplication::translate("SettingsWindow", "FASM", nullptr));
-        masmRadioButton->setText(QApplication::translate("SettingsWindow", "MASM", nullptr));
-        assemblyLabel->setText(QApplication::translate("SettingsWindow", "Assembly options:", nullptr));
-        linkingLabel->setText(QApplication::translate("SettingsWindow", "Linking options:", nullptr));
-        assemblerPathLabel->setText(QApplication::translate("SettingsWindow", "Assembler path:", nullptr));
-        linkerPathLabel->setText(QApplication::translate("SettingsWindow", "Linker path:", nullptr));
-        objectFileNameLabel->setText(QApplication::translate("SettingsWindow", "Object file name:", nullptr));
-        gdbPathLabel->setText(QApplication::translate("SettingsWindow", "GDB path (Unix only):", nullptr));
-        assemblerWorkingDirectoryLabel->setText(QApplication::translate("SettingsWindow", "Build in current directory:", nullptr));
+        label_8->setText(QCoreApplication::translate("SettingsWindow", "To apply the changes require a restart!", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(colorsTab), QCoreApplication::translate("SettingsWindow", "Colors", nullptr));
+        modeLabel->setText(QCoreApplication::translate("SettingsWindow", "Mode:", nullptr));
+        x86RadioButton->setText(QCoreApplication::translate("SettingsWindow", "x86", nullptr));
+        x64RadioButton->setText(QCoreApplication::translate("SettingsWindow", "x64", nullptr));
+        assemblerLabel->setText(QCoreApplication::translate("SettingsWindow", "Assembler:", nullptr));
+        nasmRadioButton->setText(QCoreApplication::translate("SettingsWindow", "NASM", nullptr));
+        gasRadioButton->setText(QCoreApplication::translate("SettingsWindow", "GAS", nullptr));
+        fasmRadioButton->setText(QCoreApplication::translate("SettingsWindow", "FASM", nullptr));
+        masmRadioButton->setText(QCoreApplication::translate("SettingsWindow", "MASM", nullptr));
+        assemblyLabel->setText(QCoreApplication::translate("SettingsWindow", "Assembly options:", nullptr));
+        linkingLabel->setText(QCoreApplication::translate("SettingsWindow", "Linking options:", nullptr));
+        assemblerPathLabel->setText(QCoreApplication::translate("SettingsWindow", "Assembler path:", nullptr));
+        linkerPathLabel->setText(QCoreApplication::translate("SettingsWindow", "Linker path:", nullptr));
+        objectFileNameLabel->setText(QCoreApplication::translate("SettingsWindow", "Object file name:", nullptr));
+        gdbPathLabel->setText(QCoreApplication::translate("SettingsWindow", "GDB path (Unix only):", nullptr));
+        assemblerWorkingDirectoryLabel->setText(QCoreApplication::translate("SettingsWindow", "Build in current directory:", nullptr));
         runInCurrentDirectoryCheckbox->setText(QString());
-        disableLinkingLabel->setText(QApplication::translate("SettingsWindow", "Disable linking:", nullptr));
+        disableLinkingLabel->setText(QCoreApplication::translate("SettingsWindow", "Disable linking:", nullptr));
         disableLinkingCheckbox->setText(QString());
-        gdbVerboseLabel->setText(QApplication::translate("SettingsWindow", "SASM verbose mode:", nullptr));
+        gdbVerboseLabel->setText(QCoreApplication::translate("SettingsWindow", "SASM verbose mode:", nullptr));
         sasmVerboseCheckBox->setText(QString());
         infoLabel->setText(QString());
-        tabWidget->setTabText(tabWidget->indexOf(buildTab), QApplication::translate("SettingsWindow", "Build", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(buildTab), QCoreApplication::translate("SettingsWindow", "Build", nullptr));
     } // retranslateUi
 
 };

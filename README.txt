@@ -16,6 +16,8 @@ You need:
 	gcc (x86) or gcc-multilib (x64)
 	gdb
 	nasm
+
+For QT4, install
 	qt4-qmake
 	libqt4-dev
 	libqt4-core 	
@@ -23,6 +25,10 @@ You need:
 	libxcb1
 	libxcb-render0
 	libxcb-icccm4
+
+For QT5, install
+	qt5-default
+
 
 Download sources and unpack their.
 Go to directory with their: "cd <path>"
