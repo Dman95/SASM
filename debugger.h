@@ -81,7 +81,7 @@ class Debugger : public QObject
     Q_OBJECT
 
 public:
-    Debugger(QTextEdit *tEdit, const QString &path, const QString &tmp, Assembler *assembler, const QString &gdbpath, QWidget *parent = 0, bool verbose = true);
+    Debugger(QTextEdit *tEdit, const QString &path, const QString &tmp, Assembler *assembler, const QString &gdbpath, QWidget *parent = 0, bool verbose = true, bool mimode = true);
     ~Debugger();
     void setWatchesCount(int count);
 
@@ -115,6 +115,8 @@ private:
     void gdb_cmd_run();
 
     bool verbose;
+    bool mimode;
+    bool con;
 
     QProcess *process;
     QTextEdit *textEdit;
@@ -170,7 +172,9 @@ public slots:
     void readOutputToBuffer();
     void processOutput();
     void processMessage(QString output, QString error);
+    void processMessageMiMode(QString output, QString error);
     void processAction(QString output, QString error = QString());
+    void processActionMiMode(QString output, QString error = QString());
     void doInput(QString command, DebugActionType actionType);
     void changeBreakpoint(quint64 lineNumber, bool isAdded);
     void emitStarted();

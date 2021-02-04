@@ -918,6 +918,10 @@ void MainWindow::buildProgram(bool debugMode)
         QProcess gccMProcess;
         gccMProcess.start(gcc, gccMArguments);
         gccMProcess.waitForFinished();
+        QByteArray error = gccMProcess.readAllStandardError();
+        QString errorBuffer = QString::fromLocal8Bit(error.constData(), error.size());
+        if (errorBuffer.contains("fatal error: "))
+        	emit printLog(QString("can not compile macro.c: ") + errorBuffer + "\n", Qt::red);
     #endif
 
     //! Final linking
@@ -1152,7 +1156,7 @@ void MainWindow::debug()
 
         QString gdbpath = settings.value("gdbpath", "gdb").toString();
 
-        debugger = new Debugger(compilerOut, path, Common::pathInTemp(QString()), assembler, gdbpath, 0, settings.value("sasmverbose", false).toBool());
+        debugger = new Debugger(compilerOut, path, Common::pathInTemp(QString()), assembler, gdbpath, 0, settings.value("sasmverbose", false).toBool(), settings.value("mi", false).toBool());
 
         // connect print signals for output in Debugger
         connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
@@ -1854,6 +1858,8 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
     settingsUi.disableLinkingCheckbox->setChecked(settings.value("disablelinking", false).toBool());
 
     settingsUi.sasmVerboseCheckBox->setChecked(settings.value("sasmverbose", false).toBool());
+    
+    settingsUi.MiModusCheckBox->setChecked(settings.value("mi", false).toBool());
 
     settingsUi.runInCurrentDirectoryCheckbox->setChecked(settings.value("currentdir", false).toBool());
 
@@ -1994,6 +2000,7 @@ void MainWindow::recreateAssembler(bool start)
         settingsUi.objectFileNameEdit->setText("program.o");
         settingsUi.disableLinkingCheckbox->setChecked(false);
         settingsUi.sasmVerboseCheckBox->setChecked(false);
+        settingsUi.MiModusCheckBox->setChecked(false);
         settingsUi.runInCurrentDirectoryCheckbox->setChecked(false);
         settingsUi.assemblerPathEdit->setText(assembler->getAssemblerPath());
         settingsUi.gdbPathEdit->setText("gdb");
@@ -2004,6 +2011,7 @@ void MainWindow::recreateAssembler(bool start)
         settings.setValue("disablelinking", false);
         settings.setValue("currentdir", false);
         settings.setValue("sasmverbose", false);
+        settings.setValue("mi", false);
         settings.setValue("gdbpath", "gdb");
         settings.setValue("assemblerpath", assembler->getAssemblerPath());
         settings.setValue("linkerpath", assembler->getLinkerPath());
@@ -2028,6 +2036,7 @@ void MainWindow::backupSettings()
     backupObjectFileName = settings.value("objectfilename", "program.o").toString();
     backupGDBPath = settings.value("gdbpath", "gdb").toString();
     backupGDBVerbose = settings.value("sasmverbose", false).toBool();
+    backupGDBMi = settings.value("mi", false).toBool();
     backupDisableLinking = settings.value("disablelinking", false).toBool();
     backupCurrentDir = settings.value("currentdir", false).toBool();
     backupStartText = settings.value("starttext", assembler->getStartText()).toString();
@@ -2046,6 +2055,7 @@ void MainWindow::restoreSettingsAndExit()
     settings.setValue("disablelinking", backupDisableLinking);
     settings.setValue("gdbpath", backupGDBPath);
     settings.setValue("sasmverbose", backupGDBVerbose);
+    settings.setValue("mi", backupGDBMi);
     settings.setValue("currentdir", backupCurrentDir);
     settings.setValue("starttext", backupStartText);
     settings.setValue("linkerpath", backupLinkerPath);
@@ -2091,6 +2101,7 @@ void MainWindow::saveSettings()
     settings.setValue("objectfilename", settingsUi.objectFileNameEdit->text());
     settings.setValue("disablelinking", settingsUi.disableLinkingCheckbox->isChecked());
     settings.setValue("sasmverbose", settingsUi.sasmVerboseCheckBox->isChecked());
+    settings.setValue("mi", settingsUi.MiModusCheckBox->isChecked());
     settings.setValue("currentdir", settingsUi.runInCurrentDirectoryCheckbox->isChecked());
     settings.setValue("assemblerpath", settingsUi.assemblerPathEdit->text());
     settings.setValue("gdbpath", settingsUi.gdbPathEdit->text());
