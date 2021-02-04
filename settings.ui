@@ -2186,6 +2186,20 @@
            </property>
           </widget>
          </item>
+         <item row="13" column="0">
+          <widget class="QLabel" name="MiModusLabel">
+           <property name="text">
+            <string>MI-Mode:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="13" column="1">
+          <widget class="QCheckBox" name="MiModusCheckBox">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>

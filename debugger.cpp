@@ -53,7 +53,7 @@ namespace {
 }
 
 
-Debugger::Debugger(QTextEdit *tEdit, const QString &i_path, const QString &tmp, Assembler *i_assembler, const QString &i_gdbpath, QWidget *parent, bool i_verbose)
+Debugger::Debugger(QTextEdit *tEdit, const QString &i_path, const QString &tmp, Assembler *i_assembler, const QString &i_gdbpath, QWidget *parent, bool i_verbose, bool i_mimode)
     : QObject(parent)
 {
     QSettings settings("SASM Project", "SASM");
@@ -67,6 +67,7 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &i_path, const QString &tmp, 
     gdbPath = i_gdbpath;
     assembler = i_assembler;
     verbose = i_verbose;
+    mimode = i_mimode;
 }
 
 bool Debugger::run()
@@ -117,6 +118,10 @@ bool Debugger::run()
 
     QStringList arguments;
     arguments << path;
+    
+    if (mimode) {
+    	arguments << "--interpreter=mi";
+    }
 
     printLog(tr("Starting Debugger: ")+gdb+" "+arguments.join(" ")+"\n", Qt::darkGreen);
 
@@ -178,15 +183,19 @@ void Debugger::processOutput()
     if (index != -1) { //if whole message ready to processing (end of whole message is "(gdb)")
         if (verbose)
         {
-            printLog(buffer+"\n", Qt::red);
-            printLog(errorBuffer+"\n", Qt::red);
+            printLog(buffer+"\n", Qt::blue);
+            printLog(errorBuffer+"\n", Qt::blue);
         }
-
         QString output = buffer.left(index);
         QString error = errorBuffer.left(linefeedIndex);
-        buffer.remove(0, index + 5); //remove processed message
+        buffer.remove(0, index + 5);
+        //remove processed message
         errorBuffer.remove(0, linefeedIndex + 1);
-        processMessage(output, error);
+        if(!mimode){
+            processMessage(output, error);
+        }else{
+            processMessageMiMode(output, error);
+        }
     }
     bufferTimer->start(10);
 }
@@ -246,7 +255,6 @@ void Debugger::processMessage(QString output, QString error)
             //skip this information (for gdb 8.0)
             c++;
 
-            processLst(); //count accordance
             gdb_cmd_run(); //perform Debugger::run(), that run program and open I/O files
             return;
         }
@@ -560,6 +568,388 @@ void Debugger::processAction(QString output, QString error)
 
     if (output == QString("\r\n") || output == QString("\n") ||
             output == QString("\r\n\n") || output == QString("\n\n")) //if empty
+        return;
+
+    //print information to log field
+    emit printLog(output);
+}
+
+void Debugger::processMessageMiMode(QString output, QString error)
+{
+    if (error.indexOf("PC register is not available") != -1) {
+        emit printLog(tr("GDB error\n"), Qt::red);
+        emit finished();
+        return;
+    }
+    if (c == 0) { //in start wait for printing of start gdb text like this:
+        /*GNU gdb (GDB) 7.4
+
+        Copyright (C) 2012 Free Software Foundation, Inc.
+        License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+        This is free software: you are free to change and redistribute it.
+        There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+        and "show warranty" for details.
+
+        This GDB was configured as "i686-pc-mingw32".
+        For bug reporting instructions, please see:
+        <http://www.gnu.org/software/gdb/bugs/>...
+        Reading symbols from C:\Users\Dmitri\Dropbox\Projects\SASMstatic\release\Program\SASMprog.exe...
+
+        done.
+        (gdb)*/
+        c++;
+        doInput(QString("disas main\n"), none);
+        return;
+    }
+
+    if (c == 1) {
+    if (error.indexOf("No symbol", 0, Qt::CaseInsensitive)!=-1) {
+            dbgSymbols = false;
+        } else {
+            dbgSymbols = true;
+        }
+    }
+
+    if (dbgSymbols) { //debug symbols exists
+        if (c == 1 && output != " ") {
+            /*Dump of assembler code for function sasmStartL:
+               0x00401390 <+0>:	xor    %eax,%eax
+               0x00401392 <+2>:	ret
+               0x00401393 <+3>:	add    %dl,-0x77(%ebp)
+            End of assembler dump.*/
+            //skip this information (for gdb 8.0)
+            c++;
+
+            gdb_cmd_run(); //perform Debugger::run(), that run program and open I/O files
+            return;
+        }
+
+        //determine run of program
+        //wait for message like this: Breakpoint 1, 0x00401390 in sasmStartL ()
+        if (c == 2 && output.indexOf(QString("*stopped,reason=\"breakpoint-hit")) != -1) {
+            //set accordance between program in memory and program in file
+            //in example we need 0x00401390
+
+            //count offset
+            QRegExp r = QRegExp("addr=\"0x[0-9a-fA-F]{8,16}");
+            int index = r.indexIn(output);
+            //take offset in hexadecimal representation (10 symbols) from string and convert it to int
+            offset = output.mid(index+6, r.matchedLength()-6).toULongLong(0, 16);
+            processLst(); //count accordance
+
+            c++;
+            actionTypeQueue.enqueue(ni);
+            doInput("info inferiors\n", none);
+        }
+
+        //if an error with the wrong name of the section has occurred
+        if ((c == 2 && output.indexOf(QString("Make breakpoint pending on future shared library load")) != -1)
+                || (c == 1 && output == " ")) {
+            actionTypeQueue.enqueue(anyAction);
+            processActionMiMode(tr("An error has occurred in the debugger. Please check the names of the sections."));
+            QObject::disconnect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputToBuffer()));
+            emit finished();
+        }
+    } else { //debug symbols does not exists (for example, non-gcc linker)
+        if (c == 1) {
+            offset = entryPoint; //changes in processLst()
+            c++;
+            processLst(); //count accordance
+            gdb_cmd_run(); //perform Debugger::run(), that run program and open I/O files
+            return;
+        }
+
+        //determine run of program
+        //wait for message like this: Breakpoint 1, 0x00401390 in sasmStartL ()
+        if (c == 2 && output.indexOf(QString(" in ")) != -1) {
+            c++;
+            actionTypeQueue.enqueue(ni);
+            doInput("info inferiors\n", none);
+        }
+    }
+
+    //interrupt while debugging (program was stopped)
+    #ifdef Q_OS_WIN32
+        QString interruptSig("SIGTRAP");
+    #else
+        QString interruptSig("SIGINT");
+    #endif
+    if (output.indexOf(interruptSig) != -1) {
+        stopped = true;
+        emit wasStopped();
+        return;
+    }
+
+    if (!pid) {
+        QRegExp r("Num +Description +Executable");
+        int index = output.indexOf(r);
+        if (index != -1) {
+            QString processString("process ");
+            r = QRegExp(processString + "[0-9]+");
+            index = output.indexOf(r);
+            output = output.mid(index + processString.length());
+            output = output.split(QChar(' ')).at(0);
+            pid = output.toULongLong(0, 10);
+            return;
+        }
+    }
+    
+    //process all actions after start
+    if (c == 3) //if (output.indexOf(QString("$1 =")) == -1 && output.indexOf(QString("&\"si")) == -1 && output.indexOf(QString("&\"ni")) == -1 &&) //input file
+        if (output.indexOf(QRegExp("$1 =|&\"si|&\"ni|&\"c")) == -1 || output.indexOf(QString("&\"clear")) != -1)  
+            processActionMiMode(output, error);
+}
+
+void Debugger::processActionMiMode(QString output, QString error)
+{
+    bool backtrace = (output.indexOf(QRegExp("#\\d+  0x[0-9a-fA-F]{8,16} in .* ()")) != -1);
+
+
+    if (output.indexOf(exitMessage) != -1 && !backtrace) {
+        doInput("c\n", none);
+        return;
+    }
+    if (output.indexOf(QRegExp(cExitMessage)) != -1) { //if debug finished
+        //print output - message like bottom
+        /*...output...~"[Inferior 1 (process 7372) exited normally]\n"
+        =thread-exited,id="1",group-id="i1"\u000a=thread-group-exited,id="i1",exit-code="0"
+        *stopped,reason="exited-normally"\u000a"*/
+            
+        QString msg = output.left(output.lastIndexOf(QChar('~'))); //program output
+        msg.remove(0,2); //rm first view whitespace
+        emit printOutput(msg);
+
+        //exit from debugging
+        QObject::disconnect(process, SIGNAL(readyReadStandardOutput()), this, SLOT(readOutputToBuffer()));
+        emit finished();
+        return;
+    }
+    if (actionTypeQueue.isEmpty()) {
+        return;
+    }
+    DebugActionType actionType = actionTypeQueue.dequeue();
+
+    if (actionType == breakpoint)
+        return;
+
+    if(actionType == ni && firstAction){
+        firstAction = false;
+        QRegExp r = QRegExp("addr=\"0x[0-9a-fA-F]{8,16}");
+        int index = r.indexIn(output);
+        quint64 lineNumber = output.mid(index+6, r.matchedLength()-6).toULongLong(0, 16);
+        
+        bool found = false;
+        for (int i = lines.count() - 1; i >= 0; i--) {
+            if (lineNumber == lines[i].numInMem) {
+                lineNumber = lines[i].numInCode;
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            //output = tr("Inside the macro or outside the program.") + '\n';
+            emit inMacro();
+            return;
+        } else { //if found highlight and print it
+            //highlight line number
+            emit highlightLine(lineNumber);
+            stopped = true;
+            emit wasStopped();
+            return;
+        }
+    }
+
+    if (actionType == si || actionType == ni || actionType == showLine) {
+        //message is: line number + data
+        //print line number and other data if si or ni and print line number only if showLine
+        //scan line number in memory
+        QRegExp r = QRegExp("addr=\"0x[0-9a-fA-F]{8,16}");
+        int index = r.indexIn(output);
+        //print output
+        if (index > 1) {
+            QString msg = output.left(output.indexOf(QChar('~'))); //left part - probably output of program;
+            QRegExp breakpointMsg("=breakpoint");
+            QRegExp threadMsg("\\[Switching to Thread [^\\]]*\\]\r?\n");//todo
+            QRegExp signalMsg("\r?\n(Program received signal.*)");//todo
+            if (breakpointMsg.indexIn(msg) != -1)
+                msg.remove(breakpointMsg.indexIn(msg), msg.indexOf(QChar('\n'), breakpointMsg.indexIn(msg)) + 5);
+            msg.remove(threadMsg);
+            if (signalMsg.indexIn(msg) != -1) {
+                QString recievedSignal = signalMsg.cap(1);
+                if (QRegExp("SIG(TRAP|INT)").indexIn(recievedSignal) == -1) {
+                    emit printLog(recievedSignal, Qt::red);
+                }
+                msg.remove(signalMsg);
+            }
+            msg.remove(0,2); //rm first view whitespace
+            emit printOutput(msg);
+        }
+        
+        quint64 lineNumber = output.mid(index+6, r.matchedLength()-6).toULongLong(0, 16);
+        //take line number in hexadecimal representation
+        //(10 symbols) in memory from string and convert it to int
+
+        //find line number in accordance array and get number line in file with code
+        bool found = false;
+        for (int i = lines.count() - 1; i >= 0; i--) {
+            if (lineNumber == lines[i].numInMem) {
+                lineNumber = lines[i].numInCode;
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            //output = tr("Inside the macro or outside the program.") + '\n';
+            emit inMacro();
+        } else { //if found highlight and print it
+            //highlight line number
+            emit highlightLine(lineNumber);
+            stopped = true;
+            emit wasStopped();
+        }
+        return;
+    }
+
+    if (actionType == anyAction) {
+        if (output[output.length() - 1] != '\n')
+            output += QChar('\n');
+        //process as ni or si
+        if (output.indexOf(QRegExp("addr=\"0x[0-9a-fA-F]{8,16}\"")) != -1
+                && !backtrace) {
+            actionTypeQueue.enqueue(showLine);
+            processActionMiMode(output);
+        }
+        if (!error.isEmpty()) {
+            if (output != " \n")
+                output = error + output;
+            else
+                output = error;
+        }
+    }
+
+    if (actionType == infoMemory) { 
+        bool isValid = false;
+        if (output.indexOf(QString("No symbol")) == -1 &&
+                output.indexOf(QString("no debug info")) == -1 && output != QString(" ")) {
+            //if variable exists (isValid = true)
+            isValid = true;
+            int index = output.indexOf(QRegExp("\\$\\d+ = .*"));
+            if (index == -1)
+                isValid = false;
+            else {
+                output = output.right(output.length() - index);
+                output = output.right(output.length() - output.indexOf(QChar('=')) - 1);
+                output = output.left(output.indexOf(QString("\\n")));
+                for (int i = output.size() - 1; i >= 0; i--) {
+                    if (output[i].isSpace())
+                        output.remove(i, 1);
+                }
+            }
+        }
+        memoryInfo info;
+        if (isValid)
+            info.value = output;
+        info.isValid = isValid;
+        watches.append(info);
+        if (watchesCount == watches.size()) {
+            emit printMemory(watches);
+            watches.clear();
+        }
+        return;
+    }
+
+    if (actionType == infoRegisters) {
+        output.remove(QString("&\"info registers\\n\"")); 
+        output.remove(QString("^done")); 
+        QStringList tmp;
+        for (QString s : output.split(QChar('\n'), QString::SkipEmptyParts)){
+            if (s.at(0) == QChar('~'))
+                tmp.append(s.remove(QRegExp("\"|~|\n")));
+        }
+        QString filteredoutput = tmp.join(QString("\n"));
+        QTextStream registersStream(&filteredoutput);
+        QList<registersInfo> registers;
+        registersInfo info;
+        QSettings settings("SASM Project", "SASM");
+
+        QSet<QString> general;
+        QString ip;
+        QSet<QString> segment;
+        segment << "cs" << "ds" << "ss" << "es" << "fs" << "gs";
+        QSet<QString> flags;
+        flags << "eflags" << "mxcsr";
+        QSet<QString> fpu_info;
+        fpu_info << "fctrl" << "fstat" << "ftag" << "fiseg" << "fioff" << "foseg" << "fooff" << "fop";
+        QRegExp mmx("mm\\d+");
+        QRegExp xmm("xmm\\d+");
+        QRegExp ymm("ymm\\d+");
+        QRegExp fpu_stack("st\\d+");
+
+        if (settings.value("mode", QString("x86")).toString() == "x86") {
+            //x86
+
+            general << "eax" << "ebx" << "ecx" << "edx" << "esi" << "edi" << "esp" << "ebp";
+            ip = "eip";
+        } else {
+            //x64
+            general << "rax" << "rbx" << "rcx" << "rdx" << "rsi" << "rdi" << "rsp" << "rbp" <<
+                       "r8" << "r9" << "r10" << "r11" << "r12" << "r13" << "r14" << "r15";
+            ip = "rip";
+        }
+
+        for (int i = 0; !registersStream.atEnd(); i++) {
+            registersStream >> info.name;
+
+            if (info.name.isEmpty()) {
+                // last empty line
+                break;
+            }
+
+            if (general.contains(info.name) || segment.contains(info.name) || fpu_info.contains(info.name) ||
+                    info.name == ip || flags.contains(info.name) || fpu_stack.exactMatch(info.name)) {
+                registersStream >> info.hexValue;
+                registersStream.skipWhiteSpace();
+                info.decValue = registersStream.readLine();
+            } else if (mmx.exactMatch(info.name) || xmm.exactMatch(info.name) || ymm.exactMatch(info.name)) {
+                QMap<QString, QString> fields;
+
+                if (!readStruct(registersStream, &fields)) {
+                    // bad news
+                    emit printLog(QString("can not parse register data: ") + info.name + "\n", Qt::red);
+                    break;
+                }
+
+                if (mmx.exactMatch(info.name))
+                    info.decValue = fields["v8_int8"];
+                else if (xmm.exactMatch(info.name))
+                    info.decValue = fields["uint128"];
+                else if (ymm.exactMatch(info.name))
+                    info.decValue = fields["v2_int128"];
+
+                info.hexValue = "";
+            } else {
+                // unknown register, try to skip it.
+                registersStream.readLine();
+                emit printLog(QString("unknown register: ") + info.name + "\n", Qt::red);
+                continue;
+            }
+
+            registers.append(info);
+            if (i == 0 && info.name != "eax" && info.name != "rax" && registersOk) {
+                doInput(QString("info registers\n"), infoRegisters);
+                registersOk = false;
+                return;
+            }
+        }
+
+        emit printRegisters(registers);
+        return;
+    }
+    //todo
+    if (output == QString("\r\n") || output == QString("\n") ||
+            output == QString("\r\n\n") || output == QString("\n\n")||output.at(0)=='*') //if empty or starts with *
         return;
 
     //print information to log field

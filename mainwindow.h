@@ -211,6 +211,7 @@ private:
     QString backupObjectFileName;
     QString backupGDBPath;
     QString backupGDBVerbose;
+    QString backupGDBMi;
     bool backupDisableLinking;
     bool backupCurrentDir;
     QString backupAssemblerPath;
