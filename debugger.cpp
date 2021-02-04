@@ -626,7 +626,7 @@ void Debugger::processMessageMiMode(QString output, QString error)
 
         //determine run of program
         //wait for message like this: Breakpoint 1, 0x00401390 in sasmStartL ()
-        if (c == 2 && output.indexOf(QString(" in ")) != -1) {
+        if (c == 2 && output.indexOf(QString("*stopped,reason=\"breakpoint-hit")) != -1) {
             //set accordance between program in memory and program in file
             //in example we need 0x00401390
 
@@ -768,7 +768,7 @@ void Debugger::processActionMiMode(QString output, QString error)
         int index = r.indexIn(output);
         //print output
         if (index > 1) {
-            QString msg = output.left(output.lastIndexOf(QChar('~'))); //left part - probably output of program;
+            QString msg = output.left(output.indexOf(QChar('~'))); //left part - probably output of program;
             QRegExp breakpointMsg("=breakpoint");
             QRegExp threadMsg("\\[Switching to Thread [^\\]]*\\]\r?\n");//todo
             QRegExp signalMsg("\r?\n(Program received signal.*)");//todo
@@ -803,26 +803,20 @@ void Debugger::processActionMiMode(QString output, QString error)
         if (!found) {
             //output = tr("Inside the macro or outside the program.") + '\n';
             emit inMacro();
-            return;
         } else { //if found highlight and print it
             //highlight line number
             emit highlightLine(lineNumber);
             stopped = true;
             emit wasStopped();
-
-            //print string number and all after it
-            //output = QString::number(lineNumber) + tr(" line") + output.mid(output.indexOf("()") + 2);
-            if (actionType == showLine)
-                return;
-            output.remove(0, output.indexOf("()") + 6);
         }
+        return;
     }
 
     if (actionType == anyAction) {
         if (output[output.length() - 1] != '\n')
             output += QChar('\n');
         //process as ni or si
-        if (output.indexOf(QRegExp("0x[0-9a-fA-F]{8,16} in ")) != -1
+        if (output.indexOf(QRegExp("addr=\"0x[0-9a-fA-F]{8,16}\"")) != -1
                 && !backtrace) {
             actionTypeQueue.enqueue(showLine);
             processActionMiMode(output);
