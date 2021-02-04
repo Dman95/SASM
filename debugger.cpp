@@ -261,7 +261,7 @@ void Debugger::processMessage(QString output, QString error)
 
         //determine run of program
         //wait for message like this: Breakpoint 1, 0x00401390 in sasmStartL ()
-        if (c == 2 && output.indexOf(QString(" in ")) != -1) {
+        if (c == 2 && (output.indexOf(QString(" in ")) != -1 || output.indexOf(QString(" at \\")) != -1)) {
             //set accordance between program in memory and program in file
             //in example we need 0x00401390
 
@@ -296,7 +296,7 @@ void Debugger::processMessage(QString output, QString error)
 
         //determine run of program
         //wait for message like this: Breakpoint 1, 0x00401390 in sasmStartL ()
-        if (c == 2 && output.indexOf(QString(" in ")) != -1) {
+        if (c == 2 && (output.indexOf(QString(" in ")) != -1 || output.indexOf(QString(" at \\")) != -1)) {
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
@@ -661,7 +661,7 @@ void Debugger::processMessageMiMode(QString output, QString error)
 
         //determine run of program
         //wait for message like this: Breakpoint 1, 0x00401390 in sasmStartL ()
-        if (c == 2 && output.indexOf(QString(" in ")) != -1) {
+        if (c == 2 && output.indexOf(QString("*stopped,reason=\"breakpoint-hit")) != -1) {
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
