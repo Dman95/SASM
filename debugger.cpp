@@ -258,10 +258,19 @@ void Debugger::processMessage(QString output, QString error)
             gdb_cmd_run(); //perform Debugger::run(), that run program and open I/O files
             return;
         }
+        
+        if (c == 2 && output.indexOf(QString("Breakpoint 1 at ")) != -1){
+            QRegExp r = QRegExp("0x[0-9a-fA-F]{5,16}");
+            int index = r.indexIn(output);
+            //take offset in hexadecimal representation (10 symbols) from string and convert it to int
+            offset = output.mid(index, r.matchedLength()).toULongLong(0, 16);
+            c++;
+            return;
+        }
 
         //determine run of program
         //wait for message like this: Breakpoint 1, 0x00401390 in sasmStartL ()
-        if (c == 2 && (output.indexOf(QString(" in ")) != -1 || output.indexOf(QString(" at \\")) != -1)) {
+        if (c == 3 && output.indexOf(QString(" in ")) != -1) {
             //set accordance between program in memory and program in file
             //in example we need 0x00401390
 
@@ -276,9 +285,16 @@ void Debugger::processMessage(QString output, QString error)
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
         }
+        
+        if (c == 3 && output.indexOf(QString(" at /")) != -1) {
+            processLst(); //count accordance
+            c++;
+            actionTypeQueue.enqueue(ni);
+            doInput("info inferiors\n", none);
+        }
 
         //if an error with the wrong name of the section has occurred
-        if ((c == 2 && output.indexOf(QString("Make breakpoint pending on future shared library load")) != -1)
+        if ((c == 3 && output.indexOf(QString("Make breakpoint pending on future shared library load")) != -1)
                 || (c == 1 && output == " ")) {
             actionTypeQueue.enqueue(anyAction);
             processAction(tr("An error has occurred in the debugger. Please check the names of the sections."));
@@ -294,9 +310,23 @@ void Debugger::processMessage(QString output, QString error)
             return;
         }
 
+	if (c == 2 && output.indexOf(QString("Breakpoint 1 at ")) != -1){
+            QRegExp r = QRegExp("0x[0-9a-fA-F]{5,16}");
+            int index = r.indexIn(output);
+            //take offset in hexadecimal representation (10 symbols) from string and convert it to int
+            offset = output.mid(index, r.matchedLength()).toULongLong(0, 16);
+            c++;
+            return;
+        }
+
         //determine run of program
         //wait for message like this: Breakpoint 1, 0x00401390 in sasmStartL ()
-        if (c == 2 && (output.indexOf(QString(" in ")) != -1 || output.indexOf(QString(" at \\")) != -1)) {
+        if (c == 3 && output.indexOf(QString(" in ")) != -1) {
+            c++;
+            actionTypeQueue.enqueue(ni);
+            doInput("info inferiors\n", none);
+        }
+        if (c == 3 && output.indexOf(QString(" at /")) != -1) {
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
@@ -330,7 +360,7 @@ void Debugger::processMessage(QString output, QString error)
     }
 
     //process all actions after start
-    if (c == 3)
+    if (c == 4)
         if (output.indexOf(QString("$1 =")) == -1) //input file
             processAction(output, error);
 }
