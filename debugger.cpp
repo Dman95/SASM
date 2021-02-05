@@ -221,7 +221,7 @@ void Debugger::processMessage(QString output, QString error)
         done.
         (gdb)*/
 
-#if 0
+    #if 0
         // not required anymore, since GDB can be specified
         if (output.indexOf(QString(") 8.1.")) != -1) {
             actionTypeQueue.enqueue(anyAction);
@@ -230,7 +230,7 @@ void Debugger::processMessage(QString output, QString error)
             emit finished();
             return;
         }
-#endif
+    #endif
 
         c++;
         doInput(QString("disas main\n"), none);
@@ -258,19 +258,10 @@ void Debugger::processMessage(QString output, QString error)
             gdb_cmd_run(); //perform Debugger::run(), that run program and open I/O files
             return;
         }
-        
-        if (c == 2 && output.indexOf(QString("Breakpoint 1 at ")) != -1){
-            QRegExp r = QRegExp("0x[0-9a-fA-F]{5,16}");
-            int index = r.indexIn(output);
-            //take offset in hexadecimal representation (10 symbols) from string and convert it to int
-            offset = output.mid(index, r.matchedLength()).toULongLong(0, 16);
-            c++;
-            return;
-        }
 
         //determine run of program
         //wait for message like this: Breakpoint 1, 0x00401390 in sasmStartL ()
-        if (c == 3 && output.indexOf(QString(" in ")) != -1) {
+        if (c == 2 && output.indexOf(QString(" in ")) != -1) {
             //set accordance between program in memory and program in file
             //in example we need 0x00401390
 
@@ -285,16 +276,9 @@ void Debugger::processMessage(QString output, QString error)
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
         }
-        
-        if (c == 3 && output.indexOf(QString(" at /")) != -1) {
-            processLst(); //count accordance
-            c++;
-            actionTypeQueue.enqueue(ni);
-            doInput("info inferiors\n", none);
-        }
 
         //if an error with the wrong name of the section has occurred
-        if ((c == 3 && output.indexOf(QString("Make breakpoint pending on future shared library load")) != -1)
+        if ((c == 2 && output.indexOf(QString("Make breakpoint pending on future shared library load")) != -1)
                 || (c == 1 && output == " ")) {
             actionTypeQueue.enqueue(anyAction);
             processAction(tr("An error has occurred in the debugger. Please check the names of the sections."));
@@ -310,23 +294,9 @@ void Debugger::processMessage(QString output, QString error)
             return;
         }
 
-	if (c == 2 && output.indexOf(QString("Breakpoint 1 at ")) != -1){
-            QRegExp r = QRegExp("0x[0-9a-fA-F]{5,16}");
-            int index = r.indexIn(output);
-            //take offset in hexadecimal representation (10 symbols) from string and convert it to int
-            offset = output.mid(index, r.matchedLength()).toULongLong(0, 16);
-            c++;
-            return;
-        }
-
         //determine run of program
         //wait for message like this: Breakpoint 1, 0x00401390 in sasmStartL ()
-        if (c == 3 && output.indexOf(QString(" in ")) != -1) {
-            c++;
-            actionTypeQueue.enqueue(ni);
-            doInput("info inferiors\n", none);
-        }
-        if (c == 3 && output.indexOf(QString(" at /")) != -1) {
+        if (c == 2 && output.indexOf(QString(" in ")) != -1) {
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
@@ -360,7 +330,7 @@ void Debugger::processMessage(QString output, QString error)
     }
 
     //process all actions after start
-    if (c == 4)
+    if (c == 3)
         if (output.indexOf(QString("$1 =")) == -1) //input file
             processAction(output, error);
 }
@@ -603,6 +573,7 @@ void Debugger::processAction(QString output, QString error)
     //print information to log field
     emit printLog(output);
 }
+
 
 void Debugger::processMessageMiMode(QString output, QString error)
 {
@@ -896,7 +867,7 @@ void Debugger::processActionMiMode(QString output, QString error)
         QStringList tmp;
         for (QString s : output.split(QChar('\n'), QString::SkipEmptyParts)){
             if (s.at(0) == QChar('~'))
-                tmp.append(s.remove(QRegExp("\"|~|\n")));
+                tmp.append(s.mid(2, s.size()-5));
         }
         QString filteredoutput = tmp.join(QString("\n"));
         QTextStream registersStream(&filteredoutput);
