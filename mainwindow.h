@@ -102,7 +102,7 @@ public:
     void writeSettings();
     void setupEditor(int i);
     bool okToContinue(int index = -1);
-    void setCurrentTabName(const QString &filePath, int index = -1);
+    void setTabPath(const QString &filePath, int index = -1);
     bool removeDirRecuresively(const QString &dirName);
 
 private:

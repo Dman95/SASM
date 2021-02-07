@@ -53,7 +53,12 @@ namespace {
 }
 
 
-Debugger::Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler *assembler, QWidget *parent)
+Debugger::Debugger(QTextEdit *tEdit,
+                   const QString &exePathParam,
+                   const QString &workingDirectoryPathParam,
+                   const QString &inputPathParam,
+                   Assembler *assembler,
+                   QWidget *parent)
     : QObject(parent)
 {
     QSettings settings("SASM Project", "SASM");
@@ -61,7 +66,9 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler
     pid = 0;
     firstAction = true;
     textEdit = tEdit;
-    tmpPath = tmp;
+    exePath = exePathParam;
+    workingDirectoryPath = workingDirectoryPathParam;
+    inputPath = inputPathParam;
     registersOk = true;
     this->assembler = assembler;
     #ifdef Q_OS_WIN32
@@ -97,7 +104,7 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler
     QProcess objdumpProcess;
     QProcessEnvironment objdumpEnvironment = QProcessEnvironment::systemEnvironment();
     QStringList objdumpArguments;
-    objdumpArguments << "-f" << path;
+    objdumpArguments << "-f" << exePath;
 	objdumpEnvironment.insert("LC_MESSAGES", "en_US");
 	objdumpProcess.setProcessEnvironment(objdumpEnvironment);
     objdumpProcess.start(objdump, objdumpArguments);
@@ -110,7 +117,7 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &path, QString tmp, Assembler
 
 
     QStringList arguments;
-    arguments << path;
+    arguments << exePath;
 
     process = new QProcess;
     process->start(gdb, arguments);
@@ -602,9 +609,9 @@ void Debugger::run()
     else {
         doInput("b *0x" + QString::number(entryPoint, 16) + "\n", none);
     }
-    doInput(QString("cd " + tmpPath + "\n"), none);
+    doInput(QString("cd " + workingDirectoryPath + "\n"), none);
     doInput(QString("run\n"), none);
-    doInput(QString("p (int) dup2((int) open(\"input.txt\",0),0)\n"), none);
+    doInput(QString("p (int) dup2((int) open(\"%1\",0),0)\n").arg(inputPath), none);
 }
 
 void Debugger::changeBreakpoint(quint64 lineNumber, bool isAdded)

@@ -612,22 +612,24 @@ void MainWindow::openFile(QString path)
     newFile();
     Tab *curTab = (Tab *) tabs->currentWidget();
     curTab->loadCodeFromFile(path);
-    setCurrentTabName(path);
+    setTabPath(path);
     //connect(curTab, SIGNAL(fileOpened(QString)), this, SLOT(openFile(QString)));
 }
 
-void MainWindow::setCurrentTabName(const QString &filePath, int index)
+void MainWindow::setTabPath(const QString &filePath, int index)
 {
     //! Taking name of file (without path)
-    QString caption;
     int i;
     if ((i = filePath.lastIndexOf('/')) == -1)
         i = filePath.lastIndexOf('\\');
-    caption = filePath.mid(i + 1);
-    if (index == -1)
+    QString caption = filePath.mid(i + 1);
+    if (index == -1) {
+        tabs->setTabToolTip(tabs->currentIndex(), filePath);
         tabs->setTabText(tabs->currentIndex(), caption);
-    else
+    } else {
+        tabs->setTabToolTip(index, filePath);
         tabs->setTabText(index, caption);
+    }
 }
 
 void MainWindow::closeFile()
@@ -669,7 +671,7 @@ bool MainWindow::saveAsFile(int index)
     else
         tab = (Tab *) tabs->widget(index);
     tab->saveCodeToFile(fileName, assembler);
-    setCurrentTabName(fileName, index);
+    setTabPath(fileName, index);
     return true;
 }
 
@@ -1021,6 +1023,14 @@ void MainWindow::runProgram()
 
     QString program = Common::pathInTemp("SASMprog.exe");
     runProcess->setStandardInputFile(input);
+
+    //! Run program in code directory if it exists
+    QString codePath = currentTab->getCurrentFilePath();
+    if (!codePath.isEmpty()) {
+        QString codeDirPath = QFileInfo(codePath).absoluteDir().absolutePath();
+        runProcess->setWorkingDirectory(codeDirPath);
+    }
+
     connect(runProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(getOutput()));
     programStopped = false;
     connect(runProcess, SIGNAL(started()), this, SLOT(startCountProgramTime()));
@@ -1139,9 +1149,27 @@ void MainWindow::debug()
         }
         ((Tab *) tabs->currentWidget())->clearOutput();
         printLogWithTime(tr("Debugging started...") + '\n', Qt::darkGreen);
-        QString path = Common::pathInTemp("SASMprog.exe");
-        CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
-        debugger = new Debugger(compilerOut, path, Common::pathInTemp(QString()), assembler);
+        Tab *currentTab = (Tab *) tabs->currentWidget();
+        CodeEditor *code = currentTab->code;
+
+        //! Determine executable path
+        QString exePath = Common::pathInTemp("SASMprog.exe");
+
+        //! Determine working directory path
+        QString workingDirectoryPath;
+        QString codePath = currentTab->getCurrentFilePath();
+        if (!codePath.isEmpty()) {
+            workingDirectoryPath = QFileInfo(codePath).absoluteDir().absolutePath();
+        } else {
+            workingDirectoryPath = Common::pathInTemp("");
+        }
+        workingDirectoryPath.replace("\\", "/");
+
+        //! Determine input path
+        QString inputPath = Common::pathInTemp("input.txt");
+        inputPath.replace("\\", "/");
+
+        debugger = new Debugger(compilerOut, exePath, workingDirectoryPath, inputPath, assembler);
         connect(debugger, SIGNAL(highlightLine(int)), code, SLOT(updateDebugLine(int)));
         connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
         connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
@@ -1610,7 +1638,7 @@ void MainWindow::restorePrevSession(bool notNotify)
         newFile();
         Tab *curTab = (Tab *) tabs->currentWidget();
         curTab->loadCodeFromFile(fileName);
-        setCurrentTabName(fileName);
+        setTabPath(fileName);
     }
     settings.endGroup();
 }
