@@ -20,8 +20,8 @@ For running:
 On Linux:
 For building:
     build-essential
+    qtbase5-dev
     qt5-default
-    qtchooser
 For running:
     gcc-multilib (x64 OS) or gcc (x86 OS)
     gdb
