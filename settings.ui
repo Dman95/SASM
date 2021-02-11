@@ -165,17 +165,22 @@
               </item>
               <item>
                <property name="text">
-                <string>Polski</string>
+                <string notr="true">Polski</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>עברית</string>
+                <string notr="true">עברית</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Español</string>
+                <string notr="true">Español</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true">Português</string>
                </property>
               </item>
              </widget>

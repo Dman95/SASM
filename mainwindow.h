@@ -76,7 +76,7 @@
 #include "signallocker.h"
 #include "masm.h"
 
-#define SASM_VERSION "3.11.1"
+#define SASM_VERSION "3.12.0"
 
 /**
  * @file mainwindow.h
@@ -103,7 +103,7 @@ public:
     void writeSettings();
     void setupEditor(int i);
     bool okToContinue(int index = -1);
-    void setCurrentTabName(const QString &filePath, int index = -1);
+    void setTabPath(const QString &filePath, int index = -1);
     bool removeDirRecuresively(const QString &dirName);
 
 private:

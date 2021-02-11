@@ -81,7 +81,17 @@ class Debugger : public QObject
     Q_OBJECT
 
 public:
-    Debugger(QTextEdit *tEdit, const QString &path, const QString &tmp, Assembler *assembler, const QString &gdbpath, QWidget *parent = 0, bool verbose = true, bool mimode = true);
+    Debugger(QTextEdit *tEdit,
+		    const QString &path,
+		    const QString &tmp,
+             const QString &inputPathParam,
+		    Assembler *assembler,
+		    const QString &gdbpath,
+		    QWidget *parent = 0,
+		    bool verbose = true,
+		    bool mimode = true
+	);
+
     ~Debugger();
     void setWatchesCount(int count);
 
@@ -139,6 +149,14 @@ private:
     //! Message on exit which shows when "continue" command used
     QRegExp cExitMessage;
 
+    //! Path to executable
+    QString exePath;
+
+    //! Path to working directory
+    QString workingDirectoryPath;
+
+    //! Path to temporary input.txt file
+    QString inputPath;
 
     QString path;
     QString tmpPath;

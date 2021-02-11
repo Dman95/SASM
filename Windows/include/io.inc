@@ -512,39 +512,35 @@ section .text
     push ecx
     push edx
 
+; we will have to do postprocessing after scanf
     ALIGN_STACK 8    
-    push %2
+    push %%read_tmp
 %elifnum %2
     %error "Incorrect parameter (number)"
 %elifstr %2
     %error "Incorrect parameter (string)"
 %else
 ; may be, address expression?
-    
-    mov dword [%%tmp], eax    ; may use register esp, need to take care
-
-    lea eax, %2
-
     pushf
-    push dword [%%tmp] ; eax
+    push eax
     push ecx
     push edx
 
+; we will have to do postprocessing after scanf
     ALIGN_STACK 8
-    push eax
+    push %%read_tmp
 %endif
 
     push %%fmt
     call scanf
     UNALIGN_STACK
 
+%if %$is_reg = 1
+; register postprocessing
     pop edx
     pop ecx
     pop eax
     popf    
-
-%if %$is_reg = 1
-; register postprocessing
 
 %if %$reg_size = %1
     mov %2, [%%read_tmp]
@@ -555,6 +551,43 @@ section .text
         %4 %2, word [%%read_tmp]
     %endif
 %endif
+    
+%elifid %2
+; variable (hope so) postprocessing
+    %if %1 = 1
+        mov cl, byte [%%read_tmp]
+        mov byte [%2], cl
+    %elif %1 = 2
+        mov cx, word [%%read_tmp]
+        mov word [%2], cx
+    %else
+        mov ecx, dword [%%read_tmp]
+        mov dword [%2], ecx
+    %endif
+    
+    pop edx
+    pop ecx
+    pop eax
+    popf   
+
+%else
+; may be, address expression? postprocessing
+    lea eax, %2
+    %if %1 = 1
+        mov cl, byte [%%read_tmp]
+        mov byte [eax], cl
+    %elif %1 = 2
+        mov cx, word [%%read_tmp]
+        mov word [eax], cx
+    %else
+        mov ecx, dword [%%read_tmp]
+        mov dword [eax], ecx
+    %endif
+    
+    pop edx
+    pop ecx
+    pop eax
+    popf     
 
 %endif
 
