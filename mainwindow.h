@@ -49,6 +49,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTime>
+#include <QElapsedTimer>
 #include <QPointer>
 #include <QColorDialog>
 #include <QSignalMapper>
@@ -165,7 +166,7 @@ private:
     QProcess *runProcess;
     CodeEditor *prevCodeEditor;
     QTimer *timer;
-    QTime programExecutionTime;
+    QElapsedTimer programExecutionTime;
     Debugger *debugger;
     bool programIsBuilded;
     QPointer<DebugTableWidget> registersWindow;

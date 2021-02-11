@@ -93,14 +93,14 @@ WatchSettingsWidget::WatchSettingsWidget(QWidget *parent) :
 int WatchSettingsWidget::sumSize()
 {
     return typeComboBox->sizeHint().width() + sizeComboBox->sizeHint().width()
-            + arraySizeEdit->fontMetrics().width(arraySizeEdit->placeholderText())
+            + arraySizeEdit->fontMetrics().horizontalAdvance(arraySizeEdit->placeholderText())
             + addressCheckbox->sizeHint().width() + 50;
 }
 
 QSize WatchSettingsWidget::sizeHint() const
 {
     return QSize(typeComboBox->sizeHint().width() + sizeComboBox->sizeHint().width()
-            + arraySizeEdit->fontMetrics().width(arraySizeEdit->placeholderText())
+            + arraySizeEdit->fontMetrics().horizontalAdvance(arraySizeEdit->placeholderText())
             + addressCheckbox->sizeHint().width() + 50, 0);
 }
 

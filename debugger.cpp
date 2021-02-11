@@ -56,7 +56,6 @@ namespace {
 Debugger::Debugger(QTextEdit *tEdit, const QString &i_path, const QString &tmp, Assembler *i_assembler, const QString &i_gdbpath, QWidget *parent, bool i_verbose, bool i_mimode)
     : QObject(parent)
 {
-    QSettings settings("SASM Project", "SASM");
     c = 0;
     pid = 0;
     firstAction = true;
@@ -75,6 +74,7 @@ bool Debugger::run()
     #ifdef Q_OS_WIN32
         QString gdb;
         QString objdump;
+        QSettings settings("SASM Project", "SASM");
         if (settings.value("mode", QString("x86")).toString() == "x86") {
             gdb = QCoreApplication::applicationDirPath() + "/MinGW/bin/gdb.exe";
             objdump = QCoreApplication::applicationDirPath() + "/MinGW/bin/objdump.exe";
@@ -221,7 +221,7 @@ void Debugger::processMessage(QString output, QString error)
         done.
         (gdb)*/
 
-#if 0
+    #if 0
         // not required anymore, since GDB can be specified
         if (output.indexOf(QString(") 8.1.")) != -1) {
             actionTypeQueue.enqueue(anyAction);
@@ -230,7 +230,7 @@ void Debugger::processMessage(QString output, QString error)
             emit finished();
             return;
         }
-#endif
+    #endif
 
         c++;
         doInput(QString("disas main\n"), none);
@@ -574,6 +574,7 @@ void Debugger::processAction(QString output, QString error)
     emit printLog(output);
 }
 
+
 void Debugger::processMessageMiMode(QString output, QString error)
 {
     if (error.indexOf("PC register is not available") != -1) {
@@ -661,7 +662,7 @@ void Debugger::processMessageMiMode(QString output, QString error)
 
         //determine run of program
         //wait for message like this: Breakpoint 1, 0x00401390 in sasmStartL ()
-        if (c == 2 && output.indexOf(QString(" in ")) != -1) {
+        if (c == 2 && output.indexOf(QString("*stopped,reason=\"breakpoint-hit")) != -1) {
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
@@ -704,7 +705,6 @@ void Debugger::processActionMiMode(QString output, QString error)
 {
     bool backtrace = (output.indexOf(QRegExp("#\\d+  0x[0-9a-fA-F]{8,16} in .* ()")) != -1);
 
-
     if (output.indexOf(exitMessage) != -1 && !backtrace) {
         doInput("c\n", none);
         return;
@@ -717,6 +717,9 @@ void Debugger::processActionMiMode(QString output, QString error)
             
         QString msg = output.left(output.lastIndexOf(QChar('~'))); //program output
         msg.remove(0,2); //rm first view whitespace
+        QRegExp threadMsg("=thread");
+        while (threadMsg.indexIn(msg) != -1)
+             msg.remove(threadMsg.indexIn(msg), msg.indexOf(QChar('\n'), threadMsg.indexIn(msg) + 7));
         emit printOutput(msg);
 
         //exit from debugging
@@ -770,11 +773,12 @@ void Debugger::processActionMiMode(QString output, QString error)
         if (index > 1) {
             QString msg = output.left(output.indexOf(QChar('~'))); //left part - probably output of program;
             QRegExp breakpointMsg("=breakpoint");
-            QRegExp threadMsg("\\[Switching to Thread [^\\]]*\\]\r?\n");//todo
+            QRegExp threadMsg("=thread");
             QRegExp signalMsg("\r?\n(Program received signal.*)");//todo
             if (breakpointMsg.indexIn(msg) != -1)
                 msg.remove(breakpointMsg.indexIn(msg), msg.indexOf(QChar('\n'), breakpointMsg.indexIn(msg)) + 5);
-            msg.remove(threadMsg);
+            while (threadMsg.indexIn(msg) != -1)
+                msg.remove(threadMsg.indexIn(msg), msg.indexOf(QChar('\n'), threadMsg.indexIn(msg) + 7));
             if (signalMsg.indexIn(msg) != -1) {
                 QString recievedSignal = signalMsg.cap(1);
                 if (QRegExp("SIG(TRAP|INT)").indexIn(recievedSignal) == -1) {
@@ -864,9 +868,9 @@ void Debugger::processActionMiMode(QString output, QString error)
         output.remove(QString("&\"info registers\\n\"")); 
         output.remove(QString("^done")); 
         QStringList tmp;
-        for (QString s : output.split(QChar('\n'), QString::SkipEmptyParts)){
+        for (QString s : output.split(QChar('\n'), Qt::SkipEmptyParts)){
             if (s.at(0) == QChar('~'))
-                tmp.append(s.remove(QRegExp("\"|~|\n")));
+                tmp.append(s.mid(2, s.size()-5));
         }
         QString filteredoutput = tmp.join(QString("\n"));
         QTextStream registersStream(&filteredoutput);
