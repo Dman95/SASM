@@ -849,9 +849,9 @@ void MainWindow::buildProgram(bool debugMode)
     if (settings.contains("assemblerpath"))
         assemblerPath = settings.value("assemblerpath").toString();
     #ifdef Q_OS_WIN32
-        QString assemblerOptions = "-g -f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
+        QString assemblerOptions = "-f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
     #else
-        QString assemblerOptions = "-g -f elf32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
+        QString assemblerOptions = "-f elf32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
     #endif
     if (settings.contains("assemblyoptions"))
         assemblerOptions = settings.value("assemblyoptions").toString();
