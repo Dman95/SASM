@@ -705,7 +705,6 @@ void Debugger::processActionMiMode(QString output, QString error)
 {
     bool backtrace = (output.indexOf(QRegExp("#\\d+  0x[0-9a-fA-F]{8,16} in .* ()")) != -1);
 
-
     if (output.indexOf(exitMessage) != -1 && !backtrace) {
         doInput("c\n", none);
         return;
@@ -720,7 +719,7 @@ void Debugger::processActionMiMode(QString output, QString error)
         msg.remove(0,2); //rm first view whitespace
         QRegExp threadMsg("=thread");
         while (threadMsg.indexIn(msg) != -1)
-             msg.remove(threadMsg.indexIn(msg), msg.indexOf(QChar('\n'), threadMsg.indexIn(msg)) + 7);
+             msg.remove(threadMsg.indexIn(msg), msg.indexOf(QChar('\n'), threadMsg.indexIn(msg) + 7));
         emit printOutput(msg);
 
         //exit from debugging
@@ -778,8 +777,8 @@ void Debugger::processActionMiMode(QString output, QString error)
             QRegExp signalMsg("\r?\n(Program received signal.*)");//todo
             if (breakpointMsg.indexIn(msg) != -1)
                 msg.remove(breakpointMsg.indexIn(msg), msg.indexOf(QChar('\n'), breakpointMsg.indexIn(msg)) + 5);
-            if (threadMsg.indexIn(msg) != -1)
-				msg.remove(threadMsg.indexIn(msg), msg.indexOf(QChar('\n'), threadMsg.indexIn(msg)) + 7);
+            while (threadMsg.indexIn(msg) != -1)
+                msg.remove(threadMsg.indexIn(msg), msg.indexOf(QChar('\n'), threadMsg.indexIn(msg) + 7));
             if (signalMsg.indexIn(msg) != -1) {
                 QString recievedSignal = signalMsg.cap(1);
                 if (QRegExp("SIG(TRAP|INT)").indexIn(recievedSignal) == -1) {
@@ -866,7 +865,19 @@ void Debugger::processActionMiMode(QString output, QString error)
     }
 
     if (actionType == infoRegisters) {
+<<<<<<< HEAD
         QTextStream registersStream(&output);
+=======
+        output.remove(QString("&\"info registers\\n\"")); 
+        output.remove(QString("^done")); 
+        QStringList tmp;
+        for (QString s : output.split(QChar('\n'), Qt::SkipEmptyParts)){
+            if (s.at(0) == QChar('~'))
+                tmp.append(s.mid(2, s.size()-5));
+        }
+        QString filteredoutput = tmp.join(QString("\n"));
+        QTextStream registersStream(&filteredoutput);
+>>>>>>> 1407e25deed2e0e32514b93f580ed1eeb42e2ea7
         QList<registersInfo> registers;
         registersInfo info;
         QSettings settings("SASM Project", "SASM");

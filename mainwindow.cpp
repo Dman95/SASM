@@ -1571,7 +1571,7 @@ void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool a
                     if (cs == Qt::CaseSensitive)
                         newCursor = document->find(pattern, newCursor, QTextDocument::FindCaseSensitively);
                     else
-                        newCursor = document->find(pattern, newCursor, 0);
+                        newCursor = document->find(pattern, newCursor);
                     //! Replace mode
                     if (replace && i == tabs->currentIndex()) {
                         newCursor.removeSelectedText();
@@ -1603,13 +1603,13 @@ void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool a
             if (cs == Qt::CaseSensitive)
                 newCursor = document->find(pattern, newCursor, QTextDocument::FindCaseSensitively);
             else
-                newCursor = document->find(pattern, newCursor, 0);
+                newCursor = document->find(pattern, newCursor);
              //! Continue from start
             if (newCursor.isNull()) {
                 if (cs == Qt::CaseSensitive)
                     newCursor = document->find(pattern, newCursor, QTextDocument::FindCaseSensitively);
                 else
-                    newCursor = document->find(pattern, newCursor, 0);
+                    newCursor = document->find(pattern, newCursor);
             }
             if (!newCursor.isNull()) {
                 selection.cursor = newCursor;
