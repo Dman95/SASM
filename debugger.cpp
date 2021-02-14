@@ -865,19 +865,7 @@ void Debugger::processActionMiMode(QString output, QString error)
     }
 
     if (actionType == infoRegisters) {
-<<<<<<< HEAD
         QTextStream registersStream(&output);
-=======
-        output.remove(QString("&\"info registers\\n\"")); 
-        output.remove(QString("^done")); 
-        QStringList tmp;
-        for (QString s : output.split(QChar('\n'), Qt::SkipEmptyParts)){
-            if (s.at(0) == QChar('~'))
-                tmp.append(s.mid(2, s.size()-5));
-        }
-        QString filteredoutput = tmp.join(QString("\n"));
-        QTextStream registersStream(&filteredoutput);
->>>>>>> 1407e25deed2e0e32514b93f580ed1eeb42e2ea7
         QList<registersInfo> registers;
         registersInfo info;
         QSettings settings("SASM Project", "SASM");
