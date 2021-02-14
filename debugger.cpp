@@ -697,7 +697,7 @@ void Debugger::processMessageMiMode(QString output, QString error)
     
     //process all actions after start
     if (c == 3) //if (output.indexOf(QString("$1 =")) == -1 && output.indexOf(QString("&\"si")) == -1 && output.indexOf(QString("&\"ni")) == -1 &&) //input file
-        if (output.indexOf(QRegExp("$1 =|&\"si|&\"ni|&\"c")) == -1 || output.indexOf(QString("&\"clear")) != -1)  
+        if (output.indexOf(QRegExp("$1 =|&\"si|&\"ni|&\"c|&\"p")) == -1 || output.indexOf(QString("&\"clear")) != -1)  
             processActionMiMode(output, error);
 }
 
@@ -866,15 +866,7 @@ void Debugger::processActionMiMode(QString output, QString error)
     }
 
     if (actionType == infoRegisters) {
-        output.remove(QString("&\"info registers\\n\"")); 
-        output.remove(QString("^done")); 
-        QStringList tmp;
-        for (QString s : output.split(QChar('\n'), QString::SkipEmptyParts)){
-            if (s.at(0) == QChar('~'))
-                tmp.append(s.mid(2, s.size()-5));
-        }
-        QString filteredoutput = tmp.join(QString("\n"));
-        QTextStream registersStream(&filteredoutput);
+        QTextStream registersStream(&output);
         QList<registersInfo> registers;
         registersInfo info;
         QSettings settings("SASM Project", "SASM");
@@ -891,6 +883,7 @@ void Debugger::processActionMiMode(QString output, QString error)
         QRegExp xmm("xmm\\d+");
         QRegExp ymm("ymm\\d+");
         QRegExp fpu_stack("st\\d+");
+        bool first = true;
 
         if (settings.value("mode", QString("x86")).toString() == "x86") {
             //x86
@@ -912,11 +905,19 @@ void Debugger::processActionMiMode(QString output, QString error)
                 break;
             }
 
+            if (info.name.at(0) != QChar('~')) {
+                continue;
+            }
+            first = false;
+            info.name.remove(QString("~\""));
+
             if (general.contains(info.name) || segment.contains(info.name) || fpu_info.contains(info.name) ||
                     info.name == ip || flags.contains(info.name) || fpu_stack.exactMatch(info.name)) {
                 registersStream >> info.hexValue;
+                info.hexValue.remove(QRegExp("~|\"|\\\\n|\\\\t"));
                 registersStream.skipWhiteSpace();
                 info.decValue = registersStream.readLine();
+                info.decValue.remove(QRegExp("~|\"|\\\\n|\\\\t"));
             } else if (mmx.exactMatch(info.name) || xmm.exactMatch(info.name) || ymm.exactMatch(info.name)) {
                 QMap<QString, QString> fields;
 
@@ -942,7 +943,7 @@ void Debugger::processActionMiMode(QString output, QString error)
             }
 
             registers.append(info);
-            if (i == 0 && info.name != "eax" && info.name != "rax" && registersOk) {
+            if (first && info.name != "eax" && info.name != "rax" && registersOk) {
                 doInput(QString("info registers\n"), infoRegisters);
                 registersOk = false;
                 return;
