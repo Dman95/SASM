@@ -904,7 +904,7 @@ void Debugger::processActionMiMode(QString output, QString error)
                 break;
             }
 
-            if (info.name.at(0) != QChar('~')) {
+            if (info.name.at(0) != QChar('~')||info.name != QString("~\"\\n\"")) {
                 continue;
             }
             first = false;
