@@ -67,6 +67,7 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &i_path, const QString &tmp, 
     assembler = i_assembler;
     verbose = i_verbose;
     mimode = i_mimode;
+    wincrflag = 0;
 }
 
 bool Debugger::run()
@@ -75,6 +76,7 @@ bool Debugger::run()
         QString gdb;
         QString objdump;
         QSettings settings("SASM Project", "SASM");
+        wincrflag++;
         if (settings.value("mode", QString("x86")).toString() == "x86") {
             gdb = QCoreApplication::applicationDirPath() + "/MinGW/bin/gdb.exe";
             objdump = QCoreApplication::applicationDirPath() + "/MinGW/bin/objdump.exe";
@@ -769,9 +771,10 @@ void Debugger::processActionMiMode(QString output, QString error)
         //scan line number in memory
         QRegExp r = QRegExp("addr=\"0x[0-9a-fA-F]{8,16}");
         int index = r.indexIn(output);
+        int msgIndex = output.indexOf(QChar('~'));
         //print output
-        if (index > 1) {
-            QString msg = output.left(output.indexOf(QChar('~'))); //left part - probably output of program;
+        if (msgIndex > 2+wincrflag) {
+            QString msg = output.left(msgIndex); //left part - probably output of program;
             QRegExp breakpointMsg("=breakpoint");
             QRegExp threadMsg("=thread");
             QRegExp signalMsg("\r?\n(Program received signal.*)");//todo
@@ -786,7 +789,7 @@ void Debugger::processActionMiMode(QString output, QString error)
                 }
                 msg.remove(signalMsg);
             }
-            msg.remove(0,2); //rm first view whitespace
+            msg.remove(0,2+wincrflag); //rm first view whitespace
             emit printOutput(msg);
         }
         

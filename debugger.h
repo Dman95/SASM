@@ -117,6 +117,7 @@ private:
     bool verbose;
     bool mimode;
     bool con;
+    int wincrflag;
 
     QProcess *process;
     QTextEdit *textEdit;
