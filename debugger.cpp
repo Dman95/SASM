@@ -852,6 +852,17 @@ void Debugger::processActionMiMode(QString output, QString error)
             if (index == -1)
                 isValid = false;
             else {
+				QStringList tmpList;
+				bool firstElement = true;
+                for(QString t : output.split(QString("~\""), Qt::SkipEmptyParts)){
+					if (firstElement){
+						firstElement = false;
+					    continue;
+					}
+			        tmpList.append(t.left(t.indexOf(QChar('\"'))));
+					}
+                output = tmpList.join(QString(""));
+				printLog(output);
                 output = output.right(output.length() - index);
                 output = output.right(output.length() - output.indexOf(QChar('=')) - 1);
                 output = output.left(output.indexOf(QString("\\n")));
