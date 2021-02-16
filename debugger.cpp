@@ -68,6 +68,7 @@ Debugger::Debugger(QTextEdit *tEdit, const QString &i_path, const QString &tmp, 
     verbose = i_verbose;
     mimode = i_mimode;
     wincrflag = 0;
+    firstPrint = true;
 }
 
 bool Debugger::run()
@@ -697,9 +698,14 @@ void Debugger::processMessageMiMode(QString output, QString error)
         }
     }
     
+    if (output.indexOf(QString("&\"p"))!=-1 && firstPrint){
+        firstPrint = false;
+        return;
+    }
+    
     //process all actions after start
     if (c == 3) //if (output.indexOf(QString("$1 =")) == -1 && output.indexOf(QString("&\"si")) == -1 && output.indexOf(QString("&\"ni")) == -1 &&) //input file
-        if (output.indexOf(QRegExp("$1 =|&\"si|&\"ni|&\"c|&\"p")) == -1 || output.indexOf(QString("&\"clear")) != -1)  
+        if (output.indexOf(QRegExp("$1 =|&\"si|&\"ni|&\"c")) == -1 || output.indexOf(QString("&\"clear")) != -1)
             processActionMiMode(output, error);
 }
 

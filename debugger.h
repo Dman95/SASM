@@ -117,6 +117,7 @@ private:
     bool verbose;
     bool mimode;
     bool con;
+    bool firstPrint;
     int wincrflag;
 
     QProcess *process;
