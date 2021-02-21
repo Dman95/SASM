@@ -53,15 +53,27 @@ namespace {
 }
 
 
-Debugger::Debugger(QTextEdit *tEdit, const QString &i_path, const QString &tmp, Assembler *i_assembler, const QString &i_gdbpath, QWidget *parent, bool i_verbose, bool i_mimode)
-    : QObject(parent)
+Debugger::Debugger(
+		QTextEdit *tEdit,
+		const QString &i_path,
+		const QString &i_workingDirectoryPathParam,
+                const QString &i_inputPathParam,
+		Assembler *i_assembler,
+		const QString &i_gdbpath,
+		QWidget *parent,
+		bool i_verbose,
+		bool i_mimode
+) : QObject(parent)
 {
     c = 0;
     pid = 0;
     firstAction = true;
     textEdit = tEdit;
     path = i_path;
-    tmpPath = tmp;
+
+    workingDirectoryPath = i_workingDirectoryPathParam;
+    inputPath = i_inputPathParam;
+
     registersOk = true;
     gdbPath = i_gdbpath;
     assembler = i_assembler;
@@ -108,7 +120,7 @@ bool Debugger::run()
     QProcess objdumpProcess;
     QProcessEnvironment objdumpEnvironment = QProcessEnvironment::systemEnvironment();
     QStringList objdumpArguments;
-    objdumpArguments << "-f" << path;
+    objdumpArguments << "-f" << exePath;
 	objdumpEnvironment.insert("LC_MESSAGES", "en_US");
 	objdumpProcess.setProcessEnvironment(objdumpEnvironment);
     objdumpProcess.start(objdump, objdumpArguments);
@@ -1072,9 +1084,9 @@ void Debugger::gdb_cmd_run()
     else {
         doInput("b *0x" + QString::number(entryPoint, 16) + "\n", none);
     }
-    doInput(QString("cd " + tmpPath + "\n"), none);
+    doInput(QString("cd " + workingDirectoryPath + "\n"), none);
     doInput(QString("run\n"), none);
-    doInput(QString("p (int) dup2((int) open(\"input.txt\",0),0)\n"), none);
+    doInput(QString("p (int) dup2((int) open(\"%1\",0),0)\n").arg(inputPath), none);
 }
 
 void Debugger::changeBreakpoint(quint64 lineNumber, bool isAdded)

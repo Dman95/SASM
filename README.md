@@ -5,40 +5,65 @@ SASM (SimpleASM) - simple Open Source crossplatform IDE for NASM, MASM, GAS, FAS
 SASM has syntax highlighting and debugger. The program works out of the box and is great for beginners to learn assembly language. SASM is translated into Russian, English, Turkish (thanks Ali Goren), Chinese (thanks Ahmed Zetao Yang), German (thanks Sebastian Fischer), Italian (thanks Carlo Dapor), Polish (thanks Krzysztof Rossa), Hebrew (thanks Elian Kamal), Spanish (thanks Mariano Cordoba).
 Licensed under the GNU GPL v3.0. Based on the Qt.
 
-===========================================================================
-How to build SASM from sources:
-===========================================================================
+
+
+# How to build and run SASM:
+
 You need:
-	Qt 4.8 and above
-	C++ compiler
 
-	On linux also: 
-	gcc (x86) or gcc-multilib (x64)
-	gdb
-	nasm
+* On Windows:
 
-For QT4, install
-	qt4-qmake
-	libqt4-dev
-	libqt4-core 	
-	libqt4-gui
-	libxcb1
-	libxcb-render0
-	libxcb-icccm4
+  * For building:
+    * C++ compiler (e.g. gcc from MinGW)
+    * make (e.g. mingw32-make from MinGW)
+    * Qt 5
 
-For QT5, install
-	qt5-default
+  * For running:
+    * Everything needed is included.
 
 
-Download sources and unpack their.
-Go to directory with their: "cd <path>"
-Further print commands:
-1) "qmake" (For installing in specific directory on Linux - print: "qmake PREFIX=<path>". By default SASM installs in "/usr/bin" and "usr/share")
-2) "make" for Linux and "mingw32-make" for Windows.
-3) For Linux: "make install" (command "sasm" will open SASM) or run "sasm" from folder right away or put "sasm" executable file to folder "Linux" (from this folder you can run the program).
-   For Windows: Put "sasm.exe" executable file to folder "Windows". From this folder you can run the program. Also you can run program right away from SASM folder.
-            If the program does not start after successful compilation and the error message (0xc000007b) appears, check that the path to GNU Compiler is set correctly in the environment variables.   
-===========================================================================
+
+* On Linux
+  * For building:
+    * gcc (x86) or gcc-multilib (x64)
+    * gdb
+    * nasm
+
+  * For QT4, install
+    * qt4-qmake
+    * libqt4-dev
+    * libqt4-core 	
+    * libqt4-gui
+    * libxcb1
+    * libxcb-render0
+    * libxcb-icccm4
+
+  * For QT5 building:
+    * build-essential
+    * qtbase5-dev
+    * qt5-default
+
+  * For running:
+    * gcc-multilib (x64 OS) or gcc (x86 OS)
+    * gdb
+    * nasm
+
+
+* Instructions:
+  * Download sources and unpack them.
+  * Go to directory with their: "cd <path>"
+  * 1) "qmake" (For installing in specific directory on Linux - print: "qmake PREFIX=<path>". By default SASM installs in "/usr/bin" and "usr/share")
+  * 2) "make" for Linux and "mingw32-make" for Windows.
+
+  * For Linux:
+    * "make install" (command "sasm" will open SASM) or run "sasm" from folder right away or put "sasm" executable file to folder "Linux" (from this folder you can run the program).
+  * For Windows:
+    * Put "sasm.exe" executable file to folder "Windows". From this folder you can run the program.
+    * Also you can run program right away from SASM folder.
+    * If the program does not start after successful compilation and the error message (0xc000007b) appears, check that the path to GNU Compiler is set correctly in the environment variables.   
+
+
+# Prebuild packages
 
 Also you can download already compiled packages 
 from site https://dman95.github.io/SASM/ or 
