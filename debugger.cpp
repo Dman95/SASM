@@ -61,6 +61,7 @@ Debugger::Debugger(QTextEdit *tEdit,
 				   bool i_verbose,
 				   bool i_mimode)
     : QObject(parent)
+
 {
     c = 0;
     pid = 0;
@@ -68,6 +69,7 @@ Debugger::Debugger(QTextEdit *tEdit,
     textEdit = tEdit;
     exePath = exePathParam;
     workingDirectoryPath = workingDirectoryPathParam;
+	inputPath = inputPathParam;
     registersOk = true;
     this->assembler = assembler;
     verbose = i_verbose;
@@ -124,7 +126,6 @@ bool Debugger::run()
     entryPoint = objdumpResult.toLongLong(0, 16);
 
     QStringList arguments;
-
     arguments << exePath;
     
     if (mimode) {

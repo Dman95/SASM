@@ -1178,6 +1178,8 @@ void MainWindow::debug()
         }
         workingDirectoryPath.replace("\\", "/");
 
+        QString gdbpath = settings.value("gdbpath", "gdb").toString();
+
         //! Determine input path
         QString inputPath = Common::pathInTemp("input.txt");
         inputPath.replace("\\", "/");
@@ -1186,7 +1188,6 @@ void MainWindow::debug()
 // connect print signals for output in Debugger
         connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
         connect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
-
         connect(debugger, SIGNAL(highlightLine(int)), code, SLOT(updateDebugLine(int)));
         connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
         connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
