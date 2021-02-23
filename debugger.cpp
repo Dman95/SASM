@@ -860,7 +860,10 @@ void Debugger::processActionMiMode(QString output, QString error)
             else {
 				QStringList tmpList;
 				bool firstElement = true;
-                for(QString t : output.split(QString("~\""), QString::SkipEmptyParts)){
+                for(QString t : output.split(QString("~\""))){
+                       if (t.isEmpty()){
+                           continue;
+                       }
 			if (firstElement){
 			    firstElement = false;
 			    continue;
