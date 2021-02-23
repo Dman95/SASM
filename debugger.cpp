@@ -861,14 +861,14 @@ void Debugger::processActionMiMode(QString output, QString error)
 				QStringList tmpList;
 				bool firstElement = true;
                 for(QString t : output.split(QString("~\""), QString::SkipEmptyParts)){
-					if (firstElement){
-						firstElement = false;
-					    continue;
-					}
-			        tmpList.append(t.left(t.indexOf(QChar('\"'))));
-					}
+			if (firstElement){
+			    firstElement = false;
+			    continue;
+			}
+		        tmpList.append(t.left(t.indexOf(QChar('\"'))));
+		}
                 output = tmpList.join(QString(""));
-				printLog(output);
+                index = output.indexOf(QRegExp("\\$\\d+ = .*"));
                 output = output.right(output.length() - index);
                 output = output.right(output.length() - output.indexOf(QChar('=')) - 1);
                 output = output.left(output.indexOf(QString("\\n")));
