@@ -712,7 +712,7 @@ void Debugger::processMessageMiMode(QString output, QString error)
     
     //process all actions after start
     if (c == 3) //if (output.indexOf(QString("$1 =")) == -1 && output.indexOf(QString("&\"si")) == -1 && output.indexOf(QString("&\"ni")) == -1 &&) //input file
-        if (output.indexOf(QRegExp("$1 =|&\"si|&\"ni|&\"c")) == -1 || output.indexOf(QString("&\"clear")) != -1)
+        if (output.indexOf(QRegExp("\\$1 =|&\"si|&\"ni|&\"c")) == -1 || output.indexOf(QString("&\"clear")) != -1)
             processActionMiMode(output, error);
 }
 
