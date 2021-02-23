@@ -788,13 +788,12 @@ void Debugger::processActionMiMode(QString output, QString error)
         //print output
         if (msgIndex > 2+wincrflag) {
             QString msg = output.left(msgIndex); //left part - probably output of program;
-            QRegExp breakpointMsg("=breakpoint");
-            QRegExp threadMsg("=thread");
-            QRegExp signalMsg("\r?\n(Program received signal.*)");//todo
-            if (breakpointMsg.indexIn(msg) != -1)
-                msg.remove(breakpointMsg.indexIn(msg), msg.indexOf(QChar('\n'), breakpointMsg.indexIn(msg)) + 5);
-            while (threadMsg.indexIn(msg) != -1)
-                msg.remove(threadMsg.indexIn(msg), msg.indexOf(QChar('\n'), threadMsg.indexIn(msg) + 7));
+            QRegExp asyncMsg("=thread|\\*running|\\*stopped|=library-|=traceframe-|=tsv-|=breakpoint|=record|=cmd-|=memory");
+            QRegExp signalMsg("\r?\n(Program received signal.*)");
+            while (asyncMsg.indexIn(msg) != -1){
+				msg.remove(asyncMsg.indexIn(msg), msg.indexOf(QChar('\n'), asyncMsg.indexIn(msg) + 7));
+				printLog("yes");
+			}
             if (signalMsg.indexIn(msg) != -1) {
                 QString recievedSignal = signalMsg.cap(1);
                 if (QRegExp("SIG(TRAP|INT)").indexIn(recievedSignal) == -1) {
