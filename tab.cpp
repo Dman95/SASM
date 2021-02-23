@@ -143,6 +143,7 @@ void Tab::saveCodeToFile(const QString &filePath, Assembler *assembler, bool cha
     outfile.setFileName(filePath);
     outfile.open(QIODevice::WriteOnly | QIODevice::Text);
     QTextStream out(&outfile);
+    out.setCodec("UTF-8");
     if (debugMode) {
         assembler->putDebugString(code);
     }
@@ -164,6 +165,7 @@ void Tab::loadCodeFromFile(const QString &filePath)
     file.setFileName(filePath);
     file.open(QIODevice::ReadOnly);
     QTextStream text(&file);
+    text.setCodec("UTF-8");
     QString source = text.readAll();
     code->setPlainText(source);
     currentFilePath = filePath;

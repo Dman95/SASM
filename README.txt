@@ -6,25 +6,26 @@ SASM has syntax highlighting and debugger. The program works out of the box and 
 Licensed under the GNU GPL v3.0. Based on the Qt.
 
 ===========================================================================
-How to build SASM from sources:
+How to build and run SASM:
 ===========================================================================
 You need:
-	Qt 4.8 and above
-	C++ compiler
+On Windows:
+For building:
+    C++ compiler (e.g. gcc from MinGW)
+    make (e.g. mingw32-make from MinGW)
+    Qt 5
+For running:
+    Everything needed is included.
 
-	On linux also: 
-	gcc (x86) or gcc-multilib (x64)
-	gdb
-	nasm
-
-For QT4, install
-	qt4-qmake
-	libqt4-dev
-	libqt4-core 	
-	libqt4-gui
-	libxcb1
-	libxcb-render0
-	libxcb-icccm4
+On Linux:
+For building:
+    build-essential
+    qtbase5-dev
+    qt5-default
+For running:
+    gcc-multilib (x64 OS) or gcc (x86 OS)
+    gdb
+    nasm
 
 For QT5, install
 	qt5-default

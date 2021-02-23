@@ -658,6 +658,7 @@ section .text
     ALIGN_STACK
 %elifid %2
 ; variable (hope so)
+; we will have to do postprocessing after scanf
     pushfq
     push rax
     push rcx
@@ -666,7 +667,7 @@ section .text
     push r9
     push r10
     push r11
-    mov rdx, %2
+    mov rdx, %%read_tmp
     ALIGN_STACK
 %elifnum %2
     %error "Incorrect parameter (number)"
@@ -674,10 +675,9 @@ section .text
     %error "Incorrect parameter (string)"
 %else
 ; may be, address expression?
-    mov qword[%%tmp], rax
-    lea rax, %2
+; we will have to do postprocessing after scanf
     pushfq
-    push qword[%%tmp] ;rax
+    push rax
     push rcx
     push rdx
     push r8
@@ -685,11 +685,13 @@ section .text
     push r10
     push r11
     ALIGN_STACK
-    mov rdx, rax
+    mov rdx, %%read_tmp
 %endif
     mov rcx, %%fmt
     call scanf
     UNALIGN_STACK
+%if %$is_reg = 1
+    ; register postprocessing
     pop r11
     pop r10
     pop r9
@@ -698,8 +700,6 @@ section .text
     pop rcx
     pop rax
     popfq
-%if %$is_reg = 1
-    ; register postprocessing
     %if %$reg_size = %1
         mov %2, [%%read_tmp]
     %else ; extend bytes 1 -> 2, 1 -> 4, 1 -> 8, 2 -> 4, 2 -> 8, 4 -> 8
@@ -717,6 +717,55 @@ section .text
             %endif
         %endif
     %endif
+%elifid %2
+    ; variable (hope so) postprocessing
+    %if %1 = 1
+        mov cl, byte [%%read_tmp]
+        mov byte [%2], cl
+    %elif %1 = 2
+        mov cx, word [%%read_tmp]
+        mov word [%2], cx
+    %elif %1 = 4
+        mov ecx, dword [%%read_tmp]
+        mov dword [%2], ecx
+    %else
+        mov rcx, qword [%%read_tmp]
+        mov qword [%2], rcx
+    %endif
+
+    pop r11
+    pop r10
+    pop r9
+    pop r8
+    pop rdx
+    pop rcx
+    pop rax
+    popfq
+%else
+    ; may be, address expression? postprocessing
+    lea rax, %2
+    %if %1 = 1
+        mov cl, byte [%%read_tmp]
+        mov byte [rax], cl
+    %elif %1 = 2
+        mov cx, word [%%read_tmp]
+        mov word [rax], cx
+    %elif %1 = 4
+        mov ecx, dword [%%read_tmp]
+        mov dword [rax], ecx
+    %else
+        mov rcx, qword [%%read_tmp]
+        mov qword [rax], rcx
+    %endif
+    
+    pop r11
+    pop r10
+    pop r9
+    pop r8
+    pop rdx
+    pop rcx
+    pop rax
+    popfq
 %endif
     %pop ; IS_REG
 %endmacro
