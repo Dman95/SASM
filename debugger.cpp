@@ -75,6 +75,7 @@ Debugger::Debugger(QTextEdit *tEdit,
     verbose = i_verbose;
     mimode = i_mimode;
     wincrflag = 0;
+    run();
 }
 
 bool Debugger::run()
