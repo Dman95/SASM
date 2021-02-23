@@ -52,33 +52,30 @@ namespace {
     bool readStruct(QTextStream& str, QMap<QString, QString>* map);
 }
 
+Debugger::Debugger(QTextEdit *tEdit,
+                   const QString &exePathParam,
+                   const QString &workingDirectoryPathParam,
+                   const QString &inputPathParam,
+                   Assembler *assembler,
+                   QWidget *parent,
+				   bool i_verbose,
+				   bool i_mimode)
+    : QObject(parent)
 
-Debugger::Debugger(
-		QTextEdit *tEdit,
-		const QString &i_path,
-		const QString &i_workingDirectoryPathParam,
-                const QString &i_inputPathParam,
-		Assembler *i_assembler,
-		const QString &i_gdbpath,
-		QWidget *parent,
-		bool i_verbose,
-		bool i_mimode
-) : QObject(parent)
 {
     c = 0;
     pid = 0;
     firstAction = true;
     textEdit = tEdit;
-    path = i_path;
-
-    workingDirectoryPath = i_workingDirectoryPathParam;
-    inputPath = i_inputPathParam;
-
+    exePath = exePathParam;
+    workingDirectoryPath = workingDirectoryPathParam;
+	inputPath = inputPathParam;
     registersOk = true;
-    gdbPath = i_gdbpath;
-    assembler = i_assembler;
+    this->assembler = assembler;
     verbose = i_verbose;
     mimode = i_mimode;
+    wincrflag = 0;
+    run();
 }
 
 bool Debugger::run()
@@ -87,6 +84,7 @@ bool Debugger::run()
         QString gdb;
         QString objdump;
         QSettings settings("SASM Project", "SASM");
+        wincrflag++;
         if (settings.value("mode", QString("x86")).toString() == "x86") {
             gdb = QCoreApplication::applicationDirPath() + "/MinGW/bin/gdb.exe";
             objdump = QCoreApplication::applicationDirPath() + "/MinGW/bin/objdump.exe";
@@ -105,7 +103,7 @@ bool Debugger::run()
             exitMessage = "__fu0__set_invalid_parameter_handler";
         }
     #else
-        QString gdb = gdbPath;
+        QString gdb = "gdb";
         QString objdump = "objdump";
         exitMessage = "libc_start_main";
     #endif
@@ -129,7 +127,7 @@ bool Debugger::run()
     entryPoint = objdumpResult.toLongLong(0, 16);
 
     QStringList arguments;
-    arguments << path;
+    arguments << exePath;
     
     if (mimode) {
     	arguments << "--interpreter=mi";
@@ -707,9 +705,14 @@ void Debugger::processMessageMiMode(QString output, QString error)
         }
     }
     
+    if (output.indexOf(QString("&\"p"))!=-1 && firstPrint){
+        firstPrint = false;
+        return;
+    }
+    
     //process all actions after start
     if (c == 3) //if (output.indexOf(QString("$1 =")) == -1 && output.indexOf(QString("&\"si")) == -1 && output.indexOf(QString("&\"ni")) == -1 &&) //input file
-        if (output.indexOf(QRegExp("$1 =|&\"si|&\"ni|&\"c")) == -1 || output.indexOf(QString("&\"clear")) != -1)  
+        if (output.indexOf(QRegExp("\\$1 =|&\"si|&\"ni|&\"c")) == -1 || output.indexOf(QString("&\"clear")) != -1)
             processActionMiMode(output, error);
 }
 
@@ -781,16 +784,16 @@ void Debugger::processActionMiMode(QString output, QString error)
         //scan line number in memory
         QRegExp r = QRegExp("addr=\"0x[0-9a-fA-F]{8,16}");
         int index = r.indexIn(output);
+        int msgIndex = output.indexOf(QChar('~'));
         //print output
-        if (index > 1) {
-            QString msg = output.left(output.indexOf(QChar('~'))); //left part - probably output of program;
-            QRegExp breakpointMsg("=breakpoint");
-            QRegExp threadMsg("=thread");
-            QRegExp signalMsg("\r?\n(Program received signal.*)");//todo
-            if (breakpointMsg.indexIn(msg) != -1)
-                msg.remove(breakpointMsg.indexIn(msg), msg.indexOf(QChar('\n'), breakpointMsg.indexIn(msg)) + 5);
-            while (threadMsg.indexIn(msg) != -1)
-                msg.remove(threadMsg.indexIn(msg), msg.indexOf(QChar('\n'), threadMsg.indexIn(msg) + 7));
+        if (msgIndex > 2+wincrflag) {
+            QString msg = output.left(msgIndex); //left part - probably output of program;
+            QRegExp asyncMsg("=thread|\\*running|\\*stopped|=library-|=traceframe-|=tsv-|=breakpoint|=record|=cmd-|=memory");
+            QRegExp signalMsg("\r?\n(Program received signal.*)");
+            while (asyncMsg.indexIn(msg) != -1){
+				msg.remove(asyncMsg.indexIn(msg), msg.indexOf(QChar('\n'), asyncMsg.indexIn(msg) + 7));
+				printLog("yes");
+			}
             if (signalMsg.indexIn(msg) != -1) {
                 QString recievedSignal = signalMsg.cap(1);
                 if (QRegExp("SIG(TRAP|INT)").indexIn(recievedSignal) == -1) {
@@ -798,7 +801,7 @@ void Debugger::processActionMiMode(QString output, QString error)
                 }
                 msg.remove(signalMsg);
             }
-            msg.remove(0,2); //rm first view whitespace
+            msg.remove(0,2+wincrflag); //rm first view whitespace
             emit printOutput(msg);
         }
         
@@ -855,6 +858,20 @@ void Debugger::processActionMiMode(QString output, QString error)
             if (index == -1)
                 isValid = false;
             else {
+				QStringList tmpList;
+				bool firstElement = true;
+                for(QString t : output.split(QString("~\""))){
+                       if (t.isEmpty()){
+                           continue;
+                       }
+			if (firstElement){
+			    firstElement = false;
+			    continue;
+			}
+		        tmpList.append(t.left(t.indexOf(QChar('\"'))));
+		}
+                output = tmpList.join(QString(""));
+                index = output.indexOf(QRegExp("\\$\\d+ = .*"));
                 output = output.right(output.length() - index);
                 output = output.right(output.length() - output.indexOf(QChar('=')) - 1);
                 output = output.left(output.indexOf(QString("\\n")));
@@ -877,15 +894,7 @@ void Debugger::processActionMiMode(QString output, QString error)
     }
 
     if (actionType == infoRegisters) {
-        output.remove(QString("&\"info registers\\n\"")); 
-        output.remove(QString("^done")); 
-        QStringList tmp;
-        for (QString s : output.split(QChar('\n'), Qt::SkipEmptyParts)){
-            if (s.at(0) == QChar('~'))
-                tmp.append(s.mid(2, s.size()-5));
-        }
-        QString filteredoutput = tmp.join(QString("\n"));
-        QTextStream registersStream(&filteredoutput);
+        QTextStream registersStream(&output);
         QList<registersInfo> registers;
         registersInfo info;
         QSettings settings("SASM Project", "SASM");
@@ -902,6 +911,7 @@ void Debugger::processActionMiMode(QString output, QString error)
         QRegExp xmm("xmm\\d+");
         QRegExp ymm("ymm\\d+");
         QRegExp fpu_stack("st\\d+");
+        bool first = true;
 
         if (settings.value("mode", QString("x86")).toString() == "x86") {
             //x86
@@ -923,11 +933,19 @@ void Debugger::processActionMiMode(QString output, QString error)
                 break;
             }
 
+            if (info.name.at(0) != QChar('~')||info.name.indexOf(QString("~\"\\n\""))!=-1) {
+                continue;
+            }
+            first = false;
+            info.name.remove(QString("~\""));
+
             if (general.contains(info.name) || segment.contains(info.name) || fpu_info.contains(info.name) ||
                     info.name == ip || flags.contains(info.name) || fpu_stack.exactMatch(info.name)) {
                 registersStream >> info.hexValue;
+                info.hexValue.remove(QRegExp("~|\"|\\\\n|\\\\t"));
                 registersStream.skipWhiteSpace();
                 info.decValue = registersStream.readLine();
+                info.decValue.remove(QRegExp("~|\"|\\\\n|\\\\t"));
             } else if (mmx.exactMatch(info.name) || xmm.exactMatch(info.name) || ymm.exactMatch(info.name)) {
                 QMap<QString, QString> fields;
 
@@ -953,7 +971,7 @@ void Debugger::processActionMiMode(QString output, QString error)
             }
 
             registers.append(info);
-            if (i == 0 && info.name != "eax" && info.name != "rax" && registersOk) {
+            if (first && info.name != "eax" && info.name != "rax" && registersOk) {
                 doInput(QString("info registers\n"), infoRegisters);
                 registersOk = false;
                 return;

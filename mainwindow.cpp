@@ -1184,21 +1184,10 @@ void MainWindow::debug()
         QString inputPath = Common::pathInTemp("input.txt");
         inputPath.replace("\\", "/");
 
-        debugger = new Debugger(compilerOut, exePath, Common::pathInTemp(QString()), inputPath, assembler, gdbpath, 0, settings.value("sasmverbose", false).toBool(), settings.value("mi", false).toBool());
-
-        // connect print signals for output in Debugger
+        debugger = new Debugger(compilerOut, exePath, workingDirectoryPath, inputPath, assembler, 0, settings.value("sasmverbose", false).toBool(), settings.value("mi", false).toBool());
+// connect print signals for output in Debugger
         connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
         connect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
-
-        bool retval = debugger->run();
-
-        if (!retval)
-        {
-            delete debugger;
-            debugger = 0;
-            return;
-        }
-
         connect(debugger, SIGNAL(highlightLine(int)), code, SLOT(updateDebugLine(int)));
         connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
         connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));

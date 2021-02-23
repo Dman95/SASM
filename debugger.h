@@ -84,13 +84,11 @@ public:
     Debugger(QTextEdit *tEdit,
 		    const QString &path,
 		    const QString &tmp,
-             const QString &inputPathParam,
-		    Assembler *assembler,
-		    const QString &gdbpath,
-		    QWidget *parent = 0,
-		    bool verbose = true,
-		    bool mimode = true
-	);
+            const QString &inputPathParam,
+            Assembler *assembler,
+            QWidget *parent = 0,
+			bool verbose = true,
+			bool mimode = true);
 
     ~Debugger();
     void setWatchesCount(int count);
@@ -127,6 +125,8 @@ private:
     bool verbose;
     bool mimode;
     bool con;
+    bool firstPrint;
+    int wincrflag;
 
     QProcess *process;
     QTextEdit *textEdit;
@@ -157,11 +157,6 @@ private:
 
     //! Path to temporary input.txt file
     QString inputPath;
-
-    QString path;
-    QString tmpPath;
-    QString gdbPath;
-
 
     //! Timer for checking output and sending ready output to processing with Debugger::processOutput() function
     QTimer *bufferTimer;

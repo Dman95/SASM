@@ -10,6 +10,39 @@ Licensed under the GNU GPL v3.0. Based on the Qt.
 # How to build and run SASM:
 
 You need:
+<<<<<<< HEAD:README.txt
+On Windows:
+For building:
+    C++ compiler (e.g. gcc from MinGW)
+    make (e.g. mingw32-make from MinGW)
+    Qt 5
+For running:
+    Everything needed is included.
+
+On Linux:
+For building:
+    build-essential
+    qtbase5-dev
+    qt5-default
+For running:
+    gcc-multilib (x64 OS) or gcc (x86 OS)
+    gdb
+    nasm
+
+For QT5, install
+	qt5-default
+
+
+Download sources and unpack their.
+Go to directory with their: "cd <path>"
+Further print commands:
+1) "qmake" (For installing in specific directory on Linux - print: "qmake PREFIX=<path>". By default SASM installs in "/usr/bin" and "usr/share")
+2) "make" for Linux and "mingw32-make" for Windows.
+3) For Linux: "make install" (command "sasm" will open SASM) or run "sasm" from folder right away or put "sasm" executable file to folder "Linux" (from this folder you can run the program).
+   For Windows: Put "sasm.exe" executable file to folder "Windows". From this folder you can run the program. Also you can run program right away from SASM folder.
+            If the program does not start after successful compilation and the error message (0xc000007b) appears, check that the path to GNU Compiler is set correctly in the environment variables.   
+===========================================================================
+=======
 
 * On Windows:
 
