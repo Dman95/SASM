@@ -65,12 +65,14 @@ MainWindow::MainWindow(const QStringList &args, QWidget *parent)
     help = 0;
     registersWindow = 0;
     memoryWindow = 0;
+    stackWindow = 0;
     debugger = 0;
     programStopped = true;
     highlighter = 0;
     tabs = 0;
     memoryDock = 0;
     registersDock = 0;
+    stackDock = 0;
 
     //! Initialize assembler
     assembler = 0;
@@ -229,6 +231,7 @@ void MainWindow::createMenus()
     debugMenu->addAction(debugToggleBreakpointAction);
     debugMenu->addAction(debugShowRegistersAction);
     debugMenu->addAction(debugShowMemoryAction);
+    debugMenu->addAction(debugShowStackAction);
     debugMenu->addSeparator();
     debugMenu->addAction(stopAction);
     settingsMenu = menuBar()->addMenu(tr("Settings"));
@@ -460,6 +463,18 @@ void MainWindow::createActions()
     debugShowMemoryAction->setShortcut(key);
     debugShowMemoryAction->setCheckable(true);
     connect(debugShowMemoryAction, SIGNAL(toggled(bool)), this, SLOT(debugShowMemory()), Qt::QueuedConnection);
+    
+    //neu:
+    debugShowStackAction = new QAction("Show stack", this);
+    /*
+    key = keySettings.value("showMemory", "default").toString();
+    stdKey = QKeySequence(QString("Ctrl+M"));
+    if (key == "default")
+        key = stdKey.toString();
+    debugShowMemoryAction->setShortcut(key);
+    */
+    debugShowStackAction->setCheckable(true);
+    connect(debugShowStackAction, SIGNAL(toggled(bool)), this, SLOT(debugShowStack()), Qt::QueuedConnection);
 
     disableDebugActions(true);
 
@@ -748,6 +763,11 @@ void MainWindow::closeAllChildWindows()
         memoryWindow->close();
         delete memoryWindow;
         memoryWindow = 0;
+    }
+    if (stackWindow) {
+        stackWindow->close();
+        delete stackWindow;
+        stackWindow = 0;
     }
 }
 
@@ -1229,6 +1249,7 @@ void MainWindow::changeDebugActionToStart()
     else {
         debugShowRegisters();
         debugShowMemory();
+        debugShowStack();
     }
 }
 
@@ -1249,6 +1270,7 @@ void MainWindow::enableDebugActions()
     debugNextNiAction->setEnabled(true);
     debugShowRegistersAction->setEnabled(true);
     debugShowMemoryAction->setEnabled(true);
+    debugShowStackAction->setEnabled(true);
     stopAction->setEnabled(true);
 
     //! Change stopAction
@@ -1262,6 +1284,7 @@ void MainWindow::enableDebugActions()
     //! Restore windows
     debugShowRegistersAction->setChecked(settings.value("debugregisters", false).toBool());
     debugShowMemoryAction->setChecked(settings.value("debugmemory", false).toBool());
+    debugShowStackAction->setChecked(settings.value("debugstack", false).toBool());
 }
 
 void MainWindow::disableDebugActions(bool start)
@@ -1274,6 +1297,7 @@ void MainWindow::disableDebugActions(bool start)
     debugNextNiAction->setEnabled(false);
     debugShowRegistersAction->setEnabled(false);
     debugShowMemoryAction->setEnabled(false);
+    debugShowStackAction->setEnabled(false);
     stopAction->setEnabled(false);
 
     //! Change stopAction
@@ -1337,6 +1361,8 @@ void MainWindow::debugShowMemory()
             restoreState(settings.value("debugstate").toByteArray());
             if (registersDock)
                 registersDock->show();
+            if (stackDock)
+                stackDock->show();
             if (memoryDock)
                 memoryDock->show();
 
@@ -1396,6 +1422,51 @@ void MainWindow::debugShowMemory()
             memoryDock->close();
             delete memoryDock;
             memoryDock = 0;
+        }
+}
+
+void MainWindow::debugShowStack()
+{
+    if (debugShowStackAction->isChecked()) {
+        if (!stackWindow) {
+            stackDock = new QDockWidget(tr("Stack"), this);
+            stackDock->setAllowedAreas(Qt::AllDockWidgetAreas);
+            
+            stackWindow = new DebugTableWidget(0, 1, stackTable, stackDock);
+            connect(stackWindow, SIGNAL(closeSignal()), this, SLOT(setShowStackToUnchecked()));
+            connect(debugger, SIGNAL(printStack(QList<QString>)),
+                  stackWindow, SLOT(setValuesFromDebugger(QList<QString>)));
+
+            stackDock->setWidget(stackWindow);
+            stackDock->setFeatures(QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable);
+            addDockWidget(Qt::LeftDockWidgetArea, stackDock);
+            stackDock->setObjectName("stackDock");
+
+            restoreState(settings.value("debugstate").toByteArray());
+            if (registersDock)
+                registersDock->show();
+            if (memoryDock)
+                memoryDock->show();
+            if (stackDock)
+                stackDock->show();
+            stackWindow->initializeStackWindow();
+            connect(stackWindow->typeComboBox, SIGNAL(currentTextChanged(const QString)), this, SLOT(debugShowStack()), Qt::QueuedConnection);
+            debugger->doInput(QString("info f 0\n"), infoStack);
+        }
+        if (debugger->isStopped()) {
+            int size = stackWindow->typeComboBox->currentIndex();
+            debugger->setStackSizeFormat(size);
+            debugger->doInput(QString("x/100x $sp\n"), infoStack);
+        }
+    } else
+        if (stackWindow) {
+            stackWindow->close();
+            stackWindow->clear();
+            delete stackWindow;
+            stackWindow = 0;
+            stackDock->close();
+            delete stackDock;
+            stackDock = 0;
         }
 }
 
@@ -1461,6 +1532,8 @@ void MainWindow::debugShowRegisters()
                 registersDock->show();
             if (memoryDock)
                 memoryDock->show();
+            if (stackDock)
+                stackDock->show();
         }
         static SignalLocker locker;
         if (debugger->isStopped() && locker.tryLock()) {
@@ -1488,10 +1561,16 @@ void MainWindow::setShowRegistersToUnchecked()
     debugShowRegistersAction->setChecked(false);
 }
 
+void MainWindow::setShowStackToUnchecked()
+{
+    debugShowStackAction->setChecked(false);
+}
+
 void MainWindow::debugExit()
 {
     settings.setValue("debugregisters", debugShowRegistersAction->isChecked());
     settings.setValue("debugmemory", debugShowMemoryAction->isChecked());
+    settings.setValue("debugstack", debugShowStackAction->isChecked());
     settings.setValue("debugstate", saveState());
     CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
     disconnect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
@@ -1505,6 +1584,7 @@ void MainWindow::debugExit()
     closeAnyCommandWidget();
     debugShowRegistersAction->setChecked(false);
     debugShowMemoryAction->setChecked(false);
+    debugShowStackAction->setChecked(false);
     printLogWithTime(tr("Debugging finished.") + '\n', Qt::darkGreen);
     disableDebugActions();
 }
@@ -2242,6 +2322,7 @@ void MainWindow::changeActionsState(int widgetIndex)
         debugNextAction->setEnabled(false);
         debugNextNiAction->setEnabled(false);
         debugShowRegistersAction->setEnabled(false);
+        debugShowStackAction->setEnabled(false);
         debugToggleBreakpointAction->setEnabled(false);
         debugShowMemoryAction->setEnabled(false);
     } else {

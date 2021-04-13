@@ -68,7 +68,7 @@
  * Defines the debugger.
  */
 
-enum DebugActionType {ni, si, showLine, infoRegisters, infoMemory, anyAction, none, breakpoint};
+enum DebugActionType {ni, si, showLine, infoRegisters, infoMemory, infoStack, anyAction, none, breakpoint};
 
 
 /**
@@ -178,8 +178,13 @@ private:
     bool stopped;
     quint64 pid;
     bool dbgSymbols;
+    bool firstStack;
 
     quint64 entryPoint;
+    
+    // save Stackbottom
+    quint64 stackBottom;
+    int sizeStack;
 
 public slots:
     void readOutputToBuffer();
@@ -191,6 +196,7 @@ public slots:
     void doInput(QString command, DebugActionType actionType);
     void changeBreakpoint(quint64 lineNumber, bool isAdded);
     void emitStarted();
+    void setStackSizeFormat(int size);
 
 signals:
     //! Highlight the current debug line.
@@ -199,6 +205,7 @@ signals:
     //! Signal is emited when debugger is ready to get commands like step into and etc.
     void started();
     void printRegisters(QList<Debugger::registersInfo>);
+    void printStack(QList<QString>);
     void printMemory(QList<Debugger::memoryInfo>);
     void printLog(QString msg, QColor color = QColor(Qt::black));
     void printOutput(QString msg);

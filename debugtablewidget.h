@@ -17,7 +17,7 @@
  * Defines the debugging window (memory or registers table).
  */
 
-enum DebugTableWidgetType {registersTable, memoryTable};
+enum DebugTableWidgetType {registersTable, memoryTable, stackTable};
 
 
 /**
@@ -36,10 +36,16 @@ public:
     ~DebugTableWidget();
     bool isEmpty();
     void initializeMemoryWindow(const QList<RuQPlainTextEdit::Watch> &watches);
+    void initializeStackWindow();
     static QByteArray memoryHeaderState;
     static QByteArray registerWindowState;
+    static QByteArray stackWindowState;
     static bool geometryMemorySaved;
     static bool geometryRegistersSaved;
+    static bool geometryStackSaved;
+    QComboBox *typeComboBox;
+    QComboBox *typeComboBox2;
+    QCheckBox *signCheckbox;
 
 protected:
     void closeEvent(QCloseEvent *);
@@ -56,15 +62,18 @@ public slots:
     void addVariable(const RuQPlainTextEdit::Watch &variable, int rowNumber = -1);
     void changeVariableValue(const QString &value, int rowNumber, bool isValid);
     void addRegister(const QString &name, const QString &hexValue, const QString &decValue, int rowNumber);
+    void addStack(const QString &hexValue);
     void changeMemoryWindow(int row, int column);
     void setValuesFromDebugger(QList<Debugger::memoryInfo> watches);
     void setValuesFromDebugger(QList<Debugger::registersInfo> registers);
+    void setValuesFromDebugger(QList<QString> stacks);
 
 private:
     int contextMenuLineNumber;
     DebugTableWidgetType type;
     bool empty;
     bool firstTime;
+    QHBoxLayout *layout;
 };
 
 #endif // DEBUGTABLEWIDGET_H

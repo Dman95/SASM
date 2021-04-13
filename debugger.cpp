@@ -65,6 +65,7 @@ Debugger::Debugger(QTextEdit *tEdit,
 {
     c = 0;
     pid = 0;
+    firstStack = true;
     firstAction = true;
     textEdit = tEdit;
     exePath = exePathParam;
@@ -75,6 +76,7 @@ Debugger::Debugger(QTextEdit *tEdit,
     verbose = i_verbose;
     mimode = i_mimode;
     wincrflag = 0;
+    sizeStack = 1;
     run();
 }
 
@@ -575,6 +577,74 @@ void Debugger::processAction(QString output, QString error)
         emit printRegisters(registers);
         return;
     }
+    
+    if (actionType == infoStack) {
+     	QTextStream stackStream(&output);
+     	QList<QString> stacks;
+     	QRegExp r = QRegExp("0x[0-9a-fA-F]{6,12}");
+     	int index;
+    	if (firstStack){
+  	    firstStack = false;
+  	    index = r.indexIn(output);
+    	    if(index != -1)
+    	    	stackBottom = output.mid(index, r.matchedLength()).toULongLong(0, 16) - 8;
+  	    //emit printLog("Startaddress: " + QString::number(stackBottom));
+  	    return;
+    	}
+    	QString info;
+    	quint64 address;
+    	quint64 value;
+    	index = output.indexOf(QString("Cannot access memory"));
+    	if (index != -1){
+    	    emit printLog(QString("Error showing stack"), Qt::red);
+    	    return;
+    	}
+    	for (int i = 0; !stackStream.atEnd(); i++) {
+    	    stackStream >> info;
+    	    index = r.indexIn(info);
+    	    address = info.mid(index, r.matchedLength()).toULongLong(0, 16);
+    	    if (index == -1 || address >= stackBottom) {
+    	        break;
+    	    }
+    	    if(sizeStack>1){
+    	        for(int j = 0; j < 4; j++){
+    	            stackStream >> info;
+    	    	    index = r.indexIn(info);
+    	            value = info.mid(index, r.matchedLength()).toULongLong(0, 16);
+    	            for(int k = 0; k < 2; k++){ //per line
+    	                if(sizeStack==2)
+    	    	            stacks.append(QString("0x") + QString::number((value >> 16*k)&0xffff, 16));
+    	    	        else
+    	    	            stacks.append(QString::number((value >> 16*k)&0xffff, 10));
+    	    	        if (address + 2 + 2*k + j*4 >= stackBottom) {
+    	    	            emit printStack(stacks);
+        	            return;
+    	    	        }
+    	            }
+    	        }
+    	    } else {
+    	        for(int j = 0; j < 4; j++){ //per line
+    	            stackStream >> info;
+    	    	    index = r.indexIn(info);
+    	            value = info.mid(index, r.matchedLength()).toULongLong(0, 16);
+    	    	    for(int k = 0; k < 4; k++){
+    	    	        if(sizeStack==0)
+    	    	            stacks.append(QString("0x") + QString::number((value >> 8*k)&0xff, 16));
+    	    	        else
+    	    	            stacks.append(QString::number((value >> 8*k)&0xff, 10));
+    	    	        if (address + 1 + k + j*4 >= stackBottom) {
+    	    	            emit printStack(stacks);
+        	            return;
+    	    	        }
+    	    	    }
+    	        }
+    	    }
+    	}
+    	if(stacks.size()>=100)
+    	    stacks.append(QString("..."));
+    	emit printStack(stacks);
+        return;
+    }
 
     if (output == QString("\r\n") || output == QString("\n") ||
             output == QString("\r\n\n") || output == QString("\n\n")) //if empty
@@ -947,6 +1017,7 @@ void Debugger::processActionMiMode(QString output, QString error)
                 info.decValue = registersStream.readLine();
                 info.decValue.remove(QRegExp("~|\"|\\\\n|\\\\t"));
             } else if (mmx.exactMatch(info.name) || xmm.exactMatch(info.name) || ymm.exactMatch(info.name)) {
+                //TODO
                 QMap<QString, QString> fields;
 
                 if (!readStruct(registersStream, &fields)) {
@@ -981,7 +1052,81 @@ void Debugger::processActionMiMode(QString output, QString error)
         emit printRegisters(registers);
         return;
     }
-    //todo
+    
+    if (actionType == infoStack) {
+     	QTextStream stackStream(&output);
+     	QList<QString> stacks;
+     	QRegExp r = QRegExp("0x[0-9a-fA-F]{6,12}");
+     	int index;
+    	if (firstStack){
+  	    firstStack = false;
+  	    index = r.indexIn(output);
+    	    if(index != -1)
+    	    	stackBottom = output.mid(index, r.matchedLength()).toULongLong(0, 16) - 8;
+  	    return;
+    	}
+    	QString info;
+    	quint64 address;
+    	quint64 value;
+    	index = output.indexOf(QString("Cannot access memory"));
+    	if (index != -1){
+    	    emit printLog(QString("Error showing stack"), Qt::red);
+    	    return;
+    	}
+    	for (int i = 0; !stackStream.atEnd(); i++) {
+    	    stackStream >> info;
+    	    if (info.at(0) != QChar('~')||info.indexOf(QString("~\"\\n\""))!=-1) {
+                continue;
+            }
+            //info.remove(QRegExp("~|\"|\\\\n"));
+            QList<QString> stackLine = info.split(QString("\\t"));
+    	    index = r.indexIn(info);
+    	    address = info.mid(index, r.matchedLength()).toULongLong(0, 16);
+    	    if (index == -1 || address >= stackBottom) {
+    	        break;
+    	    }
+    	    if(sizeStack>1){
+    	        for(int j = 0; j < stackLine.size()-1; j++){
+    	            //emit printLog(info);
+    	            info = stackLine[j+1];
+    	    	    index = r.indexIn(info);
+    	            value = info.mid(index, r.matchedLength()).toULongLong(0, 16);
+    	            for(int k = 0; k < 2; k++){ //per line
+    	                if(sizeStack==2)
+    	    	            stacks.append(QString("0x") + QString::number((value >> 16*k)&0xffff, 16));
+    	    	        else
+    	    	            stacks.append(QString::number((value >> 16*k)&0xffff, 10));
+    	    	        if (address + 2 + 2*k + j*4 >= stackBottom) {
+    	    	            emit printStack(stacks);
+        	            return;
+    	    	        }
+    	            }
+    	        }
+    	    } else {
+    	        for(int j = 0; j < stackLine.size()-1; j++){ //per line
+    	            info = stackLine[j+1];
+    	    	    index = r.indexIn(info);
+    	            value = info.mid(index, r.matchedLength()).toULongLong(0, 16);
+    	    	    for(int k = 0; k < 4; k++){
+    	    	        if(sizeStack==0)
+    	    	            stacks.append(QString("0x") + QString::number((value >> 8*k)&0xff, 16));
+    	    	        else
+    	    	            stacks.append(QString::number((value >> 8*k)&0xff, 10));
+    	    	        if (address + 1 + k + j*4 >= stackBottom) {
+    	    	            emit printStack(stacks);
+        	            return;
+    	    	        }
+    	    	    }
+    	        }
+    	    }
+    	}
+    	if(stacks.size()>=100)
+    	    stacks.append(QString("..."));
+    	emit printStack(stacks);
+        return;
+    }
+
+    
     if (output == QString("\r\n") || output == QString("\n") ||
             output == QString("\r\n\n") || output == QString("\n\n")||output.at(0)=='*') //if empty or starts with *
         return;
@@ -1030,6 +1175,11 @@ void Debugger::doInput(QString command, DebugActionType actionType)
 void Debugger::setWatchesCount(int count)
 {
     watchesCount = count;
+}
+
+void Debugger::setStackSizeFormat(int size)
+{
+    sizeStack = size;
 }
 
 void Debugger::processLst()

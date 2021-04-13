@@ -152,6 +152,7 @@ private:
     QAction *debugToggleBreakpointAction;
     QAction *debugShowRegistersAction;
     QAction *debugShowMemoryAction;
+    QAction *debugShowStackAction;
     QAction *settingsAction;
     QAction *helpAction;
     QAction *aboutAction;
@@ -173,6 +174,8 @@ private:
     QDockWidget *registersDock;
     QPointer<DebugTableWidget> memoryWindow;
     QDockWidget *memoryDock;
+    QPointer<DebugTableWidget> stackWindow;
+    QDockWidget *stackDock;
     QList<RuQPlainTextEdit::Watch> watches;
     DebugAnyCommandWidget *debugAnyCommandWidget;
     bool programStopped;
@@ -258,9 +261,11 @@ public slots:
     void debugToggleBreakpoint();
     void debugShowRegisters();
     void debugShowMemory();
+    void debugShowStack();
     void debugRunCommand(QString command, bool print);
     void saveWatches(DebugTableWidget *table);
     void setShowRegistersToUnchecked();
+    void setShowStackToUnchecked();
     void setShowMemoryToUnchecked();
     void setShowMemoryToChecked(const RuQPlainTextEdit::Watch &variable);
     void showAnyCommandWidget();
