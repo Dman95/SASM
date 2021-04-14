@@ -75,6 +75,7 @@
 #include "fasm.h"
 #include "signallocker.h"
 #include "masm.h"
+#include "stackwidget.h"
 
 #define SASM_VERSION "3.12.1"
 
@@ -174,7 +175,7 @@ private:
     QDockWidget *registersDock;
     QPointer<DebugTableWidget> memoryWindow;
     QDockWidget *memoryDock;
-    QPointer<DebugTableWidget> stackWindow;
+    QPointer<StackWidget> stackWindow;
     QDockWidget *stackDock;
     QList<RuQPlainTextEdit::Watch> watches;
     DebugAnyCommandWidget *debugAnyCommandWidget;

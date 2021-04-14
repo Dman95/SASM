@@ -1432,10 +1432,11 @@ void MainWindow::debugShowStack()
             stackDock = new QDockWidget(tr("Stack"), this);
             stackDock->setAllowedAreas(Qt::AllDockWidgetAreas);
             
-            stackWindow = new DebugTableWidget(0, 1, stackTable, stackDock);
+            stackWindow = new StackWidget;
             connect(stackWindow, SIGNAL(closeSignal()), this, SLOT(setShowStackToUnchecked()));
             connect(debugger, SIGNAL(printStack(QList<QString>)),
-                  stackWindow, SLOT(setValuesFromDebugger(QList<QString>)));
+                  stackWindow->stackContent, SLOT(setValuesFromDebugger(QList<QString>)));
+            connect(stackWindow->settings, SIGNAL(stacksettingsChanged()), this, SLOT(debugShowStack()), Qt::QueuedConnection);
 
             stackDock->setWidget(stackWindow);
             stackDock->setFeatures(QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable);
@@ -1449,19 +1450,18 @@ void MainWindow::debugShowStack()
                 memoryDock->show();
             if (stackDock)
                 stackDock->show();
-            stackWindow->initializeStackWindow();
-            connect(stackWindow->typeComboBox, SIGNAL(currentTextChanged(const QString)), this, SLOT(debugShowStack()), Qt::QueuedConnection);
             debugger->doInput(QString("info f 0\n"), infoStack);
         }
         if (debugger->isStopped()) {
-            int size = stackWindow->typeComboBox->currentIndex();
-            debugger->setStackSizeFormat(size);
+            debugger->setSystemStack(stackWindow->settings->typeComboBox->currentIndex());
+            debugger->setBitStack(stackWindow->settings->sizeComboBox->currentIndex());
+            debugger->setSignStack(stackWindow->settings->signCheckbox->isChecked());
             debugger->doInput(QString("x/100x $sp\n"), infoStack);
         }
     } else
         if (stackWindow) {
             stackWindow->close();
-            stackWindow->clear();
+            //stackWindow->clear();
             delete stackWindow;
             stackWindow = 0;
             stackDock->close();

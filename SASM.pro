@@ -70,7 +70,9 @@ SOURCES += main.cpp\
     fasm.cpp \
     signallocker.cpp \
     masm.cpp \
-    gccbasedassembler.cpp
+    gccbasedassembler.cpp \
+    stacksettingswidget.cpp \
+    stackwidget.cpp
 
 HEADERS  += mainwindow.h \
     tab.h \
@@ -91,7 +93,9 @@ HEADERS  += mainwindow.h \
     fasm.h \
     signallocker.h \
     masm.h \
-    gccbasedassembler.h
+    gccbasedassembler.h \
+    stacksettingswidget.h \
+    stackwidget.h
 
 FORMS += settings.ui
 

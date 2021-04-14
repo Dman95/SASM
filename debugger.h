@@ -117,7 +117,7 @@ public:
 
     // start debugger
     bool run();
-
+   
 private:
     void processLst();
     void gdb_cmd_run();
@@ -182,9 +182,11 @@ private:
 
     quint64 entryPoint;
     
-    // save Stackbottom
+    // save Stack
     quint64 stackBottom;
-    int sizeStack;
+    int bitStack;
+    int systemStack;
+    bool signStack;
 
 public slots:
     void readOutputToBuffer();
@@ -196,7 +198,9 @@ public slots:
     void doInput(QString command, DebugActionType actionType);
     void changeBreakpoint(quint64 lineNumber, bool isAdded);
     void emitStarted();
-    void setStackSizeFormat(int size);
+    void setBitStack(int bit);
+    void setSystemStack(int system);
+    void setSignStack(bool sign);
 
 signals:
     //! Highlight the current debug line.

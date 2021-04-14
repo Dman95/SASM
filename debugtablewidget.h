@@ -10,6 +10,7 @@
 #include <QByteArray>
 #include "debugger.h"
 #include "watchsettingswidget.h"
+#include "stacksettingswidget.h"
 #include "ruqplaintextedit.h"
 
 /**
@@ -36,16 +37,12 @@ public:
     ~DebugTableWidget();
     bool isEmpty();
     void initializeMemoryWindow(const QList<RuQPlainTextEdit::Watch> &watches);
-    void initializeStackWindow();
     static QByteArray memoryHeaderState;
     static QByteArray registerWindowState;
     static QByteArray stackWindowState;
     static bool geometryMemorySaved;
     static bool geometryRegistersSaved;
     static bool geometryStackSaved;
-    QComboBox *typeComboBox;
-    QComboBox *typeComboBox2;
-    QCheckBox *signCheckbox;
 
 protected:
     void closeEvent(QCloseEvent *);
@@ -73,7 +70,6 @@ private:
     DebugTableWidgetType type;
     bool empty;
     bool firstTime;
-    QHBoxLayout *layout;
 };
 
 #endif // DEBUGTABLEWIDGET_H

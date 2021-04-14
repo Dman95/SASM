@@ -88,28 +88,12 @@ DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType w
         setHorizontalHeaderLabels(header);
         horizontalHeader()->setStretchLastSection(true);
         setWindowTitle(tr("Stack"));
+        addStack(QString("Bottom"));
         resizeColumnsToContents();
         if (geometryStackSaved)
             restoreGeometry(stackWindowState);
     }
 }
-
-void DebugTableWidget::initializeStackWindow()
-{
-    if (type == stackTable) {
-        typeComboBox = new QComboBox;
-        QStringList comboBoxList;
-        comboBoxList << tr("Hex 32") << tr("Bin 32") << tr("Hex 64") << tr("Bin 64");
-        typeComboBox->insertItems(0, comboBoxList);
-        insertRow(0);
-        setCellWidget(0, 0, typeComboBox);
-        addStack(QString("Bottom"));
-        
-        // ???
-        //connect(typeComboBox, SIGNAL(currentIndexChanged(int)), this, SIGNAL(settingsChanged()));
-    }
-}
-
 
 void DebugTableWidget::initializeMemoryWindow(const QList<RuQPlainTextEdit::Watch> &watches)
 {
@@ -144,9 +128,9 @@ void DebugTableWidget::setValuesFromDebugger(QList<Debugger::registersInfo> regi
 
 void DebugTableWidget::setValuesFromDebugger(QList<QString> stacks) //the stack
 {
-    setRowCount(1);
+    setRowCount(0);
     addStack(QString("Bottom"));
-    for (int i = stacks.size()-1; i >= 0; i--)
+    for (int i = 0; i < stacks.size(); i++)
        addStack(stacks[i]);
     show();
     if (firstTime) {
@@ -266,8 +250,8 @@ void DebugTableWidget::addStack(const QString &hexValue)
             QFont monoFont("Courier");
             monoFont.setStyleHint(QFont::Monospace);
             hexValueItem->setFont(monoFont);
-            insertRow(1);
-            setItem(1, 0, hexValueItem);
+            insertRow(0);
+            setItem(0, 0, hexValueItem);
     }
 }
 
