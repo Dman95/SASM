@@ -1450,7 +1450,6 @@ void MainWindow::debugShowStack()
                 memoryDock->show();
             if (stackDock)
                 stackDock->show();
-            debugger->doInput(QString("info f 0\n"), infoStack);
         }
         if (debugger->isStopped()) {
             debugger->setSystemStack(stackWindow->settings->typeComboBox->currentIndex());

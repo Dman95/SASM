@@ -249,7 +249,9 @@ void DebugTableWidget::addStack(const QString &hexValue)
             QTableWidgetItem *hexValueItem = new QTableWidgetItem(hexValue);
             QFont monoFont("Courier");
             monoFont.setStyleHint(QFont::Monospace);
+            hexValueItem->setTextAlignment(Qt::AlignCenter);
             hexValueItem->setFont(monoFont);
+            hexValueItem->setFlags(Qt::ItemIsEnabled);
             insertRow(0);
             setItem(0, 0, hexValueItem);
     }

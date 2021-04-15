@@ -201,6 +201,7 @@ public slots:
     void setBitStack(int bit);
     void setSystemStack(int system);
     void setSignStack(bool sign);
+    QString signedNumberStack(quint64 value);
 
 signals:
     //! Highlight the current debug line.

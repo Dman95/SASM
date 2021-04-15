@@ -289,6 +289,7 @@ void Debugger::processMessage(QString output, QString error)
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
+            doInput(QString("info f 0\n"), infoStack);
         }
 
         //if an error with the wrong name of the section has occurred
@@ -314,6 +315,7 @@ void Debugger::processMessage(QString output, QString error)
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
+            doInput(QString("info f 0\n"), infoStack);
         }
     }
 
@@ -592,7 +594,6 @@ void Debugger::processAction(QString output, QString error)
   	    index = r.indexIn(output);
     	    if(index != -1)
     	    	stackBottom = output.mid(index, r.matchedLength()).toULongLong(0, 16) - 8;
-  	    //emit printLog("Startaddress: " + QString::number(stackBottom));
   	    return;
     	}
     	QString info;
@@ -630,7 +631,6 @@ void Debugger::processAction(QString output, QString error)
     	quint64 stackelem;
     	for (int i = stacks2.size()-1; i >= 0; i-=bitStack){
     	    stackelem = stacks2[i];
-    	    emit printLog(QString(" ")+QString::number(stacks2[i]));
     	    for (int j = 1; j < bitStack; j++){
     	        if (i-j<0){
     	            stacks.append(QString("(+") + QString::number(bitStack-j) + QString(" unused Byte) ") + QString::number(stackelem, systemStack));
@@ -638,7 +638,24 @@ void Debugger::processAction(QString output, QString error)
     	        }
     	        stackelem = (stackelem << 8) + stacks2[i-j];
     	    }
-    	    stacks.append(QString::number(stackelem, systemStack));
+    	    if (signStack) {
+    	        switch (bitStack) {
+                    case 1:
+                        stacks.append(QString::number(((qint8) stackelem), systemStack));
+                        break;
+                    case 2:
+                        stacks.append(QString::number(stackelem, systemStack));
+                        break;
+                    case 4:
+                        stacks.append(QString::number(stackelem, systemStack));
+                        break;
+                    case 8:
+                    default:
+                        stacks.append(QString::number(stackelem, systemStack));
+                }
+    	    } else {
+    	        stacks.append(QString::number(stackelem, systemStack));
+    	    }
     	}
     	exit2:
     	if(stacks.size()>=100)
@@ -722,6 +739,7 @@ void Debugger::processMessageMiMode(QString output, QString error)
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
+            doInput(QString("info f 0\n"), infoStack);
         }
 
         //if an error with the wrong name of the section has occurred
@@ -747,6 +765,7 @@ void Debugger::processMessageMiMode(QString output, QString error)
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
+            doInput(QString("info f 0\n"), infoStack);
         }
     }
 
@@ -1054,9 +1073,10 @@ void Debugger::processActionMiMode(QString output, QString error)
         return;
     }
     
-    if (actionType == infoStack) {/*
-     	QTextStream stackStream(&output);
+    if (actionType == infoStack) {
+      	QTextStream stackStream(&output);
      	QList<QString> stacks;
+     	QList<quint64> stacks2;
      	QRegExp r = QRegExp("0x[0-9a-fA-F]{6,12}");
      	int index;
     	if (firstStack){
@@ -1074,56 +1094,54 @@ void Debugger::processActionMiMode(QString output, QString error)
     	    emit printLog(QString("Error showing stack"), Qt::red);
     	    return;
     	}
-        for (int i = 0; !stackStream.atEnd(); i++) {
+    	for (int i = 0; !stackStream.atEnd(); i++) {
     	    stackStream >> info;
     	    if (info.at(0) != QChar('~')||info.indexOf(QString("~\"\\n\""))!=-1) {
                 continue;
             }
-            //info.remove(QRegExp("~|\"|\\\\n"));
+            info.remove(QRegExp("~|\"|\\\\n"));
             QList<QString> stackLine = info.split(QString("\\t"));
     	    index = r.indexIn(info);
     	    address = info.mid(index, r.matchedLength()).toULongLong(0, 16);
     	    if (index == -1 || address >= stackBottom) {
     	        break;
     	    }
-    	    if(sizeStack>1){
-    	        for(int j = 0; j < stackLine.size()-1; j++){
-    	            //emit printLog(info);
-    	            info = stackLine[j+1];
-    	    	    index = r.indexIn(info);
-    	            value = info.mid(index, r.matchedLength()).toULongLong(0, 16);
-    	            for(int k = 0; k < 2; k++){ //per line
-    	                if(sizeStack==2)
-    	    	            stacks.append(QString("0x") + QString::number((value >> 16*k)&0xffff, 16));
-    	    	        else
-    	    	            stacks.append(QString::number((value >> 16*k)&0xffff, 10));
-    	    	        if (address + 2 + 2*k + j*4 >= stackBottom) {
-    	    	            emit printStack(stacks);
-        	            return;
-    	    	        }
-    	            }
-    	        }
-    	    } else {
-    	        for(int j = 0; j < stackLine.size()-1; j++){ //per line
-    	            info = stackLine[j+1];
-    	    	    index = r.indexIn(info);
-    	            value = info.mid(index, r.matchedLength()).toULongLong(0, 16);
-    	    	    for(int k = 0; k < 4; k++){
-    	    	        if(sizeStack==0)
-    	    	            stacks.append(QString("0x") + QString::number((value >> 8*k)&0xff, 16));
-    	    	        else
-    	    	            stacks.append(QString::number((value >> 8*k)&0xff, 10));
-    	    	        if (address + 1 + k + j*4 >= stackBottom) {
-    	    	            emit printStack(stacks);
-        	            return;
-    	    	        }
-    	    	    }
+    	    
+    	    for(int j = 0; j < 2; j++){
+		info = stackLine[j*2+1];
+    	    	index = r.indexIn(info);
+    	        value = info.mid(index, r.matchedLength()).toULongLong(0, 16);
+    	        info = stackLine[j*2+2];
+    	    	index = r.indexIn(info);
+    	        value += (info.mid(index, r.matchedLength()).toULongLong(0, 16)) << 32;
+    	        for(int k = 0; k < 8; k++){ //per line
+    	           if (address + k + j*8 >= stackBottom) {
+    	   	        goto exit;
+    	   	   }
+    	    	   stacks2.append((value >> 8*k)&0xff);
     	        }
     	    }
     	}
+    	exit:
+    	quint64 stackelem;
+    	for (int i = stacks2.size()-1; i >= 0; i-=bitStack){
+    	    stackelem = stacks2[i];
+    	    for (int j = 1; j < bitStack; j++){
+    	        if (i-j<0){
+    	            stacks.append(QString("(+") + QString::number(bitStack-j) + QString(" unused Byte) ") + QString::number(stackelem, systemStack));
+    	            goto exit2;
+    	        }
+    	        stackelem = (stackelem << 8) + stacks2[i-j];
+    	    }
+    	    if (signStack)
+    	    	stacks.append(signedNumberStack(stackelem));
+    	    else
+    	    	stacks.append(QString::number(stackelem, systemStack));
+    	}
+    	exit2:
     	if(stacks.size()>=100)
     	    stacks.append(QString("..."));
-    	emit printStack(stacks);*/
+    	emit printStack(stacks);
         return;
     }
 
@@ -1134,6 +1152,24 @@ void Debugger::processActionMiMode(QString output, QString error)
 
     //print information to log field
     emit printLog(output);
+}
+
+// convert unsinged to signed and add -
+QString Debugger::signedNumberStack(quint64 value) {
+    if ((value&(1<<(bitStack*8-1))) > 0) {
+    	switch (bitStack) {
+         case 1:
+            return QString("-") + QString::number(((-1*((qint8)value))&0xff), systemStack);
+         case 2:
+            return QString("-") + QString::number(((-1*((qint16)value))&0xffff), systemStack);
+         case 4:
+            return QString("-") + QString::number(((-1*((qint32)value))&0xffffffff), systemStack);
+         case 8:
+         default:
+            return QString("-") + QString::number((-1*((qint64)value)), systemStack);
+      }
+    }
+    return QString::number(value, systemStack);
 }
 
 bool Debugger::isStopped()
