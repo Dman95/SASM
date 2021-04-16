@@ -84,10 +84,14 @@ Debugger::Debugger(QTextEdit *tEdit,
 
 bool Debugger::run()
 {
+    QSettings settings("SASM Project", "SASM");
+    if (settings.value("mode", QString("x86")).toString() == "x86")
+        addressSizeOffset = 4;
+    else
+        addressSizeOffset = 8;
     #ifdef Q_OS_WIN32
         QString gdb;
         QString objdump;
-        QSettings settings("SASM Project", "SASM");
         wincrflag++;
         if (settings.value("mode", QString("x86")).toString() == "x86") {
             gdb = QCoreApplication::applicationDirPath() + "/MinGW/bin/gdb.exe";
@@ -593,7 +597,7 @@ void Debugger::processAction(QString output, QString error)
   	    firstStack = false;
   	    index = r.indexIn(output);
     	    if(index != -1)
-    	    	stackBottom = output.mid(index, r.matchedLength()).toULongLong(0, 16) - 8;
+    	    	stackBottom = output.mid(index, r.matchedLength()).toULongLong(0, 16) - addressSizeOffset;
   	    return;
     	}
     	QString info;
@@ -1068,12 +1072,8 @@ void Debugger::processActionMiMode(QString output, QString error)
     	if (firstStack){
   	    firstStack = false;
   	    index = r.indexIn(output);
-    	    if(index != -1){
-    	        if (settings.value("mode", QString("x86")).toString() == "x86")
-    	    	    stackBottom = output.mid(index, r.matchedLength()).toULongLong(0, 16) - 8;
-    	    	else
-    	    	    stackBottom = output.mid(index, r.matchedLength()).toULongLong(0, 16) - 4;
-    	    }
+    	    if(index != -1)
+    	    	stackBottom = output.mid(index, r.matchedLength()).toULongLong(0, 16) - addressSizeOffset;
   	    return;
     	}
     	QString info;
