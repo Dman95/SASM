@@ -603,13 +603,13 @@ void Debugger::processAction(QString output, QString error)
     	QString info;
     	quint64 address;
     	quint64 value;
-    	index = output.indexOf(QString("Cannot access memory"));
-    	if (index != -1){
-    	    emit printLog(QString("Error showing stack"), Qt::red);
-    	    return;
-    	}
     	for (int i = 0; !stackStream.atEnd(); i++) {
     	    stackStream >> info;
+    	    index = info.indexOf(QString("Cannot access memory"));
+    	    if (index != -1){
+    	        emit printLog(QString("Error showing stack"), Qt::red);
+    	        return;
+    	    }
     	    index = r.indexIn(info);
     	    address = info.mid(index, r.matchedLength()).toULongLong(0, 16);
     	    if (index == -1 || address >= stackBottom) {
@@ -1079,13 +1079,13 @@ void Debugger::processActionMiMode(QString output, QString error)
     	QString info;
     	quint64 address;
     	quint64 value;
-    	index = output.indexOf(QString("Cannot access memory"));
-    	if (index != -1){
-    	    emit printLog(QString("Error showing stack"), Qt::red);
-    	    return;
-    	}
     	for (int i = 0; !stackStream.atEnd(); i++) {
     	    stackStream >> info;
+    	    index = info.indexOf(QString("Cannot access memory"));
+    	    if (index != -1){
+    	        emit printLog(QString("Error showing stack"), Qt::red);
+    	        return;
+    	    }
     	    if (info.at(0) != QChar('~')||info.indexOf(QString("~\"\\n\""))!=-1) {
                 continue;
             }
