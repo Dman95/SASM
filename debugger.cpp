@@ -1068,8 +1068,12 @@ void Debugger::processActionMiMode(QString output, QString error)
     	if (firstStack){
   	    firstStack = false;
   	    index = r.indexIn(output);
-    	    if(index != -1)
-    	    	stackBottom = output.mid(index, r.matchedLength()).toULongLong(0, 16) - 8;
+    	    if(index != -1){
+    	        if (settings.value("mode", QString("x86")).toString() == "x86")
+    	    	    stackBottom = output.mid(index, r.matchedLength()).toULongLong(0, 16) - 8;
+    	    	else
+    	    	    stackBottom = output.mid(index, r.matchedLength()).toULongLong(0, 16) - 4;
+    	    }
   	    return;
     	}
     	QString info;
@@ -1158,7 +1162,7 @@ QString Debugger::signedNumberStack(quint64 value) {
         case 8:
         default:
             if ((value&0x8000000000000000) > 0)
-                return QString("-") + QString::number((-1*((qint64)value)), systemStack);
+                return QString("-") + QString::number((-1*((qint64)value)), systemStack); //falls mit führender Null: QStringLiteral("%1").arg((-1*((qint64)value)), 63, systemStack, QLatin1Char('0')); 
             break;
     }
     return QString::number(value, systemStack);
