@@ -638,24 +638,10 @@ void Debugger::processAction(QString output, QString error)
     	        }
     	        stackelem = (stackelem << 8) + stacks2[i-j];
     	    }
-    	    if (signStack) {
-    	        switch (bitStack) {
-                    case 1:
-                        stacks.append(QString::number(((qint8) stackelem), systemStack));
-                        break;
-                    case 2:
-                        stacks.append(QString::number(stackelem, systemStack));
-                        break;
-                    case 4:
-                        stacks.append(QString::number(stackelem, systemStack));
-                        break;
-                    case 8:
-                    default:
-                        stacks.append(QString::number(stackelem, systemStack));
-                }
-    	    } else {
-    	        stacks.append(QString::number(stackelem, systemStack));
-    	    }
+    	    if (signStack)
+    	    	stacks.append(signedNumberStack(stackelem));
+    	    else
+    	    	stacks.append(QString::number(stackelem, systemStack));
     	}
     	exit2:
     	if(stacks.size()>=100)
@@ -1156,18 +1142,24 @@ void Debugger::processActionMiMode(QString output, QString error)
 
 // convert unsinged to signed and add -
 QString Debugger::signedNumberStack(quint64 value) {
-    if ((value&(1<<(bitStack*8-1))) > 0) {
-    	switch (bitStack) {
-         case 1:
-            return QString("-") + QString::number(((-1*((qint8)value))&0xff), systemStack);
-         case 2:
-            return QString("-") + QString::number(((-1*((qint16)value))&0xffff), systemStack);
-         case 4:
-            return QString("-") + QString::number(((-1*((qint32)value))&0xffffffff), systemStack);
-         case 8:
-         default:
-            return QString("-") + QString::number((-1*((qint64)value)), systemStack);
-      }
+    switch (bitStack) {
+        case 1:
+            if ((value&0x80) > 0)
+                return QString("-") + QString::number(((-1*((qint8)value))&0xff), systemStack);
+            break;
+        case 2:
+            if ((value&0x8000) > 0)
+                return QString("-") + QString::number(((-1*((qint16)value))&0xffff), systemStack);
+            break;
+        case 4:
+            if ((value&0x80000000) > 0)
+                return QString("-") + QString::number(((-1*((qint32)value))&0xffffffff), systemStack);
+            break;
+        case 8:
+        default:
+            if ((value&0x8000000000000000) > 0)
+                return QString("-") + QString::number((-1*((qint64)value)), systemStack);
+            break;
     }
     return QString::number(value, systemStack);
 }
