@@ -187,6 +187,7 @@ private:
     int bitStack;
     int systemStack;
     bool signStack;
+    int addressSizeOffset;
 
 public slots:
     void readOutputToBuffer();
