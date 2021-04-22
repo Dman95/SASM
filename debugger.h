@@ -104,6 +104,11 @@ public:
         bool isValid;
     };
 
+    struct stackInfo {
+        QString value;
+        QString address;
+    };
+
     typedef Assembler::LineNum LineNum;
 
     bool isStopped();
@@ -211,7 +216,7 @@ signals:
     //! Signal is emited when debugger is ready to get commands like step into and etc.
     void started();
     void printRegisters(QList<Debugger::registersInfo>);
-    void printStack(QList<QString>);
+    void printStack(QList<Debugger::stackInfo>);
     void printMemory(QList<Debugger::memoryInfo>);
     void printLog(QString msg, QColor color = QColor(Qt::black));
     void printOutput(QString msg);

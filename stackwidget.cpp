@@ -45,7 +45,7 @@ StackWidget::StackWidget(QWidget *parent) :
     QWidget(parent)
 {
     layout = new QVBoxLayout(this);
-    stackContent = new DebugTableWidget(0, 1, stackTable, this);;
+    stackContent = new DebugTableWidget(0, 2, stackTable, this);;
     settings = new StackSettingsWidget;
 
     layout->addWidget(settings);

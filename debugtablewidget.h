@@ -59,11 +59,11 @@ public slots:
     void addVariable(const RuQPlainTextEdit::Watch &variable, int rowNumber = -1);
     void changeVariableValue(const QString &value, int rowNumber, bool isValid);
     void addRegister(const QString &name, const QString &hexValue, const QString &decValue, int rowNumber);
-    void addStack(const QString &hexValue);
+    void addStack(const QString &hexValue, const QString &address);
     void changeMemoryWindow(int row, int column);
     void setValuesFromDebugger(QList<Debugger::memoryInfo> watches);
     void setValuesFromDebugger(QList<Debugger::registersInfo> registers);
-    void setValuesFromDebugger(QList<QString> stacks);
+    void setValuesFromDebugger(QList<Debugger::stackInfo> stacks);
 
 private:
     int contextMenuLineNumber;

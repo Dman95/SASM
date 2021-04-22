@@ -1434,8 +1434,8 @@ void MainWindow::debugShowStack()
             
             stackWindow = new StackWidget;
             connect(stackWindow, SIGNAL(closeSignal()), this, SLOT(setShowStackToUnchecked()));
-            connect(debugger, SIGNAL(printStack(QList<QString>)),
-                  stackWindow->stackContent, SLOT(setValuesFromDebugger(QList<QString>)));
+            connect(debugger, SIGNAL(printStack(QList<Debugger::stackInfo>)),
+                  stackWindow->stackContent, SLOT(setValuesFromDebugger(QList<Debugger::stackInfo>)));
             connect(stackWindow->settings, SIGNAL(stacksettingsChanged()), this, SLOT(debugShowStack()), Qt::QueuedConnection);
 
             stackDock->setWidget(stackWindow);

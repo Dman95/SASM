@@ -84,11 +84,12 @@ DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType w
     if (type == stackTable) {
         setSelectionMode(QAbstractItemView::NoSelection);
         QStringList header;
-        header << "Stack";
+        header << "Address" << "Stack-top";
         setHorizontalHeaderLabels(header);
+        //setResizeMode(QHeaderView::ResizeToContents)
         horizontalHeader()->setStretchLastSection(true);
         setWindowTitle(tr("Stack"));
-        addStack(QString("Bottom"));
+        addStack(QString("    --    "), QString("Bottom"));
         resizeColumnsToContents();
         if (geometryStackSaved)
             restoreGeometry(stackWindowState);
@@ -126,12 +127,11 @@ void DebugTableWidget::setValuesFromDebugger(QList<Debugger::registersInfo> regi
     }
 }
 
-void DebugTableWidget::setValuesFromDebugger(QList<QString> stacks) //the stack
+void DebugTableWidget::setValuesFromDebugger(QList<Debugger::stackInfo> stacks) //the stack
 {
     setRowCount(0);
-    addStack(QString("Bottom"));
     for (int i = 0; i < stacks.size(); i++)
-       addStack(stacks[i]);
+       addStack(stacks[i].value, stacks[i].address);
     show();
     if (firstTime) {
         firstTime = false;
@@ -242,7 +242,7 @@ void DebugTableWidget::addRegister(const QString &name, const QString &hexValue,
     }
 }
 
-void DebugTableWidget::addStack(const QString &hexValue)
+void DebugTableWidget::addStack(const QString &hexValue, const QString &address)
 {
     empty = false;
     if (type == stackTable) {
@@ -252,9 +252,15 @@ void DebugTableWidget::addStack(const QString &hexValue)
             hexValueItem->setTextAlignment(Qt::AlignCenter);
             hexValueItem->setFont(monoFont);
             hexValueItem->setFlags(Qt::ItemIsEnabled);
+            QTableWidgetItem *addressItem = new QTableWidgetItem(address);
+            addressItem->setTextAlignment(Qt::AlignCenter);
+            addressItem->setFont(monoFont);
+            addressItem->setFlags(Qt::ItemIsEnabled);
             insertRow(0);
-            setItem(0, 0, hexValueItem);
+            setItem(0, 1, hexValueItem);
+            setItem(0, 0, addressItem);
     }
+    resizeColumnsToContents();
 }
 
 bool DebugTableWidget::isEmpty()
