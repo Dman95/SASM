@@ -59,6 +59,9 @@
 #include <QMutex>
 #include <QDragEnterEvent>
 #include <QMimeData>
+#include <thread>
+#include <sys/ipc.h>
+#include <sys/msg.h>
 #include "tab.h"
 #include "highlighter.h"
 #include "debugger.h"
@@ -76,6 +79,7 @@
 #include "signallocker.h"
 #include "masm.h"
 #include "stackwidget.h"
+#include "displayWindow.h"
 
 #define SASM_VERSION "3.12.1"
 
@@ -226,6 +230,11 @@ private:
     //! About close
     bool closeFromCloseAll;
     void closeEvent(QCloseEvent *e);
+    
+    // display
+    DisplayWindow *displaywdg;
+    std::thread *consumer;
+    int msgid;
 
 public slots:
     //! Actions and Menus
@@ -311,6 +320,9 @@ public slots:
 
     //! Single Application message
     void onMessageReceived(const QString &message);
+    
+    //display
+    void closeDisplay();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);

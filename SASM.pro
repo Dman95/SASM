@@ -72,7 +72,8 @@ SOURCES += main.cpp\
     masm.cpp \
     gccbasedassembler.cpp \
     stacksettingswidget.cpp \
-    stackwidget.cpp
+    stackwidget.cpp \
+    displayWindow.cpp
 
 HEADERS  += mainwindow.h \
     tab.h \
@@ -95,7 +96,8 @@ HEADERS  += mainwindow.h \
     masm.h \
     gccbasedassembler.h \
     stacksettingswidget.h \
-    stackwidget.h
+    stackwidget.h \
+    displayWindow.h
 
 FORMS += settings.ui
 

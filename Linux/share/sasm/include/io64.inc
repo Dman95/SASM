@@ -44,6 +44,14 @@ CEXTERN fflush
 CEXTERN get_stdin
 CEXTERN get_stdout
 
+CEXTERN printSomething
+CEXTERN update
+%macro updateDisplay 1.nolist
+    mov rdi, %1
+    call update
+%endmacro
+
+
 ; Make stack be 16 bytes aligned
 %macro ALIGN_STACK 0.nolist
     enter 0, 0

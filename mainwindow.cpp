@@ -769,6 +769,7 @@ void MainWindow::closeAllChildWindows()
         delete stackWindow;
         stackWindow = 0;
     }
+    
 }
 
 bool MainWindow::deleteTab(int index, bool saveFileName)
@@ -1025,7 +1026,7 @@ void MainWindow::buildProgram(bool debugMode)
         programIsBuilded = true;
     }
 }
-
+//TODO
 void MainWindow::runProgram()
 {
     if (!programStopped) {
@@ -1106,7 +1107,7 @@ void MainWindow::testStopOfProgram()
         timer->stop();
     }
 }
-
+//TODO
 void MainWindow::runExeProgram()
 {
     if (!programIsBuilded) {
@@ -1203,9 +1204,19 @@ void MainWindow::debug()
         //! Determine input path
         QString inputPath = Common::pathInTemp("input.txt");
         inputPath.replace("\\", "/");
-
+      
+      	// start display
+      	key_t key = ftok("progfile", 65);
+   	displaywdg = new DisplayWindow;
+    	displaywdg->setWindowIcon(QIcon(":images/mainIcon.png"));
+    	displaywdg->setFixedSize(500,525);
+    	displaywdg->setWindowFlags(Qt::Widget | Qt::MSWindowsFixedSizeDialogHint);
+    	displaywdg->show();
+    	msgid = msgget(key, 0666 | IPC_CREAT);
+    	consumer = new std::thread(&DisplayWindow::changeDisplay, displaywdg, msgid);
+      
         debugger = new Debugger(compilerOut, exePath, workingDirectoryPath, inputPath, assembler, 0, settings.value("sasmverbose", false).toBool(), settings.value("mi", false).toBool());
-// connect print signals for output in Debugger
+	// connect print signals for output in Debugger
         connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
         connect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
         connect(debugger, SIGNAL(highlightLine(int)), code, SLOT(updateDebugLine(int)));
@@ -1564,7 +1575,7 @@ void MainWindow::setShowStackToUnchecked()
 {
     debugShowStackAction->setChecked(false);
 }
-
+//TODO
 void MainWindow::debugExit()
 {
     settings.setValue("debugregisters", debugShowRegistersAction->isChecked());
@@ -1579,6 +1590,9 @@ void MainWindow::debugExit()
     code->setDebugDisabled();
      //! Many actions performed here - deleting of highlighting too
     delete debugger;
+    // close display:
+    connect(displaywdg, SIGNAL(closeDisplay()), this, SLOT(closeDisplay()), Qt::UniqueConnection);
+    displaywdg->finish(msgid);
     debugger = 0;
     closeAnyCommandWidget();
     debugShowRegistersAction->setChecked(false);
@@ -1586,6 +1600,13 @@ void MainWindow::debugExit()
     debugShowStackAction->setChecked(false);
     printLogWithTime(tr("Debugging finished.") + '\n', Qt::darkGreen);
     disableDebugActions();
+}
+
+void MainWindow::closeDisplay(){
+    displaywdg->close();
+    //TODO
+    //delete displaywdg;
+    //displaywdg = 0;
 }
 
 void MainWindow::showAnyCommandWidget()
