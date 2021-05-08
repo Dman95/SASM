@@ -42,8 +42,9 @@
 #define DISPLAYWINDOW_H
 
 #include <QWidget>
-#include <QComboBox>
-#include <QHBoxLayout>
+#include <QtGui>
+#include <QLabel>
+#include <QVBoxLayout>
 #include <sys/ipc.h>
 #include <sys/msg.h>
 #include <stdio.h>
@@ -55,7 +56,7 @@ class DisplayWindow : public QWidget
 public:
     struct mesg_buffer {
     long mesg_type;
-    char mesg_text[1024];
+    char mesg_text[256];
     } message;
 
     explicit DisplayWindow(QWidget *parent = 0);
@@ -67,11 +68,9 @@ protected:
     void closeEvent(QCloseEvent *);
 
 private:
-    QVBoxLayout *layout;
-    QWidget *display;
-    QComboBox *settings;
-    int height;
-    int width;
+    QVBoxLayout  *layout;
+    QImage* displayPicture;
+    QLabel* displayImageLabel;
 
 signals:
     void displayChanged(void);

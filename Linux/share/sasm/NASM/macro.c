@@ -10,7 +10,7 @@ void sasm_replace_stdin(void) {dup2(open("input.txt",0),0);}
 
 struct mesg_buffer {
     long mesg_type;
-    char mesg_text[1024];
+    char mesg_text[256];
 } message;
 
 int msgid = 0;
@@ -32,7 +32,8 @@ void update(char* data){
        message.mesg_type = 1;
        strcpy(message.mesg_text, "empty");
    }
-   strcpy(message.mesg_text, data);
+   for(int i = 0; i < 1024; i++)
+   	message.mesg_text[i] = data[i];
    msgsnd(msgid, &message, sizeof(message), 0);
 }
 

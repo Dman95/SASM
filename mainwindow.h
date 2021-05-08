@@ -80,6 +80,7 @@
 #include "masm.h"
 #include "stackwidget.h"
 #include "displayWindow.h"
+#include <unistd.h>
 
 #define SASM_VERSION "3.12.1"
 

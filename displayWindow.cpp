@@ -44,25 +44,21 @@
 DisplayWindow::DisplayWindow(QWidget *parent) :
     QWidget(parent)
 {
-    width = 500;
-    height = 500;
+    this->setStyleSheet("background-color:grey;");
     layout = new QVBoxLayout(this);
-    display = new QWidget;
-    display->setGeometry(0,0,width,height);
-    display->resize(maximumSize());
-    settings = new QComboBox;
-    QStringList sizeBoxList;
-    sizeBoxList << QString("400x400") << QString("500x500") << QString("600x600");
-    //sizeBoxList << QString::number(settings->iconSize().height());
-    settings->insertItems(0, sizeBoxList);
 
-    layout->addWidget(settings, 0, Qt::AlignTop);
-    layout->addWidget(display);
+    // white = new QRgb(255, 255, 255);
+    // black = new QRgb(0, 0, 0);
 
-    layout->setSpacing(0);
-    layout->setMargin(0);
+    displayImageLabel = new QLabel("");
+    displayPicture  = new QImage(480, 480, QImage::Format_RGB32);
+    displayPicture->fill(qRgb(255, 255, 255));
+    displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
+
+    layout->addWidget(displayImageLabel, Qt::AlignTop);
 
     setLayout(layout); 
+    this->resize(displayPicture->size());
 }
 
 void DisplayWindow::changeDisplay(int msgid){
@@ -73,12 +69,21 @@ void DisplayWindow::changeDisplay(int msgid){
     	if (message.mesg_type == 2){
     	    break;
     	}
-    	// display the message
-        std::cout << "Data Received in :";
-        for(int i = 0; i < 1024; i++){
-            std::cout << message.mesg_text[i] << " ";
+    	// display the message and print on display
+        //std::cout << "Data Received in :";
+        displayPicture->fill(qRgb(255, 255, 255));
+        for(int i = 0; i < 256; i++){
+            //std::cout << + message.mesg_text[i] << " ";
+            if(message.mesg_text[i]) {
+                for(int j = 0; j < 60; j++){
+                for(int k = 0; k < 60; k++){
+                    displayPicture->setPixel((i%8)*60+j, i/8*60+k, qRgb(0, 0, 0));
+                }}
+                //displayPicture->setPixel((i%32)*15, i/32*15, qRgb(0, 0, 0));
+            }
         }
-        std::cout << "\n";
+        //std::cout << "\n";
+        displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
     }
     msgctl(msgid, IPC_RMID, NULL);
     emit closeDisplay();
@@ -99,6 +104,6 @@ void DisplayWindow::closeEvent(QCloseEvent *) {
 
 DisplayWindow::~DisplayWindow()
 {
-    delete display;
+    delete displayImageLabel;
     delete layout;
 }

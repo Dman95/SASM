@@ -1056,6 +1056,16 @@ void MainWindow::runProgram()
 
     QString program = Common::pathInTemp("SASMprog.exe");
     runProcess->setStandardInputFile(input);
+    
+    // start display
+    key_t key = ftok("progfile", 65);
+    displaywdg = new DisplayWindow;
+    displaywdg->setWindowIcon(QIcon(":images/mainIcon.png"));
+    displaywdg->setFixedSize(500,525);
+    displaywdg->setWindowFlags(Qt::Widget | Qt::MSWindowsFixedSizeDialogHint);
+    displaywdg->show();
+    msgid = msgget(key, 0666 | IPC_CREAT);
+    consumer = new std::thread(&DisplayWindow::changeDisplay, displaywdg, msgid);
 
     //! Run program in code directory if it exists
     QString codePath = currentTab->getCurrentFilePath();
@@ -1093,6 +1103,8 @@ void MainWindow::testStopOfProgram()
         stopAction->setEnabled(false);
         debugAction->setEnabled(true);
         buildAction->setEnabled(true);
+        connect(displaywdg, SIGNAL(closeDisplay()), this, SLOT(closeDisplay()), Qt::UniqueConnection);
+        displaywdg->finish(msgid);
         if (!programStopped) {
             if (runProcess->exitStatus() == QProcess::NormalExit)
                 printLogWithTime(tr("The program finished normally. Execution time: %1 s")
@@ -1209,7 +1221,7 @@ void MainWindow::debug()
       	key_t key = ftok("progfile", 65);
    	displaywdg = new DisplayWindow;
     	displaywdg->setWindowIcon(QIcon(":images/mainIcon.png"));
-    	displaywdg->setFixedSize(500,525);
+    	//displaywdg->setFixedSize(500,525);
     	displaywdg->setWindowFlags(Qt::Widget | Qt::MSWindowsFixedSizeDialogHint);
     	displaywdg->show();
     	msgid = msgget(key, 0666 | IPC_CREAT);
@@ -1603,7 +1615,9 @@ void MainWindow::debugExit()
 }
 
 void MainWindow::closeDisplay(){
+    usleep(100);
     displaywdg->close();
+    disconnect(displaywdg, SIGNAL(closeDisplay()), this, SLOT(closeDisplay()));
     //TODO
     //delete displaywdg;
     //displaywdg = 0;
