@@ -1217,7 +1217,9 @@ void MainWindow::debug()
         QString inputPath = Common::pathInTemp("input.txt");
         inputPath.replace("\\", "/");
       
-      	// start display
+      	// start display Linux
+      	#ifdef Q_OS_WIN32
+	#else
       	key_t key = ftok("progfile", 65);
    	displaywdg = new DisplayWindow;
     	displaywdg->setWindowIcon(QIcon(":images/mainIcon.png"));
@@ -1226,6 +1228,7 @@ void MainWindow::debug()
     	displaywdg->show();
     	msgid = msgget(key, 0666 | IPC_CREAT);
     	consumer = new std::thread(&DisplayWindow::changeDisplay, displaywdg, msgid);
+    	#endif
       
         debugger = new Debugger(compilerOut, exePath, workingDirectoryPath, inputPath, assembler, 0, settings.value("sasmverbose", false).toBool(), settings.value("mi", false).toBool());
 	// connect print signals for output in Debugger

@@ -79,6 +79,11 @@
 #include "stackwidget.h"
 #include "displayWindow.h"
 #include <unistd.h>
+#ifdef Q_OS_WIN32
+#else
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#endif
 
 #define SASM_VERSION "3.12.1"
 
