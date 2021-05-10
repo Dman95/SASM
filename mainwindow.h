@@ -60,8 +60,6 @@
 #include <QDragEnterEvent>
 #include <QMimeData>
 #include <thread>
-#include <sys/ipc.h>
-#include <sys/msg.h>
 #include "tab.h"
 #include "highlighter.h"
 #include "debugger.h"

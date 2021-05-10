@@ -93,12 +93,15 @@ void DisplayWindow::changeDisplay(int msgid){
 }
 
 void DisplayWindow::finish(int msgid){
+    #ifdef Q_OS_WIN32
+    #else
     mesg_buffer end;
     end.mesg_type = 2;
     strcpy(end.mesg_text, "end");
     //send default message type == 2 means end
     if(msgsnd(msgid, &end, sizeof(end), 0) < 0)
         printf("error finish... ");
+    #endif
 }
 
 void DisplayWindow::closeEvent(QCloseEvent *) {
