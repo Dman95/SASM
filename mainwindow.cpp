@@ -1058,6 +1058,8 @@ void MainWindow::runProgram()
     runProcess->setStandardInputFile(input);
     
     // start display
+    #ifdef Q_OS_WIN32
+    #else
     key_t key = ftok("progfile", 65);
     displaywdg = new DisplayWindow;
     displaywdg->setWindowIcon(QIcon(":images/mainIcon.png"));
@@ -1066,7 +1068,8 @@ void MainWindow::runProgram()
     displaywdg->show();
     msgid = msgget(key, 0666 | IPC_CREAT);
     consumer = new std::thread(&DisplayWindow::changeDisplay, displaywdg, msgid);
-
+    #endif
+    
     //! Run program in code directory if it exists
     QString codePath = currentTab->getCurrentFilePath();
     if (!codePath.isEmpty()) {
