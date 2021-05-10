@@ -45,10 +45,13 @@
 #include <QtGui>
 #include <QLabel>
 #include <QVBoxLayout>
-#include <sys/ipc.h>
-#include <sys/msg.h>
 #include <stdio.h>
 #include <iostream>
+#ifdef Q_OS_WIN32
+#else
+#include <sys/ipc.h>
+#include <sys/msg.h>
+#endif
 
 class DisplayWindow : public QWidget
 {

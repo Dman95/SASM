@@ -62,6 +62,8 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
 }
 
 void DisplayWindow::changeDisplay(int msgid){
+    #ifdef Q_OS_WIN32
+    #else
     while(1){
     	// msgrcv to receive message
     	msgrcv(msgid, &message, sizeof(message), 0, 0);
@@ -87,6 +89,7 @@ void DisplayWindow::changeDisplay(int msgid){
     }
     msgctl(msgid, IPC_RMID, NULL);
     emit closeDisplay();
+    #endif
 }
 
 void DisplayWindow::finish(int msgid){
