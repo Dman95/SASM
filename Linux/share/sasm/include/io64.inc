@@ -46,14 +46,17 @@ CEXTERN get_stdout
 
 CEXTERN update
 %macro updateDisplay 1.nolist
+    push rax
     push rdi
     mov rdi, %1
     call update
     pop rdi
+    pop rax
 %endmacro
 
 CEXTERN setup
 %macro setupDisplay 3.nolist
+    push rax
     push rdi
     push rsi
     push rdx
@@ -64,6 +67,7 @@ CEXTERN setup
     pop rdx
     pop rsi
     pop rdi
+    pop rax
 %endmacro
 
 ; Make stack be 16 bytes aligned

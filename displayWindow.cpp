@@ -91,23 +91,33 @@ void DisplayWindow::changeDisplay(int msgid, int msgidsnd){
     	
     	// display the message and print on display
     	int needed_pixel = res_x*res_y;
-    	if(mode)
+    	int currentcharx;
+    	int currentchary;
+    	if(mode) {
     	    needed_pixel *= 3;
+    	}
         for(int i = 0; i < std::min(768, needed_pixel); i++){
+            if(mode){
+                currentcharx = ((i/3)%res_x)*60;
+                currentchary = (i/3/res_x)*60;
+            } else {
+                currentcharx = (i%res_x)*60;
+                currentchary = (i/res_x)*60;
+            }
             // pixel makieren
             for(int k = 0; k < 60; k++){
-                displayPicture->setPixel((i%res_x)*60+k, (i/res_x)*60, qRgb(255, 0, 0));
-                displayPicture->setPixel((i%res_x)*60+k, (i/res_x)*60+1, qRgb(255, 0, 0));
+                displayPicture->setPixel(currentcharx+k, currentchary, qRgb(255, 0, 0));
+                displayPicture->setPixel(currentcharx+k, currentchary+1, qRgb(255, 0, 0));
             }
             for(int k = 2; k < 57; k++){
-                displayPicture->setPixel((i%res_x)*60, (i/res_x)*60+k, qRgb(255, 0, 0));
-                displayPicture->setPixel((i%res_x)*60+1, (i/res_x)*60+k, qRgb(255, 0, 0));
-                displayPicture->setPixel((i%res_x)*60+58, (i/res_x)*60+k, qRgb(255, 0, 0));
-                displayPicture->setPixel((i%res_x)*60+59, (i/res_x)*60+k, qRgb(255, 0, 0));
+                displayPicture->setPixel(currentcharx, currentchary+k, qRgb(255, 0, 0));
+                displayPicture->setPixel(currentcharx+1, currentchary+k, qRgb(255, 0, 0));
+                displayPicture->setPixel(currentcharx+58, currentchary+k, qRgb(255, 0, 0));
+                displayPicture->setPixel(currentcharx+59, currentchary+k, qRgb(255, 0, 0));
             }
             for(int k = 0; k < 60; k++) {
-                displayPicture->setPixel((i%res_x)*60+k, (i/res_x)*60+58, qRgb(255, 0, 0));
-                displayPicture->setPixel((i%res_x)*60+k, (i/res_x)*60+59, qRgb(255, 0, 0));
+                displayPicture->setPixel(currentcharx+k, currentchary+58, qRgb(255, 0, 0));
+                displayPicture->setPixel(currentcharx+k, currentchary+59, qRgb(255, 0, 0));
             }
             displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
             usleep(105000);
@@ -115,20 +125,19 @@ void DisplayWindow::changeDisplay(int msgid, int msgidsnd){
             if (mode){
                 for(int j = 0; j < 60; j++){
                 for(int k = 0; k < 60; k++){
-                    displayPicture->setPixel((i%res_x)*60+j, (i/res_x)*60+k, qRgb(message.mesg_text[i], message.mesg_text[i+1], message.mesg_text[i+2]));
+                    displayPicture->setPixel(currentcharx+j, currentchary+k, qRgb(message.mesg_text[i], message.mesg_text[i+1], message.mesg_text[i+2]));
                 }}
                 i+=2;
             } else {
-                printf("i: %d value: %d", i, message.mesg_text[i]);
                 if(message.mesg_text[i]) {
                     for(int j = 0; j < 60; j++){
                     for(int k = 0; k < 60; k++){
-                        displayPicture->setPixel((i%res_x)*60+j, i/res_x*60+k, qRgb(255, 255, 255));
+                        displayPicture->setPixel(currentcharx+j, currentchary+k, qRgb(255, 255, 255));
                     }}
                 } else {
                     for(int j = 0; j < 60; j++){
                     for(int k = 0; k < 60; k++){
-                        displayPicture->setPixel((i%res_x)*60+j, i/res_x*60+k, qRgb(0, 0, 0));
+                        displayPicture->setPixel(currentcharx+j, currentchary+k, qRgb(0, 0, 0));
                     }}
                 }
             }
