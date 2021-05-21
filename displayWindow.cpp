@@ -46,10 +46,6 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
 {
     this->setStyleSheet("background-color:grey;");
     layout = new QVBoxLayout(this);
-
-    // white = new QRgb(255, 255, 255);
-    // black = new QRgb(0, 0, 0);
-
     displayImageLabel = new QLabel("");
     displayPicture  = new QImage(480, 480, QImage::Format_RGB32);
     displayPicture->fill(qRgb(255, 255, 255));
@@ -59,35 +55,89 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
 
     setLayout(layout); 
     this->resize(displayPicture->size());
+    this->setFixedSize(500,525);
 }
 
-void DisplayWindow::changeDisplay(int msgid){
+void DisplayWindow::changeDisplay(int msgid, int msgidsnd){
+    this->setFixedSize(500,525);
+    displayPicture  = new QImage(480, 480, QImage::Format_RGB32);
+    displayPicture->fill(qRgb(255, 255, 255));
+    displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
     #ifdef Q_OS_WIN32
     #else
+    char res_x = 8;
+    char res_y = 8;
+    char mode = 0;
+    memset(&message.mesg_text[0], 0xff, sizeof(message.mesg_text));
+    displayPicture->fill(qRgb(0, 0, 0));
+    displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
     while(1){
     	// msgrcv to receive message
     	msgrcv(msgid, &message, sizeof(message), 0, 0);
 
-    	if (message.mesg_type == 2){
+    	if (message.mesg_type == 2){  // type = 1 (default) -> normal message | -> 2 finish | -> 3 setup
     	    break;
     	}
+    	if (message.mesg_type == 3){
+    	    res_x = message.mesg_text[0];
+     	    res_y = message.mesg_text[1];
+     	    mode = message.mesg_text[2];
+     	    displayPicture  = new QImage(res_x*60, res_y*60, QImage::Format_RGB32);
+    	    displayPicture->fill(qRgb(0, 0, 0));
+    	    displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
+    	    this->setFixedSize(displayPicture->size());
+    	    continue;
+    	}
+    	
     	// display the message and print on display
-        //std::cout << "Data Received in :";
-        displayPicture->fill(qRgb(255, 255, 255));
-        for(int i = 0; i < 256; i++){
-            //std::cout << + message.mesg_text[i] << " ";
-            if(message.mesg_text[i]) {
+    	int needed_pixel = res_x*res_y;
+    	if(mode)
+    	    needed_pixel *= 3;
+        for(int i = 0; i < std::min(768, needed_pixel); i++){
+            // pixel makieren
+            for(int k = 0; k < 60; k++){
+                displayPicture->setPixel((i%res_x)*60+k, (i/res_x)*60, qRgb(255, 0, 0));
+                displayPicture->setPixel((i%res_x)*60+k, (i/res_x)*60+1, qRgb(255, 0, 0));
+            }
+            for(int k = 2; k < 57; k++){
+                displayPicture->setPixel((i%res_x)*60, (i/res_x)*60+k, qRgb(255, 0, 0));
+                displayPicture->setPixel((i%res_x)*60+1, (i/res_x)*60+k, qRgb(255, 0, 0));
+                displayPicture->setPixel((i%res_x)*60+58, (i/res_x)*60+k, qRgb(255, 0, 0));
+                displayPicture->setPixel((i%res_x)*60+59, (i/res_x)*60+k, qRgb(255, 0, 0));
+            }
+            for(int k = 0; k < 60; k++) {
+                displayPicture->setPixel((i%res_x)*60+k, (i/res_x)*60+58, qRgb(255, 0, 0));
+                displayPicture->setPixel((i%res_x)*60+k, (i/res_x)*60+59, qRgb(255, 0, 0));
+            }
+            displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
+            usleep(105000);
+            
+            if (mode){
                 for(int j = 0; j < 60; j++){
                 for(int k = 0; k < 60; k++){
-                    displayPicture->setPixel((i%8)*60+j, i/8*60+k, qRgb(0, 0, 0));
+                    displayPicture->setPixel((i%res_x)*60+j, (i/res_x)*60+k, qRgb(message.mesg_text[i], message.mesg_text[i+1], message.mesg_text[i+2]));
                 }}
-                //displayPicture->setPixel((i%32)*15, i/32*15, qRgb(0, 0, 0));
+                i+=2;
+            } else {
+                printf("i: %d value: %d", i, message.mesg_text[i]);
+                if(message.mesg_text[i]) {
+                    for(int j = 0; j < 60; j++){
+                    for(int k = 0; k < 60; k++){
+                        displayPicture->setPixel((i%res_x)*60+j, i/res_x*60+k, qRgb(255, 255, 255));
+                    }}
+                } else {
+                    for(int j = 0; j < 60; j++){
+                    for(int k = 0; k < 60; k++){
+                        displayPicture->setPixel((i%res_x)*60+j, i/res_x*60+k, qRgb(0, 0, 0));
+                    }}
+                }
             }
         }
-        //std::cout << "\n";
         displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
+        msgsnd(msgidsnd, &message, sizeof(message), 0);
     }
     msgctl(msgid, IPC_RMID, NULL);
+    msgctl(msgidsnd, IPC_RMID, NULL);
     emit closeDisplay();
     #endif
 }
@@ -97,10 +147,8 @@ void DisplayWindow::finish(int msgid){
     #else
     mesg_buffer end;
     end.mesg_type = 2;
-    strcpy(end.mesg_text, "end");
     //send default message type == 2 means end
-    if(msgsnd(msgid, &end, sizeof(end), 0) < 0)
-        printf("error finish... ");
+    msgsnd(msgid, &end, sizeof(end), 0);
     #endif
 }
 

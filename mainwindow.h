@@ -236,7 +236,8 @@ private:
     void closeEvent(QCloseEvent *e);
     
     // display
-    DisplayWindow *displaywdg;
+    QPointer<DisplayWindow> displayWindow;
+    //DisplayWindow *displaywdg;
     std::thread *consumer;
     int msgid;
 

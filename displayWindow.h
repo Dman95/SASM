@@ -47,6 +47,7 @@
 #include <QVBoxLayout>
 #include <stdio.h>
 #include <iostream>
+#include <unistd.h>
 #ifdef Q_OS_WIN32
 #else
 #include <sys/ipc.h>
@@ -59,12 +60,12 @@ class DisplayWindow : public QWidget
 public:
     struct mesg_buffer {
     long mesg_type;
-    char mesg_text[256];
+    char mesg_text[768];
     } message;
-
+    
     explicit DisplayWindow(QWidget *parent = 0);
     ~DisplayWindow();
-    void changeDisplay(int msgid);
+    void changeDisplay(int msgid, int msgidsnd);
     void finish(int msgid);
 
 protected:

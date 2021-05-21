@@ -1060,14 +1060,19 @@ void MainWindow::runProgram()
     // start display
     #ifdef Q_OS_WIN32
     #else
-    key_t key = ftok("progfile", 65);
-    displaywdg = new DisplayWindow;
-    displaywdg->setWindowIcon(QIcon(":images/mainIcon.png"));
-    displaywdg->setFixedSize(500,525);
-    displaywdg->setWindowFlags(Qt::Widget | Qt::MSWindowsFixedSizeDialogHint);
-    displaywdg->show();
+    if (!displayWindow) {
+        displayWindow = new DisplayWindow;
+        displayWindow->setWindowIcon(QIcon(":images/mainIcon.png"));
+        //displayWindow->setFixedSize(500,525);
+        displayWindow->setWindowFlags(Qt::Widget | Qt::MSWindowsFixedSizeDialogHint);
+        displayWindow->activateWindow();
+        //displaywdg->setParent(this);
+    }
+    displayWindow->show();
+    key_t key = ftok("/tmp", 65);
     msgid = msgget(key, 0666 | IPC_CREAT);
-    consumer = new std::thread(&DisplayWindow::changeDisplay, displaywdg, msgid);
+    int msgid_recv = msgget(ftok("/tmp", 66), 0666 | IPC_CREAT);
+    consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid, msgid_recv);
     #endif
     
     //! Run program in code directory if it exists
@@ -1106,8 +1111,8 @@ void MainWindow::testStopOfProgram()
         stopAction->setEnabled(false);
         debugAction->setEnabled(true);
         buildAction->setEnabled(true);
-        connect(displaywdg, SIGNAL(closeDisplay()), this, SLOT(closeDisplay()), Qt::UniqueConnection);
-        displaywdg->finish(msgid);
+        connect(displayWindow, SIGNAL(closeDisplay()), this, SLOT(closeDisplay()), Qt::UniqueConnection);
+        displayWindow->finish(msgid);
         if (!programStopped) {
             if (runProcess->exitStatus() == QProcess::NormalExit)
                 printLogWithTime(tr("The program finished normally. Execution time: %1 s")
@@ -1223,14 +1228,20 @@ void MainWindow::debug()
       	// start display Linux
       	#ifdef Q_OS_WIN32
 	#else
-      	key_t key = ftok("progfile", 65);
-   	displaywdg = new DisplayWindow;
-    	displaywdg->setWindowIcon(QIcon(":images/mainIcon.png"));
-    	//displaywdg->setFixedSize(500,525);
-    	displaywdg->setWindowFlags(Qt::Widget | Qt::MSWindowsFixedSizeDialogHint);
-    	displaywdg->show();
+	if (!displayWindow) {
+           displayWindow = new DisplayWindow;
+           displayWindow->setWindowIcon(QIcon(":images/mainIcon.png"));
+           //displayWindow->setFixedSize(500,525);
+           //displayWindow->setFixedSize(600,625);
+           displayWindow->setWindowFlags(Qt::Widget | Qt::MSWindowsFixedSizeDialogHint);
+           displayWindow->activateWindow();
+           //displaywdg->setParent(this);
+        }
+        displayWindow->show();
+      	key_t key = ftok("/tmp", 65); //returned -1
     	msgid = msgget(key, 0666 | IPC_CREAT);
-    	consumer = new std::thread(&DisplayWindow::changeDisplay, displaywdg, msgid);
+    	int msgid_recv = msgget(ftok("/tmp", 66), 0666 | IPC_CREAT);
+    	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid, msgid_recv);
     	#endif
       
         debugger = new Debugger(compilerOut, exePath, workingDirectoryPath, inputPath, assembler, 0, settings.value("sasmverbose", false).toBool(), settings.value("mi", false).toBool());
@@ -1609,8 +1620,8 @@ void MainWindow::debugExit()
      //! Many actions performed here - deleting of highlighting too
     delete debugger;
     // close display:
-    connect(displaywdg, SIGNAL(closeDisplay()), this, SLOT(closeDisplay()), Qt::UniqueConnection);
-    displaywdg->finish(msgid);
+    connect(displayWindow, SIGNAL(closeDisplay()), this, SLOT(closeDisplay()), Qt::UniqueConnection);
+    displayWindow->finish(msgid);
     debugger = 0;
     closeAnyCommandWidget();
     debugShowRegistersAction->setChecked(false);
@@ -1621,12 +1632,12 @@ void MainWindow::debugExit()
 }
 
 void MainWindow::closeDisplay(){
-    usleep(100);
-    displaywdg->close();
-    disconnect(displaywdg, SIGNAL(closeDisplay()), this, SLOT(closeDisplay()));
-    //TODO
-    //delete displaywdg;
-    //displaywdg = 0;
+    consumer->join();
+    disconnect(displayWindow, SIGNAL(closeDisplay()), this, SLOT(closeDisplay()));
+    if (displayWindow) {
+        displayWindow->close();
+        delete settingsWindow;
+    }
 }
 
 void MainWindow::showAnyCommandWidget()
