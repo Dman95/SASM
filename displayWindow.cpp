@@ -96,49 +96,53 @@ void DisplayWindow::changeDisplay(int msgid, int msgidsnd){
     	if(mode) {
     	    needed_pixel *= 3;
     	}
-        for(int i = 0; i < std::min(768, needed_pixel); i++){
-            if(mode){
-                currentcharx = ((i/3)%res_x)*60;
-                currentchary = (i/3/res_x)*60;
-            } else {
-                currentcharx = (i%res_x)*60;
-                currentchary = (i/res_x)*60;
-            }
-            // pixel makieren
-            for(int k = 0; k < 60; k++){
-                displayPicture->setPixel(currentcharx+k, currentchary, qRgb(255, 0, 0));
-                displayPicture->setPixel(currentcharx+k, currentchary+1, qRgb(255, 0, 0));
-            }
-            for(int k = 2; k < 57; k++){
-                displayPicture->setPixel(currentcharx, currentchary+k, qRgb(255, 0, 0));
-                displayPicture->setPixel(currentcharx+1, currentchary+k, qRgb(255, 0, 0));
-                displayPicture->setPixel(currentcharx+58, currentchary+k, qRgb(255, 0, 0));
-                displayPicture->setPixel(currentcharx+59, currentchary+k, qRgb(255, 0, 0));
-            }
-            for(int k = 0; k < 60; k++) {
-                displayPicture->setPixel(currentcharx+k, currentchary+58, qRgb(255, 0, 0));
-                displayPicture->setPixel(currentcharx+k, currentchary+59, qRgb(255, 0, 0));
-            }
-            displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
-            usleep(105000);
-            
-            if (mode){
-                for(int j = 0; j < 60; j++){
-                for(int k = 0; k < 60; k++){
-                    displayPicture->setPixel(currentcharx+j, currentchary+k, qRgb(message.mesg_text[i], message.mesg_text[i+1], message.mesg_text[i+2]));
-                }}
-                i+=2;
-            } else {
-                if(message.mesg_text[i]) {
-                    for(int j = 0; j < 60; j++){
-                    for(int k = 0; k < 60; k++){
-                        displayPicture->setPixel(currentcharx+j, currentchary+k, qRgb(255, 255, 255));
-                    }}
+    	for(int l = 0; l < needed_pixel; l+=768) {
+    	    if(l>0)
+    	        msgrcv(msgid, &message, sizeof(message), 0, 0);
+            for(int i = 0; i < std::min(768, needed_pixel-l); i++){
+                if(mode){
+                    currentcharx = (((i+l)/3)%res_x)*60;
+                    currentchary = ((i+l)/3/res_x)*60;
                 } else {
+                    currentcharx = ((i+l)%res_x)*60;
+                    currentchary = ((i+l)/res_x)*60;
+                }
+                // pixel makieren
+                for(int k = 0; k < 60; k++){
+                    displayPicture->setPixel(currentcharx+k, currentchary, qRgb(255, 0, 0));
+                    displayPicture->setPixel(currentcharx+k, currentchary+1, qRgb(255, 0, 0));
+                }
+                for(int k = 2; k < 57; k++){
+                    displayPicture->setPixel(currentcharx, currentchary+k, qRgb(255, 0, 0));
+                    displayPicture->setPixel(currentcharx+1, currentchary+k, qRgb(255, 0, 0));
+                    displayPicture->setPixel(currentcharx+58, currentchary+k, qRgb(255, 0, 0));
+                    displayPicture->setPixel(currentcharx+59, currentchary+k, qRgb(255, 0, 0));
+                }
+                for(int k = 0; k < 60; k++) {
+                    displayPicture->setPixel(currentcharx+k, currentchary+58, qRgb(255, 0, 0));
+                    displayPicture->setPixel(currentcharx+k, currentchary+59, qRgb(255, 0, 0));
+                }
+                displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
+                usleep(100000);
+                
+                if (mode){
                     for(int j = 0; j < 60; j++){
                     for(int k = 0; k < 60; k++){
-                        displayPicture->setPixel(currentcharx+j, currentchary+k, qRgb(0, 0, 0));
+                        displayPicture->setPixel(currentcharx+j, currentchary+k, qRgb(message.mesg_text[i], message.mesg_text[i+1], message.mesg_text[i+2]));
                     }}
+                    i+=2;
+                } else {
+                    if(message.mesg_text[i]) {
+                        for(int j = 0; j < 60; j++){
+                        for(int k = 0; k < 60; k++){
+                            displayPicture->setPixel(currentcharx+j, currentchary+k, qRgb(255, 255, 255));
+                        }}
+                    } else {
+                        for(int j = 0; j < 60; j++){
+                        for(int k = 0; k < 60; k++){
+                            displayPicture->setPixel(currentcharx+j, currentchary+k, qRgb(0, 0, 0));
+                        }}
+                    }
                 }
             }
         }

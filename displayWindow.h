@@ -60,7 +60,7 @@ class DisplayWindow : public QWidget
 public:
     struct mesg_buffer {
     long mesg_type;
-    char mesg_text[768];
+    uint8_t mesg_text[768];
     } message;
     
     explicit DisplayWindow(QWidget *parent = 0);
