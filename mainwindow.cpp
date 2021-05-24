@@ -1111,9 +1111,11 @@ void MainWindow::testStopOfProgram()
         stopAction->setEnabled(false);
         debugAction->setEnabled(true);
         buildAction->setEnabled(true);
-        connect(displayWindow, SIGNAL(closeDisplay()), this, SLOT(closeDisplay()), Qt::UniqueConnection);
-        displayWindow->finish(msgid);
         if (!programStopped) {
+            if(!displayWindow){
+                connect(displayWindow, SIGNAL(closeDisplay()), this, SLOT(closeDisplay()), Qt::UniqueConnection);
+                displayWindow->finish(msgid);
+            }
             if (runProcess->exitStatus() == QProcess::NormalExit)
                 printLogWithTime(tr("The program finished normally. Execution time: %1 s")
                                  .arg(programExecutionTime.elapsed() / 1000.0)
@@ -1127,7 +1129,7 @@ void MainWindow::testStopOfProgram()
         timer->stop();
     }
 }
-//TODO
+
 void MainWindow::runExeProgram()
 {
     if (!programIsBuilded) {
@@ -1633,7 +1635,6 @@ void MainWindow::debugExit()
 
 void MainWindow::closeDisplay(){
     consumer->join();
-    disconnect(displayWindow, SIGNAL(closeDisplay()), this, SLOT(closeDisplay()));
     if (displayWindow) {
         displayWindow->close();
         delete displayWindow;
