@@ -123,7 +123,7 @@ void DisplayWindow::changeDisplay(int msgid, int msgidsnd){
                     displayPicture->setPixel(currentcharx+k, currentchary+59, qRgb(255, 0, 0));
                 }
                 displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
-                usleep(100000);
+                usleep(90000);
                 
                 if (mode){
                     for(int j = 0; j < 60; j++){
@@ -172,5 +172,5 @@ void DisplayWindow::closeEvent(QCloseEvent *) {
 DisplayWindow::~DisplayWindow()
 {
     delete displayImageLabel;
-    delete layout;
+    //delete layout;
 }

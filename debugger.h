@@ -193,6 +193,8 @@ private:
     int systemStack;
     bool signStack;
     int addressSizeOffset;
+    
+    bool firstRet;
 
 public slots:
     void readOutputToBuffer();

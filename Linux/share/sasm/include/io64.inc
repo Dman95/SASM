@@ -46,6 +46,7 @@ CEXTERN get_stdout
 
 CEXTERN update
 %macro updateDisplay 1.nolist
+    sasmMacroFunc
     pushfq
     push rax
     push rcx
@@ -57,7 +58,9 @@ CEXTERN update
     push rsi
     push rdi
     mov rdi, %1
+    ALIGN_STACK
     call update
+    UNALIGN_STACK
     pop rdi
     pop rsi
     pop r11
@@ -68,10 +71,12 @@ CEXTERN update
     pop rcx
     pop rax
     popfq
+    sasmMacroFuncE
 %endmacro
 
 CEXTERN setup
 %macro setupDisplay 3.nolist
+    sasmMacroFunc
     pushfq
     push rax
     push rcx
@@ -85,7 +90,9 @@ CEXTERN setup
     mov rdi, %1
     mov rsi, %2
     mov rdx, %3
+    ALIGN_STACK
     call setup
+    UNALIGN_STACK
     pop rdi
     pop rsi
     pop r11
@@ -96,6 +103,7 @@ CEXTERN setup
     pop rcx
     pop rax
     popfq
+    sasmMacroFuncE
 %endmacro
 
 ; Make stack be 16 bytes aligned

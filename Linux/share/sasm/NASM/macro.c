@@ -41,7 +41,6 @@ int min(int x, int y) {
 }
 
 void update(char* data){
-   //setup(1, 2, 3);
    if (msgid_snd == 0){
        msgid_snd = msgget(ftok("/tmp", 65), 0666 | IPC_CREAT);
    }

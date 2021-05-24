@@ -67,6 +67,7 @@ Debugger::Debugger(QTextEdit *tEdit,
     pid = 0;
     firstStack = true;
     firstAction = true;
+    firstRet = true;
     textEdit = tEdit;
     exePath = exePathParam;
     workingDirectoryPath = workingDirectoryPathParam;
@@ -359,7 +360,8 @@ void Debugger::processAction(QString output, QString error)
 {
     bool backtrace = (output.indexOf(QRegExp("#\\d+  0x[0-9a-fA-F]{8,16} in .* ()")) != -1);
 
-    if (output.indexOf(exitMessage) != -1 && !backtrace) {
+    if (output.indexOf(exitMessage) != -1 && !backtrace && firstRet) {
+        firstRet = false;
         doInput("c\n", none);
         return;
     }

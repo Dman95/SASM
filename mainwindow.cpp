@@ -1636,7 +1636,7 @@ void MainWindow::closeDisplay(){
     disconnect(displayWindow, SIGNAL(closeDisplay()), this, SLOT(closeDisplay()));
     if (displayWindow) {
         displayWindow->close();
-        delete settingsWindow;
+        delete displayWindow;
     }
 }
 
