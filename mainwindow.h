@@ -225,6 +225,7 @@ private:
     QString backupGDBPath;
     QString backupGDBVerbose;
     QString backupGDBMi;
+    QString backupGDBDisplay;
     bool backupDisableLinking;
     bool backupCurrentDir;
     QString backupAssemblerPath;

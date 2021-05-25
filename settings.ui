@@ -2207,6 +2207,20 @@
          </item>
         </layout>
        </item>
+       <item row="14" column="0">
+          <widget class="QLabel" name="gdbDisplayLabel">
+           <property name="text">
+            <string>SASM display:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="14" column="1">
+          <widget class="QCheckBox" name="sasmDisplayCheckBox">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
        <item>
         <widget class="QLabel" name="infoLabel">
          <property name="text">

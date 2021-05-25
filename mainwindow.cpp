@@ -1063,12 +1063,11 @@ void MainWindow::runProgram()
     if (!displayWindow) {
         displayWindow = new DisplayWindow;
         displayWindow->setWindowIcon(QIcon(":images/mainIcon.png"));
-        //displayWindow->setFixedSize(500,525);
         displayWindow->setWindowFlags(Qt::Widget | Qt::MSWindowsFixedSizeDialogHint);
         displayWindow->activateWindow();
-        //displaywdg->setParent(this);
     }
-    displayWindow->show();
+    if (settings.value("display", false).toBool())
+        displayWindow->show();
     key_t key = ftok("/tmp", 65);
     msgid = msgget(key, 0666 | IPC_CREAT);
     int msgid_recv = msgget(ftok("/tmp", 66), 0666 | IPC_CREAT);
@@ -1112,10 +1111,8 @@ void MainWindow::testStopOfProgram()
         debugAction->setEnabled(true);
         buildAction->setEnabled(true);
         if (!programStopped) {
-            if(!displayWindow){
-                connect(displayWindow, SIGNAL(closeDisplay()), this, SLOT(closeDisplay()), Qt::UniqueConnection);
-                displayWindow->finish(msgid);
-            }
+            connect(displayWindow, SIGNAL(closeDisplay()), this, SLOT(closeDisplay()), Qt::UniqueConnection);
+            displayWindow->finish(msgid);
             if (runProcess->exitStatus() == QProcess::NormalExit)
                 printLogWithTime(tr("The program finished normally. Execution time: %1 s")
                                  .arg(programExecutionTime.elapsed() / 1000.0)
@@ -1239,7 +1236,8 @@ void MainWindow::debug()
            displayWindow->activateWindow();
            //displaywdg->setParent(this);
         }
-        displayWindow->show();
+        if (settings.value("display", false).toBool())
+            displayWindow->show();
       	key_t key = ftok("/tmp", 65); //returned -1
     	msgid = msgget(key, 0666 | IPC_CREAT);
     	int msgid_recv = msgget(ftok("/tmp", 66), 0666 | IPC_CREAT);
@@ -2009,6 +2007,8 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
     settingsUi.sasmVerboseCheckBox->setChecked(settings.value("sasmverbose", false).toBool());
     
     settingsUi.MiModusCheckBox->setChecked(settings.value("mi", false).toBool());
+    
+    settingsUi.sasmDisplayCheckBox->setChecked(settings.value("display", false).toBool());
 
     settingsUi.runInCurrentDirectoryCheckbox->setChecked(settings.value("currentdir", false).toBool());
 
@@ -2161,6 +2161,7 @@ void MainWindow::recreateAssembler(bool start)
         settings.setValue("currentdir", false);
         settings.setValue("sasmverbose", false);
         settings.setValue("mi", false);
+        settings.setValue("display", false);
         settings.setValue("gdbpath", "gdb");
         settings.setValue("assemblerpath", assembler->getAssemblerPath());
         settings.setValue("linkerpath", assembler->getLinkerPath());
@@ -2185,6 +2186,7 @@ void MainWindow::backupSettings()
     backupObjectFileName = settings.value("objectfilename", "program.o").toString();
     backupGDBPath = settings.value("gdbpath", "gdb").toString();
     backupGDBVerbose = settings.value("sasmverbose", false).toBool();
+    backupGDBDisplay = settings.value("display", false).toBool();
     backupGDBMi = settings.value("mi", false).toBool();
     backupDisableLinking = settings.value("disablelinking", false).toBool();
     backupCurrentDir = settings.value("currentdir", false).toBool();
@@ -2205,6 +2207,7 @@ void MainWindow::restoreSettingsAndExit()
     settings.setValue("gdbpath", backupGDBPath);
     settings.setValue("sasmverbose", backupGDBVerbose);
     settings.setValue("mi", backupGDBMi);
+    settings.setValue("display", backupGDBDisplay);
     settings.setValue("currentdir", backupCurrentDir);
     settings.setValue("starttext", backupStartText);
     settings.setValue("linkerpath", backupLinkerPath);
@@ -2251,6 +2254,7 @@ void MainWindow::saveSettings()
     settings.setValue("disablelinking", settingsUi.disableLinkingCheckbox->isChecked());
     settings.setValue("sasmverbose", settingsUi.sasmVerboseCheckBox->isChecked());
     settings.setValue("mi", settingsUi.MiModusCheckBox->isChecked());
+    settings.setValue("display", settingsUi.sasmDisplayCheckBox->isChecked());
     settings.setValue("currentdir", settingsUi.runInCurrentDirectoryCheckbox->isChecked());
     settings.setValue("assemblerpath", settingsUi.assemblerPathEdit->text());
     settings.setValue("gdbpath", settingsUi.gdbPathEdit->text());
