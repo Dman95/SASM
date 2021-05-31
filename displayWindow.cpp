@@ -85,7 +85,7 @@ void DisplayWindow::changeDisplay(int msgid, int msgidsnd){
      	    displayPicture  = new QImage(res_x*60, res_y*60, QImage::Format_RGB32);
     	    displayPicture->fill(qRgb(0, 0, 0));
     	    displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
-    	    this->setFixedSize(displayPicture->size());
+    	    this->setFixedSize(displayPicture->size()+QSize(25,25));
     	    continue;
     	}
     	
