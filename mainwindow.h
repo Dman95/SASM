@@ -238,7 +238,6 @@ private:
     
     // display
     QPointer<DisplayWindow> displayWindow;
-    //DisplayWindow *displaywdg;
     std::thread *consumer;
     int msgid;
 

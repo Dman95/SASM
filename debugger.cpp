@@ -885,7 +885,6 @@ void Debugger::processActionMiMode(QString output, QString error)
             QRegExp signalMsg("\r?\n(Program received signal.*)");
             while (asyncMsg.indexIn(msg) != -1){
 				msg.remove(asyncMsg.indexIn(msg), msg.indexOf(QChar('\n'), asyncMsg.indexIn(msg) + 7));
-				printLog("yes");
 			}
             if (signalMsg.indexIn(msg) != -1) {
                 QString recievedSignal = signalMsg.cap(1);

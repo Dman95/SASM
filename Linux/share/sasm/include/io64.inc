@@ -40,9 +40,38 @@ CEXTERN fgets
 CEXTERN puts
 CEXTERN fputs
 CEXTERN fflush
+CEXTERN sleepFunc
 
 CEXTERN get_stdin
 CEXTERN get_stdout
+
+%macro sleepFunc 0.nolist
+    sasmMacroFunc
+    pushfq
+    push rax
+    push rcx
+    push rdx
+    push r8
+    push r9
+    push r10
+    push r11
+    push rsi
+    push rdi
+    ALIGN_STACK
+    call sleepFunc
+    UNALIGN_STACK
+    pop rdi
+    pop rsi
+    pop r11
+    pop r10
+    pop r9
+    pop r8
+    pop rdx
+    pop rcx
+    pop rax
+    popfq
+    sasmMacroFuncE
+%endmacro
 
 CEXTERN update
 %macro updateDisplay 1.nolist
@@ -75,7 +104,7 @@ CEXTERN update
 %endmacro
 
 CEXTERN setup
-%macro setupDisplay 3.nolist
+%macro setupDisplay 4.nolist
     sasmMacroFunc
     pushfq
     push rax
@@ -90,6 +119,7 @@ CEXTERN setup
     mov rdi, %1
     mov rsi, %2
     mov rdx, %3
+    mov rcx, %4
     ALIGN_STACK
     call setup
     UNALIGN_STACK

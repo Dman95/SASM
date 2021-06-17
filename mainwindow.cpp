@@ -1026,7 +1026,7 @@ void MainWindow::buildProgram(bool debugMode)
         programIsBuilded = true;
     }
 }
-//TODO
+
 void MainWindow::runProgram()
 {
     if (!programStopped) {
@@ -1070,8 +1070,7 @@ void MainWindow::runProgram()
         displayWindow->show();
     key_t key = ftok("/tmp", 65);
     msgid = msgget(key, 0666 | IPC_CREAT);
-    int msgid_recv = msgget(ftok("/tmp", 66), 0666 | IPC_CREAT);
-    consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid, msgid_recv);
+    consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid);
     #endif
     
     //! Run program in code directory if it exists
@@ -1240,8 +1239,7 @@ void MainWindow::debug()
             displayWindow->show();
       	key_t key = ftok("/tmp", 65); //returned -1
     	msgid = msgget(key, 0666 | IPC_CREAT);
-    	int msgid_recv = msgget(ftok("/tmp", 66), 0666 | IPC_CREAT);
-    	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid, msgid_recv);
+    	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid);
     	#endif
       
         debugger = new Debugger(compilerOut, exePath, workingDirectoryPath, inputPath, assembler, 0, settings.value("sasmverbose", false).toBool(), settings.value("mi", false).toBool());
@@ -1633,10 +1631,10 @@ void MainWindow::debugExit()
 
 void MainWindow::closeDisplay(){
     consumer->join();
-    if (displayWindow) {
+    /*if (displayWindow) {
         displayWindow->close();
         delete displayWindow;
-    }
+    }*/
 }
 
 void MainWindow::showAnyCommandWidget()

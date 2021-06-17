@@ -45,9 +45,12 @@
 #include <QtGui>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QComboBox>
+#include <QElapsedTimer>
 #include <stdio.h>
 #include <iostream>
 #include <unistd.h>
+#include <vector>
 #ifdef Q_OS_WIN32
 #else
 #include <sys/ipc.h>
@@ -60,13 +63,14 @@ class DisplayWindow : public QWidget
 public:
     struct mesg_buffer {
     long mesg_type;
-    uint8_t mesg_text[768];
+    uint8_t mesg_text[8184];
     } message;
     
     explicit DisplayWindow(QWidget *parent = 0);
     ~DisplayWindow();
-    void changeDisplay(int msgid, int msgidsnd);
+    void changeDisplay(int msgid);
     void finish(int msgid);
+    void updateDisplay();
 
 protected:
     void closeEvent(QCloseEvent *);
@@ -75,6 +79,16 @@ private:
     QVBoxLayout  *layout;
     QImage* displayPicture;
     QLabel* displayImageLabel;
+    QComboBox *zoomComboBox;
+    std::vector<uint8_t> buffer;
+    int zoom;
+    int msgid;
+    int res_x;
+    int res_y;
+    int mode;
+    
+private slots:
+void zoomSettingsChanged(int value);
 
 signals:
     void displayChanged(void);
