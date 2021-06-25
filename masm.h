@@ -42,6 +42,7 @@
 #define MASM_H
 
 #include <QMessageBox>
+
 #include "assembler.h"
 
 /**
@@ -53,24 +54,23 @@
  *
  */
 
-class MASM : public Assembler
-{
-    Q_OBJECT
-public:
-    explicit MASM(bool x86, QObject *parent = 0);
-    QString getAssemblerPath();
-    QString getLinkerPath();
-    quint64 getMainOffset(QFile &lst, QString entryLabel);
-    void parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 offset);
-    void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
-                             QList<QTextCharFormat *> &formats,
-                             bool &multiLineComments,
-                             QRegExp &commentStartExpression,
-                             QRegExp &commentEndExpression);
-    QString getStartText();
-    void putDebugString(CodeEditor *);
-    QString getAssemblerOptions();
-    QString getLinkerOptions();
+class MASM : public Assembler {
+  Q_OBJECT
+ public:
+  explicit MASM(bool x86, QObject* parent = 0);
+  QString getAssemblerPath();
+  QString getLinkerPath();
+  quint64 getMainOffset(QFile& lst, QString entryLabel);
+  void parseLstFile(QFile& lst, QString& programFilePath,
+                    QVector<Assembler::LineNum>& lines, quint64 offset);
+  void fillHighligherRules(QVector<Assembler::HighlightingRule>& highlightingRules,
+                           QList<QTextCharFormat*>& formats, bool& multiLineComments,
+                           QRegExp& commentStartExpression,
+                           QRegExp& commentEndExpression);
+  QString getStartText();
+  void putDebugString(CodeEditor*);
+  QString getAssemblerOptions();
+  QString getLinkerOptions();
 };
 
-#endif // MASM_H
+#endif  // MASM_H

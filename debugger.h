@@ -83,6 +83,8 @@ class Debugger : public QObject
 public:
     Debugger(QTextEdit *tEdit,
              const QString &exePathParam,
+             const QString &lstPathParam,
+             const QString &programPathParam,
              const QString &workingDirectoryPathParam,
              const QString &inputPathParam,
              Assembler *assembler,
@@ -133,6 +135,12 @@ private:
     //! Path to executable
     QString exePath;
 
+    //! Path to .lst file
+    QString lstPath;
+
+    //! Path to .asm file
+    QString programPath;
+    
     //! Path to working directory
     QString workingDirectoryPath;
 

@@ -41,39 +41,40 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QColorDialog>
+#include <QDragEnterEvent>
+#include <QFileDialog>
 #include <QMainWindow>
-#include <QStackedWidget>
-#include <QTextBrowser>
-#include <QTimer>
+#include <QMap>
 #include <QMenuBar>
 #include <QMessageBox>
-#include <QFileDialog>
-#include <QTime>
-#include <QPointer>
-#include <QColorDialog>
-#include <QSignalMapper>
-#include <QMap>
-#include <QSplitter>
-#include <QToolBar>
-#include <QMutex>
-#include <QDragEnterEvent>
 #include <QMimeData>
-#include "tab.h"
-#include "highlighter.h"
-#include "debugger.h"
-#include "finddialog.h"
-#include "ruqtextedit.h"
-#include "getstartedwidget.h"
-#include "ui_settings.h"
-#include "debugtablewidget.h"
-#include "debuganycommandwidget.h"
+#include <QMutex>
+#include <QPointer>
+#include <QSignalMapper>
+#include <QSplitter>
+#include <QStackedWidget>
+#include <QTextBrowser>
+#include <QTime>
+#include <QTimer>
+#include <QToolBar>
+
 #include "assembler.h"
-#include "nasm.h"
-#include "gas.h"
 #include "common.h"
+#include "debuganycommandwidget.h"
+#include "debugger.h"
+#include "debugtablewidget.h"
 #include "fasm.h"
-#include "signallocker.h"
+#include "finddialog.h"
+#include "gas.h"
+#include "getstartedwidget.h"
+#include "highlighter.h"
 #include "masm.h"
+#include "nasm.h"
+#include "ruqtextedit.h"
+#include "signallocker.h"
+#include "tab.h"
+#include "ui_settings.h"
 
 #define SASM_VERSION "3.12.1"
 
@@ -82,230 +83,240 @@
  * Defines the main user interface.
  */
 
-/*! \brief The MainWindow class defines the actions and behavior of the main user interface.
+/*! \brief The MainWindow class defines the actions and behavior of the main user
+ * interface.
  *
  */
 
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
-    
-public:
-    MainWindow(const QStringList & args, QWidget *parent = 0);
-    ~MainWindow();
+class MainWindow : public QMainWindow {
+  Q_OBJECT
 
-    void initUi();
-    void createMenus();
-    void createActions();
-    void createButtons();
-    void createToolBars();
-    void writeSettings();
-    void setupEditor(int i);
-    bool okToContinue(int index = -1);
-    void setTabPath(const QString &filePath, int index = -1);
-    bool removeDirRecuresively(const QString &dirName);
+ public:
+  MainWindow(const QStringList& args, QWidget* parent = 0);
+  ~MainWindow();
 
-private:
-    //ui
-    GetStartedWidget *getStartedWidget;
-    QStackedWidget *mainWidget;
-    QSplitter *splitter;
-    QVBoxLayout *workLayout;
-    QWidget *workWidget;
-    RuQTextEdit *compilerOut;
-    QTabWidget *tabs;
+  void initUi();
+  void createMenus();
+  void createActions();
+  void createButtons();
+  void createToolBars();
+  void writeSettings();
+  void setupEditor(int i);
+  bool okToContinue(int index = -1);
+  void setTabPath(const QString& filePath, int index = -1);
+  bool removeDirRecuresively(const QString& dirName);
 
-    //! Menus and Actions
-    QMenu *fileMenu;
-    QMenu *editMenu;
-    QMenu *debugMenu;
-    QMenu *buildMenu;
-    QMenu *settingsMenu;
-    QMenu *helpMenu;
-    QAction *newAction;
-    QAction *openAction;
-    QAction *closeAction;
-    QAction *saveAction;
-    QAction *saveAsAction;
-    QAction *saveExeAction;
-    QAction *exitAction;
-    QAction *findAction;
-    QAction *commentAction;
-    QAction *uncommentAction;
-    QAction *undoAction;
-    QAction *redoAction;
-    QAction *cutAction;
-    QAction *copyAction;
-    QAction *pasteAction;
-    QAction *deleteAction;
-    QAction *selectAllAction;
-    QAction *putTabAction;
-    QAction *deleteTabAction;
-    QAction *buildAction;
-    QAction *runAction;
-    QAction *runExeAction;
-    QAction *stopAction;
-    QAction *debugAction;
-    QAction *debugNextAction;
-    QAction *debugNextNiAction;
-    QAction *debugToggleBreakpointAction;
-    QAction *debugShowRegistersAction;
-    QAction *debugShowMemoryAction;
-    QAction *settingsAction;
-    QAction *helpAction;
-    QAction *aboutAction;
+ private:
+  // ui
+  GetStartedWidget* getStartedWidget;
+  QStackedWidget* mainWidget;
+  QSplitter* splitter;
+  QVBoxLayout* workLayout;
+  QWidget* workWidget;
+  RuQTextEdit* compilerOut;
+  QTabWidget* tabs;
 
-    //! Toolbars
-    QToolBar *fileToolBar;
-    QToolBar *editToolBar;
-    QToolBar *buildToolBar;
-    QToolBar *debugToolBar;
+  //! Menus and Actions
+  QMenu* fileMenu;
+  QMenu* editMenu;
+  QMenu* debugMenu;
+  QMenu* buildMenu;
+  QMenu* settingsMenu;
+  QMenu* helpMenu;
+  QAction* newAction;
+  QAction* openAction;
+  QAction* closeAction;
+  QAction* saveAction;
+  QAction* saveAsAction;
+  QAction* saveExeAction;
+  QAction* exitAction;
+  QAction* findAction;
+  QAction* commentAction;
+  QAction* uncommentAction;
+  QAction* undoAction;
+  QAction* redoAction;
+  QAction* cutAction;
+  QAction* copyAction;
+  QAction* pasteAction;
+  QAction* deleteAction;
+  QAction* selectAllAction;
+  QAction* putTabAction;
+  QAction* deleteTabAction;
+  QAction* buildAction;
+  QAction* runAction;
+  QAction* runExeAction;
+  QAction* stopAction;
+  QAction* debugAction;
+  QAction* debugNextAction;
+  QAction* debugNextNiAction;
+  QAction* debugToggleBreakpointAction;
+  QAction* debugShowRegistersAction;
+  QAction* debugShowMemoryAction;
+  QAction* settingsAction;
+  QAction* helpAction;
+  QAction* aboutAction;
 
-    //! Builder and debugger and all that concern to them
-    QProcess *runProcess;
-    CodeEditor *prevCodeEditor;
-    QTimer *timer;
-    QTime programExecutionTime;
-    Debugger *debugger;
-    bool programIsBuilded;
-    QPointer<DebugTableWidget> registersWindow;
-    QDockWidget *registersDock;
-    QPointer<DebugTableWidget> memoryWindow;
-    QDockWidget *memoryDock;
-    QList<RuQPlainTextEdit::Watch> watches;
-    DebugAnyCommandWidget *debugAnyCommandWidget;
-    bool programStopped;
-    int outputIndex;
-    Assembler *assembler;
-    bool debuggerWasStarted;
-    QString debugKey;
+  //! Toolbars
+  QToolBar* fileToolBar;
+  QToolBar* editToolBar;
+  QToolBar* buildToolBar;
+  QToolBar* debugToolBar;
 
-    //! Highlighters
-    Highlighter *highlighter;
-    Highlighter *settingsHighlighter;
+  //! Builder and debugger and all that concern to them
+  QProcess* runProcess;
+  CodeEditor* prevCodeEditor;
+  QTimer* timer;
+  QTime programExecutionTime;
+  Debugger* debugger;
+  bool programIsBuilded;
+  QPointer<DebugTableWidget> registersWindow;
+  QDockWidget* registersDock;
+  QPointer<DebugTableWidget> memoryWindow;
+  QDockWidget* memoryDock;
+  QList<RuQPlainTextEdit::Watch> watches;
+  DebugAnyCommandWidget* debugAnyCommandWidget;
+  bool programStopped;
+  int outputIndex;
+  Assembler* assembler;
+  bool debuggerWasStarted;
+  QString debugKey;
 
-    //! Search
-    QPointer<FindDialog> findDialog;
-    Qt::CaseSensitivity prevCs;
+  //! Highlighters
+  Highlighter* highlighter;
+  Highlighter* settingsHighlighter;
 
-    //! Settings and Help
-    QPointer<QWidget> settingsWindow;
-    Ui::SettingsWindow settingsUi;
-    QString startText;
-    CodeEditor *settingsStartTextEditor;
-    //!save and open
-    QString saveOpenDirectory;
-    QPointer<QTextBrowser> help;
-    QSignalMapper *colorSignalMapper;
-    QSignalMapper *fontsSignalMapper;
-    QList<QPushButton *> colorButtons;
-    //! According to colorButtons
-    QList<QColor> defaultColors;
-    QMap<QString, QColor> colorsMap;
-    QList<QCheckBox *> fontCheckBoxes;
-    QSettings settings;
-    QString backupAssembler;
-    QString backupMode;
-    QString backupAssemblerOptions;
-    QString backupLinkerOptions;
-    QString backupObjectFileName;
-    bool backupDisableLinking;
-    bool backupCurrentDir;
-    QString backupAssemblerPath;
-    QString backupStartText;
-    QString backupLinkerPath;
+  //! Search
+  QPointer<FindDialog> findDialog;
+  Qt::CaseSensitivity prevCs;
 
-    //! About close
-    bool closeFromCloseAll;
-    void closeEvent(QCloseEvent *e);
+  //! Settings and Help
+  QPointer<QWidget> settingsWindow;
+  Ui::SettingsWindow settingsUi;
+  QString startText;
+  CodeEditor* settingsStartTextEditor;
+  //! save and open
+  QString saveOpenDirectory;
+  QPointer<QTextBrowser> help;
+  QSignalMapper* colorSignalMapper;
+  QSignalMapper* fontsSignalMapper;
+  QList<QPushButton*> colorButtons;
+  //! According to colorButtons
+  QList<QColor> defaultColors;
+  QMap<QString, QColor> colorsMap;
+  QList<QCheckBox*> fontCheckBoxes;
+  QSettings settings;
+  QString backupAssembler;
+  QString backupMode;
+  QString backupAssemblerOptions;
+  QString backupLinkerOptions;
+  QString backupObjectFileName;
+  bool backupDisableLinking;
+  bool backupCurrentDir;
+  QString backupAssemblerPath;
+  QString backupStartText;
+  QString backupLinkerPath;
 
-public slots:
-    //! Actions and Menus
-    void newFile();
-    void openFile();
-    void closeFile();
-    bool saveFile(int index = -1, bool openSaveAs = true);
-    bool saveAsFile(int index = -1);
-    void saveExe();
-    bool closeApp();
-    void refreshEditMenu();
-    void changeCurrentSavedState(bool changed);
-    void openFile(QString path);
+  // Files
+  QString replaceSOURCE;          // $SOURCE$
+  QString replaceLSTOUTPUT;       // $LSTOUTPUT$
+  QString replacePROGRAM;         // $PROGRAM$
+  QString replacePROGRAM_OBJ;     // $PROGRAM.OBJ$
+  QString replaceWORKSPACE_ROOT;  // $WORKSPACE_ROOT$
+  QString outputCOMPILER_ERROR;
+  QString outputLINKER_ERROR;
 
-    //! Build
-    void buildProgram(bool debugMode = false);
-    void runProgram();
-    void runExeProgram();
-    void stopProgram();
-    void testStopOfProgram();
-    void setProgramBuildedFlagToFalse();
-    void changeCurrentTab(int index);
-    void printLog(const QString & message, const QColor &color);
-    void printLogWithTime(const QString & message, const QColor &color);
-    void startCountProgramTime();
+  //! About close
+  bool closeFromCloseAll;
+  void closeEvent(QCloseEvent* e);
 
-    //! Debug
-    void debug();
-    void enableDebugActions();
-    void disableDebugActions(bool start = false);
-    void debugNext();
-    void debugNextNi();
-    void debugExit();
-    void debugToggleBreakpoint();
-    void debugShowRegisters();
-    void debugShowMemory();
-    void debugRunCommand(QString command, bool print);
-    void saveWatches(DebugTableWidget *table);
-    void setShowRegistersToUnchecked();
-    void setShowMemoryToUnchecked();
-    void setShowMemoryToChecked(const RuQPlainTextEdit::Watch &variable);
-    void showAnyCommandWidget();
-    void closeAnyCommandWidget();
-    void printOutput(QString msg, int index = -1);
-    void getOutput();
-    void changeDebugActionToStart();
+ public slots:
+  //! Actions and Menus
+  void newFile();
+  void openFile();
+  void closeFile();
+  bool saveFile(int index = -1, bool openSaveAs = true);
+  bool saveAsFile(int index = -1);
+  void saveExe();
+  bool closeApp();
+  void refreshEditMenu();
+  void changeCurrentSavedState(bool changed);
+  void openFile(QString path);
 
-    //! Search
-    void find();
-    void findNext(const QString &pattern, Qt::CaseSensitivity cs, bool all, bool replace,
-                  const QString &replaceText = 0);
+  //! Build
+  void buildProgram(bool debugMode = false);
+  void runProgram();
+  void runExeProgram();
+  void stopProgram();
+  void testStopOfProgram();
+  void setProgramBuildedFlagToFalse();
+  void changeCurrentTab(int index);
+  void printLog(const QString& message, const QColor& color);
+  void printLogWithTime(const QString& message, const QColor& color);
+  void startCountProgramTime();
 
-    //! Settings
-    void restorePrevSession(bool notNotify = false);
-    void openSettings();
-    void changeMode(bool x86);
-    void changeAssembler();
-    void changeStartText();
-    void saveSettings();
-    void exitSettings();
-    void changeActionsState(int widgetIndex);
-    void resetAllSettings();
-    void pickColor(QWidget *colorButton, bool init = false);
-    void changeHighlightingFont(QWidget *box, bool init = false);
-    void changeHighlightingLineMode(bool mode);
-    void recreateHighlighter();
-    void recreateAssembler(bool start = false);
-    void initAssemblerSettings(bool firstOpening);
-    void backupSettings();
-    void restoreSettingsAndExit();
-    void printMasmInfo();
-    void enableOrDisableLinkingEdit(int disableLinkingCheckboxState);
+  //! Debug
+  void debug();
+  void enableDebugActions();
+  void disableDebugActions(bool start = false);
+  void debugNext();
+  void debugNextNi();
+  void debugExit();
+  void debugToggleBreakpoint();
+  void debugShowRegisters();
+  void debugShowMemory();
+  void debugRunCommand(QString command, bool print);
+  void saveWatches(DebugTableWidget* table);
+  void setShowRegistersToUnchecked();
+  void setShowMemoryToUnchecked();
+  void setShowMemoryToChecked(const RuQPlainTextEdit::Watch& variable);
+  void showAnyCommandWidget();
+  void closeAnyCommandWidget();
+  void printOutput(QString msg, int index = -1);
+  void getOutput();
+  void changeDebugActionToStart();
 
-    //! Closing
-    bool deleteTab(int index, bool saveFileName = false);
-    void closeAllChildWindows();
+  //! Search
+  void find();
+  void findNext(const QString& pattern, Qt::CaseSensitivity cs, bool all, bool replace,
+                const QString& replaceText = 0);
 
-    //! Help and About
-    void openHelp();
-    void openAbout();
+  //! Settings
+  void restorePrevSession(bool notNotify = false);
+  void openSettings();
+  void changeMode(bool x86);
+  void changeAssembler();
+  void changeStartText();
+  void saveSettings();
+  void exitSettings();
+  void changeActionsState(int widgetIndex);
+  void resetAllSettings();
+  void pickColor(QWidget* colorButton, bool init = false);
+  void changeHighlightingFont(QWidget* box, bool init = false);
+  void changeHighlightingLineMode(bool mode);
+  void recreateHighlighter();
+  void recreateAssembler(bool start = false);
+  void initAssemblerSettings(bool firstOpening);
+  void backupSettings();
+  void restoreSettingsAndExit();
+  void printMasmInfo();
+  void enableOrDisableLinkingEdit(int disableLinkingCheckboxState);
+  void enableOrDisableObjectFilenameLabel(int disableCurrentDirCheckboxState);
 
-    //! Single Application message
-    void onMessageReceived(const QString &message);
+  //! Closing
+  bool deleteTab(int index, bool saveFileName = false);
+  void closeAllChildWindows();
 
-protected:
-    void dragEnterEvent(QDragEnterEvent *event);
+  //! Help and About
+  void openHelp();
+  void openAbout();
 
-    void dropEvent(QDropEvent *event);
+  //! Single Application message
+  void onMessageReceived(const QString& message);
+
+ protected:
+  void dragEnterEvent(QDragEnterEvent* event);
+
+  void dropEvent(QDropEvent* event);
 };
 
-#endif // MAINWINDOW_H
+#endif  // MAINWINDOW_H

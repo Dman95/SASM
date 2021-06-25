@@ -41,8 +41,9 @@
 #ifndef FASM_H
 #define FASM_H
 
-#include <QProcess>
 #include <QLinkedList>
+#include <QProcess>
+
 #include "gccbasedassembler.h"
 
 /**
@@ -55,28 +56,26 @@
  *
  */
 
-class FASM : public GccBasedAssembler
-{
-    Q_OBJECT
-public:
-    explicit FASM(bool x86, QObject *parent = 0);
-    QString getAssemblerPath();
-    quint64 getMainOffset(QFile &lstOut, QString entryLabel);
-    void parseLstFile(QFile &lstOut, QVector<Assembler::LineNum> &lines, quint64 offset);
-    void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
-                             QList<QTextCharFormat *> &formats,
-                             bool &multiLineComments,
-                             QRegExp &commentStartExpression,
-                             QRegExp &commentEndExpression);
-    QString getStartText();
-    void putDebugString(CodeEditor *code);
-    QString getAssemblerOptions();
-    QString getListingFilePath(QFile &lstOut);
+class FASM : public GccBasedAssembler {
+  Q_OBJECT
+ public:
+  explicit FASM(bool x86, QObject* parent = 0);
+  QString getAssemblerPath();
+  quint64 getMainOffset(QFile& lstOut, QString entryLabel);
+  void parseLstFile(QFile& lstOut, QString& programFilePath,
+                    QVector<Assembler::LineNum>& lines, quint64 offset);
+  void fillHighligherRules(QVector<Assembler::HighlightingRule>& highlightingRules,
+                           QList<QTextCharFormat*>& formats, bool& multiLineComments,
+                           QRegExp& commentStartExpression,
+                           QRegExp& commentEndExpression);
+  QString getStartText();
+  void putDebugString(CodeEditor* code);
+  QString getAssemblerOptions();
+  QString getListingFilePath(QFile& lstOut);
 
-signals:
+ signals:
 
-public slots:
-
+ public slots:
 };
 
-#endif // FASM_H
+#endif  // FASM_H

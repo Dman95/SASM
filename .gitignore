@@ -1,11 +1,21 @@
+# Ignore files with no extensions
+*
+!*/
+!*.*
+
+# VSCode
+.vscode/
+
 # Qt #
 ######################
 *.pro.user
 *.pro.user.*
 moc_*.cpp
+moc_*.h
 qrc_*.cpp
 Makefile
 *-build-*
+ui_settings.h
 
 # OS generated files #
 ######################
@@ -20,3 +30,6 @@ Thumbs.db
 doc/*
 .qmake.stash
 sasm.app
+
+# Build output
+*.o
