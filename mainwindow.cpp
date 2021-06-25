@@ -12,7 +12,7 @@
 ** (at your option) any later version.
 **
 ** SASM is distributed in the hope that it will be useful,
-** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** but WITHOUT ANY WARRANTY; without even the implieddwarranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
 **
@@ -1058,19 +1058,34 @@ void MainWindow::runProgram()
     runProcess->setStandardInputFile(input);
     
     // start display
-    #ifdef Q_OS_WIN32
-    #else
     if (!displayWindow) {
         displayWindow = new DisplayWindow;
         displayWindow->setWindowIcon(QIcon(":images/mainIcon.png"));
         displayWindow->setWindowFlags(Qt::Widget | Qt::MSWindowsFixedSizeDialogHint);
         displayWindow->activateWindow();
     }
-    if (settings.value("display", false).toBool())
-        displayWindow->show();
+    if (settings.value("display", false).toBool()){
+		displayWindow->show();
+	}
+	#ifdef Q_OS_WIN32
+	// --- TODO ---
+	HANDLE hCreateNamedPipe = CreateNamedPipe(
+			TEXT("\\\\.\\pipe\\sasmpipe"),
+			PIPE_ACCESS_INBOUND,
+			PIPE_TYPE_BYTE|PIPE_READMODE_MESSAGE|PIPE_WAIT,
+			PIPE_UNLIMITED_INSTANCES,
+			8184,
+			8184,
+			0,
+			NULL);
+	if(hCreateNamedPipe == INVALID_HANDLE_VALUE){
+		printLog(QString("Couldnt create Pipe\n"), Qt::red);
+	}
+	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, -1, hCreateNamedPipe);
+    #else
     key_t key = ftok("/tmp", 65);
     msgid = msgget(key, 0666 | IPC_CREAT);
-    consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid);
+    consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid, nullptr);
     #endif
     
     //! Run program in code directory if it exists
@@ -1223,28 +1238,39 @@ void MainWindow::debug()
         QString inputPath = Common::pathInTemp("input.txt");
         inputPath.replace("\\", "/");
       
-      	// start display Linux
-      	#ifdef Q_OS_WIN32
-	#else
-	if (!displayWindow) {
+      	// start display
+		if (!displayWindow) {
            displayWindow = new DisplayWindow;
            displayWindow->setWindowIcon(QIcon(":images/mainIcon.png"));
-           //displayWindow->setFixedSize(500,525);
-           //displayWindow->setFixedSize(600,625);
            displayWindow->setWindowFlags(Qt::Widget | Qt::MSWindowsFixedSizeDialogHint);
            displayWindow->activateWindow();
-           //displaywdg->setParent(this);
         }
         if (settings.value("display", false).toBool())
             displayWindow->show();
-      	key_t key = ftok("/tmp", 65); //returned -1
+		#ifdef Q_OS_WIN32
+		HANDLE hCreateNamedPipe = CreateNamedPipe(
+			L"\\\\.\\pipe\\sasmpipe",
+			PIPE_ACCESS_INBOUND,
+			PIPE_TYPE_MESSAGE|PIPE_READMODE_MESSAGE|PIPE_WAIT,
+			PIPE_UNLIMITED_INSTANCES,
+			8184,
+			8184,
+			0,
+			NULL);
+		if(hCreateNamedPipe == INVALID_HANDLE_VALUE){
+			printLog(QString("Couldnt create Pipe"+QString::number(GetLastError()))+"\n", Qt::red);
+		}
+		consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, -1, hCreateNamedPipe);
+		#else
+      	key_t key = ftok("/tmp", 65);
     	msgid = msgget(key, 0666 | IPC_CREAT);
-    	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid);
+    	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid, nullptr);
     	#endif
       
         debugger = new Debugger(compilerOut, exePath, workingDirectoryPath, inputPath, assembler, 0, settings.value("sasmverbose", false).toBool(), settings.value("mi", false).toBool());
 	// connect print signals for output in Debugger
         connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
+		connect(displayWindow, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor))); // remove
         connect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
         connect(debugger, SIGNAL(highlightLine(int)), code, SLOT(updateDebugLine(int)));
         connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);

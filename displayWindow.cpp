@@ -65,15 +65,13 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
     this->setFixedSize(500,525);
 }
 
-void DisplayWindow::changeDisplay(int msgid){
+void DisplayWindow::changeDisplay(int msgid, HANDLE hCreateNamedPipe){
     this->setFixedSize(537,562);
     displayPicture  = new QImage(512, 512, QImage::Format_RGB32);
     displayPicture->fill(qRgb(255, 255, 255));
     displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
     buffer.resize(512*512);
     memset(buffer.data(), 0xff, 512*512);
-    #ifdef Q_OS_WIN32
-    #else
     this->msgid = msgid;
     res_x = 512;
     res_y = 512;
@@ -84,7 +82,67 @@ void DisplayWindow::changeDisplay(int msgid){
     displayPicture->fill(qRgb(0, 0, 0));
     displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
     programExecutionTime.start();
-    while(1){
+    #ifdef Q_OS_WIN32
+	if(!ConnectNamedPipe(hCreateNamedPipe, NULL))
+		emit printLog(QString("Connection Failed with Error (")+QString::number(GetLastError())+")\n", Qt::red);
+	while(1){
+		DWORD dwNoBytesRead;
+		BOOL readSuccess = ReadFile(
+				hCreateNamedPipe,
+				message.mesg_text,
+				8184,
+				&dwNoBytesRead,
+				NULL);
+		if(!readSuccess){
+			if(GetLastError()!=109)
+				emit printLog(QString("Read Failed with Error (")+QString::number(GetLastError())+")\n", Qt::red);
+			break;
+		}
+		if(message.mesg_text[0]==3){
+			res_x = message.mesg_text[1];
+     	    res_y = message.mesg_text[5];
+    	    for(int i = 1; i < 4; i++){
+    	        res_x += message.mesg_text[1+i] << (8*i);
+     	        res_y += message.mesg_text[5+i]  << (8*i);
+     	    }
+     	    mode = message.mesg_text[9];
+     	    fps = message.mesg_text[10];
+     	    if(mode)
+     	        buffer.resize(res_x*res_y*3);
+     	    else
+     	        buffer.resize(res_x*res_y);
+     	    displayPicture  = new QImage(res_x*zoom, res_y*zoom, QImage::Format_RGB32);
+    	    displayPicture->fill(qRgb(0, 0, 0));
+    	    displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
+    	    this->setFixedSize(displayPicture->size()+QSize(25,50));
+    	    continue;
+		}
+		// display the message and print on display
+    	int needed_bytes = (mode) ? res_x*res_y*3 : res_x*res_y;
+    	for(int i = 0; i < needed_bytes; i+=8184){
+			dwNoBytesRead = 0;
+			BOOL readSuccess = ReadFile(
+				hCreateNamedPipe,
+				message.mesg_text,
+				8184,
+				&dwNoBytesRead,
+				NULL);
+			if(!readSuccess){
+				emit printLog(QString("Read Failed with Error (")+QString::number(GetLastError())+")\n", Qt::red);
+				break;
+			}
+    	    memcpy(buffer.data()+i, &message.mesg_text[0], std::min(8184, needed_bytes-i));
+    	}
+    	updateDisplay();
+		qint64 elapsed_time = programExecutionTime.elapsed();
+    	if(elapsed_time < 1000/fps)
+    	    usleep(1000/fps - elapsed_time);
+        displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
+        programExecutionTime.start();
+    }
+	CloseHandle(hCreateNamedPipe);
+	#else
+	while(1){
     	// msgrcv to receive message
     	msgrcv(msgid, &message, sizeof(message), 0, 0);
 
@@ -118,19 +176,46 @@ void DisplayWindow::changeDisplay(int msgid){
     	    memcpy(buffer.data()+i, &message.mesg_text[0], std::min(8184, needed_bytes-i));
     	}
     	updateDisplay();
-   	qint64 elapsed_time = programExecutionTime.elapsed();
+		qint64 elapsed_time = programExecutionTime.elapsed();
     	if(elapsed_time < 1000/fps)
     	    usleep(1000/fps - elapsed_time);
         displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
         programExecutionTime.start();
     }
     msgctl(msgid, IPC_RMID, NULL);
+	#endif
     emit closeDisplay();
-    #endif
 }
 
 void DisplayWindow::finish(int msgid){
     #ifdef Q_OS_WIN32
+	/*char c[8184];
+	c[0] = 2;
+	HANDLE hFile = CreateFileW(
+            L"\\\\.\\pipe\\SASMPIPE",
+			GENERIC_WRITE,
+			FILE_SHARE_READ | FILE_SHARE_WRITE,
+			NULL,
+			OPEN_EXISTING,
+			0,
+			NULL);
+	if(hFile == INVALID_HANDLE_VALUE){
+		emit printLog(QString("Could not create file object (")+QString::number(GetLastError())+")\n", Qt::red);
+		return;
+	}
+	DWORD dwNoBytesWrote = 0;
+	BOOL writeSuccess = WriteFile(
+			hFile,
+			c,
+			sizeof(c),
+			&dwNoBytesWrote,
+			NULL);
+	if(!writeSuccess){
+		emit printLog(QString("Could not write to file (")+QString::number(GetLastError())+")\n", Qt::red);
+	}
+	if(!FlushFileBuffers(hFile)){
+		emit printLog(QString("Could not flush the file (")+QString::number(GetLastError())+")\n", Qt::red);
+	}*/
     #else
     mesg_buffer end;
     end.mesg_type = 2;

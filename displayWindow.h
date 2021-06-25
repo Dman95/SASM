@@ -52,10 +52,14 @@
 #include <unistd.h>
 #include <vector>
 #ifdef Q_OS_WIN32
+#include <windows.h>
+#include <conio.h>
+#include <tchar.h>
 #else
 #include <sys/ipc.h>
 #include <sys/msg.h>
 #endif
+#define BUF_SIZE 256
 
 class DisplayWindow : public QWidget
 {
@@ -63,12 +67,12 @@ class DisplayWindow : public QWidget
 public:
     struct mesg_buffer {
     long mesg_type;
-    uint8_t mesg_text[8184];
+    char mesg_text[8184];
     } message;
     
     explicit DisplayWindow(QWidget *parent = 0);
     ~DisplayWindow();
-    void changeDisplay(int msgid);
+    void changeDisplay(int msgid, HANDLE hCreateNamedPipe);
     void finish(int msgid);
     void updateDisplay();
 
@@ -94,6 +98,7 @@ signals:
     void displayChanged(void);
     void closeSignal();
     void closeDisplay();
+	void printLog(QString msg, QColor color = QColor(Qt::black));
 };
 
 #endif

@@ -80,6 +80,7 @@
 #include "displayWindow.h"
 #include <unistd.h>
 #ifdef Q_OS_WIN32
+#include <Windows.h>
 #else
 #include <sys/ipc.h>
 #include <sys/msg.h>
