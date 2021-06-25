@@ -52,26 +52,24 @@
  *
  */
 
-class GAS : public GccBasedAssembler
-{
-    Q_OBJECT
-public:
-    explicit GAS(bool x86, QObject *parent = 0);
-    QString getAssemblerPath();
-    quint64 getMainOffset(QFile &lst, QString entryLabel);
-    void parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 offset);
-    void fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightingRules,
-                             QList<QTextCharFormat *> &formats,
-                             bool &multiLineComments,
-                             QRegExp &commentStartExpression,
-                             QRegExp &commentEndExpression);
-    QString getStartText();
-    void putDebugString(CodeEditor *code);
-    QString getAssemblerOptions();   
-signals:
-    
-public slots:
-    
+class GAS : public GccBasedAssembler {
+  Q_OBJECT
+ public:
+  explicit GAS(bool x86, QObject* parent = 0);
+  QString getAssemblerPath();
+  quint64 getMainOffset(QFile& lst, QString entryLabel);
+  void parseLstFile(QFile& lst, QString& programFilePath,
+                    QVector<Assembler::LineNum>& lines, quint64 offset);
+  void fillHighligherRules(QVector<Assembler::HighlightingRule>& highlightingRules,
+                           QList<QTextCharFormat*>& formats, bool& multiLineComments,
+                           QRegExp& commentStartExpression,
+                           QRegExp& commentEndExpression);
+  QString getStartText();
+  void putDebugString(CodeEditor* code);
+  QString getAssemblerOptions();
+ signals:
+
+ public slots:
 };
 
-#endif // GAS_H
+#endif  // GAS_H
