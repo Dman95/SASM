@@ -54,22 +54,15 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
     zoomComboBox->insertItems(0, comboBoxList);
     connect(zoomComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(zoomSettingsChanged(int)));
     displayImageLabel = new QLabel("");
-    displayPicture  = new QImage(537, 562, QImage::Format_RGB32);
-    displayPicture->fill(qRgb(255, 255, 255));
-    displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
 
     layout->addWidget(displayImageLabel, Qt::AlignTop);
 
     setLayout(layout); 
-    this->resize(displayPicture->size());
     this->setFixedSize(500,525);
 }
 
 void DisplayWindow::changeDisplay(int msgid, HANDLE hCreateNamedPipe){
-    this->setFixedSize(537,562);
     displayPicture  = new QImage(512, 512, QImage::Format_RGB32);
-    displayPicture->fill(qRgb(255, 255, 255));
-    displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
     buffer.resize(512*512);
     memset(buffer.data(), 0xff, 512*512);
     this->msgid = msgid;
@@ -78,9 +71,9 @@ void DisplayWindow::changeDisplay(int msgid, HANDLE hCreateNamedPipe){
     mode = 0;
     qint64 fps = 30;
     QElapsedTimer programExecutionTime;
-    memset(&message.mesg_text[0], 0xff, sizeof(message.mesg_text));
-    displayPicture->fill(qRgb(0, 0, 0));
-    displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
+    displayPicture->fill(qRgb(255, 255, 255));
+	this->setFixedSize(QSize(512*zoom+25, 512*zoom+75));
+	displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(512*zoom,512*zoom)));
     programExecutionTime.start();
     #ifdef Q_OS_WIN32
 	if(!ConnectNamedPipe(hCreateNamedPipe, NULL))
@@ -111,10 +104,10 @@ void DisplayWindow::changeDisplay(int msgid, HANDLE hCreateNamedPipe){
      	        buffer.resize(res_x*res_y*3);
      	    else
      	        buffer.resize(res_x*res_y);
-     	    displayPicture  = new QImage(res_x*zoom, res_y*zoom, QImage::Format_RGB32);
-    	    displayPicture->fill(qRgb(0, 0, 0));
-    	    displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
-    	    this->setFixedSize(displayPicture->size()+QSize(25,50));
+     	    displayPicture  = new QImage(res_x, res_y, QImage::Format_RGB32);
+    	    displayPicture->fill(qRgb(255, 255, 255));
+			this->setFixedSize(QSize(res_x*zoom+25, res_y*zoom+75));
+    	    displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
     	    continue;
 		}
 		// display the message and print on display
@@ -137,7 +130,7 @@ void DisplayWindow::changeDisplay(int msgid, HANDLE hCreateNamedPipe){
 		qint64 elapsed_time = programExecutionTime.elapsed();
     	if(elapsed_time < 1000/fps)
     	    usleep(1000/fps - elapsed_time);
-        displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
+        displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
         programExecutionTime.start();
     }
 	CloseHandle(hCreateNamedPipe);
@@ -162,10 +155,10 @@ void DisplayWindow::changeDisplay(int msgid, HANDLE hCreateNamedPipe){
      	        buffer.resize(res_x*res_y*3);
      	    else
      	        buffer.resize(res_x*res_y);
-     	    displayPicture  = new QImage(res_x*zoom, res_y*zoom, QImage::Format_RGB32);
+     	    displayPicture  = new QImage(res_x, res_y, QImage::Format_RGB32);
     	    displayPicture->fill(qRgb(0, 0, 0));
-    	    displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
-    	    this->setFixedSize(displayPicture->size()+QSize(25,50));
+    	    displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
+    	    this->setFixedSize(QSize(res_x*zoom+25, res_x*zoom+75));
     	    continue;
     	}
     	// display the message and print on display
@@ -179,7 +172,7 @@ void DisplayWindow::changeDisplay(int msgid, HANDLE hCreateNamedPipe){
 		qint64 elapsed_time = programExecutionTime.elapsed();
     	if(elapsed_time < 1000/fps)
     	    usleep(1000/fps - elapsed_time);
-        displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
+        displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
         programExecutionTime.start();
     }
     msgctl(msgid, IPC_RMID, NULL);
@@ -188,6 +181,7 @@ void DisplayWindow::changeDisplay(int msgid, HANDLE hCreateNamedPipe){
 }
 
 void DisplayWindow::finish(int msgid){
+	this->msgid = msgid;
     #ifdef Q_OS_WIN32
 	/*char c[8184];
 	c[0] = 2;
@@ -226,12 +220,9 @@ void DisplayWindow::finish(int msgid){
 
 void DisplayWindow::zoomSettingsChanged(int value){
     zoom = std::pow(2, value);
-    displayPicture  = new QImage(res_x*zoom, res_y*zoom, QImage::Format_RGB32);
-    this->setFixedSize(displayPicture->size()+QSize(25,50));
-    displayPicture->fill(qRgb(0, 0, 0));
-    displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
     updateDisplay();
-    displayImageLabel->setPixmap(QPixmap::fromImage(*displayPicture));
+	this->setFixedSize(QSize(res_x*zoom+25, res_y*zoom+75));
+    displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom, res_y*zoom)));
 }
 
 void DisplayWindow::updateDisplay() {
@@ -241,27 +232,18 @@ void DisplayWindow::updateDisplay() {
     int needed_pixel = (mode) ? res_x*res_y*3 : res_x*res_y;
     if (mode){
        for(int l = 0; l < needed_pixel; l+=3) {
-            currentcharx = ((l/3)%res_x)*zoom;
-            currentchary = (l/3/res_x)*zoom;
-            for(int j = 0; j < zoom; j++){
-             for(int k = 0; k < zoom; k++){
-                displayPicture->setPixel(currentcharx+j, currentchary+k, qRgb(buffer[l], buffer[l+1], buffer[l+2]));
-            }}
+            currentcharx = (l/3)%res_x;
+            currentchary = l/3/res_x;
+            displayPicture->setPixel(currentcharx, currentchary, qRgb(buffer[l], buffer[l+1], buffer[l+2]));
        }
     } else {
         for(int l = 0; l < needed_pixel; l++){
-            currentcharx = (l%res_x)*zoom;
-            currentchary = (l/res_x)*zoom;
+            currentcharx = l%res_x;
+            currentchary = l/res_x;
             if(buffer[l]) {
-               for(int j = 0; j < zoom; j++){
-                for(int k = 0; k < zoom; k++){
-                    displayPicture->setPixel(currentcharx+j, currentchary+k, qRgb(255, 255, 255));
-                }}
+                displayPicture->setPixel(currentcharx, currentchary, qRgb(255, 255, 255));
             } else {
-                for(int j = 0; j < zoom; j++){
-                 for(int k = 0; k < zoom; k++){
-                    displayPicture->setPixel(currentcharx+j, currentchary+k, qRgb(0, 0, 0));
-                }}
+                displayPicture->setPixel(currentcharx, currentchary, qRgb(0, 0, 0));
             }
         }
     }

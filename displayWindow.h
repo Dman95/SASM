@@ -44,6 +44,7 @@
 #include <QWidget>
 #include <QtGui>
 #include <QLabel>
+#include <QPainter>
 #include <QVBoxLayout>
 #include <QComboBox>
 #include <QElapsedTimer>
@@ -67,7 +68,7 @@ class DisplayWindow : public QWidget
 public:
     struct mesg_buffer {
     long mesg_type;
-    char mesg_text[8184];
+    uint8_t mesg_text[8184];
     } message;
     
     explicit DisplayWindow(QWidget *parent = 0);

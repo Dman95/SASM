@@ -1070,16 +1070,16 @@ void MainWindow::runProgram()
 	#ifdef Q_OS_WIN32
 	// --- TODO ---
 	HANDLE hCreateNamedPipe = CreateNamedPipe(
-			TEXT("\\\\.\\pipe\\sasmpipe"),
+			L"\\\\.\\pipe\\sasmpipe",
 			PIPE_ACCESS_INBOUND,
-			PIPE_TYPE_BYTE|PIPE_READMODE_MESSAGE|PIPE_WAIT,
+			PIPE_TYPE_MESSAGE|PIPE_READMODE_MESSAGE|PIPE_WAIT,
 			PIPE_UNLIMITED_INSTANCES,
 			8184,
 			8184,
 			0,
 			NULL);
 	if(hCreateNamedPipe == INVALID_HANDLE_VALUE){
-		printLog(QString("Couldnt create Pipe\n"), Qt::red);
+		printLog(QString("Couldnt create Pipe"+QString::number(GetLastError()))+"\n", Qt::red);
 	}
 	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, -1, hCreateNamedPipe);
     #else
