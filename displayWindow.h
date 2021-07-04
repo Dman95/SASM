@@ -46,7 +46,9 @@
 #include <QLabel>
 #include <QPainter>
 #include <QVBoxLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QComboBox>
+#include <QtWidgets/QScrollArea>
 #include <QElapsedTimer>
 #include <stdio.h>
 #include <iostream>
@@ -81,10 +83,13 @@ protected:
     void closeEvent(QCloseEvent *);
 
 private:
-    QVBoxLayout  *layout;
+    QVBoxLayout  *verticalLayout;
+    QHBoxLayout *horizontalLayout;
     QImage* displayPicture;
     QLabel* displayImageLabel;
     QComboBox *zoomComboBox;
+	QScrollArea *scrollArea;
+    QWidget *scrollAreaWidgetContents;
     std::vector<uint8_t> buffer;
     int zoom;
     int msgid;

@@ -44,35 +44,47 @@
 DisplayWindow::DisplayWindow(QWidget *parent) :
     QWidget(parent)
 {
+	zoom = 1;
+	this->setFixedSize(QSize(512+50, 512+125));
     this->setStyleSheet("background-color:grey;");
-    layout = new QVBoxLayout(this);
-    zoom = 1;
-    zoomComboBox = new QComboBox;
-    layout->addWidget(zoomComboBox);
+    verticalLayout = new QVBoxLayout(this);
+    zoomComboBox = new QComboBox(this);
     QStringList comboBoxList;
-    comboBoxList << "1" << "2" << "4" << "8" << "16" << "32";
-    zoomComboBox->insertItems(0, comboBoxList);
-    connect(zoomComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(zoomSettingsChanged(int)));
-    displayImageLabel = new QLabel("");
+	comboBoxList << "1" << "2" << "4" << "8" << "16" << "32";
+	zoomComboBox->insertItems(0, comboBoxList);
+	connect(zoomComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(zoomSettingsChanged(int)));
 
-    layout->addWidget(displayImageLabel, Qt::AlignTop);
+    verticalLayout->addWidget(zoomComboBox);
 
-    setLayout(layout); 
-    this->setFixedSize(500,525);
+    scrollArea = new QScrollArea(this);
+    scrollArea->setWidgetResizable(true);
+    scrollAreaWidgetContents = new QWidget();
+    //scrollAreaWidgetContents->setGeometry(QRect(0, 0, 1218, 1218));
+    horizontalLayout = new QHBoxLayout(scrollAreaWidgetContents);
+    displayImageLabel = new QLabel(scrollAreaWidgetContents);
+    displayImageLabel->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 85, 127);"));
+	displayImageLabel->setMinimumSize(QSize(150, 150));
+
+    horizontalLayout->addWidget(displayImageLabel);
+
+    scrollArea->setWidget(scrollAreaWidgetContents);
+
+    verticalLayout->addWidget(scrollArea);
 }
 
 void DisplayWindow::changeDisplay(int msgid, HANDLE hCreateNamedPipe){
     displayPicture  = new QImage(512, 512, QImage::Format_RGB32);
+	displayPicture->fill(qRgb(255, 255, 255));
     buffer.resize(512*512);
     memset(buffer.data(), 0xff, 512*512);
+	scrollAreaWidgetContents->setFixedSize(512*zoom+26, 512*zoom+26);
     this->msgid = msgid;
     res_x = 512;
     res_y = 512;
     mode = 0;
     qint64 fps = 30;
     QElapsedTimer programExecutionTime;
-    displayPicture->fill(qRgb(255, 255, 255));
-	this->setFixedSize(QSize(512*zoom+25, 512*zoom+75));
+	this->setFixedSize(QSize(512+60, 512+92));
 	displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(512*zoom,512*zoom)));
     programExecutionTime.start();
     #ifdef Q_OS_WIN32
@@ -106,7 +118,8 @@ void DisplayWindow::changeDisplay(int msgid, HANDLE hCreateNamedPipe){
      	        buffer.resize(res_x*res_y);
      	    displayPicture  = new QImage(res_x, res_y, QImage::Format_RGB32);
     	    displayPicture->fill(qRgb(255, 255, 255));
-			this->setFixedSize(QSize(res_x*zoom+25, res_y*zoom+75));
+			scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
+			this->setFixedSize(QSize(res_x+60, res_y+92));
     	    displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
     	    continue;
 		}
@@ -158,7 +171,7 @@ void DisplayWindow::changeDisplay(int msgid, HANDLE hCreateNamedPipe){
      	    displayPicture  = new QImage(res_x, res_y, QImage::Format_RGB32);
     	    displayPicture->fill(qRgb(0, 0, 0));
     	    displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
-    	    this->setFixedSize(QSize(res_x*zoom+25, res_x*zoom+75));
+    	    this->setFixedSize(QSize(res_x+60, res_y+92));
     	    continue;
     	}
     	// display the message and print on display
@@ -221,7 +234,8 @@ void DisplayWindow::finish(int msgid){
 void DisplayWindow::zoomSettingsChanged(int value){
     zoom = std::pow(2, value);
     updateDisplay();
-	this->setFixedSize(QSize(res_x*zoom+25, res_y*zoom+75));
+	scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
+	this->setFixedSize(QSize(res_x+60, res_y+92));
     displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom, res_y*zoom)));
 }
 
@@ -240,7 +254,7 @@ void DisplayWindow::updateDisplay() {
         for(int l = 0; l < needed_pixel; l++){
             currentcharx = l%res_x;
             currentchary = l/res_x;
-            if(buffer[l]) {
+            if(buffer[l]){
                 displayPicture->setPixel(currentcharx, currentchary, qRgb(255, 255, 255));
             } else {
                 displayPicture->setPixel(currentcharx, currentchary, qRgb(0, 0, 0));

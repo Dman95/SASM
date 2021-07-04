@@ -2517,4 +2517,9 @@ MainWindow::~MainWindow()
 {
     //! Delete all temporary files
     removeDirRecuresively(Common::pathInTemp(QString()));
+	// close display
+	if(displayWindow){
+		displayWindow->close();
+		delete displayWindow;
+	}
 }
