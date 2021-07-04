@@ -1081,7 +1081,8 @@ void MainWindow::runProgram()
 	if(hCreateNamedPipe == INVALID_HANDLE_VALUE){
 		printLog(QString("Couldnt create Pipe"+QString::number(GetLastError()))+"\n", Qt::red);
 	}
-	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, -1, hCreateNamedPipe);
+	displayWindow->hCreateNamedPipe = hCreateNamedPipe;
+	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, -1);
     #else
     key_t key = ftok("/tmp", 65);
     msgid = msgget(key, 0666 | IPC_CREAT);
@@ -1260,7 +1261,8 @@ void MainWindow::debug()
 		if(hCreateNamedPipe == INVALID_HANDLE_VALUE){
 			printLog(QString("Couldnt create Pipe"+QString::number(GetLastError()))+"\n", Qt::red);
 		}
-		consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, -1, hCreateNamedPipe);
+		displayWindow->hCreateNamedPipe = hCreateNamedPipe;
+		consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, -1);
 		#else
       	key_t key = ftok("/tmp", 65);
     	msgid = msgget(key, 0666 | IPC_CREAT);

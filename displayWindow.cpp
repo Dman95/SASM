@@ -72,7 +72,7 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
     verticalLayout->addWidget(scrollArea);
 }
 
-void DisplayWindow::changeDisplay(int msgid, HANDLE hCreateNamedPipe){
+void DisplayWindow::changeDisplay(int msgid){
     displayPicture  = new QImage(512, 512, QImage::Format_RGB32);
 	displayPicture->fill(qRgb(255, 255, 255));
     buffer.resize(512*512);

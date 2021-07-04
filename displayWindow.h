@@ -75,9 +75,12 @@ public:
     
     explicit DisplayWindow(QWidget *parent = 0);
     ~DisplayWindow();
-    void changeDisplay(int msgid, HANDLE hCreateNamedPipe);
+    void changeDisplay(int msgid);
     void finish(int msgid);
     void updateDisplay();
+	#ifdef Q_OS_WIN32
+	HANDLE hCreateNamedPipe;
+	#endif
 
 protected:
     void closeEvent(QCloseEvent *);
