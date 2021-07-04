@@ -1086,7 +1086,7 @@ void MainWindow::runProgram()
     #else
     key_t key = ftok("/tmp", 65);
     msgid = msgget(key, 0666 | IPC_CREAT);
-    consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid, nullptr);
+    consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid);
     #endif
     
     //! Run program in code directory if it exists
@@ -1266,7 +1266,7 @@ void MainWindow::debug()
 		#else
       	key_t key = ftok("/tmp", 65);
     	msgid = msgget(key, 0666 | IPC_CREAT);
-    	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid, nullptr);
+    	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid);
     	#endif
       
         debugger = new Debugger(compilerOut, exePath, workingDirectoryPath, inputPath, assembler, 0, settings.value("sasmverbose", false).toBool(), settings.value("mi", false).toBool());
