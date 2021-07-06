@@ -65,7 +65,7 @@ CEXTERN update
     push ecx
     push edx
     ALIGN_STACK 4
-	push %1
+    push %1
     call update
     UNALIGN_STACK
     pop edx
@@ -81,10 +81,10 @@ CEXTERN setup
     push ecx
     push edx
     ALIGN_STACK 16
-	push %4
-	push %3
-	push %2
-	push %1
+    push %4
+    push %3
+    push %2
+    push %1
     call setup
     UNALIGN_STACK
     pop edx

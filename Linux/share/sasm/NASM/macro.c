@@ -56,7 +56,7 @@ void update(char* data){
    for(int j = 0; j < needed_bytes; j+=8184){
       for(int i = 0; i < min(8184, needed_bytes-j); i++)
          message.mesg_text[i] = data[i+j];
-      msgsnd(msgid_snd, &message, sizeof(message), 0);
+      //msgsnd(msgid_snd, &message, sizeof(message), 0);
    }
 }
 

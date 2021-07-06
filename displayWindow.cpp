@@ -150,7 +150,8 @@ void DisplayWindow::changeDisplay(int msgid){
 	#else
 	while(1){
     	// msgrcv to receive message
-    	msgrcv(msgid, &message, sizeof(message), 0, 0);
+    	size_t t = msgrcv(msgid, &message, sizeof(message), 0, 0);
+    	emit printLog("t: "+QString::number(t)+" type: "+QString::number(message.mesg_type)+"\n");
 
     	if (message.mesg_type == 2){  // type = 1 (default) -> normal message | -> 2 finish | -> 3 setup
     	    break;
@@ -169,9 +170,10 @@ void DisplayWindow::changeDisplay(int msgid){
      	    else
      	        buffer.resize(res_x*res_y);
      	    displayPicture  = new QImage(res_x, res_y, QImage::Format_RGB32);
-    	    displayPicture->fill(qRgb(0, 0, 0));
+    	    displayPicture->fill(qRgb(255, 255, 255));
+    	    scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
+	    this->setFixedSize(QSize(res_x+60, res_y+92));
     	    displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
-    	    this->setFixedSize(QSize(res_x+60, res_y+92));
     	    continue;
     	}
     	// display the message and print on display
@@ -182,7 +184,7 @@ void DisplayWindow::changeDisplay(int msgid){
     	    memcpy(buffer.data()+i, &message.mesg_text[0], std::min(8184, needed_bytes-i));
     	}
     	updateDisplay();
-		qint64 elapsed_time = programExecutionTime.elapsed();
+	qint64 elapsed_time = programExecutionTime.elapsed();
     	if(elapsed_time < 1000/fps)
     	    usleep(1000/fps - elapsed_time);
         displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
@@ -194,35 +196,8 @@ void DisplayWindow::changeDisplay(int msgid){
 }
 
 void DisplayWindow::finish(int msgid){
-	this->msgid = msgid;
+    this->msgid = msgid;
     #ifdef Q_OS_WIN32
-	/*char c[8184];
-	c[0] = 2;
-	HANDLE hFile = CreateFileW(
-            L"\\\\.\\pipe\\SASMPIPE",
-			GENERIC_WRITE,
-			FILE_SHARE_READ | FILE_SHARE_WRITE,
-			NULL,
-			OPEN_EXISTING,
-			0,
-			NULL);
-	if(hFile == INVALID_HANDLE_VALUE){
-		emit printLog(QString("Could not create file object (")+QString::number(GetLastError())+")\n", Qt::red);
-		return;
-	}
-	DWORD dwNoBytesWrote = 0;
-	BOOL writeSuccess = WriteFile(
-			hFile,
-			c,
-			sizeof(c),
-			&dwNoBytesWrote,
-			NULL);
-	if(!writeSuccess){
-		emit printLog(QString("Could not write to file (")+QString::number(GetLastError())+")\n", Qt::red);
-	}
-	if(!FlushFileBuffers(hFile)){
-		emit printLog(QString("Could not flush the file (")+QString::number(GetLastError())+")\n", Qt::red);
-	}*/
     #else
     mesg_buffer end;
     end.mesg_type = 2;
@@ -233,9 +208,8 @@ void DisplayWindow::finish(int msgid){
 
 void DisplayWindow::zoomSettingsChanged(int value){
     zoom = std::pow(2, value);
-    updateDisplay();
-	scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
-	this->setFixedSize(QSize(res_x+60, res_y+92));
+    scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
+    this->setFixedSize(QSize(res_x+60, res_y+92));
     displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom, res_y*zoom)));
 }
 
