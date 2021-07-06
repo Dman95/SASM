@@ -1065,24 +1065,24 @@ void MainWindow::runProgram()
         displayWindow->activateWindow();
     }
     if (settings.value("display", false).toBool()){
-		displayWindow->show();
-	}
+        displayWindow->show();
+    }
 	#ifdef Q_OS_WIN32
 	// --- TODO ---
 	HANDLE hCreateNamedPipe = CreateNamedPipe(
-			L"\\\\.\\pipe\\sasmpipe",
-			PIPE_ACCESS_INBOUND,
-			PIPE_TYPE_MESSAGE|PIPE_READMODE_MESSAGE|PIPE_WAIT,
-			PIPE_UNLIMITED_INSTANCES,
-			8184,
-			8184,
-			0,
-			NULL);
-	if(hCreateNamedPipe == INVALID_HANDLE_VALUE){
-		printLog(QString("Couldnt create Pipe"+QString::number(GetLastError()))+"\n", Qt::red);
-	}
-	displayWindow->hCreateNamedPipe = hCreateNamedPipe;
-	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, -1);
+            L"\\\\.\\pipe\\sasmpipe",
+            PIPE_ACCESS_INBOUND,
+            PIPE_TYPE_MESSAGE|PIPE_READMODE_MESSAGE|PIPE_WAIT,
+            PIPE_UNLIMITED_INSTANCES,
+            8184,
+            8184,
+            0,
+            NULL);
+    if(hCreateNamedPipe == INVALID_HANDLE_VALUE){
+        printLog(QString("Couldnt create Pipe"+QString::number(GetLastError()))+"\n", Qt::red);
+    }
+    displayWindow->hCreateNamedPipe = hCreateNamedPipe;
+    consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, -1);
     #else
     key_t key = ftok("/tmp", 65);
     msgid = msgget(key, 0666 | IPC_CREAT);

@@ -78,9 +78,9 @@ public:
     void changeDisplay(int msgid);
     void finish(int msgid);
     void updateDisplay();
-	#ifdef Q_OS_WIN32
-	HANDLE hCreateNamedPipe;
-	#endif
+    #ifdef Q_OS_WIN32
+    HANDLE hCreateNamedPipe;
+    #endif
 
 protected:
     void closeEvent(QCloseEvent *);
@@ -91,7 +91,7 @@ private:
     QImage* displayPicture;
     QLabel* displayImageLabel;
     QComboBox *zoomComboBox;
-	QScrollArea *scrollArea;
+    QScrollArea *scrollArea;
     QWidget *scrollAreaWidgetContents;
     std::vector<uint8_t> buffer;
     int zoom;
@@ -107,7 +107,7 @@ signals:
     void displayChanged(void);
     void closeSignal();
     void closeDisplay();
-	void printLog(QString msg, QColor color = QColor(Qt::black));
+    void printLog(QString msg, QColor color = QColor(Qt::black));
 };
 
 #endif

@@ -44,15 +44,15 @@
 DisplayWindow::DisplayWindow(QWidget *parent) :
     QWidget(parent)
 {
-	zoom = 1;
-	this->setFixedSize(QSize(512+50, 512+125));
+    zoom = 1;
+    this->setFixedSize(QSize(512+50, 512+125));
     this->setStyleSheet("background-color:grey;");
     verticalLayout = new QVBoxLayout(this);
     zoomComboBox = new QComboBox(this);
     QStringList comboBoxList;
-	comboBoxList << "1" << "2" << "4" << "8" << "16" << "32";
-	zoomComboBox->insertItems(0, comboBoxList);
-	connect(zoomComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(zoomSettingsChanged(int)));
+    comboBoxList << "1" << "2" << "4" << "8" << "16" << "32";
+    zoomComboBox->insertItems(0, comboBoxList);
+    connect(zoomComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(zoomSettingsChanged(int)));
 
     verticalLayout->addWidget(zoomComboBox);
 
@@ -63,7 +63,7 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
     horizontalLayout = new QHBoxLayout(scrollAreaWidgetContents);
     displayImageLabel = new QLabel(scrollAreaWidgetContents);
     displayImageLabel->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 85, 127);"));
-	displayImageLabel->setMinimumSize(QSize(150, 150));
+    displayImageLabel->setMinimumSize(QSize(150, 150));
 
     horizontalLayout->addWidget(displayImageLabel);
 
@@ -74,124 +74,124 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
 
 void DisplayWindow::changeDisplay(int msgid){
     displayPicture  = new QImage(512, 512, QImage::Format_RGB32);
-	displayPicture->fill(qRgb(255, 255, 255));
+    displayPicture->fill(qRgb(255, 255, 255));
     buffer.resize(512*512);
     memset(buffer.data(), 0xff, 512*512);
-	scrollAreaWidgetContents->setFixedSize(512*zoom+26, 512*zoom+26);
+    scrollAreaWidgetContents->setFixedSize(512*zoom+26, 512*zoom+26);
     this->msgid = msgid;
     res_x = 512;
     res_y = 512;
     mode = 0;
     qint64 fps = 30;
     QElapsedTimer programExecutionTime;
-	this->setFixedSize(QSize(512+60, 512+92));
-	displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(512*zoom,512*zoom)));
+    this->setFixedSize(QSize(512+60, 512+92));
+    displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(512*zoom,512*zoom)));
     programExecutionTime.start();
     #ifdef Q_OS_WIN32
-	if(!ConnectNamedPipe(hCreateNamedPipe, NULL))
-		emit printLog(QString("Connection Failed with Error (")+QString::number(GetLastError())+")\n", Qt::red);
-	while(1){
-		DWORD dwNoBytesRead;
-		BOOL readSuccess = ReadFile(
-				hCreateNamedPipe,
-				message.mesg_text,
-				8184,
-				&dwNoBytesRead,
-				NULL);
-		if(!readSuccess){
-			if(GetLastError()!=109)
-				emit printLog(QString("Read Failed with Error (")+QString::number(GetLastError())+")\n", Qt::red);
-			break;
-		}
-		if(message.mesg_text[0]==3){
-			res_x = message.mesg_text[1];
-     	    res_y = message.mesg_text[5];
-    	    for(int i = 1; i < 4; i++){
-    	        res_x += message.mesg_text[1+i] << (8*i);
-     	        res_y += message.mesg_text[5+i]  << (8*i);
-     	    }
-     	    mode = message.mesg_text[9];
-     	    fps = message.mesg_text[10];
-     	    if(mode)
-     	        buffer.resize(res_x*res_y*3);
-     	    else
-     	        buffer.resize(res_x*res_y);
-     	    displayPicture  = new QImage(res_x, res_y, QImage::Format_RGB32);
-    	    displayPicture->fill(qRgb(255, 255, 255));
-			scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
-			this->setFixedSize(QSize(res_x+60, res_y+92));
-    	    displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
-    	    continue;
-		}
-		// display the message and print on display
-    	int needed_bytes = (mode) ? res_x*res_y*3 : res_x*res_y;
-    	for(int i = 0; i < needed_bytes; i+=8184){
-			dwNoBytesRead = 0;
-			BOOL readSuccess = ReadFile(
-				hCreateNamedPipe,
-				message.mesg_text,
-				8184,
-				&dwNoBytesRead,
-				NULL);
-			if(!readSuccess){
-				emit printLog(QString("Read Failed with Error (")+QString::number(GetLastError())+")\n", Qt::red);
-				break;
-			}
-    	    memcpy(buffer.data()+i, &message.mesg_text[0], std::min(8184, needed_bytes-i));
-    	}
-    	updateDisplay();
-		qint64 elapsed_time = programExecutionTime.elapsed();
-    	if(elapsed_time < 1000/fps)
-    	    usleep(1000/fps - elapsed_time);
+    if(!ConnectNamedPipe(hCreateNamedPipe, NULL))
+        emit printLog(QString("Connection Failed with Error (")+QString::number(GetLastError())+")\n", Qt::red);
+    while(1){
+        DWORD dwNoBytesRead;
+        BOOL readSuccess = ReadFile(
+                hCreateNamedPipe,
+                message.mesg_text,
+                8184,
+                &dwNoBytesRead,
+                NULL);
+        if(!readSuccess){
+                if(GetLastError()!=109)
+                    emit printLog(QString("Read Failed with Error (")+QString::number(GetLastError())+")\n", Qt::red);
+            break;
+        }
+        if(message.mesg_text[0]==3){
+            res_x = message.mesg_text[1];
+            res_y = message.mesg_text[5];
+            for(int i = 1; i < 4; i++){
+                res_x += message.mesg_text[1+i] << (8*i);
+                res_y += message.mesg_text[5+i]  << (8*i);
+            }
+            mode = message.mesg_text[9];
+            fps = message.mesg_text[10];
+            if(mode)
+                buffer.resize(res_x*res_y*3);
+            else
+                buffer.resize(res_x*res_y);
+            displayPicture  = new QImage(res_x, res_y, QImage::Format_RGB32);
+            displayPicture->fill(qRgb(255, 255, 255));
+            scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
+            this->setFixedSize(QSize(res_x+60, res_y+92));
+            displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
+            continue;
+        }
+        // display the message and print on display
+        int needed_bytes = (mode) ? res_x*res_y*3 : res_x*res_y;
+        for(int i = 0; i < needed_bytes; i+=8184){
+            dwNoBytesRead = 0;
+            BOOL readSuccess = ReadFile(
+            hCreateNamedPipe,
+                message.mesg_text,
+                8184,
+                &dwNoBytesRead,
+                NULL);
+            if(!readSuccess){
+                emit printLog(QString("Read Failed with Error (")+QString::number(GetLastError())+")\n", Qt::red);
+                break;
+            }
+            memcpy(buffer.data()+i, &message.mesg_text[0], std::min(8184, needed_bytes-i));
+        }
+        updateDisplay();
+        qint64 elapsed_time = programExecutionTime.elapsed();
+        if(elapsed_time < 1000/fps)
+            usleep(1000/fps - elapsed_time);
         displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
         programExecutionTime.start();
     }
-	CloseHandle(hCreateNamedPipe);
-	#else
-	while(1){
-    	// msgrcv to receive message
-    	size_t t = msgrcv(msgid, &message, sizeof(message), 0, 0);
-    	emit printLog("t: "+QString::number(t)+" type: "+QString::number(message.mesg_type)+"\n");
+    CloseHandle(hCreateNamedPipe);
+    #else
+    while(1){
+        // msgrcv to receive message
+        size_t t = msgrcv(msgid, &message, sizeof(message), 0, 0);
+        emit printLog("t: "+QString::number(t)+" type: "+QString::number(message.mesg_type)+"\n");
 
-    	if (message.mesg_type == 2){  // type = 1 (default) -> normal message | -> 2 finish | -> 3 setup
-    	    break;
-    	}
-    	if (message.mesg_type == 3){
-    	    res_x = message.mesg_text[0];
-     	    res_y = message.mesg_text[4];
-    	    for(int i = 1; i < 4; i++){
-    	        res_x += message.mesg_text[i] << (8*i);
-     	        res_y += message.mesg_text[4+i]  << (8*i);
-     	    }
-     	    mode = message.mesg_text[8];
-     	    fps = message.mesg_text[9];
-     	    if(mode)
-     	        buffer.resize(res_x*res_y*3);
-     	    else
-     	        buffer.resize(res_x*res_y);
-     	    displayPicture  = new QImage(res_x, res_y, QImage::Format_RGB32);
-    	    displayPicture->fill(qRgb(255, 255, 255));
-    	    scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
-	    this->setFixedSize(QSize(res_x+60, res_y+92));
-    	    displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
-    	    continue;
-    	}
-    	// display the message and print on display
-    	int needed_bytes = (mode) ? res_x*res_y*3 : res_x*res_y;
-    	for(int i = 0; i < needed_bytes; i+=8184){
-    	    if(i>0)
-    	        msgrcv(msgid, &message, sizeof(message), 0, 0);
-    	    memcpy(buffer.data()+i, &message.mesg_text[0], std::min(8184, needed_bytes-i));
-    	}
-    	updateDisplay();
-	qint64 elapsed_time = programExecutionTime.elapsed();
-    	if(elapsed_time < 1000/fps)
-    	    usleep(1000/fps - elapsed_time);
+        if (message.mesg_type == 2){  // type = 1 (default) -> normal message | -> 2 finish | -> 3 setup
+            break;
+        }
+        if (message.mesg_type == 3){
+            res_x = message.mesg_text[0];
+            res_y = message.mesg_text[4];
+            for(int i = 1; i < 4; i++){
+                res_x += message.mesg_text[i] << (8*i);
+                res_y += message.mesg_text[4+i]  << (8*i);
+            }
+            mode = message.mesg_text[8];
+            fps = message.mesg_text[9];
+            if(mode)
+                buffer.resize(res_x*res_y*3);
+            else
+                buffer.resize(res_x*res_y);
+            displayPicture  = new QImage(res_x, res_y, QImage::Format_RGB32);
+            displayPicture->fill(qRgb(255, 255, 255));
+            scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
+        this->setFixedSize(QSize(res_x+60, res_y+92));
+            displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
+            continue;
+        }
+        // display the message and print on display
+        int needed_bytes = (mode) ? res_x*res_y*3 : res_x*res_y;
+        for(int i = 0; i < needed_bytes; i+=8184){
+            if(i>0)
+                msgrcv(msgid, &message, sizeof(message), 0, 0);
+            memcpy(buffer.data()+i, &message.mesg_text[0], std::min(8184, needed_bytes-i));
+        }
+        updateDisplay();
+        qint64 elapsed_time = programExecutionTime.elapsed();
+        if(elapsed_time < 1000/fps)
+            usleep(1000/fps - elapsed_time);
         displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
         programExecutionTime.start();
     }
     msgctl(msgid, IPC_RMID, NULL);
-	#endif
+    #endif
     emit closeDisplay();
 }
 
