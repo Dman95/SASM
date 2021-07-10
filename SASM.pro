@@ -48,6 +48,9 @@ INSTALLS += data
 INSTALLS += shortcutfiles
 INSTALLS += docfiles
 
+LIBS += -pthread
+QMAKE_CXXFLAGS += -pthread
+
 include(singleapplication/qtsingleapplication.pri)
 
 SOURCES += main.cpp\

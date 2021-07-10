@@ -40,6 +40,10 @@
 
 #include "displayWindow.h"
 
+#define IPC_RESULT_ERROR (-1)
+#define BLOCK_SIZE 1048576
+#define FILENAME "/tmp"
+
 
 DisplayWindow::DisplayWindow(QWidget *parent) :
     QWidget(parent)
@@ -73,6 +77,7 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
 }
 
 void DisplayWindow::changeDisplay(int msgid){
+    loop = true;
     displayPicture  = new QImage(512, 512, QImage::Format_RGB32);
     displayPicture->fill(qRgb(255, 255, 255));
     buffer.resize(512*512);
@@ -148,49 +153,78 @@ void DisplayWindow::changeDisplay(int msgid){
     }
     CloseHandle(hCreateNamedPipe);
     #else
-    while(1){
-        // msgrcv to receive message
-        size_t t = msgrcv(msgid, &message, sizeof(message), 0, 0);
-        emit printLog("t: "+QString::number(t)+" type: "+QString::number(message.mesg_type)+"\n");
-
-        if (message.mesg_type == 2){  // type = 1 (default) -> normal message | -> 2 finish | -> 3 setup
-            break;
+    sem_wait(sem_producer);
+    if(loop){
+        //setup the shared memory
+        key_t key = ftok(FILENAME, 'f');
+        if(key == IPC_RESULT_ERROR){}
+        shared_block_id = shmget(key, BLOCK_SIZE, 0666 | IPC_CREAT);
+        if(shared_block_id == IPC_RESULT_ERROR){
+            emit printLog(QString("shmget failed\n"), Qt::red);
         }
-        if (message.mesg_type == 3){
-            res_x = message.mesg_text[0];
-            res_y = message.mesg_text[4];
-            for(int i = 1; i < 4; i++){
-                res_x += message.mesg_text[i] << (8*i);
-                res_y += message.mesg_text[4+i]  << (8*i);
-            }
-            mode = message.mesg_text[8];
-            fps = message.mesg_text[9];
-            if(mode)
-                buffer.resize(res_x*res_y*3);
-            else
-                buffer.resize(res_x*res_y);
-            displayPicture  = new QImage(res_x, res_y, QImage::Format_RGB32);
-            displayPicture->fill(qRgb(255, 255, 255));
-            scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
+        block_values = (uint8_t*)shmat(shared_block_id, NULL, 0);
+        if(block_values == (uint8_t*)IPC_RESULT_ERROR){
+            emit printLog(QString("shmat failed\n"), Qt::red);
+        }
+        /// read setup
+        res_x = block_values[0];
+        res_y = block_values[4];
+        for(int i = 1; i < 4; i++){
+            res_x += block_values[i] << (8*i);
+            res_y += block_values[4+i]  << (8*i);
+        }
+        mode = block_values[8];
+        fps = block_values[9];
+        display_size = (mode) ? res_x*res_y*3 : res_x*res_y;
+        displayPicture  = new QImage(res_x, res_y, QImage::Format_RGB32);
+        displayPicture->fill(qRgb(255, 255, 255));
+        scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
         this->setFixedSize(QSize(res_x+60, res_y+92));
-            displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
-            continue;
-        }
+        displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
+        sem_post(sem_consumer);
+    }
+    ///
+    
+    while(loop){
+        // receive message
+        sem_wait(sem_producer);
+        if(!loop)
+            break;
         // display the message and print on display
-        int needed_bytes = (mode) ? res_x*res_y*3 : res_x*res_y;
-        for(int i = 0; i < needed_bytes; i+=8184){
-            if(i>0)
-                msgrcv(msgid, &message, sizeof(message), 0, 0);
-            memcpy(buffer.data()+i, &message.mesg_text[0], std::min(8184, needed_bytes-i));
+        int currentcharx, currentchary;
+        if (mode){
+            for(int l = 0; l < display_size; l+=3) {
+                currentcharx = (l/3)%res_x;
+                currentchary = l/3/res_x;
+                displayPicture->setPixel(currentcharx, currentchary, qRgb(block_values[l], block_values[l+1], block_values[l+2]));
+            }
+        } else {
+            for(int l = 0; l < display_size; l++){
+                currentcharx = l%res_x;
+                currentchary = l/res_x;
+                if(block_values[l]){
+                    displayPicture->setPixel(currentcharx, currentchary, qRgb(255, 255, 255));
+                } else {
+                    displayPicture->setPixel(currentcharx, currentchary, qRgb(0, 0, 0));
+                }
+            }
         }
-        updateDisplay();
+        
+        
         qint64 elapsed_time = programExecutionTime.elapsed();
+        //emit printLog("time: "+QString::number(elapsed_time)+"\n");
         if(elapsed_time < 1000/fps)
             usleep(1000/fps - elapsed_time);
         displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
         programExecutionTime.start();
+        sem_post(sem_consumer);
     }
-    msgctl(msgid, IPC_RMID, NULL);
+    //close sema
+    sem_close(sem_consumer);
+    sem_close(sem_producer);
+    if(shmctl(shared_block_id, IPC_RMID, NULL) == IPC_RESULT_ERROR){
+        emit printLog(QString("shmctl failed\n"), Qt::red);
+    }
     #endif
     emit closeDisplay();
 }
@@ -199,18 +233,25 @@ void DisplayWindow::finish(int msgid){
     this->msgid = msgid;
     #ifdef Q_OS_WIN32
     #else
-    mesg_buffer end;
-    end.mesg_type = 2;
-    //send default message type == 2 means end
-    msgsnd(msgid, &end, sizeof(end), 0);
+    loop = false;
+    sem_post(sem_producer);
     #endif
 }
 
 void DisplayWindow::zoomSettingsChanged(int value){
+    #ifdef Q_OS_WIN32
     zoom = std::pow(2, value);
     scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
     this->setFixedSize(QSize(res_x+60, res_y+92));
     displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom, res_y*zoom)));
+    #else
+    sem_wait(sem_producer);
+    zoom = std::pow(2, value);
+    scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
+    this->setFixedSize(QSize(res_x+60, res_y+92));
+    displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom, res_y*zoom)));
+    sem_post(sem_producer);
+    #endif
 }
 
 void DisplayWindow::updateDisplay() {

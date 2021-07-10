@@ -59,8 +59,12 @@
 #include <conio.h>
 #include <tchar.h>
 #else
-#include <sys/ipc.h>
-#include <sys/msg.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/shm.h>
+#include <semaphore.h>
+#include <fcntl.h>
+#include <sys/sem.h>
 #endif
 #define BUF_SIZE 256
 
@@ -80,6 +84,10 @@ public:
     void updateDisplay();
     #ifdef Q_OS_WIN32
     HANDLE hCreateNamedPipe;
+    #else
+    sem_t* sem_producer;
+    sem_t* sem_consumer;
+    int sem_con_id, sem_pro_id;
     #endif
 
 protected:
@@ -95,12 +103,13 @@ private:
     QWidget *scrollAreaWidgetContents;
     std::vector<uint8_t> buffer;
     int zoom;
-    int msgid;
-    int res_x;
-    int res_y;
-    int mode;
+    int msgid, res_x, res_y, mode, display_size;
+    bool loop;
+    int shared_block_id;
+    uint8_t* block_values;
+    struct sembuf sops[1];
     
-private slots:
+public slots:
 void zoomSettingsChanged(int value);
 
 signals:

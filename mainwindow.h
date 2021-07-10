@@ -82,11 +82,22 @@
 #ifdef Q_OS_WIN32
 #include <Windows.h>
 #else
+#include <fcntl.h>
+#include <semaphore.h>
+#include <errno.h>
+#include <sys/types.h> 
+#include <sys/wait.h>
+#include <sys/sem.h>
+///
+#include <sys/types.h>
 #include <sys/ipc.h>
-#include <sys/msg.h>
+#include <sys/sem.h>
 #endif
 
 #define SASM_VERSION "3.12.1"
+#define SEM_PRODUCER_FNAME "/myproducer"
+#define SEM_CONSUMER_FNAME "/myconsumer"
+#define IPC_RESULT_ERROR (-1)
 
 /**
  * @file mainwindow.h
@@ -327,8 +338,6 @@ public slots:
     //! Single Application message
     void onMessageReceived(const QString &message);
     
-    //display
-    void closeDisplay();
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);

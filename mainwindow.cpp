@@ -933,7 +933,7 @@ void MainWindow::buildProgram(bool debugMode)
 
         //! macro.c compilation
         QStringList gccMArguments;
-        gccMArguments << "-x" << "c" << Common::pathInTemp("macro.c") << "-c" << "-g" << "-o" << stdioMacros;
+        gccMArguments << "-x" << "c" << Common::pathInTemp("macro.c") << "-c" << "-g" << "-pthread" << "-o" << stdioMacros;
         if (settings.value("mode", QString("x86")).toString() == "x86")
             gccMArguments << "-m32";
         else
@@ -963,6 +963,7 @@ void MainWindow::buildProgram(bool debugMode)
         linkerProcess.setStandardOutputFile(linkerOutput);
         linkerProcess.setStandardErrorFile(linkerOutput, QIODevice::Append);
 
+        linkerArguments << "-pthread";
         if (settings.value("sasmverbose", false).toBool())
             printLog("Linker: "+linker+" "+linkerArguments.join(" ")+"\n", Qt::darkGreen);
 
@@ -1067,9 +1068,8 @@ void MainWindow::runProgram()
     if (settings.value("display", false).toBool()){
         displayWindow->show();
     }
-	#ifdef Q_OS_WIN32
-	// --- TODO ---
-	HANDLE hCreateNamedPipe = CreateNamedPipe(
+    #ifdef Q_OS_WIN32
+    HANDLE hCreateNamedPipe = CreateNamedPipe(
             L"\\\\.\\pipe\\sasmpipe",
             PIPE_ACCESS_INBOUND,
             PIPE_TYPE_MESSAGE|PIPE_READMODE_MESSAGE|PIPE_WAIT,
@@ -1084,8 +1084,19 @@ void MainWindow::runProgram()
     displayWindow->hCreateNamedPipe = hCreateNamedPipe;
     consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, -1);
     #else
-    key_t key = ftok("/tmp", 65);
-    msgid = msgget(key, 0666 | IPC_CREAT);
+    // setup some samphores
+    sem_unlink(SEM_CONSUMER_FNAME);
+    sem_unlink(SEM_PRODUCER_FNAME);
+    
+    displayWindow->sem_producer = sem_open(SEM_PRODUCER_FNAME, O_CREAT, 0666, 0);
+    if(displayWindow->sem_producer == SEM_FAILED){
+        emit printLog(QString("sem_prod failed\n"), Qt::red);
+    }
+    displayWindow->sem_consumer = sem_open(SEM_CONSUMER_FNAME, O_CREAT, 0666, 1);
+    if(displayWindow->sem_consumer == SEM_FAILED){
+        emit printLog(QString("sem_consumer failed\n"), Qt::red);
+    }
+    
     consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid);
     #endif
     
@@ -1126,8 +1137,8 @@ void MainWindow::testStopOfProgram()
         debugAction->setEnabled(true);
         buildAction->setEnabled(true);
         if (!programStopped) {
-            connect(displayWindow, SIGNAL(closeDisplay()), this, SLOT(closeDisplay()), Qt::UniqueConnection);
             displayWindow->finish(msgid);
+            consumer->join();
             if (runProcess->exitStatus() == QProcess::NormalExit)
                 printLogWithTime(tr("The program finished normally. Execution time: %1 s")
                                  .arg(programExecutionTime.elapsed() / 1000.0)
@@ -1248,24 +1259,33 @@ void MainWindow::debug()
         }
         if (settings.value("display", false).toBool())
             displayWindow->show();
-		#ifdef Q_OS_WIN32
-		HANDLE hCreateNamedPipe = CreateNamedPipe(
-			L"\\\\.\\pipe\\sasmpipe",
-			PIPE_ACCESS_INBOUND,
-			PIPE_TYPE_MESSAGE|PIPE_READMODE_MESSAGE|PIPE_WAIT,
-			PIPE_UNLIMITED_INSTANCES,
-			8184,
-			8184,
-			0,
-			NULL);
-		if(hCreateNamedPipe == INVALID_HANDLE_VALUE){
-			printLog(QString("Couldnt create Pipe"+QString::number(GetLastError()))+"\n", Qt::red);
-		}
-		displayWindow->hCreateNamedPipe = hCreateNamedPipe;
-		consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, -1);
-		#else
-      	key_t key = ftok("/tmp", 65);
-    	msgid = msgget(key, 0666 | IPC_CREAT);
+	#ifdef Q_OS_WIN32
+	HANDLE hCreateNamedPipe = CreateNamedPipe(
+		L"\\\\.\\pipe\\sasmpipe",
+		PIPE_ACCESS_INBOUND,
+		PIPE_TYPE_MESSAGE|PIPE_READMODE_MESSAGE|PIPE_WAIT,
+		PIPE_UNLIMITED_INSTANCES,
+		8184,
+		8184,
+		0,
+		NULL);
+	if(hCreateNamedPipe == INVALID_HANDLE_VALUE){
+	    printLog(QString("Couldnt create Pipe"+QString::number(GetLastError()))+"\n", Qt::red);
+	}
+	displayWindow->hCreateNamedPipe = hCreateNamedPipe;
+	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, -1);
+	#else
+        sem_unlink(SEM_CONSUMER_FNAME);
+        sem_unlink(SEM_PRODUCER_FNAME);
+        
+        displayWindow->sem_producer = sem_open(SEM_PRODUCER_FNAME, O_CREAT, 0666, 0);
+        if(displayWindow->sem_producer == SEM_FAILED){
+            emit printLog(QString("sem_prod failed\n"), Qt::red);
+        }
+        displayWindow->sem_consumer = sem_open(SEM_CONSUMER_FNAME, O_CREAT, 0666, 1);
+        if(displayWindow->sem_consumer == SEM_FAILED){
+            emit printLog(QString("sem_consumer failed\n"), Qt::red);
+        }
     	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid);
     	#endif
       
@@ -1646,8 +1666,8 @@ void MainWindow::debugExit()
      //! Many actions performed here - deleting of highlighting too
     delete debugger;
     // close display:
-    connect(displayWindow, SIGNAL(closeDisplay()), this, SLOT(closeDisplay()), Qt::UniqueConnection);
     displayWindow->finish(msgid);
+    consumer->join();
     debugger = 0;
     closeAnyCommandWidget();
     debugShowRegistersAction->setChecked(false);
@@ -1657,13 +1677,6 @@ void MainWindow::debugExit()
     disableDebugActions();
 }
 
-void MainWindow::closeDisplay(){
-    consumer->join();
-    /*if (displayWindow) {
-        displayWindow->close();
-        delete displayWindow;
-    }*/
-}
 
 void MainWindow::showAnyCommandWidget()
 {

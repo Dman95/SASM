@@ -1,63 +1,80 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
+#include <semaphore.h>
+#include <sys/wait.h>
+#include <sys/shm.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <sys/types.h>
 #include <string.h>
-#include <sys/ipc.h>
-#include <sys/msg.h>
-#include <unistd.h>
+
+#define SEM_PRODUCER_FNAME "/myproducer"
+#define SEM_CONSUMER_FNAME "/myconsumer"
+#define BLOCK_SIZE 1048576
+#define FILENAME "/tmp"
 
 FILE *get_stdin(void) { return stdin; }
 FILE *get_stdout(void) { return stdout; }
 void sasm_replace_stdin(void) {dup2(open("input.txt",0),0);}
 
-struct mesg_buffer {
-    long mesg_type;
-    char mesg_text[8184];
-} message;
+sem_t* sem_consumer;
+sem_t* sem_producer;
+int display_size;
+char is_setup = 0;
+int shared_block_id;
+char* shm_block;
 
-int msgid_snd = 0;
-int res_x = 512;
-int res_y = 512;
-char mode = 0;
-char fps = 1;
-const int max_byte = 16384;
-
-void setup(int x, int y, char mode_, char fps_){
-   res_x = x;
-   res_y = y;
-   fps = fps_;
-   mode = mode_;
-   if (msgid_snd == 0){
-       msgid_snd = msgget(ftok("/tmp", 65), 0666 | IPC_CREAT);
+void setup(int res_x, int res_y, char mode, char fps){
+   if(is_setup){
+       printf("already setup -> dont call twice\n");
+       exit(-1);
    }
-   message.mesg_type = 3;
+   is_setup = 1;
+   
+   sem_producer = sem_open(SEM_PRODUCER_FNAME, 0);
+   if(sem_producer == SEM_FAILED){
+       printf("sem_prod failed\n");
+       exit(-1);
+   }
+   sem_consumer = sem_open(SEM_CONSUMER_FNAME, 0);
+   if(sem_consumer == SEM_FAILED){
+       printf("sem_consumer failed\n");
+       exit(-1);	
+   }
+   sem_wait(sem_consumer);
+   display_size = (mode) ? res_x*res_y*3 : res_x*res_y;
+   
+   key_t key = ftok(FILENAME, 'f');
+   if(key < 0){
+       exit(-1);	
+   }
+   shared_block_id = shmget(key, BLOCK_SIZE, 0666 | IPC_CREAT);
+   if(shared_block_id == -1){
+       exit(-1);
+   }
+   shm_block = shmat(shared_block_id, NULL, 0);
+   if(shm_block==(char*)-1){
+       exit(-1);
+   }
    for(int i = 0; i < 4; i++){
-        message.mesg_text[i] = (res_x >> (8*i)) & 0xff;
-        message.mesg_text[i+4] = (res_y >> (8*i)) & 0xff;
+       shm_block[i] = (res_x >> (8*i)) & 0xff;
+       shm_block[i+4] = (res_y >> (8*i)) & 0xff;
    }
-   message.mesg_text[8] = mode;
-   message.mesg_text[9] = fps;
-   msgsnd(msgid_snd, &message, sizeof(message), 0);
-}
-
-int min(int x, int y) {
-   if(x>y)
-      return y;
-   return x;
+   shm_block[8] = mode;
+   shm_block[9] = fps;
+   sem_post(sem_producer);
 }
 
 void update(char* data){
-   if (msgid_snd == 0){
-       msgid_snd = msgget(ftok("/tmp", 65), 0666 | IPC_CREAT);
+   if(!is_setup){
+      printf("please call setup before update");
+      fflush(stdin);
+      exit(-1);
    }
-   message.mesg_type = 1;
-   int needed_bytes = res_x*res_y;
-   if(mode)
-       needed_bytes *=3;
-   for(int j = 0; j < needed_bytes; j+=8184){
-      for(int i = 0; i < min(8184, needed_bytes-j); i++)
-         message.mesg_text[i] = data[i+j];
-      //msgsnd(msgid_snd, &message, sizeof(message), 0);
-   }
+   sem_wait(sem_consumer);
+   memcpy(shm_block, data, display_size);
+   sem_post(sem_producer);
 }
 
 void sleepFunc(){usleep(10000000);}
