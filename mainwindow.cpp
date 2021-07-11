@@ -962,8 +962,11 @@ void MainWindow::buildProgram(bool debugMode)
         linkerOutput = Common::pathInTemp("linkererror.txt");
         linkerProcess.setStandardOutputFile(linkerOutput);
         linkerProcess.setStandardErrorFile(linkerOutput, QIODevice::Append);
-
+        
+        #ifdef Q_OS_WIN32
+        #else
         linkerArguments << "-pthread";
+        #endif
         if (settings.value("sasmverbose", false).toBool())
             printLog("Linker: "+linker+" "+linkerArguments.join(" ")+"\n", Qt::darkGreen);
 
