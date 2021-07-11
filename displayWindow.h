@@ -104,10 +104,9 @@ private:
     std::vector<uint8_t> buffer;
     int zoom;
     int msgid, res_x, res_y, mode, display_size;
-    bool loop;
+    std::atomic<bool> loop;
     int shared_block_id;
     uint8_t* block_values;
-    struct sembuf sops[1];
     
 public slots:
 void zoomSettingsChanged(int value);

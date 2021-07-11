@@ -91,6 +91,7 @@ void DisplayWindow::changeDisplay(int msgid){
     QElapsedTimer programExecutionTime;
     this->setFixedSize(QSize(512+60, 512+92));
     displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(512*zoom,512*zoom)));
+    //zoomComboBox->setEditable(false);
     programExecutionTime.start();
     #ifdef Q_OS_WIN32
     if(!ConnectNamedPipe(hCreateNamedPipe, NULL))
@@ -226,6 +227,8 @@ void DisplayWindow::changeDisplay(int msgid){
         emit printLog(QString("shmctl failed\n"), Qt::red);
     }
     #endif
+    loop=false;
+    //zoomComboBox->setEditable(false);
     emit closeDisplay();
 }
 
@@ -239,19 +242,11 @@ void DisplayWindow::finish(int msgid){
 }
 
 void DisplayWindow::zoomSettingsChanged(int value){
-    #ifdef Q_OS_WIN32
+    if(!loop){
     zoom = std::pow(2, value);
     scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
     this->setFixedSize(QSize(res_x+60, res_y+92));
-    displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom, res_y*zoom)));
-    #else
-    sem_wait(sem_producer);
-    zoom = std::pow(2, value);
-    scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
-    this->setFixedSize(QSize(res_x+60, res_y+92));
-    displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom, res_y*zoom)));
-    sem_post(sem_producer);
-    #endif
+    displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom, res_y*zoom)));}
 }
 
 void DisplayWindow::updateDisplay() {

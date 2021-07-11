@@ -28,9 +28,16 @@ char* shm_block;
 void setup(int res_x, int res_y, char mode, char fps){
    if(is_setup){
        printf("already setup -> dont call twice\n");
+       fflush(stdin);
        exit(-1);
    }
    is_setup = 1;
+   
+   if(res_x < 100 || res_x > 1024 || res_y < 100 || res_y > 1024 || fps > 60 || fps < 1){
+       printf("sem_prod failed\n");
+       fflush(stdin);
+       exit(-1);
+   }
    
    sem_producer = sem_open(SEM_PRODUCER_FNAME, 0);
    if(sem_producer == SEM_FAILED){
