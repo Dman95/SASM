@@ -66,16 +66,12 @@
 #include <fcntl.h>
 #include <sys/sem.h>
 #endif
-#define BUF_SIZE 256
+#define BLOCK_SIZE 3145728
 
 class DisplayWindow : public QWidget
 {
     Q_OBJECT
 public:
-    struct mesg_buffer {
-    long mesg_type;
-    uint8_t mesg_text[8184];
-    } message;
     
     explicit DisplayWindow(QWidget *parent = 0);
     ~DisplayWindow();
@@ -101,7 +97,7 @@ private:
     QComboBox *zoomComboBox;
     QScrollArea *scrollArea;
     QWidget *scrollAreaWidgetContents;
-    std::vector<uint8_t> buffer;
+    uint8_t buffer[BLOCK_SIZE];
     int zoom;
     int msgid, res_x, res_y, mode, display_size;
     std::atomic<bool> loop;

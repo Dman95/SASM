@@ -11,7 +11,7 @@
 
 #define SEM_PRODUCER_FNAME "/myproducer"
 #define SEM_CONSUMER_FNAME "/myconsumer"
-#define BLOCK_SIZE 1048576
+#define BLOCK_SIZE 3145728
 #define FILENAME "/tmp"
 
 FILE *get_stdin(void) { return stdin; }

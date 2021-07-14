@@ -98,6 +98,7 @@
 #define SEM_PRODUCER_FNAME "/myproducer"
 #define SEM_CONSUMER_FNAME "/myconsumer"
 #define IPC_RESULT_ERROR (-1)
+#define BLOCK_SIZE 3145728
 
 /**
  * @file mainwindow.h

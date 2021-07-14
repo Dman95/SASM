@@ -1077,8 +1077,8 @@ void MainWindow::runProgram()
             PIPE_ACCESS_INBOUND,
             PIPE_TYPE_MESSAGE|PIPE_READMODE_MESSAGE|PIPE_WAIT,
             PIPE_UNLIMITED_INSTANCES,
-            8184,
-            8184,
+            BLOCK_SIZE,
+            BLOCK_SIZE,
             0,
             NULL);
     if(hCreateNamedPipe == INVALID_HANDLE_VALUE){
@@ -1268,8 +1268,8 @@ void MainWindow::debug()
 		PIPE_ACCESS_INBOUND,
 		PIPE_TYPE_MESSAGE|PIPE_READMODE_MESSAGE|PIPE_WAIT,
 		PIPE_UNLIMITED_INSTANCES,
-		8184,
-		8184,
+		BLOCK_SIZE,
+		BLOCK_SIZE,
 		0,
 		NULL);
 	if(hCreateNamedPipe == INVALID_HANDLE_VALUE){
