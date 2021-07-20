@@ -61,14 +61,8 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
 
     scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true);
-    scrollAreaWidgetContents = new QWidget();
+    scrollAreaWidgetContents = new BufferFrame(this);
     //scrollAreaWidgetContents->setGeometry(QRect(0, 0, 1218, 1218));
-    horizontalLayout = new QHBoxLayout(scrollAreaWidgetContents);
-    displayImageLabel = new QLabel(scrollAreaWidgetContents);
-    displayImageLabel->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 85, 127);"));
-    displayImageLabel->setMinimumSize(QSize(150, 150));
-
-    horizontalLayout->addWidget(displayImageLabel);
 
     scrollArea->setWidget(scrollAreaWidgetContents);
 
@@ -88,8 +82,7 @@ void DisplayWindow::changeDisplay(int msgid){
     qint64 fps = 30;
     QElapsedTimer programExecutionTime;
     this->setFixedSize(QSize(512+60, 512+92));
-    displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(512*zoom,512*zoom)));
-    //zoomComboBox->setEditable(false);
+    scrollAreaWidgetContents->update();
     programExecutionTime.start();
     #ifdef Q_OS_WIN32
     if(!ConnectNamedPipe(hCreateNamedPipe, NULL)){
@@ -116,12 +109,11 @@ void DisplayWindow::changeDisplay(int msgid){
         display_size = (mode) ? res_x*res_y*3 : res_x*res_y;
         displayPicture  = new QImage(res_x, res_y, QImage::Format_RGB32);
         displayPicture->fill(qRgb(255, 255, 255));
-        scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
         this->setFixedSize(QSize(res_x+60, res_y+92));
-        displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
+		scrollAreaWidgetContents->setFixedSize(res_x*zoom, res_y*zoom);
+		scrollAreaWidgetContents->update();
 	} else {
-		int a = GetLastError();
-	    if(GetLastError()!=109||a!=0)
+	    if(GetLastError()!=109&&GetLastError()!=0)
             emit printLog(QString("Read Failed with Error (")+QString::number(GetLastError())+")\n", Qt::red);
 		loop = false;
 	}
@@ -142,11 +134,31 @@ void DisplayWindow::changeDisplay(int msgid){
             break;
         }
         // display the message and print on display
-        updateDisplay();
+        int currentcharx;
+        int currentchary;
+        int needed_pixel = (mode) ? res_x*res_y*3 : res_x*res_y;
+        if(mode){
+           for(int l = 0; l < needed_pixel; l+=3) {
+                currentcharx = (l/3)%res_x;
+                currentchary = l/3/res_x;
+                displayPicture->setPixel(currentcharx, currentchary, qRgb(buffer[l], buffer[l+1], buffer[l+2]));
+           }
+        } else {
+            for(int l = 0; l < needed_pixel; l++){
+                currentcharx = l%res_x;
+                currentchary = l/res_x;
+                if(buffer[l]){
+                    displayPicture->setPixel(currentcharx, currentchary, qRgb(255, 255, 255));
+                } else {
+                    displayPicture->setPixel(currentcharx, currentchary, qRgb(0, 0, 0));
+                }
+            }
+        }
         qint64 elapsed_time = programExecutionTime.elapsed();
         if(elapsed_time < 1000/fps)
-            usleep(1000/fps - elapsed_time);
-        displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
+            usleep((1000/fps - elapsed_time)*100);
+		scrollAreaWidgetContents->update();
+		
         programExecutionTime.start();
     }
     CloseHandle(hCreateNamedPipe);
@@ -178,7 +190,7 @@ void DisplayWindow::changeDisplay(int msgid){
         displayPicture->fill(qRgb(255, 255, 255));
         scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
         this->setFixedSize(QSize(res_x+60, res_y+92));
-        displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
+        scrollAreaWidgetContents->update();
         sem_post(sem_consumer);
     }
     ///
@@ -213,7 +225,7 @@ void DisplayWindow::changeDisplay(int msgid){
         //emit printLog("time: "+QString::number(elapsed_time)+"\n");
         if(elapsed_time < 1000/fps)
             usleep(1000/fps - elapsed_time);
-        displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom,res_y*zoom)));
+        scrollAreaWidgetContents->update();
         programExecutionTime.start();
         sem_post(sem_consumer);
     }
@@ -259,10 +271,11 @@ void DisplayWindow::finish(int msgid){
 
 void DisplayWindow::zoomSettingsChanged(int value){
     if(!loop){
-    zoom = std::pow(2, value);
-    scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
-    this->setFixedSize(QSize(res_x+60, res_y+92));
-    displayImageLabel->setPixmap(QPixmap::fromImage(displayPicture->scaled(res_x*zoom, res_y*zoom)));}
+        zoom = std::pow(2, value);
+        scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
+        this->setFixedSize(QSize(res_x+60, res_y+92));
+        scrollAreaWidgetContents->update();
+	}
 }
 
 void DisplayWindow::updateDisplay() {
@@ -293,8 +306,19 @@ void DisplayWindow::closeEvent(QCloseEvent *) {
     emit closeSignal();
 }
 
-DisplayWindow::~DisplayWindow()
-{
+DisplayWindow::~DisplayWindow(){
     delete displayImageLabel;
     //delete layout;
+}
+
+BufferFrame::BufferFrame(DisplayWindow *parent) :
+    QWidget(parent){
+    d = parent;
+}
+
+void BufferFrame::paintEvent(QPaintEvent*){
+	QPainter painter(this);
+	//if(!painter.isActive()){
+        painter.drawImage(QRect(0,0,d->res_x*d->zoom,d->res_y*d->zoom),*(d->displayPicture));
+	//}
 }

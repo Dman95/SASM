@@ -90,6 +90,7 @@ protected:
     void closeEvent(QCloseEvent *);
 
 private:
+    friend class BufferFrame;
     QVBoxLayout  *verticalLayout;
     QHBoxLayout *horizontalLayout;
     QImage* displayPicture;
@@ -112,6 +113,19 @@ signals:
     void closeSignal();
     void closeDisplay();
     void printLog(QString msg, QColor color = QColor(Qt::black));
+};
+
+class BufferFrame : public QWidget{
+public:
+    BufferFrame(DisplayWindow *parent = 0);
+	DisplayWindow* d;
+
+private:
+    friend class DisplayWindow;
+
+protected:
+    void paintEvent(QPaintEvent *event);
+
 };
 
 #endif
