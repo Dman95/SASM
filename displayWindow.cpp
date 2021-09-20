@@ -81,9 +81,11 @@ void DisplayWindow::changeDisplay(int msgid){
     mode = 0;
     qint64 fps = 30;
     QElapsedTimer programExecutionTime;
+    QElapsedTimer programExecutionTime2;
     this->setFixedSize(QSize(512+60, 512+92));
     scrollAreaWidgetContents->update();
     programExecutionTime.start();
+    programExecutionTime2.start();
     #ifdef Q_OS_WIN32
     if(!ConnectNamedPipe(hCreateNamedPipe, NULL)){
         if(GetLastError()!=535)
@@ -156,10 +158,9 @@ void DisplayWindow::changeDisplay(int msgid){
         }
         qint64 elapsed_time = programExecutionTime.elapsed();
         if(elapsed_time < 1000/fps)
-            usleep((1000/fps - elapsed_time)*100);
-		scrollAreaWidgetContents->update();
-		
+            usleep((1000/fps - elapsed_time)*1000);
         programExecutionTime.start();
+	scrollAreaWidgetContents->update();	
     }
     CloseHandle(hCreateNamedPipe);
     #else
@@ -224,9 +225,9 @@ void DisplayWindow::changeDisplay(int msgid){
         qint64 elapsed_time = programExecutionTime.elapsed();
         //emit printLog("time: "+QString::number(elapsed_time)+"\n");
         if(elapsed_time < 1000/fps)
-            usleep(1000/fps - elapsed_time);
-        scrollAreaWidgetContents->update();
+            usleep((1000/fps - elapsed_time)*1000);
         programExecutionTime.start();
+        scrollAreaWidgetContents->update();
         sem_post(sem_consumer);
     }
     //close sema
@@ -236,6 +237,8 @@ void DisplayWindow::changeDisplay(int msgid){
         emit printLog(QString("shmctl failed\n"), Qt::red);
     }
     #endif
+    qint64 elapsed_time2 = programExecutionTime2.elapsed();
+    qint64 ass = elapsed_time2;
     loop = false;
     //zoomComboBox->setEditable(false);
     emit closeDisplay();
