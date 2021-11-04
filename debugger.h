@@ -68,7 +68,7 @@
  * Defines the debugger.
  */
 
-enum DebugActionType {ni, si, showLine, infoRegisters, infoMemory, anyAction, none, breakpoint};
+enum DebugActionType {ni, si, showLine, infoRegisters, infoMemory, infoStack, anyAction, none, breakpoint};
 
 
 /**
@@ -104,6 +104,11 @@ public:
         bool isValid;
     };
 
+    struct stackInfo {
+        QString value;
+        QString address;
+    };
+
     typedef Assembler::LineNum LineNum;
 
     bool isStopped();
@@ -117,7 +122,7 @@ public:
 
     // start debugger
     bool run();
-
+   
 private:
     void processLst();
     void gdb_cmd_run();
@@ -178,8 +183,18 @@ private:
     bool stopped;
     quint64 pid;
     bool dbgSymbols;
+    bool firstStack;
 
     quint64 entryPoint;
+    
+    // save Stack
+    quint64 stackBottom;
+    int bitStack;
+    int systemStack;
+    bool signStack;
+    int addressSizeOffset;
+    
+    bool firstRet;
 
 public slots:
     void readOutputToBuffer();
@@ -191,6 +206,10 @@ public slots:
     void doInput(QString command, DebugActionType actionType);
     void changeBreakpoint(quint64 lineNumber, bool isAdded);
     void emitStarted();
+    void setBitStack(int bit);
+    void setSystemStack(int system);
+    void setSignStack(bool sign);
+    QString signedNumberStack(quint64 value);
 
 signals:
     //! Highlight the current debug line.
@@ -199,6 +218,7 @@ signals:
     //! Signal is emited when debugger is ready to get commands like step into and etc.
     void started();
     void printRegisters(QList<Debugger::registersInfo>);
+    void printStack(QList<Debugger::stackInfo>);
     void printMemory(QList<Debugger::memoryInfo>);
     void printLog(QString msg, QColor color = QColor(Qt::black));
     void printOutput(QString msg);

@@ -65,7 +65,9 @@ Debugger::Debugger(QTextEdit *tEdit,
 {
     c = 0;
     pid = 0;
+    firstStack = true;
     firstAction = true;
+    firstRet = true;
     textEdit = tEdit;
     exePath = exePathParam;
     workingDirectoryPath = workingDirectoryPathParam;
@@ -75,15 +77,22 @@ Debugger::Debugger(QTextEdit *tEdit,
     verbose = i_verbose;
     mimode = i_mimode;
     wincrflag = 0;
+    bitStack = 0;
+    systemStack = 16;
+    signStack = false;
     run();
 }
 
 bool Debugger::run()
 {
+    QSettings settings("SASM Project", "SASM");
+    if (settings.value("mode", QString("x86")).toString() == "x86")
+        addressSizeOffset = 4;
+    else
+        addressSizeOffset = 8;
     #ifdef Q_OS_WIN32
         QString gdb;
         QString objdump;
-        QSettings settings("SASM Project", "SASM");
         wincrflag++;
         if (settings.value("mode", QString("x86")).toString() == "x86") {
             gdb = QCoreApplication::applicationDirPath() + "/MinGW/bin/gdb.exe";
@@ -285,6 +294,7 @@ void Debugger::processMessage(QString output, QString error)
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
+            doInput(QString("info f 0\n"), infoStack);
         }
 
         //if an error with the wrong name of the section has occurred
@@ -310,6 +320,7 @@ void Debugger::processMessage(QString output, QString error)
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
+            doInput(QString("info f 0\n"), infoStack);
         }
     }
 
@@ -349,7 +360,8 @@ void Debugger::processAction(QString output, QString error)
 {
     bool backtrace = (output.indexOf(QRegExp("#\\d+  0x[0-9a-fA-F]{8,16} in .* ()")) != -1);
 
-    if (output.indexOf(exitMessage) != -1 && !backtrace) {
+    if (output.indexOf(exitMessage) != -1 && !backtrace && firstRet) {
+        firstRet = false;
         doInput("c\n", none);
         return;
     }
@@ -541,6 +553,7 @@ void Debugger::processAction(QString output, QString error)
                 registersStream.skipWhiteSpace();
                 info.decValue = registersStream.readLine();
             } else if (mmx.exactMatch(info.name) || xmm.exactMatch(info.name) || ymm.exactMatch(info.name)) {
+                //TODO
                 QMap<QString, QString> fields;
 
                 if (!readStruct(registersStream, &fields)) {
@@ -573,6 +586,84 @@ void Debugger::processAction(QString output, QString error)
         }
 
         emit printRegisters(registers);
+        return;
+    }
+    
+    if (actionType == infoStack) {
+     	QTextStream stackStream(&output);
+     	QList<stackInfo> stacks;
+     	QList<quint64> stacks2;
+     	QRegExp r = QRegExp("0x[0-9a-fA-F]{6,12}");
+     	int index;
+    	if (firstStack){
+  	    firstStack = false;
+  	    index = r.indexIn(output);
+    	    if(index != -1)
+    	    	stackBottom = output.mid(index, r.matchedLength()).toULongLong(0, 16) - addressSizeOffset;
+  	    return;
+    	}
+    	stackInfo info;
+    	quint64 address;
+    	quint64 value;
+    	for (int i = 0; !stackStream.atEnd(); i++) {
+    	    stackStream >> info.value;
+    	    index = info.value.indexOf(QString("Cannot access memory"));
+    	    if (index != -1){
+    	        emit printLog(QString("Error showing stack"), Qt::red);
+    	        return;
+    	    }
+    	    index = r.indexIn(info.value);
+    	    address = info.value.mid(index, r.matchedLength()).toULongLong(0, 16);
+    	    if (index == -1 || address >= stackBottom) {
+    	        break;
+    	    }
+    	    
+    	    for(int j = 0; j < 2; j++){
+    	        stackStream >> info.value;
+    	    	index = r.indexIn(info.value);
+    	        value = info.value.mid(index, r.matchedLength()).toULongLong(0, 16);
+    	        stackStream >> info.value;
+    	    	index = r.indexIn(info.value);
+    	        value += (info.value.mid(index, r.matchedLength()).toULongLong(0, 16)) << 32;
+    	        for(int k = 0; k < 8; k++){ //per line
+    	           if (address + k + j*8 >= stackBottom) {
+    	   	        goto exit;
+    	   	   }
+    	    	   stacks2.append((value >> 8*k)&0xff);
+    	        }
+    	    }
+    	}
+    	exit:
+    	quint64 stackelem;
+    	stackInfo bottom;
+    	bottom.address = QString("0x") + QString::number(stackBottom, 16);
+    	bottom.value = QString("Bottom");
+    	stacks.append(bottom);
+    	for (int i = stacks2.size()-1; i >= 0; i-=bitStack){
+    	    stackelem = stacks2[i];
+    	    for (int j = 1; j < bitStack; j++){
+    	        if (i-j<0){
+    	            info.value = QString("(+") + QString::number(bitStack-j) + QString(" unused Byte) ") + QString::number(stackelem, systemStack);
+    	            info.address = QString("0x") + QString::number(stackBottom-bitStack-(stacks2.size()-1-i), 16);
+    	            stacks.append(info);
+    	            goto exit2;
+    	        }
+    	        stackelem = (stackelem << 8) + stacks2[i-j];
+    	    }
+    	    if (signStack)
+    	    	info.value = signedNumberStack(stackelem);
+    	    else
+    	    	info.value = QString::number(stackelem, systemStack);
+    	    info.address = QString("0x") + QString::number(stackBottom-bitStack-(stacks2.size()-1-i), 16);
+    	    stacks.append(info);
+    	}
+    	exit2:
+    	if(stacks.size()>=100){
+    	    info.address = QString("");
+    	    info.value = QString("...");
+    	    stacks.append(info);
+    	}
+    	emit printStack(stacks);
         return;
     }
 
@@ -651,6 +742,7 @@ void Debugger::processMessageMiMode(QString output, QString error)
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
+            doInput(QString("info f 0\n"), infoStack);
         }
 
         //if an error with the wrong name of the section has occurred
@@ -676,6 +768,7 @@ void Debugger::processMessageMiMode(QString output, QString error)
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
+            doInput(QString("info f 0\n"), infoStack);
         }
     }
 
@@ -792,7 +885,6 @@ void Debugger::processActionMiMode(QString output, QString error)
             QRegExp signalMsg("\r?\n(Program received signal.*)");
             while (asyncMsg.indexIn(msg) != -1){
 				msg.remove(asyncMsg.indexIn(msg), msg.indexOf(QChar('\n'), asyncMsg.indexIn(msg) + 7));
-				printLog("yes");
 			}
             if (signalMsg.indexIn(msg) != -1) {
                 QString recievedSignal = signalMsg.cap(1);
@@ -947,6 +1039,7 @@ void Debugger::processActionMiMode(QString output, QString error)
                 info.decValue = registersStream.readLine();
                 info.decValue.remove(QRegExp("~|\"|\\\\n|\\\\t"));
             } else if (mmx.exactMatch(info.name) || xmm.exactMatch(info.name) || ymm.exactMatch(info.name)) {
+                //TODO
                 QMap<QString, QString> fields;
 
                 if (!readStruct(registersStream, &fields)) {
@@ -981,13 +1074,121 @@ void Debugger::processActionMiMode(QString output, QString error)
         emit printRegisters(registers);
         return;
     }
-    //todo
+    
+    if (actionType == infoStack) {
+      	QTextStream stackStream(&output);
+     	QList<stackInfo> stacks;
+     	QList<quint64> stacks2;
+     	QRegExp r = QRegExp("0x[0-9a-fA-F]{6,12}");
+     	int index;
+    	if (firstStack){
+  	    firstStack = false;
+  	    index = r.indexIn(output);
+    	    if(index != -1)
+    	    	stackBottom = output.mid(index, r.matchedLength()).toULongLong(0, 16) - addressSizeOffset;
+  	    return;
+    	}
+    	stackInfo info;
+    	quint64 address;
+    	quint64 value;
+    	for (int i = 0; !stackStream.atEnd(); i++) {
+    	    stackStream >> info.value;
+    	    index = info.value.indexOf(QString("Cannot access memory"));
+    	    if (index != -1){
+    	        emit printLog(QString("Error showing stack"), Qt::red);
+    	        return;
+    	    }
+    	    if (info.value.at(0) != QChar('~')||info.value.indexOf(QString("~\"\\n\"")) != -1) {
+                continue;
+            }
+            info.value.remove(QRegExp("~|\"|\\\\n"));
+            QList<QString> stackLine = info.value.split(QString("\\t"));
+    	    index = r.indexIn(info.value);
+    	    address = info.value.mid(index, r.matchedLength()).toULongLong(0, 16);
+    	    if (index == -1 || address >= stackBottom) {
+    	        break;
+    	    }
+    	    
+    	    for(int j = 0; j < 2; j++){
+		info.value = stackLine[j*2+1];
+    	    	index = r.indexIn(info.value);
+    	        value = info.value.mid(index, r.matchedLength()).toULongLong(0, 16);
+    	        info.value = stackLine[j*2+2];
+    	    	index = r.indexIn(info.value);
+    	        value += (info.value.mid(index, r.matchedLength()).toULongLong(0, 16)) << 32;
+    	        for(int k = 0; k < 8; k++){ //per line
+    	           if (address + k + j*8 >= stackBottom) {
+    	   	        goto exit;
+    	   	   }
+    	    	   stacks2.append((value >> 8*k)&0xff);
+    	        }
+    	    }
+    	}
+    	exit:
+    	quint64 stackelem;
+    	stackInfo bottom;
+    	bottom.address = QString("0x") + QString::number(stackBottom, 16);
+    	bottom.value = QString("Bottom");
+    	stacks.append(bottom);
+    	for (int i = stacks2.size()-1; i >= 0; i-=bitStack){
+    	    stackelem = stacks2[i];
+    	    for (int j = 1; j < bitStack; j++){
+    	        if (i-j<0){
+    	            info.value = QString("(+") + QString::number(bitStack-j) + QString(" unused Byte) ") + QString::number(stackelem, systemStack);
+    	            info.address = QString("0x") + QString::number(stackBottom-bitStack-(stacks2.size()-1-i), 16);
+    	            stacks.append(info);
+    	            goto exit2;
+    	        }
+    	        stackelem = (stackelem << 8) + stacks2[i-j];
+    	    }
+    	    if (signStack)
+    	    	info.value = signedNumberStack(stackelem);
+    	    else
+    	    	info.value = QString::number(stackelem, systemStack);
+    	    info.address = QString("0x") + QString::number(stackBottom-bitStack-(stacks2.size()-1-i), 16);
+    	    stacks.append(info);
+    	}
+    	exit2:
+    	if(stacks.size()>=100){
+    	    info.address = QString("");
+    	    info.value = QString("...");
+    	    stacks.append(info);
+    	}
+    	emit printStack(stacks);
+     	return;
+    }
+
+    
     if (output == QString("\r\n") || output == QString("\n") ||
             output == QString("\r\n\n") || output == QString("\n\n")||output.at(0)=='*') //if empty or starts with *
         return;
 
     //print information to log field
     emit printLog(output);
+}
+
+// convert unsinged to signed and add -
+QString Debugger::signedNumberStack(quint64 value) {
+    switch (bitStack) {
+        case 1:
+            if ((value&0x80) > 0)
+                return QString("-") + QString::number(((-1*((qint8)value))&0xff), systemStack);
+            break;
+        case 2:
+            if ((value&0x8000) > 0)
+                return QString("-") + QString::number(((-1*((qint16)value))&0xffff), systemStack);
+            break;
+        case 4:
+            if ((value&0x80000000) > 0)
+                return QString("-") + QString::number(((-1*((qint32)value))&0xffffffff), systemStack);
+            break;
+        case 8:
+        default:
+            if ((value&0x8000000000000000) > 0)
+                return QString("-") + QString::number((-1*((qint64)value)), systemStack); //falls mit führender Null: QStringLiteral("%1").arg((-1*((qint64)value)), 63, systemStack, QLatin1Char('0')); 
+            break;
+    }
+    return QString::number(value, systemStack);
 }
 
 bool Debugger::isStopped()
@@ -1030,6 +1231,41 @@ void Debugger::doInput(QString command, DebugActionType actionType)
 void Debugger::setWatchesCount(int count)
 {
     watchesCount = count;
+}
+
+void Debugger::setBitStack(int bit){
+    switch (bit) {
+         case 0:
+            bitStack = 1;
+            break;
+         case 1:
+            bitStack = 2;
+            break;
+         case 2:
+            bitStack = 4;
+            break;
+         case 3:
+         default:
+            bitStack = 8;
+      }
+}
+
+void Debugger::setSystemStack(int system){
+    switch (system) {
+         case 0:
+            systemStack = 16;
+            break;
+         case 1:
+            systemStack = 10;
+            break;
+         case 2:
+         default:
+            systemStack = 2;
+      }
+}
+
+void Debugger::setSignStack(bool sign){
+    signStack = sign;
 }
 
 void Debugger::processLst()

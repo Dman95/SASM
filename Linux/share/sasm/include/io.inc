@@ -43,6 +43,49 @@ CEXTERN fflush
 CEXTERN get_stdin
 CEXTERN get_stdout
 
+CEXTERN update
+%macro updateDisplay 1.nolist
+    sasmMacroFunc
+    push eax
+    push ecx
+    push edx
+    push esi
+    push edi
+    ALIGN_STACK 4
+    push %1
+    call update
+    UNALIGN_STACK
+    pop edi
+    pop esi
+    pop edx
+    pop ecx
+    pop eax
+    sasmMacroFuncE
+%endmacro
+
+CEXTERN setup
+%macro setupDisplay 4.nolist
+    sasmMacroFunc
+    push eax
+    push ecx
+    push edx
+    push esi
+    push edi
+    ALIGN_STACK 16
+    push %4
+    push %3
+    push %2
+    push %1
+    call setup
+    UNALIGN_STACK
+    pop edi
+    pop esi
+    pop edx
+    pop ecx
+    pop eax
+    sasmMacroFuncE
+%endmacro
+
 ; Make stack be 16 bytes aligned after pushing %1 bytes
 %macro ALIGN_STACK 1.nolist
     enter 0, 0

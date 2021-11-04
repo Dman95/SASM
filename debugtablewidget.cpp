@@ -49,6 +49,8 @@ QByteArray DebugTableWidget::memoryHeaderState;
 bool DebugTableWidget::geometryRegistersSaved;
 bool DebugTableWidget::geometryMemorySaved;
 QByteArray DebugTableWidget::registerWindowState;
+bool DebugTableWidget::geometryStackSaved;
+QByteArray DebugTableWidget::stackWindowState;
 
 DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType widgetType, QWidget *parent) :
     QTableWidget(rows, columns, parent)
@@ -78,6 +80,20 @@ DebugTableWidget::DebugTableWidget(int rows, int columns, DebugTableWidgetType w
         if (geometryRegistersSaved)
             restoreGeometry(registerWindowState);
     }
+    
+    if (type == stackTable) {
+        setSelectionMode(QAbstractItemView::NoSelection);
+        QStringList header;
+        header << "Address" << "Stack-top";
+        setHorizontalHeaderLabels(header);
+        //setResizeMode(QHeaderView::ResizeToContents)
+        horizontalHeader()->setStretchLastSection(true);
+        setWindowTitle(tr("Stack"));
+        addStack(QString("    --    "), QString("Bottom"));
+        resizeColumnsToContents();
+        if (geometryStackSaved)
+            restoreGeometry(stackWindowState);
+    }
 }
 
 void DebugTableWidget::initializeMemoryWindow(const QList<RuQPlainTextEdit::Watch> &watches)
@@ -104,6 +120,18 @@ void DebugTableWidget::setValuesFromDebugger(QList<Debugger::registersInfo> regi
 {
     for (int i = 0; i < registers.size(); i++)
         addRegister(registers[i].name, registers[i].hexValue, registers[i].decValue, i);
+    show();
+    if (firstTime) {
+        firstTime = false;
+        activateWindow();
+    }
+}
+
+void DebugTableWidget::setValuesFromDebugger(QList<Debugger::stackInfo> stacks) //the stack
+{
+    setRowCount(0);
+    for (int i = 0; i < stacks.size(); i++)
+       addStack(stacks[i].value, stacks[i].address);
     show();
     if (firstTime) {
         firstTime = false;
@@ -214,6 +242,27 @@ void DebugTableWidget::addRegister(const QString &name, const QString &hexValue,
     }
 }
 
+void DebugTableWidget::addStack(const QString &hexValue, const QString &address)
+{
+    empty = false;
+    if (type == stackTable) {
+            QTableWidgetItem *hexValueItem = new QTableWidgetItem(hexValue);
+            QFont monoFont("Courier");
+            monoFont.setStyleHint(QFont::Monospace);
+            hexValueItem->setTextAlignment(Qt::AlignCenter);
+            hexValueItem->setFont(monoFont);
+            hexValueItem->setFlags(Qt::ItemIsEnabled);
+            QTableWidgetItem *addressItem = new QTableWidgetItem(address);
+            addressItem->setTextAlignment(Qt::AlignCenter);
+            addressItem->setFont(monoFont);
+            addressItem->setFlags(Qt::ItemIsEnabled);
+            insertRow(0);
+            setItem(0, 1, hexValueItem);
+            setItem(0, 0, addressItem);
+    }
+    resizeColumnsToContents();
+}
+
 bool DebugTableWidget::isEmpty()
 {
     return empty;
@@ -262,5 +311,9 @@ DebugTableWidget::~DebugTableWidget()
     if (type == registersTable) {
         registerWindowState = saveGeometry();
         geometryRegistersSaved = true;
+    }
+    if (type == stackTable) {
+        stackWindowState = saveGeometry();
+        geometryStackSaved = true;
     }
 }

@@ -10,6 +10,7 @@
 #include <QByteArray>
 #include "debugger.h"
 #include "watchsettingswidget.h"
+#include "stacksettingswidget.h"
 #include "ruqplaintextedit.h"
 
 /**
@@ -17,7 +18,7 @@
  * Defines the debugging window (memory or registers table).
  */
 
-enum DebugTableWidgetType {registersTable, memoryTable};
+enum DebugTableWidgetType {registersTable, memoryTable, stackTable};
 
 
 /**
@@ -38,8 +39,10 @@ public:
     void initializeMemoryWindow(const QList<RuQPlainTextEdit::Watch> &watches);
     static QByteArray memoryHeaderState;
     static QByteArray registerWindowState;
+    static QByteArray stackWindowState;
     static bool geometryMemorySaved;
     static bool geometryRegistersSaved;
+    static bool geometryStackSaved;
 
 protected:
     void closeEvent(QCloseEvent *);
@@ -56,9 +59,11 @@ public slots:
     void addVariable(const RuQPlainTextEdit::Watch &variable, int rowNumber = -1);
     void changeVariableValue(const QString &value, int rowNumber, bool isValid);
     void addRegister(const QString &name, const QString &hexValue, const QString &decValue, int rowNumber);
+    void addStack(const QString &hexValue, const QString &address);
     void changeMemoryWindow(int row, int column);
     void setValuesFromDebugger(QList<Debugger::memoryInfo> watches);
     void setValuesFromDebugger(QList<Debugger::registersInfo> registers);
+    void setValuesFromDebugger(QList<Debugger::stackInfo> stacks);
 
 private:
     int contextMenuLineNumber;

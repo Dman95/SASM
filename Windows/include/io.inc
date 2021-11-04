@@ -58,6 +58,42 @@ CEXTERN puts
 CEXTERN fputs
 CEXTERN fflush
 
+CEXTERN update
+%macro updateDisplay 1.nolist
+    sasmMacroFunc
+    push eax
+    push ecx
+    push edx
+    ALIGN_STACK 4
+    push %1
+    call update
+    UNALIGN_STACK
+    pop edx
+    pop ecx
+    pop eax
+    sasmMacroFuncE
+%endmacro
+
+CEXTERN setup
+%macro setupDisplay 4.nolist
+    sasmMacroFunc
+    push eax
+    push ecx
+    push edx
+    ALIGN_STACK 16
+    push %4
+    push %3
+    push %2
+    push %1
+    call setup
+    UNALIGN_STACK
+    pop edx
+    pop ecx
+    pop eax
+    sasmMacroFuncE
+%endmacro
+
+
 CEXTERN get_stdin
 CEXTERN get_stdout
 
