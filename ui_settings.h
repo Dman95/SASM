@@ -1206,7 +1206,7 @@ public:
 
         MiModusCheckBox = new QCheckBox(buildTab);
         MiModusCheckBox->setObjectName(QString::fromUtf8("MiModusCheckBox"));
-        MiModusCheckBox->setEnabled(true);
+        MiModusCheckBox->setChecked(true);
 
         formLayout->setWidget(13, QFormLayout::FieldRole, MiModusCheckBox);
 

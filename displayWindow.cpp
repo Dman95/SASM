@@ -234,7 +234,7 @@ void DisplayWindow::changeDisplay(int msgid){
     sem_close(sem_consumer);
     sem_close(sem_producer);
     if(shmctl(shared_block_id, IPC_RMID, NULL) == IPC_RESULT_ERROR){
-        emit printLog(QString("shmctl failed\n"), Qt::red);
+        //emit printLog(QString("shmctl failed\n"), Qt::red);
     }
     #endif
     qint64 elapsed_time2 = programExecutionTime2.elapsed();
