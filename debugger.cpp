@@ -294,7 +294,7 @@ void Debugger::processMessage(QString output, QString error)
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
-            doInput(QString("info f 0\n"), infoStack);
+            doInput(QString("p $sp\n"), infoStack);
         }
 
         //if an error with the wrong name of the section has occurred
@@ -320,7 +320,7 @@ void Debugger::processMessage(QString output, QString error)
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
-            doInput(QString("info f 0\n"), infoStack);
+            doInput(QString("p $sp\n"), infoStack);
         }
     }
 
@@ -599,7 +599,7 @@ void Debugger::processAction(QString output, QString error)
   	    firstStack = false;
   	    index = r.indexIn(output);
     	    if(index != -1)
-    	    	stackBottom = output.mid(index, r.matchedLength()).toULongLong(0, 16) - addressSizeOffset;
+    	    	stackBottom = output.mid(index, r.matchedLength()).toULongLong(0, 16);// - addressSizeOffset;
   	    return;
     	}
     	stackInfo info;
@@ -742,7 +742,7 @@ void Debugger::processMessageMiMode(QString output, QString error)
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
-            doInput(QString("info f 0\n"), infoStack);
+            doInput(QString("p $sp\n"), infoStack);
         }
 
         //if an error with the wrong name of the section has occurred
@@ -768,7 +768,7 @@ void Debugger::processMessageMiMode(QString output, QString error)
             c++;
             actionTypeQueue.enqueue(ni);
             doInput("info inferiors\n", none);
-            doInput(QString("info f 0\n"), infoStack);
+            doInput(QString("p $sp\n"), infoStack);
         }
     }
 
@@ -1085,7 +1085,7 @@ void Debugger::processActionMiMode(QString output, QString error)
   	    firstStack = false;
   	    index = r.indexIn(output);
     	    if(index != -1)
-    	    	stackBottom = output.mid(index, r.matchedLength()).toULongLong(0, 16) - addressSizeOffset;
+    	    	stackBottom = output.mid(index, r.matchedLength()).toULongLong(0, 16);// - addressSizeOffset;
   	    return;
     	}
     	stackInfo info;
