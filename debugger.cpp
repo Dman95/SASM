@@ -929,7 +929,7 @@ void Debugger::processActionMiMode(QString output, QString error)
         if (output[output.length() - 1] != '\n')
             output += QChar('\n');
         //process as ni or si
-        if (output.indexOf(QRegExp("addr=\"0x[0-9a-fA-F]{8,16}\"")) != -1
+        if (output.indexOf(QString("*stopped,reason")) != -1
                 && !backtrace) {
             actionTypeQueue.enqueue(showLine);
             processActionMiMode(output);

@@ -8,7 +8,6 @@ global CMAIN
 CMAIN:
     mov rbp, rsp; for correct debugging
     ;rax = min 1 | rbx = max 510
-    mov rbp, rsp
     setupDisplay 512, 512, 0, 30
     call quadrat
     call quadrat
