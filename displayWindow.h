@@ -65,8 +65,10 @@
 #include <semaphore.h>
 #include <fcntl.h>
 #include <sys/sem.h>
+#include <errno.h>
 #endif
 #define BLOCK_SIZE 3145728
+#define FILENAME "/tmp"
 
 class DisplayWindow : public QWidget
 {
@@ -84,6 +86,11 @@ public:
     sem_t* sem_producer;
     sem_t* sem_consumer;
     int sem_con_id, sem_pro_id;
+    union semun {
+    	int val;               /* used for SETVAL only */
+    	struct semid_ds *buf;  /* used for IPC_STAT and IPC_SET */
+    	ushort *array;         /* used for GETALL and SETALL */
+    } arg;
     #endif
 
 protected:

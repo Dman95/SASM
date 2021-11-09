@@ -67,6 +67,26 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
     scrollArea->setWidget(scrollAreaWidgetContents);
 
     verticalLayout->addWidget(scrollArea);
+    
+    #ifdef Q_OS_WIN32
+    #else
+    /* create producer semaphore | set to 0: */
+    if ((sem_pro_id = semget(ftok(FILENAME, 'p'), 1, 0666 | IPC_CREAT)) == -1){
+        emit printLog(QString("sem_prod failed (semget)\n"), Qt::red);
+    }
+    arg.val = 0;
+    if (semctl(sem_pro_id, 0, SETVAL, arg) == -1){
+        emit printLog(QString("sem_prod failed (semctl)\n"), Qt::red);
+    }
+    /* create consumer semaphore | set to 1*/
+    if ((sem_con_id = semget(ftok(FILENAME, 'c'), 1, 0666 | IPC_CREAT)) == -1){
+        emit printLog(QString("sem_con failed (semget)\n"), Qt::red);
+    }
+    arg.val = 1;
+    if (semctl(sem_con_id, 0, SETVAL, arg) == -1){
+        emit printLog(QString("sem_con failed (semctl)\n"), Qt::red);
+    }
+    #endif
 }
 
 void DisplayWindow::changeDisplay(int msgid){
@@ -164,7 +184,12 @@ void DisplayWindow::changeDisplay(int msgid){
     }
     CloseHandle(hCreateNamedPipe);
     #else
-    sem_wait(sem_producer);
+    // wait sem_wait(sem_producer);
+    struct sembuf sb = {0, -1, 0};
+    if (semop(sem_pro_id, &sb, 1) == -1){
+        emit printLog(QString("sem_pro failed (semop)"+QString(strerror(errno))+"\n"), Qt::red);
+    }
+    
     if(loop){
         //setup the shared memory
         key_t key = ftok(FILENAME, 'f');
@@ -186,19 +211,31 @@ void DisplayWindow::changeDisplay(int msgid){
         }
         mode = block_values[8];
         fps = block_values[9];
+        if(fps < 1 || fps > 60){
+            emit printLog(QString("fps has wrong settings\n"), Qt::red);
+            fps = 1;
+        }
         display_size = (mode) ? res_x*res_y*3 : res_x*res_y;
         displayPicture  = new QImage(res_x, res_y, QImage::Format_RGB32);
         displayPicture->fill(qRgb(255, 255, 255));
         scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
         this->setFixedSize(QSize(res_x+60, res_y+92));
         scrollAreaWidgetContents->update();
-        sem_post(sem_consumer);
+        // sem_post(sem_consumer);
+        sb.sem_op = 1;
+        if (semop(sem_con_id, &sb, 1) == -1) {
+             emit printLog(QString("sem_con failed (semop)\n"), Qt::red);
+        }
     }
     ///
     
     while(loop){
         // receive message
-        sem_wait(sem_producer);
+        // sem_wait(sem_producer);
+        sb.sem_op = -1;
+        if (semop(sem_pro_id, &sb, 1) == -1) {
+             emit printLog(QString("sem_pro failed (semop)\n"), Qt::red);
+        }
         if(!loop)
             break;
         // display the message and print on display
@@ -228,13 +265,22 @@ void DisplayWindow::changeDisplay(int msgid){
             usleep((1000/fps - elapsed_time)*1000);
         programExecutionTime.start();
         scrollAreaWidgetContents->update();
-        sem_post(sem_consumer);
+        //sem_post(sem_consumer);
+        sb.sem_op = 1;
+        if (semop(sem_con_id, &sb, 1) == -1) {
+             emit printLog(QString("sem_con failed (semop)\n"), Qt::red);
+        }
     }
-    //close sema
-    sem_close(sem_consumer);
-    sem_close(sem_producer);
+    //sem_close(sem_consumer);
+    //sem_close(sem_producer);
     if(shmctl(shared_block_id, IPC_RMID, NULL) == IPC_RESULT_ERROR){
         //emit printLog(QString("shmctl failed\n"), Qt::red);
+    }
+    if (semctl(sem_pro_id, 0, IPC_RMID, arg) == -1){
+        emit printLog(QString("sem_pro failed (close)\n"), Qt::red);
+    }
+    if (semctl(sem_con_id, 0, IPC_RMID, arg) == -1){
+        emit printLog(QString("sem_con failed (close)\n"), Qt::red);
     }
     #endif
     qint64 elapsed_time2 = programExecutionTime2.elapsed();
@@ -268,7 +314,12 @@ void DisplayWindow::finish(int msgid){
 			NULL);
 	CloseHandle(hFile);
     #else
-    sem_post(sem_producer);
+    //sem_post(sem_producer);
+    struct sembuf sb = {0, -1, 0};
+    sb.sem_op = 1;
+    if (semop(sem_pro_id, &sb, 1) == -1) {
+        emit printLog(QString("sem_pro failed (semop)\n"), Qt::red);
+    }
     #endif
 }
 

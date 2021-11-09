@@ -88,6 +88,7 @@
 #include <sys/types.h> 
 #include <sys/wait.h>
 #include <sys/sem.h>
+#include <sys/ipc.h> 
 ///
 #include <sys/types.h>
 #include <sys/ipc.h>
@@ -97,6 +98,7 @@
 #define SASM_VERSION "3.12.1"
 #define SEM_PRODUCER_FNAME "/myproducer"
 #define SEM_CONSUMER_FNAME "/myconsumer"
+#define FILENAME "/tmp"
 #define IPC_RESULT_ERROR (-1)
 #define BLOCK_SIZE 3145728
 

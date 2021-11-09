@@ -607,7 +607,8 @@ void Debugger::processAction(QString output, QString error)
     	quint64 value;
     	QString temporary_line; // TODO
     	for (int i = 0; !stackStream.atEnd(); i++) {
-    	    info.value = stackStream.readLine();
+    	    //info.value = stackStream.readLine();
+    	    stackStream >> info.value;
     	    index = info.value.indexOf(QString("Cannot access memory"));
     	    if (index != -1){
     	        emit printLog(QString("Error showing stack"), Qt::red);
@@ -1094,7 +1095,8 @@ void Debugger::processActionMiMode(QString output, QString error)
     	quint64 value;
     	QString temporary_line; // TODO
     	for (int i = 0; !stackStream.atEnd(); i++) {
-    	    info.value = stackStream.readLine();
+    	    // info.value = stackStream.readLine();
+    	    stackStream >> info.value;
     	    index = info.value.indexOf(QString("Cannot access memory"));
     	    if (index != -1){
     	        emit printLog(QString("Error showing stack"), Qt::red);

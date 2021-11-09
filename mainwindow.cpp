@@ -1087,17 +1087,22 @@ void MainWindow::runProgram()
     displayWindow->hCreateNamedPipe = hCreateNamedPipe;
     consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, -1);
     #else
-    // setup some samphores
-    sem_unlink(SEM_CONSUMER_FNAME);
-    sem_unlink(SEM_PRODUCER_FNAME);
     
-    displayWindow->sem_producer = sem_open(SEM_PRODUCER_FNAME, O_CREAT, 0666, 0);
-    if(displayWindow->sem_producer == SEM_FAILED){
-        emit printLog(QString("sem_prod failed\n"), Qt::red);
+    /* create producer semaphore | set to 0: */
+    if ((displayWindow->sem_pro_id = semget(ftok(FILENAME, 'p'), 1, 0666 | IPC_CREAT)) == -1){
+        emit printLog(QString("sem_prod failed (semget)\n"), Qt::red);
     }
-    displayWindow->sem_consumer = sem_open(SEM_CONSUMER_FNAME, O_CREAT, 0666, 1);
-    if(displayWindow->sem_consumer == SEM_FAILED){
-        emit printLog(QString("sem_consumer failed\n"), Qt::red);
+    displayWindow->arg.val = 0;
+    if (semctl(displayWindow->sem_pro_id, 0, SETVAL, displayWindow->arg) == -1){
+        emit printLog(QString("sem_prod failed (semctl)\n"), Qt::red);
+    }
+    /* create consumer semaphore | set to 1*/
+    if ((displayWindow->sem_con_id = semget(ftok(FILENAME, 'c'), 1, 0666 | IPC_CREAT)) == -1){
+        emit printLog(QString("sem_con failed (semget)\n"), Qt::red);
+    }
+    displayWindow->arg.val = 1;
+    if (semctl(displayWindow->sem_con_id, 0, SETVAL, displayWindow->arg) == -1){
+        emit printLog(QString("sem_con failed (semctl)\n"), Qt::red);
     }
     
     consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid);
@@ -1278,17 +1283,23 @@ void MainWindow::debug()
 	displayWindow->hCreateNamedPipe = hCreateNamedPipe;
 	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, -1);
 	#else
-        sem_unlink(SEM_CONSUMER_FNAME);
-        sem_unlink(SEM_PRODUCER_FNAME);
-        
-        displayWindow->sem_producer = sem_open(SEM_PRODUCER_FNAME, O_CREAT, 0666, 0);
-        if(displayWindow->sem_producer == SEM_FAILED){
-            emit printLog(QString("sem_prod failed\n"), Qt::red);
+        /* create producer semaphore | set to 0: */
+        if ((displayWindow->sem_pro_id = semget(ftok(FILENAME, 'p'), 1, 0666 | IPC_CREAT)) == -1){
+            emit printLog(QString("sem_prod failed (semget)\n"), Qt::red);
         }
-        displayWindow->sem_consumer = sem_open(SEM_CONSUMER_FNAME, O_CREAT, 0666, 1);
-        if(displayWindow->sem_consumer == SEM_FAILED){
-            emit printLog(QString("sem_consumer failed\n"), Qt::red);
+        displayWindow->arg.val = 0;
+        if (semctl(displayWindow->sem_pro_id, 0, SETVAL, displayWindow->arg) == -1){
+            emit printLog(QString("sem_prod failed (semctl)\n"), Qt::red);
         }
+        /* create consumer semaphore | set to 1*/
+        if ((displayWindow->sem_con_id = semget(ftok(FILENAME, 'c'), 1, 0666 | IPC_CREAT)) == -1){
+            emit printLog(QString("sem_con failed (semget)\n"), Qt::red);
+        }
+        displayWindow->arg.val = 1;
+        if (semctl(displayWindow->sem_con_id, 0, SETVAL, displayWindow->arg) == -1){
+            emit printLog(QString("sem_con failed (semctl)\n"), Qt::red);
+    	}
+    
     	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid);
     	#endif
       

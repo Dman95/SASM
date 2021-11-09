@@ -8,6 +8,8 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <string.h>
+#include <sys/ipc.h> 
+#include <sys/sem.h>
 
 #define SEM_PRODUCER_FNAME "/myproducer"
 #define SEM_CONSUMER_FNAME "/myconsumer"
@@ -18,8 +20,7 @@ FILE *get_stdin(void) { return stdin; }
 FILE *get_stdout(void) { return stdout; }
 void sasm_replace_stdin(void) {dup2(open("input.txt",0),0);}
 
-sem_t* sem_consumer;
-sem_t* sem_producer;
+int sem_consumer_id, sem_producer_id;
 int display_size;
 char is_setup = 0;
 int shared_block_id;
@@ -33,23 +34,27 @@ void setup(int res_x, int res_y, char mode, char fps){
    }
    is_setup = 1;
    
-   if(res_x < 100 || res_x > 1024 || res_y < 100 || res_y > 1024 || fps > 60 || fps < 1){
+   if(res_x < 100 || res_x > 1024 || res_y < 100 || res_y > 1024 || fps > 30 || fps < 1){
        printf("sem_prod failed\n");
        fflush(stdin);
        exit(-1);
    }
    
-   sem_producer = sem_open(SEM_PRODUCER_FNAME, 0);
-   if(sem_producer == SEM_FAILED){
-       printf("sem_prod failed\n");
+   struct sembuf sb = {0, -1, 0};
+   sem_producer_id = semget(ftok(FILENAME, 'p'), 1, 0);
+   if(sem_producer_id == -1){
+       printf("sem_prod failed(%ld)(%ld)\n", ftok(FILENAME, 'p'), errno);
        exit(-1);
    }
-   sem_consumer = sem_open(SEM_CONSUMER_FNAME, 0);
-   if(sem_consumer == SEM_FAILED){
+   sem_consumer_id = semget(ftok(FILENAME, 'c'), 1, 0);
+   if(sem_consumer_id == -1){
        printf("sem_consumer failed\n");
        exit(-1);	
    }
-   sem_wait(sem_consumer);
+   if (semop(sem_consumer_id, &sb, 1) == -1){ //sem_wait(sem_consumer); 
+        perror("semop");
+        exit(1); 
+   }
    display_size = (mode) ? res_x*res_y*3 : res_x*res_y;
    
    key_t key = ftok(FILENAME, 'f');
@@ -70,7 +75,11 @@ void setup(int res_x, int res_y, char mode, char fps){
    }
    shm_block[8] = mode;
    shm_block[9] = fps;
-   sem_post(sem_producer);
+   sb.sem_op = 1; /* free resource sem_post(sem_producer); */
+   if (semop(sem_producer_id, &sb, 1) == -1) {
+        perror("semop");
+        exit(1);  
+   }
 }
 
 void update(char* data){
@@ -79,9 +88,17 @@ void update(char* data){
       fflush(stdin);
       exit(-1);
    }
-   sem_wait(sem_consumer);
+   struct sembuf sb = {0, -1, 0};
+   if(semop(sem_consumer_id, &sb, 1) == -1){ //sem_wait(sem_consumer); 
+        perror("semop");
+        exit(1); 
+   }
    memcpy(shm_block, data, display_size);
-   sem_post(sem_producer);
+   sb.sem_op = 1; /* free resource sem_post(sem_producer); */
+   if (semop(sem_producer_id, &sb, 1) == -1) {
+        perror("semop");
+        exit(1);  
+   }
 }
 
 void sleepFunc(){usleep(10000000);}
