@@ -1183,6 +1183,7 @@ void MainWindow::stopProgram()
         stopAction->setEnabled(false);
 
         runProcess->kill();
+        displayWindow->finish(msgid);
 
         printLogWithTime(tr("The program stopped.") + '\n', Qt::darkGreen);
     } else {

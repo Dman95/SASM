@@ -68,9 +68,9 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
 
     verticalLayout->addWidget(scrollArea);
     
-    #ifdef Q_OS_WIN32
+    /*#ifdef Q_OS_WIN32
     #else
-    /* create producer semaphore | set to 0: */
+    // create producer semaphore | set to 0: 
     if ((sem_pro_id = semget(ftok(FILENAME, 'p'), 1, 0666 | IPC_CREAT)) == -1){
         emit printLog(QString("sem_prod failed (semget)\n"), Qt::red);
     }
@@ -78,7 +78,7 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
     if (semctl(sem_pro_id, 0, SETVAL, arg) == -1){
         emit printLog(QString("sem_prod failed (semctl)\n"), Qt::red);
     }
-    /* create consumer semaphore | set to 1*/
+    // create consumer semaphore | set to 1
     if ((sem_con_id = semget(ftok(FILENAME, 'c'), 1, 0666 | IPC_CREAT)) == -1){
         emit printLog(QString("sem_con failed (semget)\n"), Qt::red);
     }
@@ -86,7 +86,7 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
     if (semctl(sem_con_id, 0, SETVAL, arg) == -1){
         emit printLog(QString("sem_con failed (semctl)\n"), Qt::red);
     }
-    #endif
+    #endif*/
 }
 
 void DisplayWindow::changeDisplay(int msgid){
@@ -186,7 +186,7 @@ void DisplayWindow::changeDisplay(int msgid){
     #else
     // wait sem_wait(sem_producer);
     struct sembuf sb = {0, -1, 0};
-    if (semop(sem_pro_id, &sb, 1) == -1){
+    if (semop(sem_pro_id, &sb, 1) == -1 && loop){
         emit printLog(QString("sem_pro failed (semop)"+QString(strerror(errno))+"\n"), Qt::red);
     }
     
@@ -224,7 +224,7 @@ void DisplayWindow::changeDisplay(int msgid){
         // sem_post(sem_consumer);
         sb.sem_op = 1;
         if (semop(sem_con_id, &sb, 1) == -1) {
-             emit printLog(QString("sem_con failed (semop)\n"), Qt::red);
+             emit printLog(QString("1 sem_con failed (semop)\n"), Qt::red);
         }
     }
     ///
@@ -233,7 +233,7 @@ void DisplayWindow::changeDisplay(int msgid){
         // receive message
         // sem_wait(sem_producer);
         sb.sem_op = -1;
-        if (semop(sem_pro_id, &sb, 1) == -1) {
+        if (semop(sem_pro_id, &sb, 1) == -1 && loop) {
              emit printLog(QString("sem_pro failed (semop)\n"), Qt::red);
         }
         if(!loop)
@@ -267,13 +267,13 @@ void DisplayWindow::changeDisplay(int msgid){
         scrollAreaWidgetContents->update();
         //sem_post(sem_consumer);
         sb.sem_op = 1;
-        if (semop(sem_con_id, &sb, 1) == -1) {
-             emit printLog(QString("sem_con failed (semop)\n"), Qt::red);
+        if (semop(sem_con_id, &sb, 1) == -1 && loop) {
+             emit printLog(QString("2 sem_con failed (semop)\n"), Qt::red);
         }
     }
     //sem_close(sem_consumer);
     //sem_close(sem_producer);
-    if(shmctl(shared_block_id, IPC_RMID, NULL) == IPC_RESULT_ERROR){
+    /*if(shmctl(shared_block_id, IPC_RMID, NULL) == IPC_RESULT_ERROR){
         //emit printLog(QString("shmctl failed\n"), Qt::red);
     }
     if (semctl(sem_pro_id, 0, IPC_RMID, arg) == -1){
@@ -281,7 +281,7 @@ void DisplayWindow::changeDisplay(int msgid){
     }
     if (semctl(sem_con_id, 0, IPC_RMID, arg) == -1){
         emit printLog(QString("sem_con failed (close)\n"), Qt::red);
-    }
+    }*/
     #endif
     qint64 elapsed_time2 = programExecutionTime2.elapsed();
     qint64 ass = elapsed_time2;
@@ -314,11 +314,16 @@ void DisplayWindow::finish(int msgid){
 			NULL);
 	CloseHandle(hFile);
     #else
-    //sem_post(sem_producer);
-    struct sembuf sb = {0, -1, 0};
-    sb.sem_op = 1;
-    if (semop(sem_pro_id, &sb, 1) == -1) {
-        emit printLog(QString("sem_pro failed (semop)\n"), Qt::red);
+    if(loop){
+        if(shmctl(shared_block_id, IPC_RMID, NULL) == IPC_RESULT_ERROR){
+            emit printLog(QString("shmctl failed\n"), Qt::red);
+        }
+    }
+    if (semctl(sem_pro_id, 0, IPC_RMID, arg) == -1){
+        emit printLog(QString("sem_pro failed (close)\n"), Qt::red);
+    }
+    if (semctl(sem_con_id, 0, IPC_RMID, arg) == -1){
+        emit printLog(QString("sem_con failed (close)\n"), Qt::red);
     }
     #endif
 }
