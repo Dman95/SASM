@@ -283,8 +283,8 @@ void DisplayWindow::changeDisplay(int msgid){
         emit printLog(QString("sem_con failed (close)\n"), Qt::red);
     }*/
     #endif
-    qint64 elapsed_time2 = programExecutionTime2.elapsed();
-    qint64 ass = elapsed_time2;
+    //qint64 elapsed_time2 = programExecutionTime2.elapsed();
+    //qint64 ass = elapsed_time2;
     loop = false;
     //zoomComboBox->setEditable(false);
     emit closeDisplay();
