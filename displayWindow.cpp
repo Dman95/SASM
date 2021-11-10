@@ -263,7 +263,6 @@ void DisplayWindow::changeDisplay(int msgid){
         emit printLog(QString("sem_con failed (close)\n"), Qt::red);
     }*/
     #endif
-    qint64 elapsed_time2 = programExecutionTime2.elapsed();
     loop = false;
     zoomComboBox->setEnabled(true);
     emit closeDisplay();
