@@ -62,35 +62,15 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
     scrollArea = new QScrollArea(this);
     scrollArea->setWidgetResizable(true);
     scrollAreaWidgetContents = new BufferFrame(this);
-    //scrollAreaWidgetContents->setGeometry(QRect(0, 0, 1218, 1218));
 
     scrollArea->setWidget(scrollAreaWidgetContents);
 
     verticalLayout->addWidget(scrollArea);
-    
-    /*#ifdef Q_OS_WIN32
-    #else
-    // create producer semaphore | set to 0: 
-    if ((sem_pro_id = semget(ftok(FILENAME, 'p'), 1, 0666 | IPC_CREAT)) == -1){
-        emit printLog(QString("sem_prod failed (semget)\n"), Qt::red);
-    }
-    arg.val = 0;
-    if (semctl(sem_pro_id, 0, SETVAL, arg) == -1){
-        emit printLog(QString("sem_prod failed (semctl)\n"), Qt::red);
-    }
-    // create consumer semaphore | set to 1
-    if ((sem_con_id = semget(ftok(FILENAME, 'c'), 1, 0666 | IPC_CREAT)) == -1){
-        emit printLog(QString("sem_con failed (semget)\n"), Qt::red);
-    }
-    arg.val = 1;
-    if (semctl(sem_con_id, 0, SETVAL, arg) == -1){
-        emit printLog(QString("sem_con failed (semctl)\n"), Qt::red);
-    }
-    #endif*/
 }
 
 void DisplayWindow::changeDisplay(int msgid){
     loop = true;
+    zoomComboBox->setEnabled(false);
     displayPicture  = new QImage(512, 512, QImage::Format_RGB32);
     displayPicture->fill(qRgb(255, 255, 255));
     memset(buffer, 0xff, 512*512);
@@ -284,9 +264,8 @@ void DisplayWindow::changeDisplay(int msgid){
     }*/
     #endif
     qint64 elapsed_time2 = programExecutionTime2.elapsed();
-    qint64 ass = elapsed_time2;
     loop = false;
-    //zoomComboBox->setEditable(false);
+    zoomComboBox->setEnabled(true);
     emit closeDisplay();
 }
 
@@ -334,7 +313,7 @@ void DisplayWindow::zoomSettingsChanged(int value){
         scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
         this->setFixedSize(QSize(res_x+60, res_y+92));
         scrollAreaWidgetContents->update();
-	}
+    }
 }
 
 void DisplayWindow::updateDisplay() {
