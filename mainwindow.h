@@ -238,9 +238,9 @@ private:
     QString backupLinkerOptions;
     QString backupObjectFileName;
     QString backupGDBPath;
-    QString backupGDBVerbose;
-    QString backupGDBMi;
-    QString backupGDBDisplay;
+    bool backupGDBVerbose;
+    bool backupGDBMi;
+    bool backupGDBDisplay;
     bool backupDisableLinking;
     bool backupCurrentDir;
     QString backupAssemblerPath;

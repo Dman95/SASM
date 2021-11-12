@@ -2060,7 +2060,7 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
 
     settingsUi.sasmVerboseCheckBox->setChecked(settings.value("sasmverbose", false).toBool());
     
-    settingsUi.MiModusCheckBox->setChecked(settings.value("mi", false).toBool());
+    settingsUi.MiModusCheckBox->setChecked(settings.value("mi", true).toBool());
     
     settingsUi.sasmDisplayCheckBox->setChecked(settings.value("display", false).toBool());
 
@@ -2214,7 +2214,7 @@ void MainWindow::recreateAssembler(bool start)
         settings.setValue("disablelinking", false);
         settings.setValue("currentdir", false);
         settings.setValue("sasmverbose", false);
-        settings.setValue("mi", false);
+        settings.setValue("mi", true);
         settings.setValue("display", false);
         settings.setValue("gdbpath", "gdb");
         settings.setValue("assemblerpath", assembler->getAssemblerPath());
@@ -2241,7 +2241,7 @@ void MainWindow::backupSettings()
     backupGDBPath = settings.value("gdbpath", "gdb").toString();
     backupGDBVerbose = settings.value("sasmverbose", false).toBool();
     backupGDBDisplay = settings.value("display", false).toBool();
-    backupGDBMi = settings.value("mi", false).toBool();
+    backupGDBMi = settings.value("mi", true).toBool();
     backupDisableLinking = settings.value("disablelinking", false).toBool();
     backupCurrentDir = settings.value("currentdir", false).toBool();
     backupStartText = settings.value("starttext", assembler->getStartText()).toString();
