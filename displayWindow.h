@@ -38,69 +38,101 @@
 **
 ****************************************************************************/
 
-#include "common.h"
+#ifndef DISPLAYWINDOW_H
+#define DISPLAYWINDOW_H
 
-/**
- * @file common.cpp
- * Contains common functions.
- */
+#include <QWidget>
+#include <QtGui>
+#include <QLabel>
+#include <QPainter>
+#include <QVBoxLayout>
+#include <QtWidgets/QHBoxLayout>
+#include <QComboBox>
+#include <QtWidgets/QScrollArea>
+#include <QElapsedTimer>
+#include <stdio.h>
+#include <iostream>
+#include <unistd.h>
+#include <vector>
+#ifdef Q_OS_WIN32
+#include <windows.h>
+#include <conio.h>
+#include <tchar.h>
+#else
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <sys/shm.h>
+#include <semaphore.h>
+#include <fcntl.h>
+#include <sys/sem.h>
+#include <errno.h>
+#endif
+#define BLOCK_SIZE 3145728
+#define FILENAME "/tmp"
 
-QString Common::applicationDataPath()
+class DisplayWindow : public QWidget
 {
+    Q_OBJECT
+public:
+    
+    explicit DisplayWindow(QWidget *parent = 0);
+    ~DisplayWindow();
+    void changeDisplay(int msgid);
+    void finish(int msgid);
+    void updateDisplay();
     #ifdef Q_OS_WIN32
-        QString appDir = QCoreApplication::applicationDirPath();
-        if (! QFile::exists(appDir + "/NASM")) {
-            appDir = QCoreApplication::applicationDirPath() + "/Windows";
-        }
-        if (! QFile::exists(appDir + "/NASM")) {
-            appDir = QCoreApplication::applicationDirPath();
-        }
-        return appDir;
-    #elif defined(__FreeBSD__) || defined(__OpenBSD__) || defined( __NetBSD__) || defined(__DragonFly__)
-        QString path = QCoreApplication::applicationDirPath();
-        QString appDir = path.left(path.length() - 4) + QString("/share/sasm"); //replace /bin with /share/sasm
-        if (! QFile::exists(appDir)) {
-            appDir = QCoreApplication::applicationDirPath() + "/share/sasm";
-        }
-        if (! QFile::exists(appDir)) {
-            appDir = QCoreApplication::applicationDirPath() + "/BSD/share/sasm";
-        }
-        return appDir;
+    HANDLE hCreateNamedPipe;
     #else
-        QString path = QCoreApplication::applicationDirPath();
-        QString appDir = path.left(path.length() - 4) + QString("/share/sasm"); //replace /bin with /share/sasm
-        if (! QFile::exists(appDir)) {
-            appDir = QCoreApplication::applicationDirPath() + "/share/sasm";
-        }
-        if (! QFile::exists(appDir)) {
-            appDir = QCoreApplication::applicationDirPath() + "/Linux/share/sasm";
-        }
-        return appDir;
+    sem_t* sem_producer;
+    sem_t* sem_consumer;
+    int sem_con_id, sem_pro_id;
+    union semun {
+    	int val;               /* used for SETVAL only */
+    	struct semid_ds *buf;  /* used for IPC_STAT and IPC_SET */
+    	ushort *array;         /* used for GETALL and SETALL */
+    } arg;
     #endif
-}
 
-QString Common::pathInTemp(QString path)
-{
-    QString temp = QDir::tempPath();
-    QChar lastSymbol = temp[temp.length() - 1];
-    if (lastSymbol == QChar('/') || lastSymbol == QChar('\\')) {
-        temp.chop(1);
-    }
+protected:
+    void closeEvent(QCloseEvent *);
 
-    // Generate temporary directory including username
-    QString name = qgetenv("USER");
-    if (name.isEmpty())
-        name = qgetenv("USERNAME");
+private:
+    friend class BufferFrame;
+    QVBoxLayout  *verticalLayout;
+    QHBoxLayout *horizontalLayout;
+    QImage* displayPicture;
+    QLabel* displayImageLabel;
+    QComboBox *zoomComboBox;
+    QScrollArea *scrollArea;
+    QWidget *scrollAreaWidgetContents;
+    uint8_t buffer[BLOCK_SIZE];
+    int zoom;
+    int msgid, res_x, res_y, mode, display_size;
+    std::atomic<bool> loop;
+    int shared_block_id;
+    uint8_t* block_values;
+    
+public slots:
+void zoomSettingsChanged(int value);
 
-    QString tempPath = temp+"/SASM"+name;
+signals:
+    void displayChanged(void);
+    void closeSignal();
+    void closeDisplay();
+    void printLog(QString msg, QColor color = QColor(Qt::black));
+};
 
-    if (! QFile::exists(tempPath)) {
-        QDir().mkpath(tempPath);
-    }
+class BufferFrame : public QWidget{
+public:
+    BufferFrame(DisplayWindow *parent = 0);
+	DisplayWindow* d;
 
-    if (!path.isEmpty()) {
-        tempPath += "/" + path;
-    }
-    tempPath = QDir::toNativeSeparators(tempPath);
-    return tempPath;
-}
+private:
+    friend class DisplayWindow;
+
+protected:
+    void paintEvent(QPaintEvent *event);
+
+};
+
+#endif

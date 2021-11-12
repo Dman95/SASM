@@ -38,69 +38,50 @@
 **
 ****************************************************************************/
 
-#include "common.h"
+#include "stacksettingswidget.h"
 
-/**
- * @file common.cpp
- * Contains common functions.
- */
-
-QString Common::applicationDataPath()
+/*! \brief  This defines the layout such as spacing and items of the stack
+ *
+ *
+ * First, the parent widget is passed to the class. Next, the form items are added
+ * and spaced appropriately. The form items are then further defined and then connected.
+*/
+StackSettingsWidget::StackSettingsWidget(QWidget *parent) :
+    QWidget(parent)
 {
-    #ifdef Q_OS_WIN32
-        QString appDir = QCoreApplication::applicationDirPath();
-        if (! QFile::exists(appDir + "/NASM")) {
-            appDir = QCoreApplication::applicationDirPath() + "/Windows";
-        }
-        if (! QFile::exists(appDir + "/NASM")) {
-            appDir = QCoreApplication::applicationDirPath();
-        }
-        return appDir;
-    #elif defined(__FreeBSD__) || defined(__OpenBSD__) || defined( __NetBSD__) || defined(__DragonFly__)
-        QString path = QCoreApplication::applicationDirPath();
-        QString appDir = path.left(path.length() - 4) + QString("/share/sasm"); //replace /bin with /share/sasm
-        if (! QFile::exists(appDir)) {
-            appDir = QCoreApplication::applicationDirPath() + "/share/sasm";
-        }
-        if (! QFile::exists(appDir)) {
-            appDir = QCoreApplication::applicationDirPath() + "/BSD/share/sasm";
-        }
-        return appDir;
-    #else
-        QString path = QCoreApplication::applicationDirPath();
-        QString appDir = path.left(path.length() - 4) + QString("/share/sasm"); //replace /bin with /share/sasm
-        if (! QFile::exists(appDir)) {
-            appDir = QCoreApplication::applicationDirPath() + "/share/sasm";
-        }
-        if (! QFile::exists(appDir)) {
-            appDir = QCoreApplication::applicationDirPath() + "/Linux/share/sasm";
-        }
-        return appDir;
-    #endif
+    layout = new QHBoxLayout(this);
+    typeComboBox = new QComboBox;
+    sizeComboBox = new QComboBox;
+    signCheckbox = new QCheckBox(tr("Signed/Unsigned"));
+    layout->addWidget(typeComboBox);
+    layout->addWidget(sizeComboBox);
+    //layout->addSpacing(1);
+    layout->addWidget(signCheckbox);
+
+    QStringList comboBoxList;
+    comboBoxList << tr("Hex") << QString("Dec") << tr("Bin");
+    typeComboBox->insertItems(0, comboBoxList);
+
+    QStringList sizeBoxList;
+    sizeBoxList << QString("8") << QString("16") << QString("32") << QString("64");
+    sizeComboBox->insertItems(0, sizeBoxList);
+
+    signCheckbox->setChecked(false);
+
+    layout->setSpacing(0);
+    layout->setMargin(0);
+
+    connect(typeComboBox, SIGNAL(currentIndexChanged(int)), this, SIGNAL(stacksettingsChanged()));
+    connect(sizeComboBox, SIGNAL(currentIndexChanged(int)), this, SIGNAL(stacksettingsChanged()));
+    connect(signCheckbox, SIGNAL(stateChanged(int)), this, SIGNAL(stacksettingsChanged()));
+
+    setLayout(layout);
 }
 
-QString Common::pathInTemp(QString path)
+StackSettingsWidget::~StackSettingsWidget()
 {
-    QString temp = QDir::tempPath();
-    QChar lastSymbol = temp[temp.length() - 1];
-    if (lastSymbol == QChar('/') || lastSymbol == QChar('\\')) {
-        temp.chop(1);
-    }
-
-    // Generate temporary directory including username
-    QString name = qgetenv("USER");
-    if (name.isEmpty())
-        name = qgetenv("USERNAME");
-
-    QString tempPath = temp+"/SASM"+name;
-
-    if (! QFile::exists(tempPath)) {
-        QDir().mkpath(tempPath);
-    }
-
-    if (!path.isEmpty()) {
-        tempPath += "/" + path;
-    }
-    tempPath = QDir::toNativeSeparators(tempPath);
-    return tempPath;
+    delete typeComboBox;
+    delete sizeComboBox;
+    delete signCheckbox;
+    delete layout;
 }

@@ -8,6 +8,5 @@ section .text
 CMAIN:
     mov rbp, rsp
     PRINT_STRING msg
-    NEWLINE
     xor rax, rax
     ret

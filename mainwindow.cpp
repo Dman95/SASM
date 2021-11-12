@@ -12,7 +12,7 @@
 ** (at your option) any later version.
 **
 ** SASM is distributed in the hope that it will be useful,
-** but WITHOUT ANY WARRANTY; without even the implied warranty of
+** but WITHOUT ANY WARRANTY; without even the implieddwarranty of
 ** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ** GNU General Public License for more details.
 **
@@ -39,6 +39,7 @@
 ****************************************************************************/
 
 #include "mainwindow.h"
+#include <iostream>
 
 /**
  * @file mainwindow.cpp
@@ -46,7 +47,7 @@
  */
 
 MainWindow::MainWindow(const QStringList &args, QWidget *parent)
-    : QMainWindow(parent), settings("SASM Project", "SASM")
+    : QMainWindow(parent), settings("SASM", "SASM")
 {
     setWindowTitle("SASM");
     setWindowIcon(QIcon(":images/mainIcon.png"));
@@ -64,12 +65,14 @@ MainWindow::MainWindow(const QStringList &args, QWidget *parent)
     help = 0;
     registersWindow = 0;
     memoryWindow = 0;
+    stackWindow = 0;
     debugger = 0;
     programStopped = true;
     highlighter = 0;
     tabs = 0;
     memoryDock = 0;
     registersDock = 0;
+    stackDock = 0;
 
     //! Initialize assembler
     assembler = 0;
@@ -228,6 +231,7 @@ void MainWindow::createMenus()
     debugMenu->addAction(debugToggleBreakpointAction);
     debugMenu->addAction(debugShowRegistersAction);
     debugMenu->addAction(debugShowMemoryAction);
+    debugMenu->addAction(debugShowStackAction);
     debugMenu->addSeparator();
     debugMenu->addAction(stopAction);
     settingsMenu = menuBar()->addMenu(tr("Settings"));
@@ -459,6 +463,18 @@ void MainWindow::createActions()
     debugShowMemoryAction->setShortcut(key);
     debugShowMemoryAction->setCheckable(true);
     connect(debugShowMemoryAction, SIGNAL(toggled(bool)), this, SLOT(debugShowMemory()), Qt::QueuedConnection);
+    
+    //neu:
+    debugShowStackAction = new QAction("Show stack", this);
+    /*
+    key = keySettings.value("showMemory", "default").toString();
+    stdKey = QKeySequence(QString("Ctrl+M"));
+    if (key == "default")
+        key = stdKey.toString();
+    debugShowMemoryAction->setShortcut(key);
+    */
+    debugShowStackAction->setCheckable(true);
+    connect(debugShowStackAction, SIGNAL(toggled(bool)), this, SLOT(debugShowStack()), Qt::QueuedConnection);
 
     disableDebugActions(true);
 
@@ -748,6 +764,12 @@ void MainWindow::closeAllChildWindows()
         delete memoryWindow;
         memoryWindow = 0;
     }
+    if (stackWindow) {
+        stackWindow->close();
+        delete stackWindow;
+        stackWindow = 0;
+    }
+    
 }
 
 bool MainWindow::deleteTab(int index, bool saveFileName)
@@ -858,8 +880,7 @@ void MainWindow::buildProgram(bool debugMode)
     QStringList assemblerArguments = assemblerOptions.split(QChar(' '));
     assemblerArguments.replaceInStrings("$SOURCE$", Common::pathInTemp("program.asm"));
     assemblerArguments.replaceInStrings("$LSTOUTPUT$", Common::pathInTemp("program.lst"));
-    assemblerArguments.replaceInStrings("$PROGRAM.OBJ$",
-        Common::pathInTemp(settings.value("objectfilename", "program.o").toString()));
+    assemblerArguments.replaceInStrings("$PROGRAM.OBJ$", Common::pathInTemp(settings.value("objectfilename", "program.o").toString()));
     assemblerArguments.replaceInStrings("$PROGRAM$", Common::pathInTemp("SASMprog.exe"));
     assemblerArguments.replaceInStrings("$MACRO.OBJ$", stdioMacros);
     QProcess assemblerProcess;
@@ -878,6 +899,10 @@ void MainWindow::buildProgram(bool debugMode)
     } else {
         assemblerProcess.setWorkingDirectory(applicationDataPath() + "/include");
     }
+
+    if (settings.value("sasmverbose", false).toBool())
+        printLog("Assembler: "+assemblerPath+" "+assemblerArguments.join(" ")+"\n", Qt::darkGreen);
+
     assemblerProcess.start(assemblerPath, assemblerArguments);
     assemblerProcess.waitForFinished();
 
@@ -908,7 +933,7 @@ void MainWindow::buildProgram(bool debugMode)
 
         //! macro.c compilation
         QStringList gccMArguments;
-        gccMArguments << "-x" << "c" << Common::pathInTemp("macro.c") << "-c" << "-g" << "-o" << stdioMacros;
+        gccMArguments << "-x" << "c" << Common::pathInTemp("macro.c") << "-c" << "-g" << "-pthread" << "-o" << stdioMacros;
         if (settings.value("mode", QString("x86")).toString() == "x86")
             gccMArguments << "-m32";
         else
@@ -916,6 +941,10 @@ void MainWindow::buildProgram(bool debugMode)
         QProcess gccMProcess;
         gccMProcess.start(gcc, gccMArguments);
         gccMProcess.waitForFinished();
+        QByteArray error = gccMProcess.readAllStandardError();
+        QString errorBuffer = QString::fromLocal8Bit(error.constData(), error.size());
+        if (errorBuffer.contains("fatal error: "))
+        	emit printLog(QString("can not compile macro.c: ") + errorBuffer + "\n", Qt::red);
     #endif
 
     //! Final linking
@@ -933,6 +962,14 @@ void MainWindow::buildProgram(bool debugMode)
         linkerOutput = Common::pathInTemp("linkererror.txt");
         linkerProcess.setStandardOutputFile(linkerOutput);
         linkerProcess.setStandardErrorFile(linkerOutput, QIODevice::Append);
+        
+        #ifdef Q_OS_WIN32
+        #else
+        linkerArguments << "-pthread";
+        #endif
+        if (settings.value("sasmverbose", false).toBool())
+            printLog("Linker: "+linker+" "+linkerArguments.join(" ")+"\n", Qt::darkGreen);
+
         linkerProcess.start(linker, linkerArguments);
         linkerProcess.waitForFinished();
 
@@ -1023,7 +1060,54 @@ void MainWindow::runProgram()
 
     QString program = Common::pathInTemp("SASMprog.exe");
     runProcess->setStandardInputFile(input);
-
+    
+    // start display
+    if (!displayWindow) {
+        displayWindow = new DisplayWindow;
+        displayWindow->setWindowIcon(QIcon(":images/mainIcon.png"));
+        displayWindow->setWindowFlags(Qt::Widget | Qt::MSWindowsFixedSizeDialogHint);
+        displayWindow->activateWindow();
+    }
+    if (settings.value("display", false).toBool()){
+        displayWindow->show();
+    }
+    #ifdef Q_OS_WIN32
+    HANDLE hCreateNamedPipe = CreateNamedPipe(
+            L"\\\\.\\pipe\\sasmpipe",
+            PIPE_ACCESS_INBOUND,
+            PIPE_TYPE_MESSAGE|PIPE_READMODE_MESSAGE|PIPE_WAIT,
+            PIPE_UNLIMITED_INSTANCES,
+            BLOCK_SIZE,
+            BLOCK_SIZE,
+            0,
+            NULL);
+    if(hCreateNamedPipe == INVALID_HANDLE_VALUE){
+        printLog(QString("Couldnt create Pipe"+QString::number(GetLastError()))+"\n", Qt::red);
+    }
+    displayWindow->hCreateNamedPipe = hCreateNamedPipe;
+    consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, -1);
+    #else
+    
+    /* create producer semaphore | set to 0: */
+    if ((displayWindow->sem_pro_id = semget(ftok(FILENAME, 'p'), 1, 0666 | IPC_CREAT)) == -1){
+        emit printLog(QString("sem_prod failed (semget)\n"), Qt::red);
+    }
+    displayWindow->arg.val = 0;
+    if (semctl(displayWindow->sem_pro_id, 0, SETVAL, displayWindow->arg) == -1){
+        emit printLog(QString("sem_prod failed (semctl)\n"), Qt::red);
+    }
+    /* create consumer semaphore | set to 1*/
+    if ((displayWindow->sem_con_id = semget(ftok(FILENAME, 'c'), 1, 0666 | IPC_CREAT)) == -1){
+        emit printLog(QString("sem_con failed (semget)\n"), Qt::red);
+    }
+    displayWindow->arg.val = 1;
+    if (semctl(displayWindow->sem_con_id, 0, SETVAL, displayWindow->arg) == -1){
+        emit printLog(QString("sem_con failed (semctl)\n"), Qt::red);
+    }
+    
+    consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid);
+    #endif
+    
     //! Run program in code directory if it exists
     QString codePath = currentTab->getCurrentFilePath();
     if (!codePath.isEmpty()) {
@@ -1061,6 +1145,8 @@ void MainWindow::testStopOfProgram()
         debugAction->setEnabled(true);
         buildAction->setEnabled(true);
         if (!programStopped) {
+            displayWindow->finish(msgid);
+            consumer->join();
             if (runProcess->exitStatus() == QProcess::NormalExit)
                 printLogWithTime(tr("The program finished normally. Execution time: %1 s")
                                  .arg(programExecutionTime.elapsed() / 1000.0)
@@ -1097,6 +1183,7 @@ void MainWindow::stopProgram()
         stopAction->setEnabled(false);
 
         runProcess->kill();
+        displayWindow->finish(msgid);
 
         printLogWithTime(tr("The program stopped.") + '\n', Qt::darkGreen);
     } else {
@@ -1149,6 +1236,7 @@ void MainWindow::debug()
         }
         ((Tab *) tabs->currentWidget())->clearOutput();
         printLogWithTime(tr("Debugging started...") + '\n', Qt::darkGreen);
+
         Tab *currentTab = (Tab *) tabs->currentWidget();
         CodeEditor *code = currentTab->code;
 
@@ -1165,11 +1253,62 @@ void MainWindow::debug()
         }
         workingDirectoryPath.replace("\\", "/");
 
+        QString gdbpath = settings.value("gdbpath", "gdb").toString();
+
         //! Determine input path
         QString inputPath = Common::pathInTemp("input.txt");
         inputPath.replace("\\", "/");
-
-        debugger = new Debugger(compilerOut, exePath, workingDirectoryPath, inputPath, assembler);
+      
+      	// start display
+		if (!displayWindow) {
+           displayWindow = new DisplayWindow;
+           displayWindow->setWindowIcon(QIcon(":images/mainIcon.png"));
+           displayWindow->setWindowFlags(Qt::Widget | Qt::MSWindowsFixedSizeDialogHint);
+           displayWindow->activateWindow();
+        }
+        if (settings.value("display", false).toBool())
+            displayWindow->show();
+	#ifdef Q_OS_WIN32
+	HANDLE hCreateNamedPipe = CreateNamedPipe(
+		L"\\\\.\\pipe\\sasmpipe",
+		PIPE_ACCESS_INBOUND,
+		PIPE_TYPE_MESSAGE|PIPE_READMODE_MESSAGE|PIPE_WAIT,
+		PIPE_UNLIMITED_INSTANCES,
+		BLOCK_SIZE,
+		BLOCK_SIZE,
+		0,
+		NULL);
+	if(hCreateNamedPipe == INVALID_HANDLE_VALUE){
+	    printLog(QString("Couldnt create Pipe"+QString::number(GetLastError()))+"\n", Qt::red);
+	}
+	displayWindow->hCreateNamedPipe = hCreateNamedPipe;
+	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, -1);
+	#else
+        /* create producer semaphore | set to 0: */
+        if ((displayWindow->sem_pro_id = semget(ftok(FILENAME, 'p'), 1, 0666 | IPC_CREAT)) == -1){
+            emit printLog(QString("sem_prod failed (semget)\n"), Qt::red);
+        }
+        displayWindow->arg.val = 0;
+        if (semctl(displayWindow->sem_pro_id, 0, SETVAL, displayWindow->arg) == -1){
+            emit printLog(QString("sem_prod failed (semctl)\n"), Qt::red);
+        }
+        /* create consumer semaphore | set to 1*/
+        if ((displayWindow->sem_con_id = semget(ftok(FILENAME, 'c'), 1, 0666 | IPC_CREAT)) == -1){
+            emit printLog(QString("sem_con failed (semget)\n"), Qt::red);
+        }
+        displayWindow->arg.val = 1;
+        if (semctl(displayWindow->sem_con_id, 0, SETVAL, displayWindow->arg) == -1){
+            emit printLog(QString("sem_con failed (semctl)\n"), Qt::red);
+    	}
+    
+    	consumer = new std::thread(&DisplayWindow::changeDisplay, displayWindow, msgid);
+    	#endif
+      
+        debugger = new Debugger(compilerOut, exePath, workingDirectoryPath, inputPath, assembler, 0, settings.value("sasmverbose", false).toBool(), settings.value("mi", false).toBool());
+	// connect print signals for output in Debugger
+        connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
+		connect(displayWindow, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor))); // remove
+        connect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
         connect(debugger, SIGNAL(highlightLine(int)), code, SLOT(updateDebugLine(int)));
         connect(debugger, SIGNAL(finished()), this, SLOT(debugExit()), Qt::QueuedConnection);
         connect(debugger, SIGNAL(started()), this, SLOT(enableDebugActions()));
@@ -1177,11 +1316,10 @@ void MainWindow::debug()
         connect(code, SIGNAL(breakpointsChanged(quint64,bool)), debugger, SLOT(changeBreakpoint(quint64,bool)));
         connect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
                    this, SLOT(setShowMemoryToChecked(RuQPlainTextEdit::Watch)));
-        connect(debugger, SIGNAL(printLog(QString,QColor)), this, SLOT(printLog(QString,QColor)));
-        connect(debugger, SIGNAL(printOutput(QString)), this, SLOT(printOutput(QString)));
         connect(debugger, SIGNAL(inMacro()), this, SLOT(debugNextNi()), Qt::QueuedConnection);
         connect(debugger, SIGNAL(wasStopped()), this, SLOT(changeDebugActionToStart()));
         connect(debugger, SIGNAL(needToContinue()), this, SLOT(debug()));
+
         code->setDebugEnabled();
     }
     //Pause or continue debugger
@@ -1212,6 +1350,7 @@ void MainWindow::changeDebugActionToStart()
     else {
         debugShowRegisters();
         debugShowMemory();
+        debugShowStack();
     }
 }
 
@@ -1232,6 +1371,7 @@ void MainWindow::enableDebugActions()
     debugNextNiAction->setEnabled(true);
     debugShowRegistersAction->setEnabled(true);
     debugShowMemoryAction->setEnabled(true);
+    debugShowStackAction->setEnabled(true);
     stopAction->setEnabled(true);
 
     //! Change stopAction
@@ -1245,6 +1385,7 @@ void MainWindow::enableDebugActions()
     //! Restore windows
     debugShowRegistersAction->setChecked(settings.value("debugregisters", false).toBool());
     debugShowMemoryAction->setChecked(settings.value("debugmemory", false).toBool());
+    debugShowStackAction->setChecked(settings.value("debugstack", false).toBool());
 }
 
 void MainWindow::disableDebugActions(bool start)
@@ -1257,6 +1398,7 @@ void MainWindow::disableDebugActions(bool start)
     debugNextNiAction->setEnabled(false);
     debugShowRegistersAction->setEnabled(false);
     debugShowMemoryAction->setEnabled(false);
+    debugShowStackAction->setEnabled(false);
     stopAction->setEnabled(false);
 
     //! Change stopAction
@@ -1320,6 +1462,8 @@ void MainWindow::debugShowMemory()
             restoreState(settings.value("debugstate").toByteArray());
             if (registersDock)
                 registersDock->show();
+            if (stackDock)
+                stackDock->show();
             if (memoryDock)
                 memoryDock->show();
 
@@ -1379,6 +1523,50 @@ void MainWindow::debugShowMemory()
             memoryDock->close();
             delete memoryDock;
             memoryDock = 0;
+        }
+}
+
+void MainWindow::debugShowStack()
+{
+    if (debugShowStackAction->isChecked()) {
+        if (!stackWindow) {
+            stackDock = new QDockWidget(tr("Stack"), this);
+            stackDock->setAllowedAreas(Qt::AllDockWidgetAreas);
+            
+            stackWindow = new StackWidget;
+            connect(stackWindow, SIGNAL(closeSignal()), this, SLOT(setShowStackToUnchecked()));
+            connect(debugger, SIGNAL(printStack(QList<Debugger::stackInfo>)),
+                  stackWindow->stackContent, SLOT(setValuesFromDebugger(QList<Debugger::stackInfo>)));
+            connect(stackWindow->settings, SIGNAL(stacksettingsChanged()), this, SLOT(debugShowStack()), Qt::QueuedConnection);
+
+            stackDock->setWidget(stackWindow);
+            stackDock->setFeatures(QDockWidget::DockWidgetFloatable | QDockWidget::DockWidgetMovable);
+            addDockWidget(Qt::LeftDockWidgetArea, stackDock);
+            stackDock->setObjectName("stackDock");
+
+            restoreState(settings.value("debugstate").toByteArray());
+            if (registersDock)
+                registersDock->show();
+            if (memoryDock)
+                memoryDock->show();
+            if (stackDock)
+                stackDock->show();
+        }
+        if (debugger->isStopped()) {
+            debugger->setSystemStack(stackWindow->settings->typeComboBox->currentIndex());
+            debugger->setBitStack(stackWindow->settings->sizeComboBox->currentIndex());
+            debugger->setSignStack(stackWindow->settings->signCheckbox->isChecked());
+            debugger->doInput(QString("x/100x $sp\n"), infoStack);
+        }
+    } else
+        if (stackWindow) {
+            stackWindow->close();
+            //stackWindow->clear();
+            delete stackWindow;
+            stackWindow = 0;
+            stackDock->close();
+            delete stackDock;
+            stackDock = 0;
         }
 }
 
@@ -1444,6 +1632,8 @@ void MainWindow::debugShowRegisters()
                 registersDock->show();
             if (memoryDock)
                 memoryDock->show();
+            if (stackDock)
+                stackDock->show();
         }
         static SignalLocker locker;
         if (debugger->isStopped() && locker.tryLock()) {
@@ -1471,10 +1661,16 @@ void MainWindow::setShowRegistersToUnchecked()
     debugShowRegistersAction->setChecked(false);
 }
 
+void MainWindow::setShowStackToUnchecked()
+{
+    debugShowStackAction->setChecked(false);
+}
+//TODO
 void MainWindow::debugExit()
 {
     settings.setValue("debugregisters", debugShowRegistersAction->isChecked());
     settings.setValue("debugmemory", debugShowMemoryAction->isChecked());
+    settings.setValue("debugstack", debugShowStackAction->isChecked());
     settings.setValue("debugstate", saveState());
     CodeEditor *code = ((Tab *) tabs->currentWidget())->code;
     disconnect(code, SIGNAL(addWatchSignal(const RuQPlainTextEdit::Watch &)),
@@ -1484,13 +1680,18 @@ void MainWindow::debugExit()
     code->setDebugDisabled();
      //! Many actions performed here - deleting of highlighting too
     delete debugger;
+    // close display:
+    displayWindow->finish(msgid);
+    consumer->join();
     debugger = 0;
     closeAnyCommandWidget();
     debugShowRegistersAction->setChecked(false);
     debugShowMemoryAction->setChecked(false);
+    debugShowStackAction->setChecked(false);
     printLogWithTime(tr("Debugging finished.") + '\n', Qt::darkGreen);
     disableDebugActions();
 }
+
 
 void MainWindow::showAnyCommandWidget()
 {
@@ -1571,7 +1772,7 @@ void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool a
                     if (cs == Qt::CaseSensitive)
                         newCursor = document->find(pattern, newCursor, QTextDocument::FindCaseSensitively);
                     else
-                        newCursor = document->find(pattern, newCursor, 0);
+                        newCursor = document->find(pattern, newCursor);
                     //! Replace mode
                     if (replace && i == tabs->currentIndex()) {
                         newCursor.removeSelectedText();
@@ -1603,13 +1804,13 @@ void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool a
             if (cs == Qt::CaseSensitive)
                 newCursor = document->find(pattern, newCursor, QTextDocument::FindCaseSensitively);
             else
-                newCursor = document->find(pattern, newCursor, 0);
+                newCursor = document->find(pattern, newCursor);
              //! Continue from start
             if (newCursor.isNull()) {
                 if (cs == Qt::CaseSensitive)
                     newCursor = document->find(pattern, newCursor, QTextDocument::FindCaseSensitively);
                 else
-                    newCursor = document->find(pattern, newCursor, 0);
+                    newCursor = document->find(pattern, newCursor);
             }
             if (!newCursor.isNull()) {
                 selection.cursor = newCursor;
@@ -1853,7 +2054,15 @@ void MainWindow::initAssemblerSettings(bool firstOpening)
 
     settingsUi.objectFileNameEdit->setText(settings.value("objectfilename", "program.o").toString());
 
+    settingsUi.gdbPathEdit->setText(settings.value("gdbpath", "gdb").toString());
+
     settingsUi.disableLinkingCheckbox->setChecked(settings.value("disablelinking", false).toBool());
+
+    settingsUi.sasmVerboseCheckBox->setChecked(settings.value("sasmverbose", false).toBool());
+    
+    settingsUi.MiModusCheckBox->setChecked(settings.value("mi", true).toBool());
+    
+    settingsUi.sasmDisplayCheckBox->setChecked(settings.value("display", false).toBool());
 
     settingsUi.runInCurrentDirectoryCheckbox->setChecked(settings.value("currentdir", false).toBool());
 
@@ -1938,6 +2147,7 @@ void MainWindow::changeMode(bool x86)
         settings.setValue("mode", QString("x86"));
     else
         settings.setValue("mode", QString("x64"));
+
     recreateAssembler();
 }
 
@@ -1947,6 +2157,7 @@ void MainWindow::recreateAssembler(bool start)
         delete assembler;
         assembler = 0;
     }
+
     bool x86 = true;
     if (settings.value("mode", QString("x86")).toString() != "x86")
         x86 = false;
@@ -1991,14 +2202,21 @@ void MainWindow::recreateAssembler(bool start)
         settingsUi.linkingOptionsEdit->setText(assembler->getLinkerOptions());
         settingsUi.objectFileNameEdit->setText("program.o");
         settingsUi.disableLinkingCheckbox->setChecked(false);
+        settingsUi.sasmVerboseCheckBox->setChecked(false);
+        settingsUi.MiModusCheckBox->setChecked(false);
         settingsUi.runInCurrentDirectoryCheckbox->setChecked(false);
         settingsUi.assemblerPathEdit->setText(assembler->getAssemblerPath());
+        settingsUi.gdbPathEdit->setText("gdb");
         settingsUi.linkerPathEdit->setText(assembler->getLinkerPath());
         settings.setValue("assemblyoptions", assembler->getAssemblerOptions());
         settings.setValue("linkingoptions", assembler->getLinkerOptions());
         settings.setValue("objectfilename", "program.o");
         settings.setValue("disablelinking", false);
         settings.setValue("currentdir", false);
+        settings.setValue("sasmverbose", false);
+        settings.setValue("mi", true);
+        settings.setValue("display", false);
+        settings.setValue("gdbpath", "gdb");
         settings.setValue("assemblerpath", assembler->getAssemblerPath());
         settings.setValue("linkerpath", assembler->getLinkerPath());
         changeStartText();
@@ -2020,6 +2238,10 @@ void MainWindow::backupSettings()
     backupAssemblerPath = settings.value("assemblerpath", assembler->getAssemblerPath()).toString();
     backupLinkerOptions = settings.value("linkingoptions", assembler->getLinkerOptions()).toString();
     backupObjectFileName = settings.value("objectfilename", "program.o").toString();
+    backupGDBPath = settings.value("gdbpath", "gdb").toString();
+    backupGDBVerbose = settings.value("sasmverbose", false).toBool();
+    backupGDBDisplay = settings.value("display", false).toBool();
+    backupGDBMi = settings.value("mi", true).toBool();
     backupDisableLinking = settings.value("disablelinking", false).toBool();
     backupCurrentDir = settings.value("currentdir", false).toBool();
     backupStartText = settings.value("starttext", assembler->getStartText()).toString();
@@ -2036,6 +2258,10 @@ void MainWindow::restoreSettingsAndExit()
     settings.setValue("linkingoptions", backupLinkerOptions);
     settings.setValue("objectfilename", backupObjectFileName);
     settings.setValue("disablelinking", backupDisableLinking);
+    settings.setValue("gdbpath", backupGDBPath);
+    settings.setValue("sasmverbose", backupGDBVerbose);
+    settings.setValue("mi", backupGDBMi);
+    settings.setValue("display", backupGDBDisplay);
     settings.setValue("currentdir", backupCurrentDir);
     settings.setValue("starttext", backupStartText);
     settings.setValue("linkerpath", backupLinkerPath);
@@ -2080,8 +2306,12 @@ void MainWindow::saveSettings()
     settings.setValue("linkingoptions", settingsUi.linkingOptionsEdit->text());
     settings.setValue("objectfilename", settingsUi.objectFileNameEdit->text());
     settings.setValue("disablelinking", settingsUi.disableLinkingCheckbox->isChecked());
+    settings.setValue("sasmverbose", settingsUi.sasmVerboseCheckBox->isChecked());
+    settings.setValue("mi", settingsUi.MiModusCheckBox->isChecked());
+    settings.setValue("display", settingsUi.sasmDisplayCheckBox->isChecked());
     settings.setValue("currentdir", settingsUi.runInCurrentDirectoryCheckbox->isChecked());
     settings.setValue("assemblerpath", settingsUi.assemblerPathEdit->text());
+    settings.setValue("gdbpath", settingsUi.gdbPathEdit->text());
     settings.setValue("linkerpath", settingsUi.linkerPathEdit->text());
     settings.setValue("starttext", settingsStartTextEditor->document()->toPlainText());
 
@@ -2202,6 +2432,7 @@ void MainWindow::changeActionsState(int widgetIndex)
         debugNextAction->setEnabled(false);
         debugNextNiAction->setEnabled(false);
         debugShowRegistersAction->setEnabled(false);
+        debugShowStackAction->setEnabled(false);
         debugToggleBreakpointAction->setEnabled(false);
         debugShowMemoryAction->setEnabled(false);
     } else {
@@ -2316,4 +2547,9 @@ MainWindow::~MainWindow()
 {
     //! Delete all temporary files
     removeDirRecuresively(Common::pathInTemp(QString()));
+	// close display
+	if(displayWindow){
+		displayWindow->close();
+		delete displayWindow;
+	}
 }

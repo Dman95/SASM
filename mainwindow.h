@@ -49,6 +49,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTime>
+#include <QElapsedTimer>
 #include <QPointer>
 #include <QColorDialog>
 #include <QSignalMapper>
@@ -58,6 +59,7 @@
 #include <QMutex>
 #include <QDragEnterEvent>
 #include <QMimeData>
+#include <thread>
 #include "tab.h"
 #include "highlighter.h"
 #include "debugger.h"
@@ -74,8 +76,31 @@
 #include "fasm.h"
 #include "signallocker.h"
 #include "masm.h"
+#include "stackwidget.h"
+#include "displayWindow.h"
+#include <unistd.h>
+#ifdef Q_OS_WIN32
+#include <Windows.h>
+#else
+#include <fcntl.h>
+#include <semaphore.h>
+#include <errno.h>
+#include <sys/types.h> 
+#include <sys/wait.h>
+#include <sys/sem.h>
+#include <sys/ipc.h> 
+///
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
+#endif
 
 #define SASM_VERSION "3.12.1"
+#define SEM_PRODUCER_FNAME "/myproducer"
+#define SEM_CONSUMER_FNAME "/myconsumer"
+#define FILENAME "/tmp"
+#define IPC_RESULT_ERROR (-1)
+#define BLOCK_SIZE 3145728
 
 /**
  * @file mainwindow.h
@@ -151,6 +176,7 @@ private:
     QAction *debugToggleBreakpointAction;
     QAction *debugShowRegistersAction;
     QAction *debugShowMemoryAction;
+    QAction *debugShowStackAction;
     QAction *settingsAction;
     QAction *helpAction;
     QAction *aboutAction;
@@ -165,13 +191,15 @@ private:
     QProcess *runProcess;
     CodeEditor *prevCodeEditor;
     QTimer *timer;
-    QTime programExecutionTime;
+    QElapsedTimer programExecutionTime;
     Debugger *debugger;
     bool programIsBuilded;
     QPointer<DebugTableWidget> registersWindow;
     QDockWidget *registersDock;
     QPointer<DebugTableWidget> memoryWindow;
     QDockWidget *memoryDock;
+    QPointer<StackWidget> stackWindow;
+    QDockWidget *stackDock;
     QList<RuQPlainTextEdit::Watch> watches;
     DebugAnyCommandWidget *debugAnyCommandWidget;
     bool programStopped;
@@ -209,6 +237,10 @@ private:
     QString backupAssemblerOptions;
     QString backupLinkerOptions;
     QString backupObjectFileName;
+    QString backupGDBPath;
+    bool backupGDBVerbose;
+    bool backupGDBMi;
+    bool backupGDBDisplay;
     bool backupDisableLinking;
     bool backupCurrentDir;
     QString backupAssemblerPath;
@@ -218,6 +250,11 @@ private:
     //! About close
     bool closeFromCloseAll;
     void closeEvent(QCloseEvent *e);
+    
+    // display
+    QPointer<DisplayWindow> displayWindow;
+    std::thread *consumer;
+    int msgid;
 
 public slots:
     //! Actions and Menus
@@ -254,9 +291,11 @@ public slots:
     void debugToggleBreakpoint();
     void debugShowRegisters();
     void debugShowMemory();
+    void debugShowStack();
     void debugRunCommand(QString command, bool print);
     void saveWatches(DebugTableWidget *table);
     void setShowRegistersToUnchecked();
+    void setShowStackToUnchecked();
     void setShowMemoryToUnchecked();
     void setShowMemoryToChecked(const RuQPlainTextEdit::Watch &variable);
     void showAnyCommandWidget();
@@ -301,6 +340,7 @@ public slots:
 
     //! Single Application message
     void onMessageReceived(const QString &message);
+    
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event);

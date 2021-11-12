@@ -6,8 +6,7 @@ section .data
 section .text
     global CMAIN
 CMAIN:
-    mov ebp, esp
+    mov ebp, esp; for correct debugging
     PRINT_STRING msg
     NEWLINE
-    xor eax, eax
     ret

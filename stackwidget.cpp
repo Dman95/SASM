@@ -38,69 +38,33 @@
 **
 ****************************************************************************/
 
-#include "common.h"
+#include "stackwidget.h"
 
-/**
- * @file common.cpp
- * Contains common functions.
- */
 
-QString Common::applicationDataPath()
+StackWidget::StackWidget(QWidget *parent) :
+    QWidget(parent)
 {
-    #ifdef Q_OS_WIN32
-        QString appDir = QCoreApplication::applicationDirPath();
-        if (! QFile::exists(appDir + "/NASM")) {
-            appDir = QCoreApplication::applicationDirPath() + "/Windows";
-        }
-        if (! QFile::exists(appDir + "/NASM")) {
-            appDir = QCoreApplication::applicationDirPath();
-        }
-        return appDir;
-    #elif defined(__FreeBSD__) || defined(__OpenBSD__) || defined( __NetBSD__) || defined(__DragonFly__)
-        QString path = QCoreApplication::applicationDirPath();
-        QString appDir = path.left(path.length() - 4) + QString("/share/sasm"); //replace /bin with /share/sasm
-        if (! QFile::exists(appDir)) {
-            appDir = QCoreApplication::applicationDirPath() + "/share/sasm";
-        }
-        if (! QFile::exists(appDir)) {
-            appDir = QCoreApplication::applicationDirPath() + "/BSD/share/sasm";
-        }
-        return appDir;
-    #else
-        QString path = QCoreApplication::applicationDirPath();
-        QString appDir = path.left(path.length() - 4) + QString("/share/sasm"); //replace /bin with /share/sasm
-        if (! QFile::exists(appDir)) {
-            appDir = QCoreApplication::applicationDirPath() + "/share/sasm";
-        }
-        if (! QFile::exists(appDir)) {
-            appDir = QCoreApplication::applicationDirPath() + "/Linux/share/sasm";
-        }
-        return appDir;
-    #endif
+    layout = new QVBoxLayout(this);
+    stackContent = new DebugTableWidget(0, 2, stackTable, this);;
+    settings = new StackSettingsWidget;
+
+    layout->addWidget(settings);
+    layout->addWidget(stackContent);
+
+    layout->setSpacing(0);
+    layout->setMargin(0);
+
+    setLayout(layout);
 }
 
-QString Common::pathInTemp(QString path)
+void StackWidget::closeEvent(QCloseEvent *) {
+    emit closeSignal();
+}
+
+StackWidget::~StackWidget()
 {
-    QString temp = QDir::tempPath();
-    QChar lastSymbol = temp[temp.length() - 1];
-    if (lastSymbol == QChar('/') || lastSymbol == QChar('\\')) {
-        temp.chop(1);
-    }
-
-    // Generate temporary directory including username
-    QString name = qgetenv("USER");
-    if (name.isEmpty())
-        name = qgetenv("USERNAME");
-
-    QString tempPath = temp+"/SASM"+name;
-
-    if (! QFile::exists(tempPath)) {
-        QDir().mkpath(tempPath);
-    }
-
-    if (!path.isEmpty()) {
-        tempPath += "/" + path;
-    }
-    tempPath = QDir::toNativeSeparators(tempPath);
-    return tempPath;
+    delete stackContent;
+    stackContent = 0;
+    delete settings;
+    delete layout;
 }

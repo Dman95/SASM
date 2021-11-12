@@ -86,7 +86,7 @@ Tab::Tab(QWidget *parent) :
     setFonts();
 
     //! Restore state
-    QSettings settings("SASM Project", "SASM");
+    QSettings settings("SASM", "SASM");
     restoreGeometry(settings.value("tabgeometry").toByteArray());
     restoreState(settings.value("tabwindowstate").toByteArray());
 }
@@ -97,7 +97,7 @@ Tab::Tab(QWidget *parent) :
 */
 void Tab::setFonts()
 {
-    QSettings settings("SASM Project", "SASM");
+    QSettings settings("SASM", "SASM");
 
     QFont codeFont;
     codeFont.setPointSize(settings.value("fontsize", 12).toInt());

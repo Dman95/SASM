@@ -4,6 +4,7 @@
 #
 #-------------------------------------------------
 
+
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -47,6 +48,9 @@ INSTALLS += data
 INSTALLS += shortcutfiles
 INSTALLS += docfiles
 
+LIBS += -pthread
+QMAKE_CXXFLAGS += -pthread
+
 include(singleapplication/qtsingleapplication.pri)
 
 SOURCES += main.cpp\
@@ -69,7 +73,10 @@ SOURCES += main.cpp\
     fasm.cpp \
     signallocker.cpp \
     masm.cpp \
-    gccbasedassembler.cpp
+    gccbasedassembler.cpp \
+    stacksettingswidget.cpp \
+    stackwidget.cpp \
+    displayWindow.cpp
 
 HEADERS  += mainwindow.h \
     tab.h \
@@ -90,7 +97,10 @@ HEADERS  += mainwindow.h \
     fasm.h \
     signallocker.h \
     masm.h \
-    gccbasedassembler.h
+    gccbasedassembler.h \
+    stacksettingswidget.h \
+    stackwidget.h \
+    displayWindow.h
 
 FORMS += settings.ui
 

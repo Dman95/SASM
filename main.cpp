@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
         return 0;
     }
     QTranslator translator, qtTranslator;
-    QSettings settings("SASM Project", "SASM");
+    QSettings settings("SASM", "SASM");
     #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
         QTextCodec *codec = QTextCodec::codecForName("UTF-8");
         QTextCodec::setCodecForCStrings(codec);

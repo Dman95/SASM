@@ -48,7 +48,7 @@
 CodeEditor::CodeEditor(QWidget *parent, bool withBeakpoints) :
     RuQPlainTextEdit(parent), debugImage(":/images/debugLine.png"),
     breakpointImage(":/images/breakpoint.png"),
-    settings("SASM Project", "SASM")
+    settings("SASM", "SASM")
 {
     hasBreakpoints = withBeakpoints;
     prevBlockCount = -1;
@@ -77,7 +77,7 @@ int CodeEditor::lineNumberAreaWidth()
         ++digits;
     }
 
-    int space = fontMetrics().width(QLatin1Char('9')) * digits + debugAreaWidth;
+    int space = fontMetrics().horizontalAdvance(QLatin1Char('9')) * digits + debugAreaWidth;
 
     return space;
 }

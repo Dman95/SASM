@@ -68,7 +68,7 @@
  * Defines the debugger.
  */
 
-enum DebugActionType {ni, si, showLine, infoRegisters, infoMemory, anyAction, none, breakpoint};
+enum DebugActionType {ni, si, showLine, infoRegisters, infoMemory, infoStack, anyAction, none, breakpoint};
 
 
 /**
@@ -82,11 +82,14 @@ class Debugger : public QObject
 
 public:
     Debugger(QTextEdit *tEdit,
-             const QString &exePathParam,
-             const QString &workingDirectoryPathParam,
-             const QString &inputPathParam,
-             Assembler *assembler,
-             QWidget *parent = 0);
+		    const QString &path,
+		    const QString &tmp,
+            const QString &inputPathParam,
+            Assembler *assembler,
+            QWidget *parent = 0,
+			bool verbose = true,
+			bool mimode = true);
+
     ~Debugger();
     void setWatchesCount(int count);
 
@@ -101,20 +104,41 @@ public:
         bool isValid;
     };
 
+    struct stackInfo {
+        QString value;
+        QString address;
+    };
+
     typedef Assembler::LineNum LineNum;
 
     bool isStopped();
     void pause();
 
+    //! Global gdb output buffer
+    QString buffer;
+
+    //! Global gdb error buffer
+    QString errorBuffer;
+
+    // start debugger
+    bool run();
+   
 private:
     void processLst();
-    void run();
+    void gdb_cmd_run();
+
+    bool verbose;
+    bool mimode;
+    bool con;
+    bool firstPrint;
+    int wincrflag;
 
     QProcess *process;
     QTextEdit *textEdit;
 
     //! Offset between program code in memory and in file
     quint64 offset;
+
 
     //! Accordance between program lines in memory and in file
     QVector<LineNum> lines;
@@ -139,12 +163,6 @@ private:
     //! Path to temporary input.txt file
     QString inputPath;
 
-    //! Global gdb output buffer
-    QString buffer;
-
-    //! Global gdb error buffer
-    QString errorBuffer;
-
     //! Timer for checking output and sending ready output to processing with Debugger::processOutput() function
     QTimer *bufferTimer;
 
@@ -165,17 +183,33 @@ private:
     bool stopped;
     quint64 pid;
     bool dbgSymbols;
+    bool firstStack;
 
     quint64 entryPoint;
+    
+    // save Stack
+    quint64 stackBottom;
+    int bitStack;
+    int systemStack;
+    bool signStack;
+    int addressSizeOffset;
+    
+    bool firstRet;
 
 public slots:
     void readOutputToBuffer();
     void processOutput();
     void processMessage(QString output, QString error);
+    void processMessageMiMode(QString output, QString error);
     void processAction(QString output, QString error = QString());
+    void processActionMiMode(QString output, QString error = QString());
     void doInput(QString command, DebugActionType actionType);
     void changeBreakpoint(quint64 lineNumber, bool isAdded);
     void emitStarted();
+    void setBitStack(int bit);
+    void setSystemStack(int system);
+    void setSignStack(bool sign);
+    QString signedNumberStack(quint64 value);
 
 signals:
     //! Highlight the current debug line.
@@ -184,6 +218,7 @@ signals:
     //! Signal is emited when debugger is ready to get commands like step into and etc.
     void started();
     void printRegisters(QList<Debugger::registersInfo>);
+    void printStack(QList<Debugger::stackInfo>);
     void printMemory(QList<Debugger::memoryInfo>);
     void printLog(QString msg, QColor color = QColor(Qt::black));
     void printOutput(QString msg);
