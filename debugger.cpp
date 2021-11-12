@@ -85,7 +85,7 @@ Debugger::Debugger(QTextEdit *tEdit,
 
 bool Debugger::run()
 {
-    QSettings settings("SASM Project", "SASM");
+    QSettings settings("SASM", "SASM");
     if (settings.value("mode", QString("x86")).toString() == "x86")
         addressSizeOffset = 4;
     else
@@ -530,7 +530,7 @@ void Debugger::processAction(QString output, QString error)
         QTextStream registersStream(&output);
         QList<registersInfo> registers;
         registersInfo info;
-        QSettings settings("SASM Project", "SASM");
+        QSettings settings("SASM", "SASM");
 
         QSet<QString> general;
         QString ip;
@@ -1025,7 +1025,7 @@ void Debugger::processActionMiMode(QString output, QString error)
         QTextStream registersStream(&output);
         QList<registersInfo> registers;
         registersInfo info;
-        QSettings settings("SASM Project", "SASM");
+        QSettings settings("SASM", "SASM");
 
         QSet<QString> general;
         QString ip;

@@ -47,7 +47,7 @@
  */
 
 MainWindow::MainWindow(const QStringList &args, QWidget *parent)
-    : QMainWindow(parent), settings("SASM Project", "SASM")
+    : QMainWindow(parent), settings("SASM", "SASM")
 {
     setWindowTitle("SASM");
     setWindowIcon(QIcon(":images/mainIcon.png"));

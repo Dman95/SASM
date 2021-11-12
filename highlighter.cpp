@@ -72,7 +72,7 @@
      formats << &keywordFormat << &registerFormat << &numberFormat << &memoryFormat <<
                 &labelFormat << &commentFormat << &systemFormat << &iomacrosFormat <<
                 &quotationFormat;
-     QSettings settings("SASM Project", "SASM");
+     QSettings settings("SASM", "SASM");
      for (int i = 0; i < formats.size(); i++) {
          formats[i]->setForeground(settings.value(names[i] + "color", defaultColors[i]).value<QColor>());
          formats[i]->setBackground(settings.value(names[i] + "colorbg", QPalette().color(QPalette::Base)).value<QColor>());
