@@ -333,6 +333,23 @@ void Debugger::processMessage(QString output, QString error)
     if (output.indexOf(interruptSig) != -1) {
         stopped = true;
         emit wasStopped();
+        QRegExp r = QRegExp("0x[0-9a-fA-F]{8,16}");
+        int index = r.indexIn(output);
+        if(index != -1){
+            quint64 lineNumber = output.mid(index, r.matchedLength()).toULongLong(0, 16);
+            bool found = false;
+            for (int i = lines.count() - 1; i >= 0; i--) {
+                if (lineNumber == lines[i].numInMem) {
+                    lineNumber = lines[i].numInCode;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                emit highlightLine(lineNumber);
+            }
+        }
         return;
     }
 
@@ -783,6 +800,23 @@ void Debugger::processMessageMiMode(QString output, QString error)
     if (output.indexOf(interruptSig) != -1) {
         stopped = true;
         emit wasStopped();
+        QRegExp r = QRegExp("addr=\"0x[0-9a-fA-F]{8,16}");
+        int index = r.indexIn(output);
+        if(index != -1){
+            quint64 lineNumber = output.mid(index+6, r.matchedLength()-6).toULongLong(0, 16);
+            bool found = false;
+            for (int i = lines.count() - 1; i >= 0; i--) {
+                if (lineNumber == lines[i].numInMem) {
+                    lineNumber = lines[i].numInCode;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                emit highlightLine(lineNumber);
+            }
+        }
         return;
     }
 
