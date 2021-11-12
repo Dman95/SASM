@@ -48,7 +48,7 @@ DisplayWindow::DisplayWindow(QWidget *parent) :
     QWidget(parent)
 {
     zoom = 1;
-    this->setFixedSize(QSize(512+50, 512+125));
+    this->resize(QSize(512+50, 512+125));
     this->setStyleSheet("background-color:grey;");
     verticalLayout = new QVBoxLayout(this);
     zoomComboBox = new QComboBox(this);
@@ -82,7 +82,7 @@ void DisplayWindow::changeDisplay(int msgid){
     qint64 fps = 30;
     QElapsedTimer programExecutionTime;
     QElapsedTimer programExecutionTime2;
-    this->setFixedSize(QSize(512+60, 512+92));
+    this->resize(QSize(512+60, 512+92));
     scrollAreaWidgetContents->update();
     programExecutionTime.start();
     programExecutionTime2.start();
@@ -111,7 +111,7 @@ void DisplayWindow::changeDisplay(int msgid){
         display_size = (mode) ? res_x*res_y*3 : res_x*res_y;
         displayPicture  = new QImage(res_x, res_y, QImage::Format_RGB32);
         displayPicture->fill(qRgb(255, 255, 255));
-        this->setFixedSize(QSize(res_x+60, res_y+92));
+        this->resize(QSize(res_x+60, res_y+92));
 		scrollAreaWidgetContents->setFixedSize(res_x*zoom, res_y*zoom);
 		scrollAreaWidgetContents->update();
 	} else {
@@ -199,7 +199,7 @@ void DisplayWindow::changeDisplay(int msgid){
         displayPicture  = new QImage(res_x, res_y, QImage::Format_RGB32);
         displayPicture->fill(qRgb(255, 255, 255));
         scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
-        this->setFixedSize(QSize(res_x+60, res_y+92));
+        this->resize(QSize(res_x+60, res_y+92));
         scrollAreaWidgetContents->update();
         // sem_post(sem_consumer);
         sb.sem_op = 1;
@@ -310,7 +310,7 @@ void DisplayWindow::zoomSettingsChanged(int value){
     if(!loop){
         zoom = std::pow(2, value);
         scrollAreaWidgetContents->setFixedSize(res_x*zoom+26, res_y*zoom+26);
-        this->setFixedSize(QSize(res_x+60, res_y+92));
+        this->resize(QSize(res_x+60, res_y+92));
         scrollAreaWidgetContents->update();
     }
 }
