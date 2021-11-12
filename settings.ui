@@ -2203,11 +2203,12 @@
            <property name="text">
             <string/>
            </property>
+           <property name="checked">
+               <bool>true</bool>
+           </property>
           </widget>
          </item>
-        </layout>
-       </item>
-       <item row="14" column="0">
+         <item row="14" column="0">
           <widget class="QLabel" name="gdbDisplayLabel">
            <property name="text">
             <string>SASM display:</string>
@@ -2219,8 +2220,13 @@
            <property name="text">
             <string/>
            </property>
+           <property name="checked">
+               <bool>false</bool>
+           </property>
           </widget>
          </item>
+        </layout>
+       </item>
        <item>
         <widget class="QLabel" name="infoLabel">
          <property name="text">
