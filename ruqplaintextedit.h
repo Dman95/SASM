@@ -129,7 +129,7 @@ public slots:
     void setDebugDisabled();
 
 signals:
-    //! Signal which emited when watch variable action is selected.
+    //! Signal which emitted when watch variable action is selected.
     void addWatchSignal(RuQPlainTextEdit::Watch variable);
 };
 

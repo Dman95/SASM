@@ -61,7 +61,7 @@
 
 /*! \brief This is the base class that all assemblers inherit
  *
- *  The Assembler class contains functions which can be used to retrieve assember specific
+ *  The Assembler class contains functions which can be used to retrieve assembler specific
  * parameters such as the linker & assembler location, the default program text, and
  * user specified options.
  *
@@ -202,7 +202,7 @@ public slots:
  *
  * \subsection step2 Step 2: Creating the assembler class
  *
- * The decleration of the class may best be discussed in light of already supported assemblers. Take for example, NASM. The NASM
+ * The declaration of the class may best be discussed in light of already supported assemblers. Take for example, NASM. The NASM
  * class is defined as:
  * class NASM : public Assembler
  *
@@ -210,7 +210,7 @@ public slots:
  * class YOURASSEMBLER : public Assembler
  *
  * The variables and methods of YOURASSEMBLER should be the virtual methods of Assembler. If you are unsure what to add, refer to
- * the already supported assemler classes. You may copy and paste them.
+ * the already supported assembler classes. You may copy and paste them.
  *
  * \subsection step3 Step 3: Adding it to the Build Options
  *

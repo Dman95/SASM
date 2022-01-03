@@ -181,7 +181,7 @@ signals:
     //! Highlight the current debug line.
     void highlightLine(int);
     void finished();
-    //! Signal is emited when debugger is ready to get commands like step into and etc.
+    //! Signal is emitted when debugger is ready to get commands like step into and etc.
     void started();
     void printRegisters(QList<Debugger::registersInfo>);
     void printMemory(QList<Debugger::memoryInfo>);

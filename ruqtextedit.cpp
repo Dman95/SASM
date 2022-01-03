@@ -42,7 +42,7 @@
 
 /**
  * @file ruqtextedit.cpp
- * Implemets text editor
+ * Implements text editor
  */
 
 RuQTextEdit::RuQTextEdit(QWidget *parent) :
