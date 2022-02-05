@@ -97,9 +97,9 @@ quint64 NASM::getMainOffset(QFile &lst, QString entryLabel)
 void NASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 offset)
 {
     bool inTextSection = false;
-    QRegExp sectionTextRegExp("SECTION\\s+\\.?(text|code)");
+    QRegExp sectionTextRegExp("(SECTION|SEGMENT)\\s+\\.?(text|code)");
     sectionTextRegExp.setCaseSensitivity(Qt::CaseInsensitive);
-    QRegExp sectionRegExp("SECTION");
+    QRegExp sectionRegExp("(SECTION|SEGMENT)");
     sectionRegExp.setCaseSensitivity(Qt::CaseInsensitive);
 
     QList<QPair<quint64, QString> > instrList;
@@ -439,7 +439,7 @@ void NASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
     //! System instructions and preprocessor commands
     rule.format = systemFormat;
     QStringList systemPatterns;
-    systemPatterns << "\\btimes\\b" << "\\bsection\\b" << "\\.bss\\b" <<
+    systemPatterns << "\\btimes\\b" << "\\bsection\\b" << "\\bsegment\\b" << "\\.bss\\b" <<
                       "\\.text\\b" << "\\.data\\b" <<
                       "\\bglobal\\b" << "\\.rodata\\b" <<
                       "\\bextern\\b" <<
