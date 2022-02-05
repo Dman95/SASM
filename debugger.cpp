@@ -62,6 +62,7 @@ Debugger::Debugger(QTextEdit *tEdit,
     : QObject(parent)
 {
     QSettings settings("SASM Project", "SASM");
+    gdbRun = false;
     c = 0;
     pid = 0;
     firstAction = true;
@@ -128,6 +129,10 @@ Debugger::Debugger(QTextEdit *tEdit,
     bufferTimer = new QTimer;
     QObject::connect(bufferTimer, SIGNAL(timeout()), this, SLOT(processOutput()), Qt::QueuedConnection);
     bufferTimer->start(10);
+
+    checkGdbRunTimer = new QTimer;
+    QObject::connect(checkGdbRunTimer, SIGNAL(timeout()), this, SLOT(checkGdbRun()), Qt::QueuedConnection);
+    checkGdbRunTimer->start(10000);
 }
 
 void Debugger::emitStarted()
@@ -159,6 +164,15 @@ void Debugger::processOutput()
         processMessage(output, error);
     }
     bufferTimer->start(10);
+}
+
+void Debugger::checkGdbRun()
+{
+    checkGdbRunTimer->stop();
+    if (!gdbRun) {
+        emit printLog(tr("GDB error\n"), Qt::red);
+        emit finished();
+    }
 }
 
 void Debugger::processMessage(QString output, QString error)
@@ -375,6 +389,7 @@ void Debugger::processAction(QString output, QString error)
             return;
         } else { //if found highlight and print it
             //highlight line number
+            gdbRun = true;
             emit highlightLine(lineNumber);
             stopped = true;
             emit wasStopped();

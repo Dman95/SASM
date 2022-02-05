@@ -120,7 +120,12 @@ private:
     QVector<LineNum> lines;
     //! Counter for sequential performing of actions
     int c;
+
     bool registersOk;
+
+    //! Flag for checking if gdb run
+    bool gdbRun;
+
     //! Queue of actions type from enum
     QQueue<DebugActionType> actionTypeQueue;
 
@@ -147,6 +152,9 @@ private:
 
     //! Timer for checking output and sending ready output to processing with Debugger::processOutput() function
     QTimer *bufferTimer;
+
+    //! Timer for run checking
+    QTimer *checkGdbRunTimer;
 
     //! The number of variable watches
     int watchesCount;
@@ -176,6 +184,7 @@ public slots:
     void doInput(QString command, DebugActionType actionType);
     void changeBreakpoint(quint64 lineNumber, bool isAdded);
     void emitStarted();
+    void checkGdbRun();
 
 signals:
     //! Highlight the current debug line.
