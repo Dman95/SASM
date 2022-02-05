@@ -624,7 +624,7 @@ void Debugger::run()
     //put \n after commands!
     //b main and run before others!
     if (dbgSymbols)
-        doInput(QString("b main\n"), none);
+        doInput(QString("b *main\n"), none);
     else {
         doInput("b *0x" + QString::number(entryPoint, 16) + "\n", none);
     }

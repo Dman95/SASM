@@ -176,7 +176,7 @@ void FASM::putDebugString(CodeEditor *code)
         index = code->toPlainText().indexOf(QChar(':'), index);
         if (isx86()) {
             if (code->toPlainText().indexOf(
-                        QRegExp("\\s+[Mm][Oo][Vv] +[Ee][Bb][Pp] *, *[Ee][Ss][Pp]"), index + 1) != index + 1) {
+                        QRegExp("\\s+([Pp][Uu][Ss][Hh] +[Ee][Bb][Pp]\\s+)?[Mm][Oo][Vv] +[Ee][Bb][Pp] *, *[Ee][Ss][Pp]"), index + 1) != index + 1) {
                 QTextCursor cursor = code->textCursor();
                 cursor.movePosition(QTextCursor::Start);
                 cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
@@ -184,7 +184,7 @@ void FASM::putDebugString(CodeEditor *code)
             }
         } else {
             if (code->toPlainText().indexOf(
-                        QRegExp("\\s+[Mm][Oo][Vv] +[Rr][Bb][Pp] *, *[Rr][Ss][Pp]"), index + 1) != index + 1) {
+                        QRegExp("\\s+([Pp][Uu][Ss][Hh] +[Rr][Bb][Pp]\\s+)?[Mm][Oo][Vv] +[Rr][Bb][Pp] *, *[Rr][Ss][Pp]"), index + 1) != index + 1) {
                 QTextCursor cursor = code->textCursor();
                 cursor.movePosition(QTextCursor::Start);
                 cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
