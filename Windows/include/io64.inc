@@ -628,6 +628,8 @@ section .text
 section .data
     %%read_tmp dq 0
     %%tmp dq 0
+    %%addr_expr_tmp dd 0
+    %%rax_tmp dd 0
 section .text
     %%after_data:
     IS_GPR %2
@@ -676,6 +678,10 @@ section .text
 %else
 ; may be, address expression?
 ; we will have to do postprocessing after scanf
+    mov [%%rax_tmp], rax
+    lea rax, %2
+    mov [%%addr_expr_tmp], rax
+    mov rax, [%%rax_tmp]
     pushfq
     push rax
     push rcx
@@ -743,7 +749,7 @@ section .text
     popfq
 %else
     ; may be, address expression? postprocessing
-    lea rax, %2
+    mov rax, [%%addr_expr_tmp]
     %if %1 = 1
         mov cl, byte [%%read_tmp]
         mov byte [rax], cl

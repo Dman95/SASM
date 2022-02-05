@@ -477,6 +477,8 @@ section .text
 section .data
     %%tmp dd 0
     %%read_tmp dd 0
+    %%addr_expr_tmp dd 0
+    %%eax_tmp dd 0
 
 section .text
 %%after_data:
@@ -521,6 +523,10 @@ section .text
     %error "Incorrect parameter (string)"
 %else
 ; may be, address expression?
+    mov [%%eax_tmp], eax
+    lea eax, %2
+    mov [%%addr_expr_tmp], eax
+    mov eax, [%%eax_tmp]
     pushf
     push eax
     push ecx
@@ -572,7 +578,7 @@ section .text
 
 %else
 ; may be, address expression? postprocessing
-    lea eax, %2
+    mov eax, [%%addr_expr_tmp]
     %if %1 = 1
         mov cl, byte [%%read_tmp]
         mov byte [eax], cl
