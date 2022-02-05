@@ -118,7 +118,7 @@ Debugger::Debugger(QTextEdit *tEdit,
 
 
     QStringList arguments;
-    arguments << exePath;
+    arguments << "-nx" << exePath;
 
     process = new QProcess;
     process->start(gdb, arguments);
