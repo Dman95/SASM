@@ -147,8 +147,10 @@ void Debugger::readOutputToBuffer()
         return;
     QByteArray error = process->readAllStandardError();
     errorBuffer += QString::fromLocal8Bit(error.constData(), error.size());
+    allErrorBuffer += QString::fromLocal8Bit(error.constData(), error.size());
     QByteArray output = process->readAllStandardOutput();
     buffer += QString::fromLocal8Bit(output.constData(), output.size());
+    allBuffer += QString::fromLocal8Bit(output.constData(), output.size());
 }
 
 void Debugger::processOutput()
@@ -171,6 +173,8 @@ void Debugger::checkGdbRun()
     checkGdbRunTimer->stop();
     if (!gdbRun) {
         emit printLog(tr("GDB error\n"), Qt::red);
+        emit printLog(allBuffer, Qt::red);
+        emit printLog(allErrorBuffer, Qt::red);
         emit finished();
     }
 }

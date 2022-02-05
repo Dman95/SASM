@@ -147,8 +147,14 @@ private:
     //! Global gdb output buffer
     QString buffer;
 
+    //! Global gdb all output buffer
+    QString allBuffer;
+
     //! Global gdb error buffer
     QString errorBuffer;
+
+    //! Global gdb all error buffer
+    QString allErrorBuffer;
 
     //! Timer for checking output and sending ready output to processing with Debugger::processOutput() function
     QTimer *bufferTimer;
