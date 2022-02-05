@@ -497,7 +497,7 @@ void NASM::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlightin
     rule.format = commentFormat;
     rule.isComment = true;
     highlightingRules.append(rule);
-    multiLineComments = false;
-    commentStartExpression = QRegExp();
-    commentEndExpression = QRegExp();
+    multiLineComments = true;
+    commentStartExpression = QRegExp(";");
+    commentEndExpression = QRegExp("[^\\\\]$");
 }
