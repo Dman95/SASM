@@ -75,7 +75,7 @@
 #include "signallocker.h"
 #include "masm.h"
 
-#define SASM_VERSION "3.12.1"
+#define SASM_VERSION "3.12.2"
 
 /**
  * @file mainwindow.h
