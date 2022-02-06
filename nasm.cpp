@@ -122,7 +122,7 @@ void NASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
             continue;
         }
         if (inTextSection) {
-            QRegExp lineRegExp("^\\s+[0-9]+\\s+([0-9a-fA-F]+)\\s+\\S+\\s+(.*)");
+            QRegExp lineRegExp("^\\s+[0-9]+\\s+([0-9a-fA-F]+)\\s+\\S+\\s+([^;]*)");
             lineRegExp.setMinimal(false);
             if (lineRegExp.indexIn(line) == 0) {
                 quint64 address = lineRegExp.cap(1).toULongLong(0, 16);
@@ -144,7 +144,7 @@ void NASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
         }
         QString line = programStream.readLine();
         numInCode++;
-        line = line.trimmed();
+        line = line.split(";")[0].trimmed();
         if (line == instrList[i].second) {
             LineNum l;
             l.numInCode = numInCode;
