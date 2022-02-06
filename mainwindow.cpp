@@ -576,6 +576,7 @@ void MainWindow::newFile()
     tabs->addTab(tab, tr("New"));
     tabs->setCurrentWidget(tab);
     connect(tab->code, SIGNAL(textChanged()), this, SLOT(setProgramBuildedFlagToFalse()));
+    connect(tab->code, SIGNAL(textChanged()), this, SLOT(findNextAfterTextChange()));
     connect(tab->code, SIGNAL(modificationChanged(bool)), this, SLOT(changeCurrentSavedState(bool)));
     connect(tab->code, SIGNAL(fileOpened(QString)), this, SLOT(openFile(QString)));
 }
@@ -1535,6 +1536,11 @@ void MainWindow::find()
     }
     findDialog->show();
     findDialog->activateWindow();
+}
+
+void MainWindow::findNextAfterTextChange()
+{
+    findNext(QString(), Qt::CaseSensitive, true, false);
 }
 
 void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool all,

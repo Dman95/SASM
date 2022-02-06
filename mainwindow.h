@@ -269,6 +269,7 @@ public slots:
     void find();
     void findNext(const QString &pattern, Qt::CaseSensitivity cs, bool all, bool replace,
                   const QString &replaceText = 0);
+    void findNextAfterTextChange();
 
     //! Settings
     void restorePrevSession(bool notNotify = false);
