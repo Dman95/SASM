@@ -61,8 +61,8 @@
 <p><img src="images/Screenshot1.png" alt="SASM"></p>
 
 <p>
-    <span style="font-size:25pt;"><a href="https://github.com/Dman95/SASM/releases/download/v3.12.1/SASMSetup3121.exe">Загрузить .exe для Windows</a></span></br>
-    <span style="font-size:25pt;"><a href="https://github.com/Dman95/SASM/releases/download/v3.12.1/SASM3121.zip">Загрузить .zip для Windows</a></span></br>
+    <span style="font-size:25pt;"><a href="https://github.com/Dman95/SASM/releases/download/v3.12.2/SASMSetup3122.exe">Загрузить .exe для Windows</a></span></br>
+    <span style="font-size:25pt;"><a href="https://github.com/Dman95/SASM/releases/download/v3.12.2/SASM3122.zip">Загрузить .zip для Windows</a></span></br>
     <span style="font-size:25pt;"><a href="https://download.opensuse.org/repositories/home:/Dman95/">Загрузить для Linux</a></span></br>
     <span style="font-size:25pt;">Установка на Mac: <a href="https://sites.google.com/a/brianrhall.net/www/rss/installingsasmonamac">ссылка 1</a>, <a href="https://github.com/Dman95/SASM/issues/57">ссылка 2</a></span>
 </p>
@@ -179,6 +179,14 @@
 
 <h2>
 <a name="changes" class="anchor" href="#changes"><span class="octicon octicon-link"></span></a>История изменений:</h2>
+<p>06.02.2022 - версия 3.12.1 (<a href="https://github.com/Dman95/SASM/releases/download/v3.12.2/SASM3122.zip">zip</a>, <a href="https://github.com/Dman95/SASM/releases/download/v3.12.2/SASMSetup3122.exe">exe</a>):</p>
+<ul>
+<li>Исправлен баг в макросах GET_DEC/GET_UDEC/GET_HEX при работе с адресными выражениями с регистром ESP.</li>
+<li>Исправлен запуск GDB с файлом .gdbinit и вывод ошибок.</li>
+<li>Исправлена отладка для программ с директивой segment и инструкциями push ebp/rbp.</li>
+<li>Исправлена отладка и подсветка синтаксиса в многострочных комментариях в NASM.</li>
+<li>Исправлена подсветка найденного при изменении текста.</li>
+</ul>
 <p>13.02.2021 - версия 3.12.1 (<a href="https://github.com/Dman95/SASM/releases/download/v3.12.1/SASM3121.zip">zip</a>, <a href="https://github.com/Dman95/SASM/releases/download/v3.12.1/SASMSetup3121.exe">exe</a>):</p>
 <ul>
 <li>Исправленa отладка при использовании с новыми версиями NASM.</li>
