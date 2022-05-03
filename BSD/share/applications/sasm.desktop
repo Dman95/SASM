@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=SASM
-GenericName=SASM
-Comment=Simple crossplatform IDE for NASM, MASM, GAS and FASM assembly languages.
-Icon=/usr/local/share/sasm/sasm.png
-Exec=sasm
-Terminal=false
-Type=Application
-Categories=Qt;Development;IDE;

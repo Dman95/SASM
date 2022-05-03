@@ -12,39 +12,37 @@ TARGET = sasm
 TEMPLATE = app
 
 isEmpty(PREFIX) {
- PREFIX = /usr
+    bsd {
+        PREFIX = /usr/local
+    } else {
+        PREFIX = /usr
+    }
 }
 
 BINDIR = $$PREFIX/bin
 DATADIR = $$PREFIX/share
 
-bsd {
+unix {
+    appdata.files = res/io.github.dman95.SASM.metainfo.xml
+    appdata.path = $$DATADIR/metainfo
+    desktop.files = res/io.github.dman95.SASM.desktop
+    desktop.path = $$DATADIR/applications
+    icons.files = res/app/icons/hicolor
+    icons.path = $$DATADIR/icons
+
     binfile.files += sasm
-    binfile.files += BSD/bin/*
     binfile.path = $$BINDIR
-    data.files += BSD/share/sasm/*
-    data.path = $$DATADIR/sasm/
-    shortcutfiles.files += BSD/share/applications/sasm.desktop
-    shortcutfiles.path = $$DATADIR/applications/
-    docfiles.files += BSD/share/doc/sasm/changelog.gz
-    docfiles.files += BSD/share/doc/sasm/copyright
-    docfiles.path = $$DATADIR/doc/sasm/
-} else {
-    binfile.files += sasm
-    binfile.files += Linux/bin/*
-    binfile.path = $$BINDIR
-    data.files += Linux/share/sasm/*
-    data.path = $$DATADIR/sasm/
-    shortcutfiles.files += Linux/share/applications/sasm.desktop
-    shortcutfiles.path = $$DATADIR/applications/
-    docfiles.files += Linux/share/doc/sasm/changelog.gz
-    docfiles.files += Linux/share/doc/sasm/copyright
-    docfiles.path = $$DATADIR/doc/sasm/
+    data.files += Unix/share/sasm
+    data.path = $$DATADIR
+    docfiles.files += Unix/share/doc
+    docfiles.path = $$DATADIR
 }
 
+INSTALLS += appdata
+INSTALLS += desktop
+INSTALLS += icons
 INSTALLS += binfile
 INSTALLS += data
-INSTALLS += shortcutfiles
 INSTALLS += docfiles
 
 include(singleapplication/qtsingleapplication.pri)

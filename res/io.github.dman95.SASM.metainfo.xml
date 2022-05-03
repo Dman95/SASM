@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.dman95.SASM</id>
+  
+  <name>SASM</name>
+  <summary>Simple cross-platform IDE for NASM, MASM, GAS and FASM assembly languages</summary>
+  <summary xml:lang="en">﻿SASM (SimpleASM) - простая кроссплатформенная среда разработки для языков ассемблера NASM, MASM, GAS, FASM с подсветкой синтаксиса и отладчиком</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  
+  <description>
+    <p>
+      SASM (SimpleASM) - simple Open Source cross-platform IDE for NASM, MASM, GAS, FASM assembly languages. SASM has syntax highlighting and debugger. The program works out of the box and is great for beginners to learn assembly language. SASM is translated into Russian, English, Turkish (thanks Ali Goren), Chinese (thanks Ahmed Zetao Yang), German (thanks Sebastian Fischer), Italian (thanks Carlo Dapor), Polish (thanks Krzysztof Rossa), Hebrew (thanks Elian Kamal), Spanish (thanks Mariano Cordoba). Licensed under the GNU GPL v3.0. Based on the Qt.
+    </p>
+  </description>
+  
+  <description xml:lang="ru">
+    <p>
+      SASM (SimpleASM) - простая кроссплатформенная среда разработки для языков ассемблера NASM, MASM, GAS, FASM с подсветкой синтаксиса и отладчиком. В SASM Вы можете легко разрабатывать и выполнять программы, написанные на языке ассемблера. Вводите код в форму и запускайте приложение. Программа работает "из коробки" и хорошо подойдет для начинающих изучать язык ассемблера. Основана на Qt. Распространяется по свободной лицензии GNU GPL v3.0.
+    </p>
+  </description>
+  
+  <url type="homepage">https://dman95.github.io</url>
+  <url type="help">https://github.com/Dman95/SASM/issues</url>
+  <launchable type="desktop-id">io.github.dman95.SASM.desktop</launchable>
+  <screenshots>
+    <screenshot type="default">
+      <image xml:lang="en">https://dman95.github.io/SASM/images/Screenshot3.png</image>
+    </screenshot>
+    <screenshot>
+      <image xml:lang="en">https://dman95.github.io/SASM/images/Screenshot4.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <image xml:lang="ru">https://dman95.github.io/SASM/images/Screenshot1.png</image>
+    </screenshot>
+    <screenshot>
+      <image xml:lang="ru">https://dman95.github.io/SASM/images/Screenshot2.png</image>
+    </screenshot>
+  </screenshots>
+  <content_rating type="oars-1.1" />
+</component>
