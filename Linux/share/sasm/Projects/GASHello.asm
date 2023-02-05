@@ -4,7 +4,7 @@ msg:
  
 .extern printf
 .text
-    .global main # entry point
+.global main # entry point
 main:
     movl %esp, %ebp # for correct debugging
     pushl $msg

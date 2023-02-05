@@ -34,7 +34,16 @@ SASM contains folder for include files - "Linux/share/sasm/include/" ("/usr/shar
 <P>
 &nbsp;
 </P>
-<H3>"io.inc" macro library for NASM</H3>
+
+<h2>Code examples</h2>
+<P>
+Working code examples for various assemblers including examples of using input/output functions and "io.inc" macros are contained in Projects folder along the path where SASM is installed (usually C:\Program Files (x86)\SASM on Windows, /usr/share/sasm on Linux).
+</P>
+<P>
+&nbsp;
+</P>
+
+<h2>"io.inc" macro library for NASM</h2>
 <P>
 SASM includes crossplatform input/output library "io.inc".
 To use it you need to add directive %include "io.inc" (%include "io64.inc" for x64) to the beginning of your program.
@@ -98,7 +107,7 @@ General purpose registers are not modified during execution of the above macros.
 &nbsp;
 </P>
 
-<H3>Input/output functions for NASM</H3>
+<h2>Input/output functions for NASM</h2>
 <P>
 Another simple ability to use input/output in NASM is input/output functions corresponding to aforementioned macros.
 To use them you need to declare the desired functions with a directive extern &lt;function name&gt;, put the arguments into the registers according to the table below, and call the functions using call instruction.
@@ -155,8 +164,9 @@ To use them you need to declare the desired functions with a directive extern &l
 <P>
 During execution of the above functions the values of the registers EBX, EBP, ESP, EDI, ESI do not change, the values of other registers can be changed.
 </P>
+<P>&nbsp;</P>
 
-<H3>A little bit about the debugger:</H3>
+<h2>A little bit about the debugger:</h2>
 <P>
 As the debugger SASM used gdb. In the distribution under Windows it included in the package. In Linux, you must install this package.
 </P>
@@ -204,7 +214,7 @@ To set value to variable or register you should enter "p" before assignment oper
 <BR>
 Also you can enter "help" command in "GDB command" field to show gdb commands help.
 <P>&nbsp;</P>
-<H3>Implementation:</H3>
+<h2>Implementation:</h2>
 <H4>Windows</H4>
 <P>As NASM compiler used nasm 2.15.05, as linker - gcc 4.6.2 from MinGW (gcc 4.8.1 from MinGW64 in x64 mode) or ld 2.22 from MinGW (ld 2.23.2 from MinGW64 in x64 mode).
 </P>
@@ -227,7 +237,7 @@ gcc;</P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">3)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
 gdb (gdb (for debugging).</P>
 <P>&nbsp;</P>
-<H3>Building system settings:</H3>
+<h2>Building system settings:</h2>
 <P>SASM has flexible program building system. In addition to standard mode settings and assemblers, you can specify the path to the assembler and the linker and their options manually.</P>
 <P>All settings are specified on "Build" tab.</P>
 <P>Paths to the assembler and the linker are specified in according fields.</P>
@@ -310,7 +320,7 @@ gdb (gdb (for debugging).</P>
 </TBODY>
 </TABLE>
 <P>&nbsp;</P>
-<H3>Troubleshooting:</H3>
+<h2>Troubleshooting:</h2>
 <P>
 <B>
 If you have something does not work, check the following items:

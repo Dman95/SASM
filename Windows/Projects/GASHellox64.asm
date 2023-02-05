@@ -5,7 +5,7 @@ msg:
 .extern printf
 .extern flush
 .text
-    .global main # entry point
+.global main # entry point
 main:
     movq %rsp, %rbp #for correct debugging
     subq $32, %rsp

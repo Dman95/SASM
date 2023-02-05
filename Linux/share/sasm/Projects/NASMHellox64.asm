@@ -4,8 +4,8 @@ section .data
     msg db 'Hello, world!', 0
 
 section .text
-    global CMAIN
-CMAIN:
+global main
+main:
     mov rbp, rsp
     PRINT_STRING msg
     NEWLINE
