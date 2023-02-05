@@ -4,7 +4,7 @@
 	<meta content="text/html; charset=utf-8" http-equiv="content-type">
 	<TITLE>SASM help</TITLE>
 </HEAD>
-<BODY>
+<BODY style="font-size: 12pt;">
 <H1>Brief help.</H1>
 <P>
 SASM (SimpleASM) - simple Open Source crossplatform IDE for NASM, MASM, GAS, FASM assembly languages.
@@ -36,7 +36,8 @@ SASM contains folder for include files - "Linux/share/sasm/include/" ("/usr/shar
 </P>
 <H3>"io.inc" macro library for NASM</H3>
 <P>
-SASM includes crossplatform input/output library "io.inc". It contains I/O macro and 2 additional macro for NASM: CMAIN - entry point and CEXTERN for invoking functions, located in C language libraries ("CEXTERN printf" for example).
+SASM includes crossplatform input/output library "io.inc".
+To use it you need to add directive %include "io.inc" (%include "io64.inc" for x64) to the beginning of your program.
 <P>
 &nbsp;
 </P>
@@ -91,8 +92,70 @@ SASM includes crossplatform input/output library "io.inc". It contains I/O macro
 </tbody>
 </table>
 <P>
+General purpose registers are not modified during execution of the above macros.
+</P>
+<P>
 &nbsp;
 </P>
+
+<H3>Input/output functions for NASM</H3>
+<P>
+Another simple ability to use input/output in NASM is input/output functions corresponding to aforementioned macros.
+To use them you need to declare the desired functions with a directive extern &lt;function name&gt;, put the arguments into the registers according to the table below, and call the functions using call instruction.
+<P>
+&nbsp;
+</P>
+</P>
+<table border="1" cellspacing="0" cellpadding="0">
+<thead>
+<tr>
+<td width="242">Function name</td>
+<td width="390">EAX</td>
+<td width="390">EDX</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td width="242" valign="top">io_get_dec<br>io_get_udec<br>io_get_hex</td>
+<td width="200" valign="top">output: number</td>
+<td width="200" valign="top"></td>
+</tr>
+<tr>
+<td width="242" valign="top">io_get_char</td>
+<td width="200" valign="top">output: character</td>
+<td width="200" valign="top"></td>
+</tr>
+<tr>
+<td width="242" valign="top">io_get_string</td>
+<td width="200" valign="top">input: address</td>
+<td width="200" valign="top">input: size</td>
+</tr>
+<tr>
+<td width="242" valign="top">io_print_dec<br>io_print_udec<br>io_print_hex</td>
+<td width="200" valign="top">input: number</td>
+<td width="200" valign="top"></td>
+</tr>
+<tr>
+<td width="242" valign="top">io_print_char</td>
+<td width="200" valign="top">input: character</td>
+<td width="200" valign="top"></td>
+</tr>
+<tr>
+<td width="242" valign="top">io_print_string</td>
+<td width="200" valign="top">input: address</td>
+<td width="200" valign="top"></td>
+</tr>
+<tr>
+<td width="242" valign="top">io_newline</td>
+<td width="200" valign="top"></td>
+<td width="200" valign="top"></td>
+</tr>
+</tbody>
+</table>
+<P>
+During execution of the above functions the values of the registers EBX, EBP, ESP, EDI, ESI do not change, the values of other registers can be changed.
+</P>
+
 <H3>A little bit about the debugger:</H3>
 <P>
 As the debugger SASM used gdb. In the distribution under Windows it included in the package. In Linux, you must install this package.
@@ -100,7 +163,7 @@ As the debugger SASM used gdb. In the distribution under Windows it included in 
 <P>
 Attention! Before debugging make all functions formed frames (mov ebp, esp). This rule should be done for all functions, including main.
 <BR>
-Also, if gcc used as a linker, then the program entry point should be marked with global label _main (Windows) or main (Linux) or CMAIN from "io.inc". Otherwise entry point should be marked with start label. Other labels for the entry point can not be used.
+Also, if gcc used as a linker, then the program entry point should be marked with global label main. Otherwise entry point should be marked with start label. Other labels for the entry point can not be used.
 <BR>
 Program code should be contained only in ".text" section (".code" for MASM). If you use other names for the code section, then the debugger correct work is not guaranteed.
 </P>
@@ -143,7 +206,7 @@ Also you can enter "help" command in "GDB command" field to show gdb commands he
 <P>&nbsp;</P>
 <H3>Implementation:</H3>
 <H4>Windows</H4>
-<P>As NASM compiler used nasm 2.11.02, as linker - gcc 4.6.2 from MinGW (gcc 4.8.1 from MinGW64 in x64 mode) or ld 2.22 from MinGW (ld 2.23.2 from MinGW64 in x64 mode).
+<P>As NASM compiler used nasm 2.15.05, as linker - gcc 4.6.2 from MinGW (gcc 4.8.1 from MinGW64 in x64 mode) or ld 2.22 from MinGW (ld 2.23.2 from MinGW64 in x64 mode).
 </P>
 <P>
 Also SASM 3.0 and greater contains fasm 1.71.39 and gas 2.23.1 from MinGW (gas 2.23.2 from MinGW64).
@@ -254,10 +317,7 @@ If you have something does not work, check the following items:
 </B>
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">1)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
-If gcc used as a linker, then the program entry point should be marked with global label _main (Windows) or main (Linux) or CMAIN from "io.inc" (see initial text). Otherwise entry point should be marked with start label.
-</P>
-<P STYLE="margin-left: 0.5in; text-indent: -0.25in">2)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
-On Windows, all functions from the standard library should begin with an underscore (for example, _printf).
+If gcc used as a linker, then the program entry point should be marked with global label main. Otherwise entry point should be marked with start label.
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">3)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
 Before debugging make all functions formed frames (mov ebp, esp or mov rbp, rsp). This rule should be done for all functions, including main. If this condition is not met, the correct work of the debugger is not guaranteed.
