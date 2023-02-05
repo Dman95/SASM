@@ -849,11 +849,7 @@ void MainWindow::buildProgram(bool debugMode)
     QString assemblerPath = assembler->getAssemblerPath();
     if (settings.contains("assemblerpath"))
         assemblerPath = settings.value("assemblerpath").toString();
-    #ifdef Q_OS_WIN32
-        QString assemblerOptions = "-f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
-    #else
-        QString assemblerOptions = "-f elf32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
-    #endif
+    QString assemblerOptions = assembler->getAssemblerOptions();
     if (settings.contains("assemblyoptions"))
         assemblerOptions = settings.value("assemblyoptions").toString();
     QStringList assemblerArguments = assemblerOptions.split(QChar(' '));

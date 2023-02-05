@@ -32,15 +32,15 @@ section .text
 %endmacro
 %define CMAIN main
 
-CEXTERN printf
-CEXTERN scanf
-CEXTERN putchar
-CEXTERN fgets
-CEXTERN puts
-CEXTERN fputs
-CEXTERN fflush
-CEXTERN get_stdin
-CEXTERN get_stdout
+extern printf
+extern scanf
+extern putchar
+extern fgets
+extern puts
+extern fputs
+extern fflush
+extern get_stdin
+extern get_stdout
 
 ; Make stack be 16 bytes aligned and reserve 32 byte space for parameters
 %macro ALIGN_STACK 0.nolist

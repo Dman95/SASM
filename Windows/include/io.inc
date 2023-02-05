@@ -28,38 +28,20 @@ section .text
 %endmacro
 
 %macro CEXTERN 1.nolist
-    extern _%1
-    %define %1 _%1
-	%ifdef _printf
-		%undef _printf
-	%elifdef _scanf
-		%undef _scanf
-	%elifdef _putchar
-		%undef _putchar
-	%elifdef _fgets
-		%undef _fgets
-	%elifdef _fputs
-		%undef _fputs
-	%elifdef _fflush
-		%undef _fflush
-	%elifdef _get_stdin
-		%undef _get_stdin
-	%elifdef _get_stdout
-		%undef _get_stdout
-    %endif
+    extern %1
 %endmacro
-%define CMAIN _main
+%define CMAIN main
 
-CEXTERN printf
-CEXTERN scanf
-CEXTERN putchar
-CEXTERN fgets
-CEXTERN puts
-CEXTERN fputs
-CEXTERN fflush
+extern printf
+extern scanf
+extern putchar
+extern fgets
+extern puts
+extern fputs
+extern fflush
 
-CEXTERN get_stdin
-CEXTERN get_stdout
+extern get_stdin
+extern get_stdout
 
 ; Make stack be 16 bytes aligned after pushing %1 bytes
 %macro ALIGN_STACK 1.nolist

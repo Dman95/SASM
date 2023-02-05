@@ -159,11 +159,11 @@ void NASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
 QString NASM::getStartText()
 {
     if (isx86()) {
-        return QString("%include \"io.inc\"\n\nsection .text\nglobal CMAIN\n") +
-               QString("CMAIN:\n    ;write your code here\n    xor eax, eax\n    ret");
+        return QString("section .text\nglobal main\n") +
+               QString("main:\n    ;write your code here\n    xor eax, eax\n    ret");
     } else {
-        return QString("%include \"io64.inc\"\n\nsection .text\nglobal CMAIN\n") +
-               QString("CMAIN:\n    ;write your code here\n    xor rax, rax\n    ret");
+        return QString("section .text\nglobal main\n") +
+               QString("main:\n    ;write your code here\n    xor rax, rax\n    ret");
     }
 }
 
@@ -198,7 +198,7 @@ QString NASM::getAssemblerOptions()
     QString options;
     #ifdef Q_OS_WIN32
         if (isx86())
-            options = "-f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
+            options = "--gprefix _ -f win32 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
         else
             options = "-f win64 $SOURCE$ -l $LSTOUTPUT$ -o $PROGRAM.OBJ$";
     #else
