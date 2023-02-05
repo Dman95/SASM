@@ -173,7 +173,7 @@ As the debugger SASM used gdb. In the distribution under Windows it included in 
 <P>
 Attention! Before debugging make all functions formed frames (mov ebp, esp). This rule should be done for all functions, including main.
 <BR>
-Also, if gcc used as a linker, then the program entry point should be marked with global label main. Otherwise entry point should be marked with start label. Other labels for the entry point can not be used.
+Also, if gcc used as a linker, then the program entry point should be marked with global label main (_main for x86 GAS/FASM projects on Windows). Otherwise entry point should be marked with start label. Other labels for the entry point can not be used.
 <BR>
 Program code should be contained only in ".text" section (".code" for MASM). If you use other names for the code section, then the debugger correct work is not guaranteed.
 </P>
@@ -327,7 +327,7 @@ If you have something does not work, check the following items:
 </B>
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">1)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
-If gcc used as a linker, then the program entry point should be marked with global label main. Otherwise entry point should be marked with start label.
+If gcc used as a linker, then the program entry point should be marked with global label main (_main for x86 GAS/FASM projects on Windows). Otherwise entry point should be marked with start label.
 </P>
 <P STYLE="margin-left: 0.5in; text-indent: -0.25in">3)<SPAN STYLE="font-variant: normal">&nbsp;&nbsp;&nbsp;
 Before debugging make all functions formed frames (mov ebp, esp or mov rbp, rsp). This rule should be done for all functions, including main. If this condition is not met, the correct work of the debugger is not guaranteed.
