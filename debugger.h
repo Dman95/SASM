@@ -129,6 +129,9 @@ private:
     //! Queue of actions type from enum
     QQueue<DebugActionType> actionTypeQueue;
 
+    //! Queue of commands
+    QQueue<QString> commandQueue;
+
     //! Message on exit in current platform
     QString exitMessage;
 

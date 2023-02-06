@@ -171,6 +171,11 @@ void Debugger::processOutput()
         //emit printLog(output, Qt::blue); // for debugging
         processMessage(output, error);
     }
+    if (!commandQueue.isEmpty() && actionTypeQueue.size() <= commandQueue.size()) { // perform next command in order of queue
+        QString nextCommand = commandQueue.dequeue();
+        if (process)
+            process->write(nextCommand.toLatin1());
+    }
     bufferTimer->start(10);
 }
 
@@ -568,13 +573,12 @@ void Debugger::doInput(QString command, DebugActionType actionType)
 {
     if (actionType != none)
         actionTypeQueue.enqueue(actionType);
+    commandQueue.enqueue(command);
     //put \n after commands!
     if (actionType == ni || actionType == si || actionType == showLine) {
         emit highlightLine(-2); //does not turn off debug mode
         stopped = false;
     }
-    if (process)
-        process->write(command.toLatin1());
 }
 
 void Debugger::setWatchesCount(int count)
@@ -633,7 +637,9 @@ void Debugger::run()
     }
     doInput(QString("cd " + workingDirectoryPath + "\n"), none);
     doInput(QString("run < %1\n").arg(inputPath), none);
-    doInput(QString("p freopen(\"%1\", \"r\", fdopen(0, \"r\"))\n").arg(inputPath), none);
+    #ifdef Q_OS_WIN32
+        doInput(QString("p freopen(\"%1\", \"r\", fdopen(0, \"r\"))\n").arg(inputPath), none);
+    #endif
 }
 
 void Debugger::changeBreakpoint(quint64 lineNumber, bool isAdded)
