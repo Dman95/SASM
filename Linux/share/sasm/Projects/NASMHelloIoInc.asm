@@ -6,8 +6,8 @@ section .data
 section .text
 global main
 main:
-    mov ebp, esp
-    PRINT_STRING msg
-    NEWLINE
-    xor eax, eax
-    ret
+    mov ebp, esp ; for correct debugging
+    PRINT_STRING msg ; print hello world
+    NEWLINE ; print newline
+    xor eax, eax ; set eax to 0
+    ret ; return

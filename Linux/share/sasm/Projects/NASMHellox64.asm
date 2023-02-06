@@ -6,8 +6,8 @@ section .data
 section .text
 global main
 main:
-    mov rbp, rsp
-    PRINT_STRING msg
-    NEWLINE
-    xor rax, rax
-    ret
+    mov rbp, rsp ; for correct debugging
+    PRINT_STRING msg ; print hello world
+    NEWLINE ; print newline
+    xor rax, rax ; set rax to 0
+    ret ; return
