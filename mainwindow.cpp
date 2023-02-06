@@ -1288,7 +1288,9 @@ void MainWindow::debugToggleBreakpoint()
 void MainWindow::debugNextNi()
 {
     debugNextNiAction->setEnabled(false);
-    debugger->doInput(QString("ni\n"), ni);
+    if (debugger) {
+        debugger->doInput(QString("ni\n"), ni);
+    }
     debugNextNiAction->setEnabled(true);
 }
 
