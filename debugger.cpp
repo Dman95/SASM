@@ -157,12 +157,18 @@ void Debugger::processOutput()
 {
     bufferTimer->stop();
     int index = buffer.indexOf(QString("(gdb)"));
+    /* static QString prevBuffer; // for debugging
+    if (prevBuffer != buffer) {
+        prevBuffer = buffer;
+        emit printLog(buffer, Qt::magenta);
+    } */
     int linefeedIndex = errorBuffer.indexOf("\n");
     if (index != -1) { //if whole message ready to processing (end of whole message is "(gdb)")
         QString output = buffer.left(index);
         QString error = errorBuffer.left(linefeedIndex);
         buffer.remove(0, index + 5); //remove processed message
         errorBuffer.remove(0, linefeedIndex + 1);
+        //emit printLog(output, Qt::blue); // for debugging
         processMessage(output, error);
     }
     bufferTimer->start(10);
@@ -626,8 +632,8 @@ void Debugger::run()
         doInput("b *0x" + QString::number(entryPoint, 16) + "\n", none);
     }
     doInput(QString("cd " + workingDirectoryPath + "\n"), none);
-    doInput(QString("run\n"), none);
-    doInput(QString("p (int) dup2((int) open(\"%1\",0),0)\n").arg(inputPath), none);
+    doInput(QString("run < %1\n").arg(inputPath), none);
+    doInput(QString("p freopen(\"%1\", \"r\", fdopen(0, \"r\"))\n").arg(inputPath), none);
 }
 
 void Debugger::changeBreakpoint(quint64 lineNumber, bool isAdded)
