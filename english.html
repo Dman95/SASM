@@ -107,8 +107,13 @@
 <h2><a name="-" class="anchor" href="#-"><span class="octicon octicon-link" style="clear: none;"></span></a>Troubleshooting</h2>
 <p>If you have something does not work (errors occur when compiling, debugging, etc.), please read the chapter "Troubleshooting" in the help of the program (F1) or on <a href="https://github.com/Dman95/SASM/wiki/">the project Wiki</a> on GitHub. Perhaps there you will find useful advice to solve your problems.</P>
 
+<h2><a name="-" class="anchor" href="#-"><span class="octicon octicon-link"></span></a>Code examples</h2>
+<P>
+Working code examples for various assemblers including examples of using input/output functions and "io.inc" macros are contained in Projects folder along the path where SASM is installed (usually C:\Program Files (x86)\SASM on Windows, /usr/share/sasm on Linux).
+</P>
+
 <h2><a name="-" class="anchor" href="#-"><span class="octicon octicon-link"></span></a>"io.inc" NASM macro library</h2>
-<p>SASM includes crossplatform input/output library "io.inc" for NASM. It contains I/O macro and 2 additional macro: CMAIN - entry point and CEXTERN for invoking functions, located in C language libraries ("CEXTERN printf" for example).
+<p>SASM includes crossplatform input/output library "io.inc" for NASM. To use it you need to add directive %include "io.inc" (%include "io64.inc" for x64) to the beginning of your program.
 <table border="0" cellspacing="0" cellpadding="0">
 <thead>
 <tr>
@@ -158,10 +163,71 @@
 </tr>
 </tbody>
 </table>
+<P>
+General purpose registers are not modified during execution of the above macros.
+</P>
+
+<h2><a name="-" class="anchor" href="#-"><span class="octicon octicon-link"></span></a>Input/output functions for NASM (x86)</h2>
+<P>
+Another simple ability to use input/output in NASM is input/output functions corresponding to aforementioned macros (work only for x86 NASM projects).
+To use them you need to declare the desired functions with a directive extern &lt;function name&gt;, put the arguments into the registers according to the table below, and call the functions using call instruction.
+<P>
+&nbsp;
+</P>
+</P>
+<table border="1" cellspacing="0" cellpadding="0">
+<thead>
+<tr>
+<td width="242">Function name</td>
+<td width="390">EAX</td>
+<td width="390">EDX</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td width="242" valign="top">io_get_dec<br>io_get_udec<br>io_get_hex</td>
+<td width="200" valign="top">output: number</td>
+<td width="200" valign="top"></td>
+</tr>
+<tr>
+<td width="242" valign="top">io_get_char</td>
+<td width="200" valign="top">output: character</td>
+<td width="200" valign="top"></td>
+</tr>
+<tr>
+<td width="242" valign="top">io_get_string</td>
+<td width="200" valign="top">input: address</td>
+<td width="200" valign="top">input: size</td>
+</tr>
+<tr>
+<td width="242" valign="top">io_print_dec<br>io_print_udec<br>io_print_hex</td>
+<td width="200" valign="top">input: number</td>
+<td width="200" valign="top"></td>
+</tr>
+<tr>
+<td width="242" valign="top">io_print_char</td>
+<td width="200" valign="top">input: character</td>
+<td width="200" valign="top"></td>
+</tr>
+<tr>
+<td width="242" valign="top">io_print_string</td>
+<td width="200" valign="top">input: address</td>
+<td width="200" valign="top"></td>
+</tr>
+<tr>
+<td width="242" valign="top">io_newline</td>
+<td width="200" valign="top"></td>
+<td width="200" valign="top"></td>
+</tr>
+</tbody>
+</table>
+<P>
+During execution of the above functions the values of the registers EBX, EBP, ESP, EDI, ESI do not change, the values of other registers can be changed.
+</P>
 
 <h2><a name="-" class="anchor" href="#-"><span class="octicon octicon-link"></span></a>Implementation</h2>
 <h3><a name="windows" class="anchor" href="#windows"><span class="octicon octicon-link"></span></a>Windows</h3>
-<p>As NASM assembler used nasm 2.11.02, as linker - gcc 4.6.2 from MinGW (gcc 4.8.1 from MinGW64 in x64 mode) or ld 2.22 from MinGW (ld 2.23.2 from MinGW64 in x64 mode).</p>
+<p>As NASM assembler used nasm 2.15.05, as linker - gcc 4.6.2 from MinGW (gcc 4.8.1 from MinGW64 in x64 mode) or ld 2.22 from MinGW (ld 2.23.2 from MinGW64 in x64 mode).</p>
 <p>SASM 3.0 and greater contains fasm 1.71.39 and gas 2.23.1 from MinGW (gas 2.23.2 from MinGW64).</p>
 <p>Also SASM contains gdb debugger from MinGW and "io.inc" macro library.</p>
 <p>All assemblers (excluding MASM) are included in SASM and you can use they right away after their choice. MASM assembler can not be included in the assembly because of its license. To use it, you should install MASM on your computer from site <a href="https://www.masm32.com/">https://www.masm32.com/</a> and specify path to MASM assembler (ml.exe, path usually "C:/masm32/bin/ml.exe") and to MASM linker (link.exe, path usually "C:/masm32/bin/link.exe") in according fields on "Build" tab in settings.</p>
@@ -171,7 +237,7 @@
 
 <p>For correct working on Linux must be installed next packages: nasm or gas (if you will use they, fasm already included in SASM), gcc, gdb (for debugging). MASM in Linux is not supported.</p>
 
-<p>More information about SASM you can see on <a href="https://github.com/Dman95/SASM/wiki/">project Wiki</a> on GitHub.</p>
+<p>More information about SASM you can see on <a href="https://github.com/Dman95/SASM/wiki/">project Wiki</a> on GitHub and in the help of the program (F1).</p>
 
 <h2><a name="changes" class="anchor" href="#changes"><span class="octicon octicon-link"></span></a>Changelog:</h2>
 <p>06.02.2023 - version 3.13.0 (<a href="https://github.com/Dman95/SASM/releases/download/v3.13.0/SASM3130.zip">zip</a>, <a href="https://github.com/Dman95/SASM/releases/download/v3.13.0/SASMSetup3130.exe">exe</a>):</p>

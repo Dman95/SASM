@@ -109,8 +109,14 @@
 <h2><a name="-" class="anchor" href="#-"><span class="octicon octicon-link" style="clear: none;"></span></a>Устранение неполадок</h2>
 <p>Если у Вас что-то работает не так (происходят ошибки при компиляции, отладке и др.), пожалуйста, прочитайте главу "Устранение неполадок" в справке в программе (F1) или в <a href="https://github.com/Dman95/SASM/wiki/">Wiki проекта</a> на GitHub. Возможно, там Вы сможете найти полезный совет для решения Вашей проблемы.</p>
 
+<h2><a name="-" class="anchor" href="#-"><span class="octicon octicon-link"></span></a>Примеры кода</h2>
+<P>
+Работоспособные примеры кода для разных ассемблеров, включая примеры работы с фунциями ввода-вывода и макросами "io.inc",
+содержатся в папке Projects по пути, где установлен SASM (обычно C:\Program Files (x86)\SASM на Windows, /usr/share/sasm на Linux).
+</P>
+
 <h2><a name="-" class="anchor" href="#-"><span class="octicon octicon-link"></span></a>Библиотека макросов для NASM "io.inc"</h2>
-<p>В программу включена библиотека макросов для NASM "io.inc". В ней есть кроссплатформенные команды ввода-вывода и макросы: CMAIN - точка входа и CEXTERN для доступа к внешним функциям на языке C. Подробнее о ее командах Вы можете узнать <a href="http://asmcourse.cs.msu.ru/?page_id=169">здесь</a> или ниже.</p>
+<p>В программу включена библиотека кроссплатформенных макросов ввода-вывода "io.inc". Для её использования в начале программы нужно добавить директиву %include "io.inc" (%include "io64.inc" для 64-битного ассемблера). Подробнее о ее командах Вы можете узнать здесь: <a href="http://asmcourse.cs.msu.ru/?page_id=169">http://asmcourse.cs.msu.ru/?page_id=169</a> или ниже.</p>
 <table border="0" cellspacing="0" cellpadding="0">
 <thead>
 <tr>
@@ -159,11 +165,64 @@
 </tr>
 </tbody>
 </table>
+<p>При вызовах макросов значения всех регистров общего назначения не изменяются.</p>
+
+<h2><a name="-" class="anchor" href="#-"><span class="octicon octicon-link"></span></a>Функции ввода-вывода для NASM (x86)</h2>
+<p>Наряду с макросами, другим простым вариантом ввода-вывода в NASM являются соответствующие макросам вспомогательные функции ввода-вывода, доступные в SASM (работают только для x86 NASM проектов). Для их использования необходимо объявить нужные функции с помощью директивы extern &lt;имя функции&gt;, а затем размещать аргументы в регистрах в соответствии с таблицей ниже и вызывать функции с помощью инструкции call. Подробнее о функциях ввода-вывода Вы можете узнать здесь: <A HREF="http://asmcourse.cs.msu.ru/?page_id=2611">http://asmcourse.cs.msu.ru/?page_id=2611</A> или ниже.</p>
+<table border="1" cellspacing="0" cellpadding="0">
+<thead>
+<tr>
+<td width="242">Имя функции</td>
+<td width="390">EAX</td>
+<td width="390">EDX</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td width="242" valign="top">io_get_dec<br>io_get_udec<br>io_get_hex</td>
+<td width="200" valign="top">выход: число</td>
+<td width="200" valign="top"></td>
+</tr>
+<tr>
+<td width="242" valign="top">io_get_char</td>
+<td width="200" valign="top">выход: символ</td>
+<td width="200" valign="top"></td>
+</tr>
+<tr>
+<td width="242" valign="top">io_get_string</td>
+<td width="200" valign="top">вход: адрес</td>
+<td width="200" valign="top">вход: размер</td>
+</tr>
+<tr>
+<td width="242" valign="top">io_print_dec<br>io_print_udec<br>io_print_hex</td>
+<td width="200" valign="top">вход: число</td>
+<td width="200" valign="top"></td>
+</tr>
+<tr>
+<td width="242" valign="top">io_print_char</td>
+<td width="200" valign="top">вход: символ</td>
+<td width="200" valign="top"></td>
+</tr>
+<tr>
+<td width="242" valign="top">io_print_string</td>
+<td width="200" valign="top">вход: адрес</td>
+<td width="200" valign="top"></td>
+</tr>
+<tr>
+<td width="242" valign="top">io_newline</td>
+<td width="200" valign="top"></td>
+<td width="200" valign="top"></td>
+</tr>
+</tbody>
+</table>
+<P>
+При вызовах функций значения регистров EBX, EBP, ESP, EDI, ESI не изменяются, значения остальных регистров могут быть изменены.
+</P>
 
 <h2><a name="-" class="anchor" href="#-"><span class="octicon octicon-link"></span></a>Реализация</h2>
 <h3>
 <a name="windows" class="anchor" href="#windows"><span class="octicon octicon-link"></span></a>Windows</h3>
-<p>В качестве ассемблера для NASM используется nasm 2.11.02, в качестве компоновщика - gcc 4.6.2 из MinGW (gcc 4.8.1 из MinGW64 в режиме x64) или ld 2.22 из MinGW (ld 2.23.2 из MinGW64 в режиме x64).</p>
+<p>В качестве ассемблера для NASM используется nasm 2.15.05, в качестве компоновщика - gcc 4.6.2 из MinGW (gcc 4.8.1 из MinGW64 в режиме x64) или ld 2.22 из MinGW (ld 2.23.2 из MinGW64 в режиме x64).</p>
 <p>Версии ассемблеров и компоновщиков для NASM подобраны с учетом рекомендуемых программ для <a href="http://asmcourse.cs.msu.ru/?page_id=169">курса</a> "Архитектура ЭВМ и язык ассемблера" ВМК МГУ 1-го потока.</p>
 <p>Также в программу включен отладчик gdb 7.4 (7.6 для x64) из пакета MinGW и немного измененная для отладки библиотека макросов ввода-вывода.</p>
 <p>Начиная с версии 3.0, в SASM включены fasm 1.71.39 и gas 2.23.1 из MinGW (gas 2.23.2 из MinGW64).</p>
@@ -175,7 +234,7 @@
 
 <p>Для работы программы на Linux должны быть установлены: nasm или gas (если их планируется использовать, fasm уже включён в сборку), gcc, gdb (для отладки).</p>
 
-<p>Больше информации о программе и её использовании можно получить в <a href="https://github.com/Dman95/SASM/wiki/">Wiki проекта</a> на GitHub.</p>
+<p>Больше информации о программе и её использовании можно получить в <a href="https://github.com/Dman95/SASM/wiki/">Wiki проекта</a> на GitHub или в справке в самой программе (F1).</p>
 
 <h2>
 <a name="changes" class="anchor" href="#changes"><span class="octicon octicon-link"></span></a>История изменений:</h2>
