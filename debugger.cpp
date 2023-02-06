@@ -435,10 +435,7 @@ void Debugger::processAction(QString output, QString error)
             else {
                 output = output.right(output.length() - index);
                 output = output.right(output.length() - output.indexOf(QChar('=')) - 1);
-                for (int i = output.size() - 1; i >= 0; i--) {
-                    if (output[i].isSpace())
-                        output.remove(i, 1);
-                }
+                output = output.trimmed();
             }
         }
         memoryInfo info;
