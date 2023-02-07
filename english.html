@@ -58,8 +58,8 @@
 <p><img src="images/Screenshot3.png" alt="SASM"></p>
 
 <p>
-    <span style="font-size:25pt;"><a href="https://github.com/Dman95/SASM/releases/download/v3.13.0/SASMSetup3130.exe">Download .exe for Windows</a></span></br>
-    <span style="font-size:25pt;"><a href="https://github.com/Dman95/SASM/releases/download/v3.13.0/SASM3130.zip">Download .zip for Windows</a></span></br>
+    <span style="font-size:25pt;"><a href="https://github.com/Dman95/SASM/releases/download/v3.13.1/SASMSetup3131.exe">Download .exe for Windows</a></span></br>
+    <span style="font-size:25pt;"><a href="https://github.com/Dman95/SASM/releases/download/v3.13.1/SASM3131.zip">Download .zip for Windows</a></span></br>
     <span style="font-size:25pt;"><a href="https://download.opensuse.org/repositories/home:/Dman95/">Download for Linux</a></span></br>
     <span style="font-size:25pt;">Installing on Mac: <a href="Installing_SASM_on_a_Mac_Brian_R._Hall.pdf">link 1</a>, <a href="https://github.com/Dman95/SASM/issues/57">link 2</a></span>
 </p>
@@ -219,7 +219,7 @@ During execution of the above functions the values of the registers EBX, EBP, ES
 <h2><a name="-" class="anchor" href="#-"><span class="octicon octicon-link"></span></a>Implementation</h2>
 <h3><a name="windows" class="anchor" href="#windows"><span class="octicon octicon-link"></span></a>Windows</h3>
 <p>As NASM assembler used nasm 2.15.05, as linker - gcc 4.6.2 from MinGW (gcc 4.8.1 from MinGW64 in x64 mode) or ld 2.22 from MinGW (ld 2.23.2 from MinGW64 in x64 mode).</p>
-<p>SASM 3.0 and greater contains fasm 1.71.39 and gas 2.23.1 from MinGW (gas 2.23.2 from MinGW64).</p>
+<p>SASM 3.0 and greater contains fasm 1.73.30 and gas 2.23.1 from MinGW (gas 2.23.2 from MinGW64).</p>
 <p>Also SASM contains gdb debugger from MinGW and "io.inc" macro library.</p>
 <p>All assemblers (excluding MASM) are included in SASM and you can use they right away after their choice. MASM assembler can not be included in the assembly because of its license. To use it, you should install MASM on your computer from site <a href="https://www.masm32.com/">https://www.masm32.com/</a> and specify path to MASM assembler (ml.exe, path usually "C:/masm32/bin/ml.exe") and to MASM linker (link.exe, path usually "C:/masm32/bin/link.exe") in according fields on "Build" tab in settings.</p>
 <p>On Windows SASM is ready for work immediately after installation.</p>
@@ -231,6 +231,15 @@ During execution of the above functions the values of the registers EBX, EBP, ES
 <p>More information about SASM you can see on <a href="https://github.com/Dman95/SASM/wiki/">project Wiki</a> on GitHub and in the help of the program (F1).</p>
 
 <h2><a name="changes" class="anchor" href="#changes"><span class="octicon octicon-link"></span></a>Changelog:</h2>
+<p>07.02.2023 - version 3.13.1 (<a href="https://github.com/Dman95/SASM/releases/download/v3.13.1/SASM3131.zip">zip</a>, <a href="https://github.com/Dman95/SASM/releases/download/v3.13.1/SASMSetup3131.exe">exe</a>):</p>
+<p>Recommended to click "Reset all" button in settings after update from previous versions.</p>
+<ul>
+<li>Fix debugging on Windows 11 and Ubuntu 22.</li>
+<li>Fix random debugging lags.</li>
+<li>Fix debugger crash when debugging file without .text section.</li>
+<li>New FASM version 1.73.30 to fix Ubuntu 22 building bug.</li>
+<li>Fix building requirements for Ubuntu 22.</li>
+</ul>
 <p>06.02.2023 - version 3.13.0 (<a href="https://github.com/Dman95/SASM/releases/download/v3.13.0/SASM3130.zip">zip</a>, <a href="https://github.com/Dman95/SASM/releases/download/v3.13.0/SASMSetup3130.exe">exe</a>):</p>
 <p>Recommended to click "Reset all" button in settings after update from previous versions.</p>
 <ul>
