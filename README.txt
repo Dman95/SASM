@@ -21,7 +21,9 @@ On Linux:
 For building:
     build-essential
     qtbase5-dev
-    qt5-default
+    qtbase5-dev-tools
+    qt5-qmake
+    qtchooser
 For running:
     gcc-multilib (x64 OS) or gcc (x86 OS)
     gdb
