@@ -640,7 +640,7 @@ void Debugger::run()
         doInput(QString("run\n"), none);
         QSettings settings("SASM Project", "SASM");
         if (settings.value("mode", QString("x86")).toString() == "x86") {
-            doInput(QString("p freopen(\"%1\", \"r\", fdopen(0, \"r\"))\n").arg(inputPath), none);
+            doInput(QString("p freopen(\"%1\", \"r\", (FILE *) {0, 0, 0, 1, 0, 0, 4096, 0, 0})\n").arg(inputPath), none);
         } else {
             doInput(QString("p freopen(\"%1\", \"r\", (FILE *) {0, 0, 0, 0, 0, 0, 1, 0, 0, 4096, 0, 0})\n").arg(inputPath), none);
         }
