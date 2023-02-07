@@ -14,13 +14,13 @@ main:
     mov rbp, rsp; for correct debugging
     sub rsp, 32
     and rsp, -16
-    mov rcx, inputFormat
-    mov rdx, a
-    mov r8, b
+    mov rdi, inputFormat
+    mov rsi, a
+    mov rdx, b
     call scanf
-    mov rdx, qword[a]
-    add rdx, qword[b]
-    mov rcx, outputFormat
+    mov rsi, qword[a]
+    add rsi, qword[b]
+    mov rdi, outputFormat
     call printf
     mov rsp, rbp
     xor rax, rax
