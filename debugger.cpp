@@ -168,7 +168,7 @@ void Debugger::processOutput()
         QString error = errorBuffer.left(linefeedIndex);
         buffer.remove(0, index + 5); //remove processed message
         errorBuffer.remove(0, linefeedIndex + 1);
-        //emit printLog(output, Qt::blue); // for debugging
+        //emit printLog(output + "\n\n", Qt::blue); // for debugging
         processMessage(output, error);
     }
     if (!commandQueue.isEmpty() && actionTypeQueue.size() <= commandQueue.size()) { // perform next command in order of queue
@@ -315,6 +315,9 @@ void Debugger::processMessage(QString output, QString error)
 void Debugger::processAction(QString output, QString error)
 {
     bool backtrace = (output.indexOf(QRegExp("#\\d+  0x[0-9a-fA-F]{8,16} in .* ()")) != -1);
+    if (output.replace(QRegExp(" +"), " ").trimmed().startsWith("Num Description Connection Executable")) { // skip such info
+        return;
+    }
     if (output.indexOf(exitMessage) != -1 && !backtrace) {
         doInput("c\n", none);
         return;
@@ -639,6 +642,8 @@ void Debugger::run()
     doInput(QString("run < %1\n").arg(inputPath), none);
     #ifdef Q_OS_WIN32
         doInput(QString("p freopen(\"%1\", \"r\", fdopen(0, \"r\"))\n").arg(inputPath), none);
+    #else
+        doInput(QString("p 0\n").arg(inputPath), none);
     #endif
 }
 
