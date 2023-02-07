@@ -293,7 +293,7 @@ void Debugger::processMessage(QString output, QString error)
     }
 
     if (!pid) {
-        QRegExp r("Num +Description +Executable");
+        QRegExp r("Num +Description +(Connection +)?Executable");
         int index = output.indexOf(r);
         if (index != -1) {
             QString processString("process ");
@@ -315,9 +315,6 @@ void Debugger::processMessage(QString output, QString error)
 void Debugger::processAction(QString output, QString error)
 {
     bool backtrace = (output.indexOf(QRegExp("#\\d+  0x[0-9a-fA-F]{8,16} in .* ()")) != -1);
-    if (output.replace(QRegExp(" +"), " ").trimmed().startsWith("Num Description Connection Executable")) { // skip such info
-        return;
-    }
     if (output.indexOf(exitMessage) != -1 && !backtrace) {
         doInput("c\n", none);
         return;
@@ -639,10 +636,16 @@ void Debugger::run()
         doInput("b *0x" + QString::number(entryPoint, 16) + "\n", none);
     }
     doInput(QString("cd " + workingDirectoryPath + "\n"), none);
-    doInput(QString("run < %1\n").arg(inputPath), none);
     #ifdef Q_OS_WIN32
-        doInput(QString("p freopen(\"%1\", \"r\", fdopen(0, \"r\"))\n").arg(inputPath), none);
+        doInput(QString("run\n"), none);
+        QSettings settings("SASM Project", "SASM");
+        if (settings.value("mode", QString("x86")).toString() == "x86") {
+            doInput(QString("p freopen(\"%1\", \"r\", fdopen(0, \"r\"))\n").arg(inputPath), none);
+        } else {
+            doInput(QString("p freopen(\"%1\", \"r\", (FILE *) {0, 0, 0, 0, 0, 0, 1, 0, 0, 4096, 0, 0})\n").arg(inputPath), none);
+        }
     #else
+        doInput(QString("run < %1\n").arg(inputPath), none);
         doInput(QString("p 0\n").arg(inputPath), none);
     #endif
 }
