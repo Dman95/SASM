@@ -884,7 +884,7 @@ void MainWindow::buildProgram(bool debugMode)
     }
 
     //! GCC
-    QString linkerOptions = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m32";
+    QString linkerOptions = assembler->getLinkerOptions();
     if (settings.contains("linkingoptions"))
         linkerOptions = settings.value("linkingoptions").toString();
     //! macro.c compilation/copying

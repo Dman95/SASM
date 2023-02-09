@@ -56,7 +56,7 @@ QString GccBasedAssembler::getLinkerOptions()
     else
         options = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m64";
     if (m_isPieEnabled)
-        options += " -fno-pie -no-pie";
+        options += " -no-pie";
     return options;
 }
 
