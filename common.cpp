@@ -81,7 +81,11 @@ QString Common::applicationDataPath()
 
 QString Common::pathInTemp(QString path)
 {
-    QString temp = QDir::tempPath();
+    #ifdef Q_OS_WIN32
+        QString temp = qgetenv("TEMP");
+    #else
+        QString temp = QDir::tempPath();
+    #endif
     QChar lastSymbol = temp[temp.length() - 1];
     if (lastSymbol == QChar('/') || lastSymbol == QChar('\\')) {
         temp.chop(1);
