@@ -2248,6 +2248,12 @@ void MainWindow::openHelp()
     help->setOpenExternalLinks(true);
     help->setWindowTitle(tr("Help"));
     help->setWindowIcon(QIcon(":images/mainIcon.png"));
+
+    QAction *closeHelpAction = new QAction(tr("Close help"), help);
+    closeHelpAction->setShortcut(QKeySequence(Qt::Key_Escape));
+    connect(closeHelpAction, SIGNAL(triggered()), help, SLOT(close()));
+    help->addAction(closeHelpAction);
+
     help->show();
 }
 
