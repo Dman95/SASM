@@ -43,7 +43,6 @@
 
 #include <QSyntaxHighlighter>
 #include <QSettings>
-#include <QPalette>
 #include <QTextDocument>
 #include "assembler.h"
 

@@ -817,7 +817,7 @@ void MainWindow::buildProgram(bool debugMode)
     programIsBuilded = false;
 
     using Common::applicationDataPath;
-    printLogWithTime(tr("Build started...") + '\n', settings.value("fontcolor", QPalette().color(QPalette::Text)).value<QColor>());
+    printLogWithTime(tr("Build started...") + '\n', settings.value("fontcolor", QColor(30, 30, 30)).value<QColor>());
     QCoreApplication::processEvents();
 
     if (! QFile::exists(applicationDataPath())) {
@@ -1011,7 +1011,7 @@ void MainWindow::runProgram()
 
     ((Tab *) tabs->currentWidget())->clearOutput();
 
-    printLogWithTime(tr("The program is executing...") + '\n', settings.value("fontcolor", QPalette().color(QPalette::Text)).value<QColor>());
+    printLogWithTime(tr("The program is executing...") + '\n', settings.value("fontcolor", QColor(30, 30, 30)).value<QColor>());
     QCoreApplication::processEvents();
 
     QString input = Common::pathInTemp("input.txt");
@@ -1804,7 +1804,7 @@ void MainWindow::initColorButtons(bool dark, bool ignoreSettings) {
             QColor(30, 30, 30) << QColor(30, 30, 30) <<
             QColor(30, 30, 30) << QColor(30, 30, 30) <<
             QColor(30, 30, 30) <<
-            QColor(30, 30, 30) << QColor(30, 30, 30) <<
+            QColor(30, 30, 30) << QColor(50, 50, 50) <<
             QColor(255, 255, 255) <<
             QColor(232, 232, 255) << QColor(100, 78, 0) <<
             QColor(255, 255, 255);
@@ -1823,7 +1823,7 @@ void MainWindow::initColorButtons(bool dark, bool ignoreSettings) {
             QColor(255, 255, 255) << QColor(255, 255, 255) <<
             QColor(255, 255, 255) << QColor(255, 255, 255) <<
             QColor(255, 255, 255) <<
-            QColor(255, 255, 255) << QColor(255, 255, 255) <<
+            QColor(255, 255, 255) << QColor(235, 235, 235) <<
             QColor(30, 30, 30) <<
             QColor(232, 232, 255) << QColor(235, 200, 40) <<
             QColor(30, 30, 30);

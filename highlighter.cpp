@@ -75,12 +75,12 @@
      QSettings settings("SASM Project", "SASM");
      for (int i = 0; i < formats.size(); i++) {
          formats[i]->setForeground(settings.value(names[i] + "color", defaultColors[i]).value<QColor>());
-         formats[i]->setBackground(settings.value(names[i] + "colorbg", QPalette().color(QPalette::Base)).value<QColor>());
+         formats[i]->setBackground(settings.value(names[i] + "colorbg", QColor(255, 255, 255)).value<QColor>());
          if (settings.value(names[i] + "bold", (i == 0) ? true : false).toBool())
              formats[i]->setFontWeight(QFont::Bold);
          formats[i]->setFontItalic(settings.value(names[i] + "italic", false).toBool());
      }
-     labelWithDotFormat.setForeground(settings.value("fontcolor", QPalette().color(QPalette::WindowText)).value<QColor>());
+     labelWithDotFormat.setForeground(settings.value("fontcolor", QColor(30, 30, 30)).value<QColor>());
      formats << &labelWithDotFormat;
      assembler->fillHighligherRules(highlightingRules, formats, multiLineComments, commentStartExpression, commentEndExpression);
  }

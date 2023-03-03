@@ -51,8 +51,8 @@ RuQTextEdit::RuQTextEdit(QWidget *parent) :
     setAcceptRichText(false);
     QSettings settings("SASM Project", "SASM");
     QPalette palette = this->palette();
-    palette.setColor(QPalette::Base, settings.value("backgroundcolor", palette.color(QPalette::Base)).value<QColor>());
-    palette.setColor(QPalette::Text, settings.value("fontcolor", palette.color(QPalette::Text)).value<QColor>());
+    palette.setColor(QPalette::Base, settings.value("backgroundcolor", QColor(255, 255, 255)).value<QColor>());
+    palette.setColor(QPalette::Text, settings.value("fontcolor", QColor(30, 30, 30)).value<QColor>());
     setPalette(palette);
 
     undoAction = new QAction(tr("Undo"), this);
