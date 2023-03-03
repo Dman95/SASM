@@ -56,7 +56,9 @@
 int main(int argc, char *argv[])
 {
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+    #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+        QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+    #endif
     QtSingleApplication a(argc, argv);
     QSettings settings("SASM Project", "SASM");
     QPalette palette;
