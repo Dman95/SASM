@@ -45,6 +45,7 @@
 #include <QStackedWidget>
 #include <QTextBrowser>
 #include <QTimer>
+#include <QElapsedTimer>
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QFileDialog>
@@ -165,7 +166,7 @@ private:
     QProcess *runProcess;
     CodeEditor *prevCodeEditor;
     QTimer *timer;
-    QTime programExecutionTime;
+    QElapsedTimer programExecutionTime;
     Debugger *debugger;
     bool programIsBuilded;
     QPointer<DebugTableWidget> registersWindow;

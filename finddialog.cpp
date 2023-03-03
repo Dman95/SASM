@@ -98,8 +98,8 @@ FindDialog::FindDialog(QWidget *parent)
     searchLayout = new QHBoxLayout;
     searchLayout->addWidget(searchLabel);
     searchSpacer = new QSpacerItem(
-                replaceLabel->fontMetrics().width(tr("Replace with:")) -
-                searchLabel->fontMetrics().width(tr("Find what:")),
+                replaceLabel->fontMetrics().horizontalAdvance(tr("Replace with:")) -
+                searchLabel->fontMetrics().horizontalAdvance(tr("Find what:")),
                 0, QSizePolicy::Fixed, QSizePolicy::Fixed);
     searchLayout->addSpacerItem(searchSpacer);
     searchLayout->addWidget(searchEdit);
