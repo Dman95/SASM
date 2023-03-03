@@ -203,7 +203,7 @@ signals:
     void started();
     void printRegisters(QList<Debugger::registersInfo>);
     void printMemory(QList<Debugger::memoryInfo>);
-    void printLog(QString msg, QColor color = QColor(Qt::black));
+    void printLog(QString msg, QColor color);
     void printOutput(QString msg);
     void inMacro();
     void wasStopped();

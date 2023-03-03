@@ -57,6 +57,7 @@ CodeEditor::CodeEditor(QWidget *parent, bool withBeakpoints) :
     setWordWrapMode(QTextOption::NoWrap);
     firstTopMargin = contentOffset().y();
     lineNumberArea = new LineNumberArea(this);
+    lineNumberPanelColor = settings.value("linenumberpanelcolor", palette().color(QPalette::Window)).value<QColor>();
 
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateLineNumberAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateLineNumberArea(QRect,int)));
@@ -112,7 +113,7 @@ void CodeEditor::lineNumberAreaPaintEvent(QPaintEvent *event)
 {
     // !Paint on line number area
     QPainter painter(lineNumberArea);
-    painter.fillRect(event->rect(), settings.value("linenumberpanelcolor", palette().color(QPalette::Window)).value<QColor>());
+    painter.fillRect(event->rect(), lineNumberPanelColor);
 
     QTextBlock block = firstVisibleBlock();
     int blockNumber = block.blockNumber();

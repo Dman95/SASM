@@ -817,7 +817,7 @@ void MainWindow::buildProgram(bool debugMode)
     programIsBuilded = false;
 
     using Common::applicationDataPath;
-    printLogWithTime(tr("Build started...") + '\n', Qt::black);
+    printLogWithTime(tr("Build started...") + '\n', settings.value("fontcolor", QPalette().color(QPalette::Text)).value<QColor>());
     QCoreApplication::processEvents();
 
     if (! QFile::exists(applicationDataPath())) {
@@ -1011,7 +1011,7 @@ void MainWindow::runProgram()
 
     ((Tab *) tabs->currentWidget())->clearOutput();
 
-    printLogWithTime(tr("The program is executing...") + '\n', Qt::black);
+    printLogWithTime(tr("The program is executing...") + '\n', settings.value("fontcolor", QPalette().color(QPalette::Text)).value<QColor>());
     QCoreApplication::processEvents();
 
     QString input = Common::pathInTemp("input.txt");
@@ -1718,31 +1718,8 @@ void MainWindow::openSettings()
                         settingsUi.currentLineColorButton << settingsUi.debugLineColorButton <<
                         settingsUi.lineNumberFontColorButton;
 
-        defaultColors <<
-                          //! According to colorButtons
-                          QColor(Qt::blue) << QColor(153, 0, 204) <<
-                          QColor(255, 122, 0) << QColor(0, 128, 255) <<
-                          QColor(128, 0, 0) << QColor(Qt::darkGreen) <<
-                          QColor(Qt::darkCyan) << QColor(Qt::blue) <<
-                          QColor(128, 128, 128) <<
-                          QPalette().color(QPalette::Base) << QPalette().color(QPalette::Base) <<
-                          QPalette().color(QPalette::Base) << QPalette().color(QPalette::Base) <<
-                          QPalette().color(QPalette::Base) << QPalette().color(QPalette::Base) <<
-                          QPalette().color(QPalette::Base) << QPalette().color(QPalette::Base) <<
-                          QPalette().color(QPalette::Base) <<
-                          QPalette().color(QPalette::Base) << QPalette().color(QPalette::Window) <<
-                          QPalette().color(QPalette::WindowText) <<
-                          QColor(232, 232, 255) << QColor(235, 200, 40) <<
-                          QColor(QPalette::WindowText);
-        //! Add color to associative array
+        //! Add color buttons signal mapping
         for (int i = 0; i < colorButtons.size(); i++) {
-
-            QString name = colorButtons[i]->objectName();
-            name.remove("Button");
-            name.replace("_2", "bg");
-            name = name.toLower();
-            colorsMap.insert(name, defaultColors[i]);
-
             connect(colorButtons[i], SIGNAL(clicked()), colorSignalMapper, SLOT(map()));
             colorSignalMapper->setMapping(colorButtons[i], colorButtons[i]);
         }
@@ -1775,7 +1752,10 @@ void MainWindow::openSettings()
         }
         connect(fontsSignalMapper, SIGNAL(mapped(QWidget*)), this, SLOT(changeHighlightingFont(QWidget*)));
 
-        connect(settingsUi.currentLineCheckBox, SIGNAL(clicked(bool)), this, SLOT(changeHighlightingLineMode(bool)));
+        connect(settingsUi.currentLineCheckBox, SIGNAL(stateChanged(int)), this, SLOT(changeHighlightingLineMode(int)));
+
+        connect(settingsUi.lightThemeButton, SIGNAL(clicked()), this, SLOT(changeColorButtonsLight()));
+        connect(settingsUi.darkThemeButton, SIGNAL(clicked()), this, SLOT(changeColorButtonsDark()));
 
         backupSettings();
         initAssemblerSettings(true);
@@ -1797,9 +1777,7 @@ void MainWindow::openSettings()
     settingsUi.insertDebugStringCheckBox->setChecked(settings.value("insertdebugstring", true).toBool());
 
     //! Colors
-    for (int i = 0; i < colorButtons.size(); i++) {
-        pickColor((QWidget *) colorButtons[i], true);
-    }
+    initColorButtons(false, false);
     //! Fonts
     for (int i = 0; i < fontCheckBoxes.size(); i++) {
         changeHighlightingFont((QWidget *) fontCheckBoxes[i], true);
@@ -1807,6 +1785,71 @@ void MainWindow::openSettings()
 
     settingsUi.currentLineCheckBox->setChecked(settings.value("currentlinemode", true).toBool());
     settingsWindow->show();
+}
+
+void MainWindow::initColorButtons(bool dark, bool ignoreSettings) {
+    defaultColors.clear();
+    if (dark) {
+        if (ignoreSettings)
+            settingsUi.currentLineCheckBox->setChecked(false);
+        defaultColors <<
+            //! According to colorButtons
+            QColor(181, 206, 168) << QColor(144, 220, 254) <<
+            QColor(181, 206, 168) << QColor(212, 212, 212) <<
+            QColor(244, 71, 71) << QColor(106, 153, 85) <<
+            QColor(78, 201, 176) << QColor(28, 113, 216) <<
+            QColor(195, 145, 120) <<
+            QColor(30, 30, 30) << QColor(30, 30, 30) <<
+            QColor(30, 30, 30) << QColor(30, 30, 30) <<
+            QColor(30, 30, 30) << QColor(30, 30, 30) <<
+            QColor(30, 30, 30) << QColor(30, 30, 30) <<
+            QColor(30, 30, 30) <<
+            QColor(30, 30, 30) << QColor(30, 30, 30) <<
+            QColor(255, 255, 255) <<
+            QColor(232, 232, 255) << QColor(100, 78, 0) <<
+            QColor(255, 255, 255);
+    } else {
+        if (ignoreSettings)
+            settingsUi.currentLineCheckBox->setChecked(true);
+        defaultColors <<
+            //! According to colorButtons
+            QColor(Qt::blue) << QColor(153, 0, 204) <<
+            QColor(255, 122, 0) << QColor(0, 128, 255) <<
+            QColor(128, 0, 0) << QColor(Qt::darkGreen) <<
+            QColor(Qt::darkCyan) << QColor(Qt::blue) <<
+            QColor(128, 128, 128) <<
+            QColor(255, 255, 255) << QColor(255, 255, 255) <<
+            QColor(255, 255, 255) << QColor(255, 255, 255) <<
+            QColor(255, 255, 255) << QColor(255, 255, 255) <<
+            QColor(255, 255, 255) << QColor(255, 255, 255) <<
+            QColor(255, 255, 255) <<
+            QColor(255, 255, 255) << QColor(255, 255, 255) <<
+            QColor(30, 30, 30) <<
+            QColor(232, 232, 255) << QColor(235, 200, 40) <<
+            QColor(30, 30, 30);
+    }
+
+    //! Add color to associative array
+    for (int i = 0; i < colorButtons.size(); i++) {
+        QString name = colorButtons[i]->objectName();
+        name.remove("Button");
+        name.replace("_2", "bg");
+        name = name.toLower();
+        colorsMap.insert(name, defaultColors[i]);
+    }
+
+    //! Colors
+    for (int i = 0; i < colorButtons.size(); i++) {
+        pickColor((QWidget *) colorButtons[i], true, ignoreSettings);
+    }
+}
+
+void MainWindow::changeColorButtonsLight() {
+    initColorButtons(false, true);
+}
+
+void MainWindow::changeColorButtonsDark() {
+    initColorButtons(true, true);
 }
 
 void MainWindow::initAssemblerSettings(bool firstOpening)
@@ -2092,34 +2135,35 @@ void MainWindow::saveSettings()
     backupSettings();
 }
 
-void MainWindow::pickColor(QWidget *button, bool init)
+void MainWindow::pickColor(QWidget *button, bool init, bool ignoreSettings)
 {
     QPushButton *colorButton = (QPushButton *) button;
     QString name = colorButton->objectName();
     name.remove("Button");
     name.replace("_2", "bg");
     name = name.toLower();
+    QColor color = (ignoreSettings) ? colorsMap[name] : settings.value(name, colorsMap[name]).value<QColor>();
     if (!init) {
-        QColor color = QColorDialog::getColor(settings.value(name, colorsMap[name]).value<QColor>());
-        if (color.isValid()) {
-            settings.setValue(name, color);
-            if (name == "backgroundcolor") {
-                int r, g, b;
-                color.getRgb(&r, &g, &b);
-                for (int i = 9; i < 18; i++) {
-                    QString buttonName = colorButtons[i]->objectName();
-                    buttonName.remove("Button");
-                    buttonName.replace("_2", "bg");
-                    buttonName = buttonName.toLower();
-                    settings.setValue(buttonName, color);
-                    colorButtons[i]->setStyleSheet(QString("background-color: rgb(%1, %2, %3)").arg(r).arg(g).arg(b));
-                }
-            }
-            recreateHighlighter();
+        QColor newColor = QColorDialog::getColor(settings.value(name, colorsMap[name]).value<QColor>());
+        if (newColor.isValid()) {
+            color = newColor;
         }
     }
+    settings.setValue(name, color);
+    if (name == "backgroundcolor") {
+        int r, g, b;
+        color.getRgb(&r, &g, &b);
+        for (int i = 9; i < 18; i++) {
+            QString buttonName = colorButtons[i]->objectName();
+            buttonName.remove("Button");
+            buttonName.replace("_2", "bg");
+            buttonName = buttonName.toLower();
+            settings.setValue(buttonName, color);
+            colorButtons[i]->setStyleSheet(QString("background-color: rgb(%1, %2, %3)").arg(r).arg(g).arg(b));
+        }
+    }
+    recreateHighlighter();
     int r, g, b;
-    QColor color = settings.value(name, colorsMap[name]).value<QColor>();
     color.getRgb(&r, &g, &b);
     colorButton->setStyleSheet(QString("background-color: rgb(%1, %2, %3)").arg(r).arg(g).arg(b));
 }
@@ -2139,9 +2183,13 @@ void MainWindow::changeHighlightingFont(QWidget *box, bool init)
     }
 }
 
-void MainWindow::changeHighlightingLineMode(bool mode)
+void MainWindow::changeHighlightingLineMode(int mode)
 {
-    settings.setValue("currentlinemode", mode);
+    if (mode == Qt::Unchecked) {
+        settings.setValue("currentlinemode", false);
+    } else if (mode == Qt::Checked) {
+        settings.setValue("currentlinemode", true);
+    }
 }
 
 void MainWindow::exitSettings()

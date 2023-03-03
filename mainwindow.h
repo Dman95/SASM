@@ -274,6 +274,9 @@ public slots:
     //! Settings
     void restorePrevSession(bool notNotify = false);
     void openSettings();
+    void initColorButtons(bool dark, bool ignoreSettings);
+    void changeColorButtonsLight();
+    void changeColorButtonsDark();
     void changeMode(bool x86);
     void changeAssembler();
     void changeStartText();
@@ -281,9 +284,9 @@ public slots:
     void exitSettings();
     void changeActionsState(int widgetIndex);
     void resetAllSettings();
-    void pickColor(QWidget *colorButton, bool init = false);
+    void pickColor(QWidget *colorButton, bool init = false, bool ignoreSettings = false);
     void changeHighlightingFont(QWidget *box, bool init = false);
-    void changeHighlightingLineMode(bool mode);
+    void changeHighlightingLineMode(int mode);
     void recreateHighlighter();
     void recreateAssembler(bool start = false);
     void initAssemblerSettings(bool firstOpening);

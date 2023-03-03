@@ -46,6 +46,7 @@
 #include <QPushButton>
 #include <QtSingleApplication>
 #include <QInputDialog>
+#include <QPalette>
 
 /**
  * @file main.cpp
@@ -54,7 +55,26 @@
 
 int main(int argc, char *argv[])
 {
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
     QtSingleApplication a(argc, argv);
+    QSettings settings("SASM Project", "SASM");
+    QPalette palette;
+    palette.setColor(QPalette::Window, settings.value("backgroundcolor", palette.color(QPalette::Base)).value<QColor>());
+    palette.setColor(QPalette::WindowText, settings.value("fontcolor", palette.color(QPalette::Text)).value<QColor>());
+    palette.setColor(QPalette::Base, settings.value("backgroundcolor", palette.color(QPalette::Base)).value<QColor>());
+    palette.setColor(QPalette::AlternateBase, settings.value("backgroundcolor", palette.color(QPalette::Base)).value<QColor>());
+    palette.setColor(QPalette::ToolTipBase, settings.value("backgroundcolor", palette.color(QPalette::Base)).value<QColor>());
+    palette.setColor(QPalette::ToolTipText, settings.value("fontcolor", palette.color(QPalette::Text)).value<QColor>());
+    palette.setColor(QPalette::Text, settings.value("fontcolor", palette.color(QPalette::Text)).value<QColor>());
+    palette.setColor(QPalette::Button, settings.value("backgroundcolor", palette.color(QPalette::Base)).value<QColor>());
+    palette.setColor(QPalette::ButtonText, settings.value("fontcolor", palette.color(QPalette::Text)).value<QColor>());
+    palette.setColor(QPalette::BrightText, Qt::red);
+    palette.setColor(QPalette::Link, QColor(42, 130, 218));
+    palette.setColor(QPalette::Highlight, QColor(42, 130, 218));
+    palette.setColor(QPalette::HighlightedText, settings.value("backgroundcolor", palette.color(QPalette::Base)).value<QColor>());
+    a.setStyle("Fusion");
+    a.setPalette(palette);
     if (a.isRunning()) {
         //we already have one instance of our application
         if (argc <= 1) {
@@ -67,7 +87,6 @@ int main(int argc, char *argv[])
         return 0;
     }
     QTranslator translator, qtTranslator;
-    QSettings settings("SASM Project", "SASM");
     #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
         QTextCodec *codec = QTextCodec::codecForName("UTF-8");
         QTextCodec::setCodecForCStrings(codec);

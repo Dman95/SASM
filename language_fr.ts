@@ -9,11 +9,11 @@
     </message>
     <message>
         <source>Perform</source>
-        <translation type="unfinished">Effectue</translation>
+        <translation>Effectue</translation>
     </message>
     <message>
         <source>Print</source>
-        <translation type="unfinished">Affiche</translation>
+        <translation>Affiche</translation>
     </message>
 </context>
 <context>
@@ -60,7 +60,7 @@
     </message>
     <message>
         <source>Delete watch</source>
-        <translation type="unfinished">Supprimer le point d&apos;arrêt</translation>
+        <translation>Supprimer le point d&apos;arrêt</translation>
     </message>
 </context>
 <context>
@@ -68,7 +68,8 @@
     <message>
         <source>GDB error
 </source>
-        <translation>Erreur GDB\n</translation>
+        <translation>Erreur GDB
+</translation>
     </message>
     <message>
         <source>An error has occurred in the debugger. Please check the names of the sections.</source>
@@ -292,7 +293,7 @@
     </message>
     <message>
         <source>Toggle breakpoint</source>
-        <translation type="unfinished">Basculer point d&apos;arrêt</translation>
+        <translation>Basculer point d&apos;arrêt</translation>
     </message>
     <message>
         <source>Show registers</source>
@@ -344,7 +345,7 @@
     </message>
     <message>
         <source>Build started...</source>
-        <translation type="unfinished">La construction a commencé…</translation>
+        <translation>La construction a commencé…</translation>
     </message>
     <message>
         <source>Error! Program directory does not exist. Please reinstall the program.</source>
@@ -448,418 +449,438 @@
     </message>
     <message>
         <source>About SASM</source>
-        <translation type="unfinished">À propos de SASM</translation>
+        <translation>À propos de SASM</translation>
     </message>
     <message>
         <source>SASM (SimpleASM) </source>
-        <translation type="unfinished">SASM (SimpleASM) </translation>
+        <translation>SASM (SimpleASM) </translation>
     </message>
     <message>
         <source>simple Open Source IDE for NASM, MASM, GAS and FASM assembler languages.</source>
-        <translation type="unfinished">IDE Open Source simple pour les langages assembleurs NASM, MASM, GAS et FASM.</translation>
+        <translation>IDE Open Source simple pour les langages assembleurs NASM, MASM, GAS et FASM.</translation>
     </message>
     <message>
         <source>Licensed under the GNU GPL v3.0</source>
-        <translation type="unfinished">Sous licence GNU GPL v3.0</translation>
+        <translation>Sous licence GNU GPL v3.0</translation>
     </message>
     <message>
         <source>Based on the Qt.</source>
-        <translation type="unfinished">Basé sur le Qt.</translation>
+        <translation>Basé sur le Qt.</translation>
     </message>
     <message>
         <source>Copyright (c) 2013 Dmitriy Manushin</source>
-        <translation type="unfinished">Copyright (c) 2013 Dmitriy Manushin</translation>
+        <translation>Copyright (c) 2013 Dmitriy Manushin</translation>
     </message>
     <message>
         <source>Development and idea - Dmitriy Manushin</source>
-        <translation type="unfinished">Développement et idée - Dmitriy Manushin</translation>
+        <translation>Développement et idée - Dmitriy Manushin</translation>
     </message>
     <message>
         <source>Icon and advices - Alick Gaybullaev</source>
-        <translation type="unfinished">Icône et conseils - Alick Gaybullaev</translation>
+        <translation>Icône et conseils - Alick Gaybullaev</translation>
     </message>
     <message>
         <source>Wishes and error messages are sent to the e-mail: Dman1095@gmail.com</source>
-        <translation type="unfinished">Les souhaits et les messages d&apos;erreur sont envoyés à l&apos;e-mail : Dman1095@gmail.com</translation>
+        <translation>Les souhaits et les messages d&apos;erreur sont envoyés à l&apos;e-mail : Dman1095@gmail.com</translation>
     </message>
     <message>
         <source>More information on the site: http://dman95.github.io/SASM/</source>
-        <translation type="unfinished">Plus d&apos;informations sur le site : http://dman95.github.io/SASM/</translation>
+        <translation>Plus d&apos;informations sur le site : http://dman95.github.io/SASM/</translation>
     </message>
     <message>
         <source>Donate:</source>
-        <translation type="unfinished">Faire un don:</translation>
+        <translation>Faire un don:</translation>
     </message>
     <message>
         <source>PayPal - Dman1095@gmail.com</source>
-        <translation type="unfinished">PayPal - Dman1095@gmail.com</translation>
+        <translation>PayPal - Dman1095@gmail.com</translation>
     </message>
     <message>
         <source>WMZ - Z282016332582</source>
-        <translation type="unfinished">WMZ - Z282016332582</translation>
+        <translation>WMZ - Z282016332582</translation>
     </message>
     <message>
         <source>WMR - R331674303467</source>
-        <translation type="unfinished">WMR - R331674303467</translation>
+        <translation>WMR - R331674303467</translation>
+    </message>
+    <message>
+        <source>Close help</source>
+        <translation>Fermer le aider</translation>
     </message>
 </context>
 <context>
     <name>RuQPlainTextEdit</name>
     <message>
         <source>Comment</source>
-        <translation type="unfinished">commentaire</translation>
+        <translation>Commentaire</translation>
     </message>
     <message>
         <source>Remove comment</source>
-        <translation type="unfinished">Supprimer le commentaire</translation>
+        <translation>Supprimer le commentaire</translation>
     </message>
     <message>
         <source>Undo</source>
-        <translation type="unfinished">Défaire</translation>
+        <translation>Défaire</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation type="unfinished">Refaire</translation>
+        <translation>Refaire</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation type="unfinished">Couper</translation>
+        <translation>Couper</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Copier</translation>
+        <translation>Copier</translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation type="unfinished">Coller</translation>
+        <translation>Coller</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Supprimer</translation>
+        <translation>Supprimer</translation>
     </message>
     <message>
         <source>Select all</source>
-        <translation type="unfinished">Tout sélectionner</translation>
+        <translation>Tout sélectionner</translation>
     </message>
     <message>
         <source>Watch &apos;%1&apos;</source>
-        <translation type="unfinished">Voir «&#xa0;%1&#xa0;»</translation>
+        <translation>Voir &apos;%1&apos;</translation>
     </message>
 </context>
 <context>
     <name>RuQTextEdit</name>
     <message>
         <source>Undo</source>
-        <translation type="unfinished">Défaire</translation>
+        <translation>Défaire</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation type="unfinished">Refaire</translation>
+        <translation>Refaire</translation>
     </message>
     <message>
         <source>Cut</source>
-        <translation type="unfinished">Couper</translation>
+        <translation>Couper</translation>
     </message>
     <message>
         <source>Copy</source>
-        <translation type="unfinished">Copier</translation>
+        <translation>Copier</translation>
     </message>
     <message>
         <source>Paste</source>
-        <translation type="unfinished">Coller</translation>
+        <translation>Coller</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Supprimer</translation>
+        <translation>Supprimer</translation>
     </message>
     <message>
         <source>Select all</source>
-        <translation type="unfinished">Tout sélectionner</translation>
+        <translation>Tout sélectionner</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished">Effacer</translation>
+        <translation>Effacer</translation>
     </message>
 </context>
 <context>
     <name>SettingsWindow</name>
     <message>
         <source>Settings</source>
-        <translation type="unfinished">Paramètres</translation>
+        <translation>Paramètres</translation>
     </message>
     <message>
         <source>SASM Options</source>
-        <translation type="unfinished">Options SASM</translation>
+        <translation>Options SASM</translation>
     </message>
     <message>
         <source>Common</source>
-        <translation type="unfinished">Générales</translation>
+        <translation>Générales</translation>
     </message>
     <message>
         <source>On start:</source>
-        <translation type="unfinished">Au démarrage :</translation>
+        <translation>Au démarrage :</translation>
     </message>
     <message>
         <source>Open get started window</source>
-        <translation type="unfinished">Ouvrir la fenêtre de démarrage</translation>
+        <translation>Ouvrir la fenêtre de démarrage</translation>
     </message>
     <message>
         <source>Restore previous session</source>
-        <translation type="unfinished">Restaurer la session précédente</translation>
+        <translation>Restaurer la session précédente</translation>
     </message>
     <message>
         <source>Language:</source>
-        <translation type="unfinished">Langue:</translation>
+        <translation>Langue:</translation>
     </message>
     <message>
         <source>To apply the changes require a restart!</source>
-        <translation type="unfinished">Pour appliquer les modifications, un redémarrage est nécessaire&#xa0;!</translation>
+        <translation>Pour appliquer les modifications, un redémarrage est nécessaire&#xa0;!</translation>
     </message>
     <message>
         <source>Show all registers in debug:</source>
-        <translation type="unfinished">Afficher tous les registres en débogage&#xa0;:</translation>
+        <translation>Afficher tous les registres en débogage&#xa0;:</translation>
     </message>
     <message>
         <source>Yes</source>
-        <translation type="unfinished">Oui</translation>
+        <translation>Oui</translation>
     </message>
     <message>
         <source>No, show only general purpose</source>
-        <translation type="unfinished">Non, afficher uniquement les généraux</translation>
+        <translation>Non, afficher uniquement les généraux</translation>
     </message>
     <message>
         <source>Insert debug string:</source>
-        <translation type="unfinished">Insérez les chaînes de débogage:</translation>
+        <translation>Insérez les chaînes de débogage:</translation>
     </message>
     <message>
         <source>Code editor</source>
-        <translation type="unfinished">Éditeur de code</translation>
+        <translation>Éditeur de code</translation>
     </message>
     <message>
         <source>Font:</source>
-        <translation type="unfinished">Police de caractère:</translation>
+        <translation>Police de caractère:</translation>
     </message>
     <message>
         <source>Size:</source>
-        <translation type="unfinished">Taille:</translation>
+        <translation>Taille:</translation>
     </message>
     <message>
         <source>Default code editor text:</source>
-        <translation type="unfinished">Texte de l&apos;éditeur de code par défaut&#xa0;:</translation>
+        <translation>Texte de l&apos;éditeur de code par défaut&#xa0;:</translation>
     </message>
     <message>
         <source>Reset all (need a restart)...</source>
-        <translation type="unfinished">Tout réinitialiser (besoin d&apos;un redémarrage)...</translation>
+        <translation>Tout réinitialiser (besoin d&apos;un redémarrage)...</translation>
     </message>
     <message>
         <source>Colors</source>
-        <translation type="unfinished">Couleurs</translation>
+        <translation>Couleurs</translation>
     </message>
     <message>
         <source>Syntax highlighting</source>
-        <translation type="unfinished">Coloration syntaxique</translation>
+        <translation>Coloration syntaxique</translation>
     </message>
     <message>
         <source>System:</source>
-        <translation type="unfinished">Système:</translation>
+        <translation>Système:</translation>
     </message>
     <message>
         <source>Bold:</source>
-        <translation type="unfinished">Gras:</translation>
+        <translation>Gras:</translation>
     </message>
     <message>
         <source>Italic:</source>
-        <translation type="unfinished">Italique:</translation>
+        <translation>Italique:</translation>
     </message>
     <message>
         <source>Foreground:</source>
-        <translation type="unfinished">Premier plan:</translation>
+        <translation>Premier plan:</translation>
     </message>
     <message>
         <source>Keywords:</source>
-        <translation type="unfinished">Mots clés:</translation>
+        <translation>Mots clés:</translation>
     </message>
     <message>
         <source>Background:</source>
-        <translation type="unfinished">Arrière-plan:</translation>
+        <translation>Arrière-plan:</translation>
     </message>
     <message>
         <source>Numbers:</source>
-        <translation type="unfinished">Nombres:</translation>
+        <translation>Nombres:</translation>
     </message>
     <message>
         <source>Labels:</source>
-        <translation type="unfinished">Étiquettes:</translation>
+        <translation>Étiquettes:</translation>
     </message>
     <message>
         <source>Comments:</source>
-        <translation type="unfinished">Commentaires:</translation>
+        <translation>Commentaires:</translation>
     </message>
     <message>
         <source>Quotation:</source>
-        <translation type="unfinished">Guillemet:</translation>
+        <translation>Guillemet:</translation>
     </message>
     <message>
         <source>Memory:</source>
-        <translation type="unfinished">Mémoire:</translation>
+        <translation>Mémoire:</translation>
     </message>
     <message>
         <source>I/O macro:</source>
-        <translation type="unfinished">Macro d&apos;E/S:</translation>
+        <translation>Macro d&apos;E/S:</translation>
     </message>
     <message>
         <source>Registers:</source>
-        <translation type="unfinished">Registres:</translation>
+        <translation>Registres:</translation>
     </message>
     <message>
         <source>Enable highlighting</source>
-        <translation type="unfinished">Activer la surbrillance</translation>
+        <translation>Activer la surbrillance</translation>
     </message>
     <message>
         <source>Current line:</source>
-        <translation type="unfinished">Ligne actuelle:</translation>
+        <translation>Ligne actuelle:</translation>
     </message>
     <message>
         <source>Debugging line:</source>
-        <translation type="unfinished">Ligne de débogage:</translation>
+        <translation>Ligne de débogage:</translation>
     </message>
     <message>
         <source>Line number panel:</source>
-        <translation type="unfinished">Panneau numéro ligne&#xa0;:</translation>
+        <translation>Panneau numéro ligne&#xa0;:</translation>
     </message>
     <message>
         <source>Line number font:</source>
-        <translation type="unfinished">Police numéro ligne:</translation>
+        <translation>Police numéro ligne:</translation>
     </message>
     <message>
         <source>Build</source>
-        <translation type="unfinished">Construction du code</translation>
+        <translation>Construction du code</translation>
     </message>
     <message>
         <source>Mode:</source>
-        <translation type="unfinished">Architecture:</translation>
+        <translation>Architecture:</translation>
     </message>
     <message>
         <source>x86</source>
-        <translation type="unfinished">x86</translation>
+        <translation>x86</translation>
     </message>
     <message>
         <source>x64</source>
-        <translation type="unfinished">x64</translation>
+        <translation>x64</translation>
     </message>
     <message>
         <source>Assembler:</source>
-        <translation type="unfinished">Assembleur:</translation>
+        <translation>Assembleur:</translation>
     </message>
     <message>
         <source>NASM</source>
-        <translation type="unfinished">NASM</translation>
+        <translation>NASM</translation>
     </message>
     <message>
         <source>GAS</source>
-        <translation type="unfinished">GAS</translation>
+        <translation>GAS</translation>
     </message>
     <message>
         <source>FASM</source>
-        <translation type="unfinished">FASM</translation>
+        <translation>FASM</translation>
     </message>
     <message>
         <source>MASM</source>
-        <translation type="unfinished">MASM</translation>
+        <translation>MASM</translation>
     </message>
     <message>
         <source>Assembly options:</source>
-        <translation type="unfinished">Options d&apos;assemblage:</translation>
+        <translation>Options d&apos;assemblage:</translation>
     </message>
     <message>
         <source>Linking options:</source>
-        <translation type="unfinished">Options d&apos;édition de liens:</translation>
+        <translation>Options d&apos;édition de liens:</translation>
     </message>
     <message>
         <source>Assembler path:</source>
-        <translation type="unfinished">Chemin de l&apos;assembleur:</translation>
+        <translation>Chemin de l&apos;assembleur:</translation>
     </message>
     <message>
         <source>Linker path:</source>
-        <translation type="unfinished">Chemin de l&apos;éditeur de liens:</translation>
+        <translation>Chemin de l&apos;éditeur de liens:</translation>
     </message>
     <message>
         <source>Object file name:</source>
-        <translation type="unfinished">Nom du fichier objet:</translation>
+        <translation>Nom du fichier objet:</translation>
     </message>
     <message>
         <source>Disable linking:</source>
-        <translation type="unfinished">Désactiver l&apos;édition de liens:</translation>
+        <translation>Désactiver l&apos;édition de liens:</translation>
     </message>
     <message>
         <source>Build in current directory:</source>
-        <translation type="unfinished">Construire dans le répertoire courant:</translation>
+        <translation>Construire dans le répertoire courant:</translation>
+    </message>
+    <message>
+        <source>Français</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Preset color theme:</source>
+        <translation>Thème de couleur prédéfini:</translation>
+    </message>
+    <message>
+        <source>Light</source>
+        <translation>Lumière</translation>
+    </message>
+    <message>
+        <source>Dark</source>
+        <translation>Sombre</translation>
     </message>
 </context>
 <context>
     <name>Tab</name>
     <message>
         <source>Input</source>
-        <translation type="unfinished">Entrée</translation>
+        <translation>Entrée</translation>
     </message>
     <message>
         <source>Output</source>
-        <translation type="unfinished">Sortie</translation>
+        <translation>Sortie</translation>
     </message>
 </context>
 <context>
     <name>WatchSettingsWidget</name>
     <message>
         <source>Address</source>
-        <translation type="unfinished">Adresse</translation>
+        <translation>Adresse</translation>
     </message>
     <message>
         <source>Array size</source>
-        <translation type="unfinished">Taille du tableau</translation>
+        <translation>Taille du tableau</translation>
     </message>
     <message>
         <source>Smart</source>
-        <translation type="unfinished">Smart</translation>
+        <translation>Smart</translation>
     </message>
     <message>
         <source>Hex</source>
-        <translation type="unfinished">Hex</translation>
+        <translation>Hex</translation>
     </message>
     <message>
         <source>Bin</source>
-        <translation type="unfinished">Bin</translation>
+        <translation>Bin</translation>
     </message>
     <message>
         <source>Char</source>
-        <translation type="unfinished">Char</translation>
+        <translation>Char</translation>
     </message>
     <message>
         <source>Int</source>
-        <translation type="unfinished">Int</translation>
+        <translation>Int</translation>
     </message>
     <message>
         <source>UInt</source>
-        <translation type="unfinished">UInt</translation>
+        <translation>UInt</translation>
     </message>
     <message>
         <source>Float</source>
-        <translation type="unfinished">Float</translation>
+        <translation>Float</translation>
     </message>
     <message>
         <source>d</source>
-        <translation type="unfinished">d</translation>
+        <translation>d</translation>
     </message>
     <message>
         <source>w</source>
-        <translation type="unfinished">w</translation>
+        <translation>w</translation>
     </message>
     <message>
         <source>b</source>
-        <translation type="unfinished">b</translation>
+        <translation>b</translation>
     </message>
     <message>
         <source>q</source>
-        <translation type="unfinished">q</translation>
+        <translation>q</translation>
     </message>
 </context>
 </TS>

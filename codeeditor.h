@@ -114,6 +114,7 @@ private:
     bool hasBreakpoints;
     int prevBlockCount;
     QSettings settings;
+    QColor lineNumberPanelColor;
 
 signals:
     void breakpointsChanged(quint64 lineNumber, bool isAdded);

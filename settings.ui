@@ -41,7 +41,7 @@
       <enum>Qt::LeftToRight</enum>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="elideMode">
       <enum>Qt::ElideNone</enum>
@@ -460,7 +460,32 @@
        <string>Colors</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="2">
+       <item row="0" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_10">
+         <item>
+          <widget class="QLabel" name="themeLabel">
+           <property name="text">
+            <string>Preset color theme:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="lightThemeButton">
+           <property name="text">
+            <string>Light</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="darkThemeButton">
+           <property name="text">
+            <string>Dark</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="2">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
           <string>Syntax highlighting</string>
@@ -1594,7 +1619,7 @@
          </layout>
         </widget>
        </item>
-       <item row="0" column="0">
+       <item row="2" column="0">
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
           <string>Common</string>
@@ -2199,7 +2224,7 @@
  <connections/>
  <buttongroups>
   <buttongroup name="buttonGroup"/>
-  <buttongroup name="buttonGroup_2"/>
   <buttongroup name="buttonGroup_3"/>
+  <buttongroup name="buttonGroup_2"/>
  </buttongroups>
 </ui>

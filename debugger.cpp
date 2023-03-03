@@ -545,7 +545,7 @@ void Debugger::processAction(QString output, QString error)
         return;
 
     //print information to log field
-    emit printLog(output);
+    emit printLog(output, QSettings("SASM Project", "SASM").value("fontcolor", QPalette().color(QPalette::Text)).value<QColor>());
 }
 
 bool Debugger::isStopped()
