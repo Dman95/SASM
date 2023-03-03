@@ -50,7 +50,6 @@
 #include <QVector>
 #include <QTextCharFormat>
 #include <QSettings>
-#include <QPalette>
 #include "common.h"
 #include "codeeditor.h"
 
