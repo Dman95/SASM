@@ -75,6 +75,8 @@ public:
     FindDialog(QWidget *parent = 0);
     ~FindDialog();
 
+    void keyPressEvent(QKeyEvent *e);
+    void showEvent(QShowEvent *e);
     void closeEvent(QCloseEvent *e);
 
 signals:
