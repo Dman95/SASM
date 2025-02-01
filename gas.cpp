@@ -346,6 +346,11 @@ void GAS::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlighting
         highlightingRules.append(rule);
     }
 
+    //labels
+    rule.pattern = QRegExp("\\S+:");
+    rule.format = labelFormat;
+    highlightingRules.append(rule);
+
     //memory
     rule.format = memoryFormat;
     QStringList memoryPatterns;
@@ -355,11 +360,6 @@ void GAS::fillHighligherRules(QVector<Assembler::HighlightingRule> &highlighting
         rule.pattern.setCaseSensitivity(Qt::CaseInsensitive);
         highlightingRules.append(rule);
     }
-
-    //labels
-    rule.pattern = QRegExp("\\S+:");
-    rule.format = labelFormat;
-    highlightingRules.append(rule);
 
     //numbers
     rule.format = numberFormat;
