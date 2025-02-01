@@ -20,3 +20,8 @@ Thumbs.db
 doc/*
 .qmake.stash
 sasm.app
+
+*.o
+sasm
+ui_settings.h
+moc_predefs.h
