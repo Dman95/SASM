@@ -132,7 +132,7 @@ Debugger::Debugger(QTextEdit *tEdit,
 
     checkGdbRunTimer = new QTimer;
     QObject::connect(checkGdbRunTimer, SIGNAL(timeout()), this, SLOT(checkGdbRun()), Qt::QueuedConnection);
-    checkGdbRunTimer->start(10000);
+    checkGdbRunTimer->start(20000);
 }
 
 void Debugger::emitStarted()
