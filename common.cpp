@@ -82,7 +82,7 @@ QString Common::applicationDataPath()
 QString Common::pathInTemp(QString path)
 {
     #ifdef Q_OS_WIN32
-        QString temp = qgetenv("TEMP");
+        QString temp = qgetenv("PROGRAMDATA");
     #else
         QString temp = QDir::tempPath();
     #endif
