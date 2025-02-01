@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="pt_PT">
+<TS version="2.1" language="pt_BR">
 <context>
     <name>DebugAnyCommandWidget</name>
     <message>
@@ -44,7 +44,7 @@
     <message>
         <location filename="debugtablewidget.cpp" line="74"/>
         <source>Register</source>
-        <translation>Registro</translation>
+        <translation>Registrador</translation>
     </message>
     <message>
         <location filename="debugtablewidget.cpp" line="74"/>
@@ -59,7 +59,7 @@
     <message>
         <location filename="debugtablewidget.cpp" line="76"/>
         <source>Registers</source>
-        <translation>Registros</translation>
+        <translation>Registradores</translation>
     </message>
     <message>
         <location filename="debugtablewidget.cpp" line="90"/>
@@ -91,7 +91,7 @@
     <message>
         <location filename="debugger.cpp" line="261"/>
         <source>An error has occurred in the debugger. Please check the names of the sections.</source>
-        <translation>Ocorreu um erro no depurador. Por favor, verifique os nomes das secções.</translation>
+        <translation>Ocorreu um erro no depurador. Por favor, verifique os nomes das seções.</translation>
     </message>
     <message>
         <location filename="debugger.cpp" line="607"/>
@@ -101,12 +101,12 @@
     <message>
         <location filename="debugger.cpp" line="619"/>
         <source>Executable sections were not found! </source>
-        <translation>Não foram encontradas secções executáveis! </translation>
+        <translation>Não foram encontradas seções executáveis! </translation>
     </message>
     <message>
         <location filename="debugger.cpp" line="620"/>
         <source>For correct debugging executable sections should have name &quot;.text&quot; or &quot;.code&quot; (for MASM only).</source>
-        <translation>Para uma depuração correta, as secções executáveis devem ser denominadas &quot;.text&quot; ou &quot;.code&quot; (apenas em MASM).</translation>
+        <translation>Para uma depuração correta, as seções executáveis devem ser denominadas &quot;.text&quot; ou &quot;.code&quot; (apenas em MASM).</translation>
     </message>
 </context>
 <context>
@@ -131,12 +131,12 @@
     <message>
         <location filename="finddialog.cpp" line="61"/>
         <source>Find next</source>
-        <translation>Localizar seguinte</translation>
+        <translation>Localizar próximo</translation>
     </message>
     <message>
         <location filename="finddialog.cpp" line="65"/>
         <source>Find all</source>
-        <translation>Localizar tudo</translation>
+        <translation>Localizar todos</translation>
     </message>
     <message>
         <location filename="finddialog.cpp" line="68"/>
@@ -146,7 +146,7 @@
     <message>
         <location filename="finddialog.cpp" line="71"/>
         <source>Replace all</source>
-        <translation>Substituir tudo</translation>
+        <translation>Substituir todos</translation>
     </message>
     <message>
         <location filename="finddialog.cpp" line="74"/>
@@ -198,7 +198,7 @@
     <message>
         <location filename="masm.cpp" line="58"/>
         <source>Only 32-bit version of MASM is available.</source>
-        <translation>Apenas está disponível a versão de 32 bits de MASM.</translation>
+        <translation>Apenas a versão de 32 bits do MASM está disponível.</translation>
     </message>
 </context>
 <context>
@@ -212,7 +212,7 @@
         <location filename="mainwindow.cpp" line="182"/>
         <location filename="mainwindow.cpp" line="487"/>
         <source>File</source>
-        <translation>Ficheiro</translation>
+        <translation>Arquivo</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="193"/>
@@ -261,22 +261,22 @@
     <message>
         <location filename="mainwindow.cpp" line="260"/>
         <source>Close file</source>
-        <translation>Fechar ficheiro</translation>
+        <translation>Fechar arquivo</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="269"/>
         <source>Save</source>
-        <translation>Guardar</translation>
+        <translation>Salvar</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="277"/>
         <source>Save as</source>
-        <translation>Guardar como</translation>
+        <translation>Salvar como</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="285"/>
         <source>Save .exe</source>
-        <translation>Guardar .exe</translation>
+        <translation>Salvar .exe</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="292"/>
@@ -291,7 +291,7 @@
     <message>
         <location filename="mainwindow.cpp" line="309"/>
         <source>Undo</source>
-        <translation>Anular</translation>
+        <translation>Desfazer</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="316"/>
@@ -316,7 +316,7 @@
     <message>
         <location filename="mainwindow.cpp" line="344"/>
         <source>Delete</source>
-        <translation>Eliminar</translation>
+        <translation>Apagar</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="351"/>
@@ -356,7 +356,7 @@
     <message>
         <location filename="mainwindow.cpp" line="404"/>
         <source>Run in new window</source>
-        <translation>Executar numa nova janela</translation>
+        <translation>Executar em uma nova janela</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="407"/>
@@ -381,7 +381,7 @@
     <message>
         <location filename="mainwindow.cpp" line="445"/>
         <source>Show registers</source>
-        <translation>Mostrar registros</translation>
+        <translation>Mostrar registradores</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="454"/>
@@ -396,29 +396,29 @@
     <message>
         <location filename="mainwindow.cpp" line="598"/>
         <source>Open file</source>
-        <translation>Abrir ficheiro</translation>
+        <translation>Abrir arquivo</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="599"/>
         <location filename="mainwindow.cpp" line="664"/>
         <source>Assembler source files (*.asm);;All files (*)</source>
         <oldsource>Assembler source files (*.asm);;All files (*.*)</oldsource>
-        <translation>Ficheiros de assembler (*.asm);;Todos os ficheiros (*.*)</translation>
+        <translation>Arquivos de assembler (*.asm);;Todos os arquivos (*.*)</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="663"/>
         <source>Save file</source>
-        <translation>Guardar ficheiro</translation>
+        <translation>Salvar arquivo</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="687"/>
         <source>Save .exe file</source>
-        <translation>Guardar ficheiro .exe</translation>
+        <translation>Salvar arquivo .exe</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="688"/>
         <source>Execution files (*.exe);;All files (*.*)</source>
-        <translation>Ficheiros executáveis (*.exe);;Todos os ficheiros (*.*)</translation>
+        <translation>Arquivos executáveis (*.exe);;Todos os arquivos (*.*)</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="788"/>
@@ -441,7 +441,7 @@
         <location filename="mainwindow.cpp" line="791"/>
         <location filename="mainwindow.cpp" line="792"/>
         <source>Save changes?</source>
-        <translation>Guardar alterações?</translation>
+        <translation>Salvar alterações?</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="820"/>
@@ -486,7 +486,7 @@
     <message>
         <location filename="mainwindow.cpp" line="997"/>
         <source>The program is already running.</source>
-        <translation>O programa já está a ser executado.</translation>
+        <translation>O programa já está em execução.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1014"/>
@@ -511,7 +511,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1100"/>
         <source>The program is not running.</source>
-        <translation>O programa não está a correr.</translation>
+        <translation>O programa não está em execução.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1144"/>
@@ -543,7 +543,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1419"/>
         <source>Registers</source>
-        <translation>Registros</translation>
+        <translation>Registradores</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1490"/>
@@ -553,7 +553,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1636"/>
         <source>In the previous session was not open any of the saved tabs!</source>
-        <translation>Na sessão anterior não esteve aberto nenhum dos separadores guardados!</translation>
+        <translation>Na sessão anterior não esteve aberto nenhum dos separadores salvos!</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1954"/>
@@ -573,7 +573,7 @@
     <message>
         <location filename="mainwindow.cpp" line="2209"/>
         <source>All settings will be deleted and all unsaved data will be lost. Are you sure?</source>
-        <translation>Todas as configurações serão eliminadas e todos os dados não guardados serão perdidos. Tem a certeza?</translation>
+        <translation>Todas as configurações serão apagadas e todos os dados não salvos serão perdidos. Tem certeza?</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2300"/>
@@ -583,7 +583,7 @@
     <message>
         <location filename="mainwindow.cpp" line="2310"/>
         <source>About SASM</source>
-        <translation>Sobre SASM</translation>
+        <translation>Sobre o SASM</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2311"/>
@@ -598,7 +598,7 @@
     <message>
         <location filename="mainwindow.cpp" line="2313"/>
         <source>Licensed under the GNU GPL v3.0</source>
-        <translation>Licenciado ao abrigo de GNU GPL v3.0</translation>
+        <translation>Licenciado sob a GNU GPL v3.0</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2314"/>
@@ -628,12 +628,12 @@
     <message>
         <location filename="mainwindow.cpp" line="2319"/>
         <source>More information on the site: http://dman95.github.io/SASM/</source>
-        <translation>Mais informações no sítio: http://dman95.github.io/SASM/</translation>
+        <translation>Mais informações no site: http://dman95.github.io/SASM/</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2320"/>
         <source>Donate:</source>
-        <translation>Donativos:</translation>
+        <translation>Doações:</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2321"/>
@@ -666,7 +666,7 @@
     <message>
         <location filename="ruqplaintextedit.cpp" line="77"/>
         <source>Undo</source>
-        <translation>Anular</translation>
+        <translation>Desfazer</translation>
     </message>
     <message>
         <location filename="ruqplaintextedit.cpp" line="81"/>
@@ -691,12 +691,12 @@
     <message>
         <location filename="ruqplaintextedit.cpp" line="97"/>
         <source>Delete</source>
-        <translation>Eliminar</translation>
+        <translation>Apagar</translation>
     </message>
     <message>
         <location filename="ruqplaintextedit.cpp" line="101"/>
         <source>Select all</source>
-        <translation>Selecionar tudo</translation>
+        <translation>Selecionar todos</translation>
     </message>
     <message>
         <location filename="ruqplaintextedit.cpp" line="149"/>
@@ -709,7 +709,7 @@
     <message>
         <location filename="ruqtextedit.cpp" line="58"/>
         <source>Undo</source>
-        <translation>Anular</translation>
+        <translation>Desfazer</translation>
     </message>
     <message>
         <location filename="ruqtextedit.cpp" line="62"/>
@@ -734,12 +734,12 @@
     <message>
         <location filename="ruqtextedit.cpp" line="78"/>
         <source>Delete</source>
-        <translation>Eliminar</translation>
+        <translation>Apagar</translation>
     </message>
     <message>
         <location filename="ruqtextedit.cpp" line="82"/>
         <source>Select all</source>
-        <translation>Selecionar tudo</translation>
+        <translation>Selecionar todos</translation>
     </message>
     <message>
         <location filename="ruqtextedit.cpp" line="86"/>
@@ -757,7 +757,7 @@
     <message>
         <location filename="settings.ui" line="34"/>
         <source>SASM Options</source>
-        <translation>Opções de SASM</translation>
+        <translation>Opções do SASM</translation>
     </message>
     <message>
         <location filename="settings.ui" line="51"/>
@@ -801,7 +801,7 @@
     <message>
         <location filename="settings.ui" line="220"/>
         <source>Show all registers in debug:</source>
-        <translation>Mostrar todos os registros durante a depuração:</translation>
+        <translation>Mostrar todos os registradores durante a depuração:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="227"/>
@@ -827,7 +827,7 @@
         <location filename="settings.ui" line="322"/>
         <location filename="settings.ui" line="1633"/>
         <source>Font:</source>
-        <translation>Texto:</translation>
+        <translation>Fonte:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="345"/>
@@ -842,7 +842,7 @@
     <message>
         <location filename="settings.ui" line="424"/>
         <source>Reset all (need a restart)...</source>
-        <translation>Repor tudo (exige uma reinicialização)...</translation>
+        <translation>Redefinir tudo (exige reinicialização)...</translation>
     </message>
     <message>
         <location filename="settings.ui" line="460"/>
@@ -857,12 +857,12 @@
     <message>
         <location filename="settings.ui" line="475"/>
         <source>Light</source>
-        <translation>Luz</translation>
+        <translation>Claro</translation>
     </message>
     <message>
         <location filename="settings.ui" line="482"/>
         <source>Dark</source>
-        <translation>Escura</translation>
+        <translation>Escuro</translation>
     </message>
     <message>
         <location filename="settings.ui" line="491"/>
@@ -933,7 +933,7 @@
     <message>
         <location filename="settings.ui" line="1421"/>
         <source>Registers:</source>
-        <translation>Registros:</translation>
+        <translation>Registradores:</translation>
     </message>
     <message>
         <location filename="settings.ui" line="1683"/>
@@ -1064,7 +1064,7 @@
     <message>
         <location filename="watchsettingswidget.cpp" line="69"/>
         <source>Array size</source>
-        <translation>Tamanho da array</translation>
+        <translation>Tamanho do array</translation>
     </message>
     <message>
         <location filename="watchsettingswidget.cpp" line="72"/>
