@@ -52,9 +52,9 @@ QString GccBasedAssembler::getLinkerOptions()
 {
     QString options;
     if (isx86())
-        options = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m32";
+        options = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m32 -Wl,--no-warn-execstack";
     else
-        options = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m64";
+        options = "$PROGRAM.OBJ$ $MACRO.OBJ$ -g -o $PROGRAM$ -m64 -Wl,--no-warn-execstack";
     if (m_isPieEnabled)
         options += " -no-pie";
     return options;
