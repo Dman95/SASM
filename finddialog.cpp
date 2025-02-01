@@ -63,18 +63,27 @@ FindDialog::FindDialog(QWidget *parent)
     findButton->setEnabled(false);
 
     findAllButton = new QPushButton(tr("Find all"));
+    findAllButton->setAutoDefault(true);
     findAllButton->setEnabled(false);
 
     replaceButton = new QPushButton(tr("Replace"));
+    replaceButton->setAutoDefault(true);
     replaceButton->setEnabled(false);
 
     replaceAllButton = new QPushButton(tr("Replace all"));
+    replaceAllButton->setAutoDefault(true);
     replaceAllButton->setEnabled(false);
 
     closeButton = new QPushButton(tr("Close"));
+    closeButton->setAutoDefault(true);
 
     connect(searchEdit, SIGNAL(textChanged(const QString &)),
             this, SLOT(enableFindButton(const QString &)));
+    connect(searchEdit, SIGNAL(returnPressed()),
+            findButton, SLOT(click()));
+
+    connect(replaceEdit, SIGNAL(returnPressed()),
+            replaceButton, SLOT(click()));
 
     connect(findButton, SIGNAL(clicked()),
             this, SLOT(findClicked()));
@@ -188,6 +197,24 @@ bool FindDialog::close()
 void FindDialog::setSearchText(const QString &text)
 {
     searchEdit->setText(text);
+}
+
+void FindDialog::keyPressEvent(QKeyEvent *e)
+{
+    switch(e->key())
+    {
+    case Qt::Key_Escape:
+        close();
+        break;
+    default:
+        QWidget::keyPressEvent(e);
+    }
+}
+
+void FindDialog::showEvent(QShowEvent *e)
+{
+    searchEdit->setFocus();
+    e->accept();
 }
 
 void FindDialog::closeEvent(QCloseEvent *e)
