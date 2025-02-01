@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
         }
         return 0;
     }
-    QTranslator translator, qtTranslator;
+    QTranslator translator, qtTranslator, addTranslator;
     #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
         QTextCodec *codec = QTextCodec::codecForName("UTF-8");
         QTextCodec::setCodecForCStrings(codec);
@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
         items << QString("Русский") << QString("English") << QString("Türk") <<
                  QString("中国") << QString("Deutsch") << QString("Italiano") <<
                  QString("Polski") << QString("עברית") << QString("Español") <<
-                 QString("Português") << QString("Français");
+                 QString("Português") << QString("Français") << QString("Português brasileiro");
         bool ok = false;
         QString selected = QInputDialog::getItem(0, QString("Choose language"),
             QString("Language:"), items, 0, false, &ok);
@@ -158,11 +158,11 @@ int main(int argc, char *argv[])
 
         qtTranslator.load(":/translations/qt_es.qm");
         a.installTranslator(&qtTranslator);
-    } else if (settings.value("language", 0).toInt() == 9) { //portuguese language
-        translator.load(":/translations/language_pt.qm");
+    } else if (settings.value("language", 0).toInt() == 9) { //portuguese portuguese language
+        translator.load(":/translations/language_pt_PT.qm");
         a.installTranslator(&translator);
 
-        qtTranslator.load(":/translations/qt_pt.qm");
+        qtTranslator.load(":/translations/qt_pt_PT.qm");
         a.installTranslator(&qtTranslator);
     } else if (settings.value("language", 0).toInt() == 10) { //french language
         translator.load(":/translations/language_fr.qm");
@@ -170,6 +170,15 @@ int main(int argc, char *argv[])
 
         qtTranslator.load(":/translations/qt_fr.qm");
         a.installTranslator(&qtTranslator);
+    } else if (settings.value("language", 0).toInt() == 11) { // brazilian portuguese language
+        translator.load(":/translations/language_pt_BR.qm");
+        a.installTranslator(&translator);
+
+        qtTranslator.load(":/translations/qt_pt_PT.qm");
+        a.installTranslator(&qtTranslator);
+
+        addTranslator.load(":/translations/qt_pt_BR.qm");
+        a.installTranslator(&addTranslator);
     }
 
     MainWindow w(a.arguments());
