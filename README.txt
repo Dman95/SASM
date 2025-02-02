@@ -13,7 +13,7 @@ On Windows:
 For building:
     C++ compiler (e.g. gcc from MinGW)
     make (e.g. mingw32-make from MinGW)
-    Qt 5
+    Qt 5 (>= 5.11)
 For running:
     Everything needed is included.
 
