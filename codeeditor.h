@@ -86,7 +86,7 @@ public slots:
     void putTab();
     void deleteTab();
     void highlightCurrentLine();
-    void highlightDebugLine(int lineNumber);
+    void highlightDebugLine(int lineNumber, bool moveCursor);
     void setDebugMode(bool mode);
     QList<int> *getBreakpoints();
     void setBreakpointOnCurrentLine();

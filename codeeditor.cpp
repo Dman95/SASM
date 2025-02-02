@@ -240,7 +240,7 @@ void CodeEditor::highlightCurrentLine()
     }
 }
 
-void CodeEditor::highlightDebugLine(int lineNumber)
+void CodeEditor::highlightDebugLine(int lineNumber, bool moveCursor)
 {
     if (debugMode) {
         QList<QTextEdit::ExtraSelection> extraSelections;
@@ -255,7 +255,9 @@ void CodeEditor::highlightDebugLine(int lineNumber)
             selection.cursor = QTextCursor(document());
             selection.cursor.movePosition(QTextCursor::NextBlock, QTextCursor::MoveAnchor, lineNumber - 1);
             selection.cursor.clearSelection();
-            setTextCursor(selection.cursor); //scroll to debugging line
+            if (moveCursor) {
+                setTextCursor(selection.cursor); //scroll to debugging line
+            }
             extraSelections.append(selection);
         }
 
@@ -281,7 +283,7 @@ void CodeEditor::updateDebugLine(int number)
                              lineNumberArea->width(), lineNumberArea->height());
     emit updateRequest(lineNumberAreaRect, 0);
 
-    highlightDebugLine(number);
+    highlightDebugLine(number, true);
     highlightCurrentLine();
 }
 

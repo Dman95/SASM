@@ -1558,7 +1558,7 @@ void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool a
             connect(code, SIGNAL(cursorPositionChanged()), code, SLOT(highlightCurrentLine()));
             code->highlightCurrentLine();
             if (code->debugMode)
-                code->highlightDebugLine(code->currentDebugLine);
+                code->highlightDebugLine(code->currentDebugLine, false);
         }
     } else {
          //If true, find all
