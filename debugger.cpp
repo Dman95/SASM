@@ -646,7 +646,7 @@ void Debugger::run()
         }
     #else
         doInput(QString("run < %1\n").arg(inputPath), none);
-        doInput(QString("p 0\n").arg(inputPath), none);
+        doInput(QString("p 0\n"), none);
     #endif
 }
 
