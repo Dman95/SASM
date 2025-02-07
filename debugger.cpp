@@ -470,7 +470,7 @@ void Debugger::processAction(QString output, QString error)
         QSet<QString> general;
         QString ip;
         QSet<QString> segment;
-        segment << "cs" << "ds" << "ss" << "es" << "fs" << "gs";
+        segment << "cs" << "ds" << "ss" << "es" << "fs" << "gs" << "fs_base" << "gs_base";
         QSet<QString> flags;
         flags << "eflags" << "mxcsr";
         QSet<QString> fpu_info;
