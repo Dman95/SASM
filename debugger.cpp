@@ -95,7 +95,7 @@ Debugger::Debugger(QTextEdit *tEdit,
     #else
         QString gdb = "gdb";
         QString objdump = "objdump";
-        exitMessage = "libc_start_main";
+        exitMessage = "libc_start";
     #endif
     cExitMessage = QRegExp("\\[Inferior .* exited");
 
