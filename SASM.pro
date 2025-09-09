@@ -112,4 +112,5 @@ TRANSLATIONS    += language_ru.ts \
                    language_es.ts \
                    language_pt_PT.ts \
                    language_fr.ts \
-                   language_pt_BR.ts
+                   language_pt_BR.ts \
+                   language_ja.ts

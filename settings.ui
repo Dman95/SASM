@@ -193,6 +193,11 @@
                 <string notr="true">Português brasileiro</string>
                </property>
               </item>
+              <item>
+               <property name="text">
+                <string notr="true">日本語</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item>

@@ -98,7 +98,8 @@ int main(int argc, char *argv[])
         items << QString("Русский") << QString("English") << QString("Türk") <<
                  QString("中国") << QString("Deutsch") << QString("Italiano") <<
                  QString("Polski") << QString("עברית") << QString("Español") <<
-                 QString("Português") << QString("Français") << QString("Português brasileiro");
+                 QString("Português") << QString("Français") << QString("Português brasileiro") <<
+                 QString("日本語");
         bool ok = false;
         QString selected = QInputDialog::getItem(0, QString("Choose language"),
             QString("Language:"), items, 0, false, &ok);
@@ -179,6 +180,12 @@ int main(int argc, char *argv[])
 
         addTranslator.load(":/translations/qt_pt_BR.qm");
         a.installTranslator(&addTranslator);
+    } else if (settings.value("language", 0).toInt() == 12) {  // japanese language
+        translator.load(":/translations/language_ja.qm");
+        a.installTranslator(&translator);
+
+        qtTranslator.load(":/translations/qt_ja.qm");
+        a.installTranslator(&qtTranslator);
     }
 
     MainWindow w(a.arguments());

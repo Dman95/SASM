@@ -22,5 +22,7 @@
         <file>qt_fr.qm</file>
         <file>language_pt_BR.qm</file>
         <file>qt_pt_BR.qm</file>
+        <file>language_ja.qm</file>
+        <file>qt_ja.qm</file>
     </qresource>
 </RCC>
