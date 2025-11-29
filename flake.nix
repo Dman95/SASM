@@ -27,14 +27,26 @@
 
           src = pkgs.lib.cleanSource ./.;
 
-          nativeBuildInputs = [
-            pkgs.libsForQt5.qmake
-            pkgs.libsForQt5.wrapQtAppsHook
+          nativeBuildInputs = with pkgs; [
+            libsForQt5.qmake
+            libsForQt5.wrapQtAppsHook
+            copyDesktopItems
           ];
 
           buildInputs = [
             pkgs.libsForQt5.qtbase
             pkgs.libsForQt5.qtscript
+          ];
+
+          desktopItems = [
+            (pkgs.makeDesktopItem {
+              name = "sasm";
+              desktopName = "SASM";
+              exec = "sasm";
+              icon = "sasm";
+              comment = "Simple crossplatform IDE for NASM, MASM, GAS and FASM assembly languages.";
+              categories = [ "Development" "IDE" "Qt"];
+            })
           ];
 
           # Wraps GCC to silence linker warnings when searching mixed 32-bit and 64-bit libraries.
@@ -51,6 +63,8 @@
                   pkgs.pkgsi686Linux.glibc
               ]}" \
               --set QT_LOGGING_RULES "qt.qpa.wayland=false" # Silences the harmless "Wayland does not support QWindow::requestActivate()" warning.
+            mkdir -p $out/share/pixmaps
+            cp $src/Linux/share/sasm/sasm.png $out/share/pixmaps/sasm.png
           '';
 
           meta = with pkgs.lib; {
