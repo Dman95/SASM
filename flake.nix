@@ -20,7 +20,7 @@
           exec ${pkgs.gcc_multi}/bin/gcc "$@" 2>&1 | ${pkgs.gnugrep}/bin/grep -v "skipping incompatible" >&2
         '';
 
-        -- guard optional 32-bit glibc
+        # guard optional 32-bit glibc
         i686Glibc = if lib.hasAttr "pkgsi686Linux" pkgs then pkgs.pkgsi686Linux.glibc else null;
         libList = lib.filter (x: x != null) [ pkgs.glibc pkgs.glibc.static i686Glibc ];
 
