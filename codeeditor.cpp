@@ -261,6 +261,7 @@ void CodeEditor::highlightDebugLine(int lineNumber, bool moveCursor)
             selection.cursor.clearSelection();
             if (moveCursor) {
                 setTextCursor(selection.cursor); //scroll to debugging line
+                centerCursor(); //ensure the debug line is visible and centered in viewport
             }
             extraSelections.append(selection);
         }
