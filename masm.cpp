@@ -99,9 +99,10 @@ void MASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
     QTextStream lstStream(&lst);
     QList<QPair<quint64, QString> > instrList;
     bool inTextSection = false;
-    QRegExp sectionTextRegExp("\\.code");
+    //! Use word boundaries to prevent matching substrings of labels
+    QRegExp sectionTextRegExp("\\.code\\b");
     sectionTextRegExp.setCaseSensitivity(Qt::CaseInsensitive);
-    QRegExp sectionDataRegExp("\\.(data|fardata|const)");
+    QRegExp sectionDataRegExp("\\.(data|fardata|const)\\b");
     sectionDataRegExp.setCaseSensitivity(Qt::CaseInsensitive);
     QRegExp empty1("\t\t\t      C.*");
     QRegExp empty2(" *;.*");

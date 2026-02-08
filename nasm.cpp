@@ -97,9 +97,11 @@ quint64 NASM::getMainOffset(QFile &lst, QString entryLabel)
 void NASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 offset)
 {
     bool inTextSection = false;
-    QRegExp sectionTextRegExp("(SECTION|SEGMENT)\\s+\\.?(text|code)");
+    //! Use word boundaries \\b to prevent matching substrings of labels
+    //! (e.g. "segmention" contains "segment" which would falsely trigger section detection)
+    QRegExp sectionTextRegExp("\\b(SECTION|SEGMENT)\\b\\s+\\.?(text|code)\\b");
     sectionTextRegExp.setCaseSensitivity(Qt::CaseInsensitive);
-    QRegExp sectionRegExp("(SECTION|SEGMENT)");
+    QRegExp sectionRegExp("\\b(SECTION|SEGMENT)\\b");
     sectionRegExp.setCaseSensitivity(Qt::CaseInsensitive);
 
     QList<QPair<quint64, QString> > instrList;

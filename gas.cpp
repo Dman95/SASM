@@ -96,9 +96,10 @@ quint64 GAS::getMainOffset(QFile &lst, QString entryLabel)
 void GAS::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 offset)
 {
     bool inTextSection = false;
-    QRegExp sectionTextRegExp("\\.text");
-    QRegExp sectionBssRegExp("\\.bss");
-    QRegExp sectionDataRegExp("\\.data");
+    //! Use word boundaries to prevent matching substrings of labels
+    QRegExp sectionTextRegExp("\\.text\\b");
+    QRegExp sectionBssRegExp("\\.bss\\b");
+    QRegExp sectionDataRegExp("\\.data\\b");
     QTextStream lstStream(&lst);
     while (!lstStream.atEnd()) {
         QString line = lstStream.readLine();
