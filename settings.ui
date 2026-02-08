@@ -185,12 +185,12 @@
               </item>
               <item>
                <property name="text">
-                <string>Français</string>
+                <string notr="true">Français</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Português brasileiro</string>
+                <string notr="true">Português brasileiro</string>
                </property>
               </item>
              </widget>
