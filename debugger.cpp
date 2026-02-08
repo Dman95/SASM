@@ -362,6 +362,21 @@ void Debugger::processAction(QString output, QString error)
         QRegExp r = QRegExp("0x[0-9a-fA-F]{8,16}");
         int index = r.indexIn(output);
 
+        //! If no address found in output, the program may have exited or GDB is in an error state.
+        //! Check error stream and avoid infinite inMacro loop.
+        if (index == -1) {
+            //! Try to find address in error stream as fallback
+            index = r.indexIn(error);
+            if (index != -1) {
+                output = error;
+            } else {
+                //! No address anywhere - program likely exited or crashed.
+                //! Query GDB for current state instead of blindly auto-stepping.
+                doInput(QString("info program\n"), anyAction);
+                return;
+            }
+        }
+
         //print output
         if (index > 1 && !firstAction) {
             QString msg = output.left(index); //left part - probably output of program;
