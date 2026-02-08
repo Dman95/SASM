@@ -163,7 +163,13 @@ void CodeEditor::lineNumberAreaMousePressEvent(QMouseEvent *event)
 
         if (lineNumber <= document()->lineCount()) {
             //blocks counting starts with 0
-            lineNumber = document()->findBlockByLineNumber(lineNumber - 1).blockNumber() + 1; //line number to paint
+            QTextBlock targetBlock = document()->findBlockByLineNumber(lineNumber - 1);
+            lineNumber = targetBlock.blockNumber() + 1; //line number to paint
+
+            //! Move text cursor to clicked line to prevent view from
+            //! scrolling back to old cursor position (e.g. top of file)
+            QTextCursor cursor(targetBlock);
+            setTextCursor(cursor);
 
             //add or remove line number in list
             if (breakpoints.contains(lineNumber)) {
@@ -203,10 +209,8 @@ void CodeEditor::setBreakpointOnCurrentLine()
 
 void CodeEditor::repaintLineNumberArea()
 {
-    //repaint
-    QRect lineNumberAreaRect(lineNumberArea->x(), lineNumberArea->y(),
-                             lineNumberArea->width(), lineNumberArea->height());
-    emit updateRequest(lineNumberAreaRect, 0);
+    //repaint without triggering viewport margin update (which resets scroll position)
+    lineNumberArea->update();
 }
 
 QList<int> *CodeEditor::getBreakpoints()
