@@ -156,6 +156,7 @@ void MainWindow::initUi()
     //! Create compiler field
     compilerOut = new RuQTextEdit;
     compilerOut->setReadOnly(true);
+    compilerOut->setMinimumHeight(100);
     QFont compilerOutFont;
     compilerOutFont.setPointSize(settings.value("fontsize", 12).toInt());
     compilerOut->setFont(compilerOutFont);
@@ -167,6 +168,7 @@ void MainWindow::initUi()
     //! Add widgets on splitter
     splitter->addWidget(tabs);
     splitter->addWidget(compilerOut);
+    splitter->setCollapsible(1, false);
     workLayout->addWidget(debugAnyCommandWidget);
     int compilerOutSize = 100;
     debugAnyCommandWidget->close();
