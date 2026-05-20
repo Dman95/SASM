@@ -13,17 +13,16 @@ On Windows:
 For building:
     C++ compiler (e.g. gcc from MinGW)
     make (e.g. mingw32-make from MinGW)
-    Qt 5 (>= 5.11)
+    Qt6
 For running:
     Everything needed is included.
 
 On Linux:
 For building:
     build-essential
-    qtbase5-dev
-    qtbase5-dev-tools
-    qt5-qmake
-    qtchooser
+    qt6-base-dev
+    qt6-base-dev-tools
+    qt6-5compat-dev
 For running:
     gcc-multilib (x64 OS) or gcc (x86 OS)
     gdb

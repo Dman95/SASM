@@ -80,7 +80,7 @@ WatchSettingsWidget::WatchSettingsWidget(QWidget *parent) :
     addressCheckbox->setChecked(false);
 
     layout->setSpacing(0);
-    layout->setMargin(0);
+    layout->setContentsMargins(QMargins());
 
     connect(typeComboBox, SIGNAL(currentIndexChanged(int)), this, SIGNAL(settingsChanged()));
     connect(sizeComboBox, SIGNAL(currentIndexChanged(int)), this, SIGNAL(settingsChanged()));

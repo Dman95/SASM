@@ -55,10 +55,6 @@
 
 int main(int argc, char *argv[])
 {
-    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-        QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
-    #endif
     QtSingleApplication a(argc, argv);
     QSettings settings("SASM Project", "SASM");
     QPalette palette;
@@ -89,10 +85,6 @@ int main(int argc, char *argv[])
         return 0;
     }
     QTranslator translator, qtTranslator, addTranslator;
-    #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-        QTextCodec *codec = QTextCodec::codecForName("UTF-8");
-        QTextCodec::setCodecForCStrings(codec);
-    #endif
     if (!settings.contains("language")) { //language choosing
         QStringList items;
         items << QString("Русский") << QString("English") << QString("Türk") <<

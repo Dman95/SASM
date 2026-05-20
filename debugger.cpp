@@ -294,11 +294,11 @@ void Debugger::processMessage(QString output, QString error)
 
     if (!pid) {
         QRegExp r("Num +Description +(Connection +)?Executable");
-        int index = output.indexOf(r);
+        int index = r.indexIn(output);
         if (index != -1) {
             QString processString("process ");
             r = QRegExp(processString + "[0-9]+");
-            index = output.indexOf(r);
+            index = r.indexIn(output);
             output = output.mid(index + processString.length());
             output = output.split(QChar(' ')).at(0);
             pid = output.toULongLong(0, 10);
@@ -314,12 +314,12 @@ void Debugger::processMessage(QString output, QString error)
 
 void Debugger::processAction(QString output, QString error)
 {
-    bool backtrace = (output.indexOf(QRegExp("#\\d+  0x[0-9a-fA-F]{8,16} in .* ()")) != -1);
+    bool backtrace = (QRegExp("#\\d+  0x[0-9a-fA-F]{8,16} in .* ()").indexIn(output) != -1);
     if (output.indexOf(exitMessage) != -1 && !backtrace) {
         doInput("c\n", none);
         return;
     }
-    if (output.indexOf(QRegExp(cExitMessage)) != -1) { //if debug finished
+    if (QRegExp(cExitMessage).indexIn(output) != -1) { //if debug finished
         //print output - message like bottom
             /*Breakpoint 1, 0x08048510 in sasmStartL ()
             "
@@ -385,15 +385,15 @@ void Debugger::processAction(QString output, QString error)
             QRegExp breakpointMsg("\r?\nBreakpoint \\d+, ");
             QRegExp threadMsg("\\[Switching to Thread [^\\]]*\\]\r?\n");
             QRegExp signalMsg("\r?\n(Program received signal.*)");
-            msg.remove(continuingMsg);
-            msg.remove(breakpointMsg);
-            msg.remove(threadMsg);
+            msg = continuingMsg.removeIn(msg);
+            msg = breakpointMsg.removeIn(msg);
+            msg = threadMsg.removeIn(msg);
             if (signalMsg.indexIn(msg) != -1) {
                 QString recievedSignal = signalMsg.cap(1);
                 if (QRegExp("SIG(TRAP|INT)").indexIn(recievedSignal) == -1) {
                     emit printLog(recievedSignal, Qt::red);
                 }
-                msg.remove(signalMsg);
+                msg = signalMsg.removeIn(msg);
             }
             emit printOutput(msg);
         }
@@ -436,7 +436,7 @@ void Debugger::processAction(QString output, QString error)
         if (output[output.length() - 1] != '\n')
             output += QChar('\n');
         //process as ni or si
-        if (output.indexOf(QRegExp("0x[0-9a-fA-F]{8,16} in ")) != -1
+        if (QRegExp("0x[0-9a-fA-F]{8,16} in ").indexIn(output) != -1
                 && !backtrace) {
             actionTypeQueue.enqueue(showLine);
             processAction(output);
@@ -455,7 +455,7 @@ void Debugger::processAction(QString output, QString error)
                 output.indexOf(QString("no debug info")) == -1 && output != QString(" ")) {
             //if variable exists (isValid = true)
             isValid = true;
-            int index = output.indexOf(QRegExp("\\$\\d+ = .*"));
+            int index = QRegExp("\\$\\d+ = .*").indexIn(output);
             if (index == -1)
                 isValid = false;
             else {

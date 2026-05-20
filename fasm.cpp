@@ -92,7 +92,7 @@ quint64 FASM::getMainOffset(QFile &lstOut, QString entryLabel)
             lst.close();
             return line.toULongLong(0, 16);
         } else {
-            if (line.indexOf(mainLabel) != -1)
+            if (mainLabel.indexIn(line) != -1)
                 flag = true;
         }
     }
@@ -171,20 +171,18 @@ QString FASM::getStartText()
 void FASM::putDebugString(CodeEditor *code)
 {
     //add : mov ebp, esp for making frame for correct debugging if this code has not been added yet
-    int index = code->toPlainText().indexOf(QRegExp("main:"));
+    int index = QRegExp("main:").indexIn(code->toPlainText());
     if (index != -1) {
         index = code->toPlainText().indexOf(QChar(':'), index);
         if (isx86()) {
-            if (code->toPlainText().indexOf(
-                        QRegExp("\\s+([Pp][Uu][Ss][Hh] +[Ee][Bb][Pp]\\s+)?[Mm][Oo][Vv] +[Ee][Bb][Pp] *, *[Ee][Ss][Pp]"), index + 1) != index + 1) {
+            if (QRegExp("\\s+([Pp][Uu][Ss][Hh] +[Ee][Bb][Pp]\\s+)?[Mm][Oo][Vv] +[Ee][Bb][Pp] *, *[Ee][Ss][Pp]").indexIn(code->toPlainText(), index + 1) != index + 1) {
                 QTextCursor cursor = code->textCursor();
                 cursor.movePosition(QTextCursor::Start);
                 cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
                 cursor.insertText(QString("\n    mov ebp, esp; for correct debugging"));
             }
         } else {
-            if (code->toPlainText().indexOf(
-                        QRegExp("\\s+([Pp][Uu][Ss][Hh] +[Rr][Bb][Pp]\\s+)?[Mm][Oo][Vv] +[Rr][Bb][Pp] *, *[Rr][Ss][Pp]"), index + 1) != index + 1) {
+            if (QRegExp("\\s+([Pp][Uu][Ss][Hh] +[Rr][Bb][Pp]\\s+)?[Mm][Oo][Vv] +[Rr][Bb][Pp] *, *[Rr][Ss][Pp]").indexIn(code->toPlainText(), index + 1) != index + 1) {
                 QTextCursor cursor = code->textCursor();
                 cursor.movePosition(QTextCursor::Start);
                 cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);

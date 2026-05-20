@@ -17,6 +17,9 @@ Makefile
 ehthumbs.db
 Thumbs.db
 
+# clangd
+.cache/
+
 doc/*
 .qmake.stash
 sasm.app

@@ -38,6 +38,7 @@
 **
 ****************************************************************************/
 
+#include <QRegExp>
 #include "codeeditor.h"
 
 /**
@@ -455,7 +456,7 @@ bool CodeEditor::isMacroOnCurrentDebugLine()
                           "\\bGET_STRING\\b" << "\\bCMAIN\\b" << "\\bCEXTERN\\b";
         foreach (const QString &pattern, macrosPatterns) {
             QRegExp regExp(pattern, Qt::CaseSensitive);
-            if (text.indexOf(regExp) != -1)
+            if (regExp.indexIn(text) != -1)
                 return true;
         }
     }

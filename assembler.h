@@ -79,7 +79,7 @@ public:
         quint64 numInCode;
          //! Address of instruction on this line in memory
         quint64 numInMem;
-        bool operator ==(const LineNum& ln)
+        bool operator ==(const LineNum& ln) const
         {
             return ln.numInCode == numInCode;
         }

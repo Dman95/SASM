@@ -87,7 +87,7 @@ quint64 NASM::getMainOffset(QFile &lst, QString entryLabel)
                 }
             }
         } else {
-            if (line.indexOf(mainLabel) != -1)
+            if (mainLabel.indexIn(line) != -1)
                 flag = true;
         }
     }
@@ -109,18 +109,18 @@ void NASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
     lstStream.seek(0);
     while (!lstStream.atEnd()) {
         QString line = lstStream.readLine();
-        if (line.indexOf(QRegExp("^ +[0-9]+ +<[0-9]+>")) != -1) { //macro
+        if (QRegExp("^ +[0-9]+ +<[0-9]+>").indexIn(line) != -1) { //macro
             continue;
         }
-        if (line.indexOf(sectionTextRegExp) != -1) {
+        if (sectionTextRegExp.indexIn(line) != -1) {
             inTextSection = true;
-        } else if (line.indexOf(sectionRegExp) != -1) {
+        } else if (sectionRegExp.indexIn(line) != -1) {
             inTextSection = false;
         }
         //! omit strings with data only
         //! if in list : line number, address, data and it is all (without instruction) -
         //! omit this string and subtract 1 from offset
-        if (line.indexOf(QRegExp("^(\\s+[^\\s]+){4}")) == -1) {
+        if (QRegExp("^(\\s+[^\\s]+){4}").indexIn(line) == -1) {
             continue;
         }
         if (inTextSection) {
@@ -172,20 +172,18 @@ QString NASM::getStartText()
 void NASM::putDebugString(CodeEditor *code)
 {
     //! add : mov ebp, esp for making frame for correct debugging if this code has not been added yet
-    int index = code->toPlainText().indexOf(QRegExp("CMAIN:|main:"));
+    int index = QRegExp("CMAIN:|main:").indexIn(code->toPlainText());
     if (index != -1) {
         index = code->toPlainText().indexOf(QChar(':'), index);
         if (isx86()) {
-            if (code->toPlainText().indexOf(
-                        QRegExp("\\s+([Pp][Uu][Ss][Hh] +[Ee][Bb][Pp]\\s+)?[Mm][Oo][Vv] +[Ee][Bb][Pp] *, *[Ee][Ss][Pp]"), index + 1) != index + 1) {
+            if (QRegExp("\\s+([Pp][Uu][Ss][Hh] +[Ee][Bb][Pp]\\s+)?[Mm][Oo][Vv] +[Ee][Bb][Pp] *, *[Ee][Ss][Pp]").indexIn(code->toPlainText(), index + 1) != index + 1) {
                 QTextCursor cursor = code->textCursor();
                 cursor.movePosition(QTextCursor::Start);
                 cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
                 cursor.insertText(QString("\n    mov ebp, esp; for correct debugging"));
             }
         } else {
-            if (code->toPlainText().indexOf(
-                        QRegExp("\\s+([Pp][Uu][Ss][Hh] +[Rr][Bb][Pp]\\s+)?[Mm][Oo][Vv] +[Rr][Bb][Pp] *, *[Rr][Ss][Pp]"), index + 1) != index + 1) {
+            if (QRegExp("\\s+([Pp][Uu][Ss][Hh] +[Rr][Bb][Pp]\\s+)?[Mm][Oo][Vv] +[Rr][Bb][Pp] *, *[Rr][Ss][Pp]").indexIn(code->toPlainText(), index + 1) != index + 1) {
                 QTextCursor cursor = code->textCursor();
                 cursor.movePosition(QTextCursor::Start);
                 cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);

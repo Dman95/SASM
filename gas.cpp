@@ -86,7 +86,7 @@ quint64 GAS::getMainOffset(QFile &lst, QString entryLabel)
                 }
             }
         } else {
-            if (line.indexOf(mainLabel) != -1)
+            if (mainLabel.indexIn(line) != -1)
                 flag = true;
         }
     }
@@ -103,9 +103,9 @@ void GAS::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 o
     QTextStream lstStream(&lst);
     while (!lstStream.atEnd()) {
         QString line = lstStream.readLine();
-        if (line.indexOf(sectionTextRegExp) != -1) {
+        if (sectionTextRegExp.indexIn(line) != -1) {
             inTextSection = true;
-        } else if (line.indexOf(sectionDataRegExp) != -1 || line.indexOf(sectionBssRegExp) != -1) {
+        } else if (sectionDataRegExp.indexIn(line) != -1 || sectionBssRegExp.indexIn(line) != -1) {
             inTextSection = false;
         }
         if (line.length() <= 19) { //omit strings with data only
@@ -145,23 +145,21 @@ QString GAS::getStartText()
 void GAS::putDebugString(CodeEditor *code)
 {
     //add : mov ebp, esp for making frame for correct debugging if this code has not been added yet
-    int index = code->toPlainText().indexOf(QRegExp("CMAIN:|main:"));
+    int index = QRegExp("CMAIN:|main:").indexIn(code->toPlainText());
     if (index != -1) {
         index = code->toPlainText().indexOf(QChar(':'), index);
         int intelIndex = code->toPlainText().lastIndexOf("intel_syntax", index + 1);
         int attIndex = code->toPlainText().lastIndexOf("att_syntax", index + 1);
         if (intelIndex == -1 || attIndex > intelIndex) { //AT&T syntax
             if (isx86()) {
-                if (code->toPlainText().indexOf(
-                            QRegExp("\\s+([Pp][Uu][Ss][Hh][Ll]? +%?[Ee][Bb][Pp]\\s+)?[Mm][Oo][Vv][Ll] +%?[Ee][Ss][Pp] *, *%?[Ee][Bb][Pp]"), index + 1) != index + 1) {
+                if (QRegExp("\\s+([Pp][Uu][Ss][Hh][Ll]? +%?[Ee][Bb][Pp]\\s+)?[Mm][Oo][Vv][Ll] +%?[Ee][Ss][Pp] *, *%?[Ee][Bb][Pp]").indexIn(code->toPlainText() , index + 1) != index + 1) {
                     QTextCursor cursor = code->textCursor();
                     cursor.movePosition(QTextCursor::Start);
                     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
                     cursor.insertText(QString("\n    movl %esp, %ebp #for correct debugging"));
                 }
             } else {
-                if (code->toPlainText().indexOf(
-                            QRegExp("\\s+([Pp][Uu][Ss][Hh][Qq]? +%?[Rr][Bb][Pp]\\s+)?[Mm][Oo][Vv][Qq] +%?[Rr][Ss][Pp] *, *%?[Rr][Bb][Pp]"), index + 1) != index + 1) {
+                if (QRegExp("\\s+([Pp][Uu][Ss][Hh][Qq]? +%?[Rr][Bb][Pp]\\s+)?[Mm][Oo][Vv][Qq] +%?[Rr][Ss][Pp] *, *%?[Rr][Bb][Pp]").indexIn(code->toPlainText(), index + 1) != index + 1) {
                     QTextCursor cursor = code->textCursor();
                     cursor.movePosition(QTextCursor::Start);
                     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
@@ -170,16 +168,14 @@ void GAS::putDebugString(CodeEditor *code)
             }
         } else { //Intel syntax
             if (isx86()) {
-                if (code->toPlainText().indexOf(
-                            QRegExp("\\s+([Pp][Uu][Ss][Hh][Ll]? +%?[Ee][Bb][Pp]\\s+)?[Mm][Oo][Vv] +%?[Ee][Bb][Pp] *, *%?[Ee][Ss][Pp]"), index + 1) != index + 1) {
+                if (QRegExp("\\s+([Pp][Uu][Ss][Hh][Ll]? +%?[Ee][Bb][Pp]\\s+)?[Mm][Oo][Vv] +%?[Ee][Bb][Pp] *, *%?[Ee][Ss][Pp]").indexIn(code->toPlainText(), index + 1) != index + 1) {
                     QTextCursor cursor = code->textCursor();
                     cursor.movePosition(QTextCursor::Start);
                     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);
                     cursor.insertText(QString("\n    mov %ebp, %esp #for correct debugging"));
                 }
             } else {
-                if (code->toPlainText().indexOf(
-                            QRegExp("\\s+([Pp][Uu][Ss][Hh][Qq]? +%?[Rr][Bb][Pp]\\s+)?[Mm][Oo][Vv] +%?[Rr][Bb][Pp] *, *%?[Rr][Ss][Pp]"), index + 1) != index + 1) {
+                if (QRegExp("\\s+([Pp][Uu][Ss][Hh][Qq]? +%?[Rr][Bb][Pp]\\s+)?[Mm][Oo][Vv] +%?[Rr][Bb][Pp] *, *%?[Rr][Ss][Pp]").indexIn(code->toPlainText(), index + 1) != index + 1) {
                     QTextCursor cursor = code->textCursor();
                     cursor.movePosition(QTextCursor::Start);
                     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, index + 1);

@@ -131,7 +131,7 @@ void MainWindow::initUi()
     splitter->setOrientation(Qt::Vertical);
     workLayout = new QVBoxLayout;
     workLayout->addWidget(splitter);
-    workLayout->setMargin(0);
+    workLayout->setContentsMargins(QMargins());
     workLayout->setSpacing(0);
     workWidget = new QWidget;
     workWidget->setLayout(workLayout);
@@ -947,7 +947,7 @@ void MainWindow::buildProgram(bool debugMode)
     QTextStream log(&logFile);
     QString logText = log.readAll();
     if (settings.value("assembler", QString("NASM")).toString() == "FASM" && logText.count(QChar('\n')) == 2
-            && logText.contains(QRegExp(" bytes\\.")))
+            && QRegExp(" bytes\\.").indexIn(logText) != -1)
         logText.clear();
     if (settings.value("assembler", QString("NASM")).toString() == "MASM") {
         if (logText.count(QChar('\n')) == 1 && logText.startsWith(" Assembling:"))
@@ -1577,7 +1577,7 @@ void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool a
                     if (cs == Qt::CaseSensitive)
                         newCursor = document->find(pattern, newCursor, QTextDocument::FindCaseSensitively);
                     else
-                        newCursor = document->find(pattern, newCursor, 0);
+                        newCursor = document->find(pattern, newCursor);
                     //! Replace mode
                     if (replace && i == tabs->currentIndex()) {
                         newCursor.removeSelectedText();
@@ -1609,13 +1609,13 @@ void MainWindow::findNext(const QString &pattern, Qt::CaseSensitivity cs, bool a
             if (cs == Qt::CaseSensitive)
                 newCursor = document->find(pattern, newCursor, QTextDocument::FindCaseSensitively);
             else
-                newCursor = document->find(pattern, newCursor, 0);
+                newCursor = document->find(pattern, newCursor);
              //! Continue from start
             if (newCursor.isNull()) {
                 if (cs == Qt::CaseSensitive)
                     newCursor = document->find(pattern, newCursor, QTextDocument::FindCaseSensitively);
                 else
-                    newCursor = document->find(pattern, newCursor, 0);
+                    newCursor = document->find(pattern, newCursor);
             }
             if (!newCursor.isNull()) {
                 selection.cursor = newCursor;
@@ -2291,7 +2291,6 @@ void MainWindow::openHelp()
 
     helpFile.open(QFile::ReadOnly);
     QTextStream helpText(&helpFile);
-    helpText.setCodec("utf-8");
     help->setHtml(helpText.readAll());
     helpFile.close();
     help->setWindowState(Qt::WindowMaximized);

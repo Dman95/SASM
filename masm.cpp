@@ -118,9 +118,9 @@ void MASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
             continue;
         if (empty2.exactMatch(line))
             continue;
-        if (line.indexOf(sectionTextRegExp) != -1) {
+        if (sectionTextRegExp.indexIn(line)!= -1) {
             inTextSection = true;
-        } else if (line.indexOf(sectionDataRegExp) != -1) {
+        } else if (sectionDataRegExp.indexIn(line) != -1) {
             inTextSection = false;
         }
         if (inTextSection) {
@@ -139,7 +139,7 @@ void MASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
                 macroInstruction.remove(0, k);
                 if (macroInstruction[0] == '=')
                     continue;
-                macroInstruction.remove(QRegExp("^[0-9a-fA-F]{8,16}[ \t]+")); //if label
+                macroInstruction = QRegExp("^[0-9a-fA-F]{8,16}[ \t]+").removeIn(macroInstruction); //if label
                 while (!stringWithAddress.exactMatch(line) && !lstStream.atEnd())
                     line = lstStream.readLine();
                 lineArr = line.toLocal8Bit();
@@ -160,7 +160,7 @@ void MASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
                 while (k < macroInstruction.length() && macroInstruction[k].isSpace())
                     k++;
                 macroInstruction.remove(0, k);
-                macroInstruction.remove(QRegExp("^[0-9a-fA-F]{8,16}[ \t]+")); //if label
+                macroInstruction = QRegExp("^[0-9a-fA-F]{8,16}[ \t]+").removeIn(macroInstruction); //if label
                 while (!stringWithAddress.exactMatch(line) && !lstStream.atEnd())
                     line = lstStream.readLine();
                 lineArr = line.toLocal8Bit();
@@ -200,7 +200,7 @@ void MASM::parseLstFile(QFile &lst, QVector<Assembler::LineNum> &lines, quint64 
             //! Check if instruction
             if (!stringWithCode.exactMatch(line) || macro.exactMatch(line) || sscanf(s, "%llx", &a) != 1)
                 continue;
-            int index = line.indexOf(QRegExp("[RE\t]\t"));
+            int index = QRegExp("[RE\t]\t").indexIn(line);
             if (index == -1)
                 continue;
             line = line.mid(index + 2);
